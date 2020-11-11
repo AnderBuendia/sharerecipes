@@ -118,7 +118,8 @@ const typeDefs = gql`
         updateCommentsRecipe(id: ID!, input: RecipeInput): Recipe
 
         # Files
-        uploadFile(file: Upload!): File
+        uploadImageRecipe(file: Upload!): File
+        uploadImageUser(file: Upload!): File
     }
 `;
 

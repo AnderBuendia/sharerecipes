@@ -6,6 +6,7 @@ import Layout from '../../../components/layouts/Layout';
 import Input from '../../../components/form/Input';
 import SelectMenu from '../../../components/edituserform/selectMenu';
 import Alert from '../../../components/form/Alert';
+import UploadImageUser from '../../../components/edituserform/UploadImageUser';
 
 const GET_USER = gql`
     query getUser {
@@ -31,6 +32,12 @@ const EditUserAccount = () => {
     /* Set a message login */
     const [message, setMessage] = useState(null);
 
+    /* To get url from DropZone */
+    const [urlFileImage, setUrlFileImage] = useState('');
+
+    /* Url and filename from Upload DropZone */
+    const { url, fileName } = urlFileImage;
+
     /* Apollo mutation to update data user */
     const [ updateUser ] = useMutation(UPDATE_USER);
 
@@ -48,7 +55,9 @@ const EditUserAccount = () => {
                     input: {
                         name,
                         email,
-                        password
+                        password,
+                        image_url: url,
+                        image_name: fileName
                     }
                 }  
             });
@@ -98,7 +107,11 @@ const EditUserAccount = () => {
                             <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center my-4">
                                 Edit Your Account
                             </h2>
-                          
+
+                            <UploadImageUser 
+                                handleUrlFileUser={setUrlFileImage}
+                                handleMessage={setMessage}
+                            />
 
                             <Input
                                 label="Username"

@@ -4,9 +4,10 @@ import { useRouter } from 'next/router';
 import { gql, useMutation } from '@apollo/client';
 import Swal from 'sweetalert2';
 import ReactSelect from 'react-select';
+import Image from 'next/image';
 import Layout from '../components/layouts/Layout';
 import Input from '../components/form/Input';
-import Upload from '../components/form/Upload';
+import UploadImageRecipe from '../components/form/UploadImageRecipe';
 import Alert from '../components/form/Alert';
 
 const NEW_RECIPE = gql`
@@ -57,8 +58,8 @@ const NewRecipe = () => {
     const [selectedFoodStyle, setSelectedFoodStyle] = useState('');
     const [selectedDifficulty, setSelectedDifficulty] = useState('');
 
-    /* To get url from DropZone */
-    const [urlFile, setUrlFile] = useState('');
+    /* To get url from UploadImageRecipe */
+    const [urlFileRecipe, setUrlFileRecipe] = useState('');
 
     /* To get the ingredients */
     const [indexes, setIndexes] = useState([]);
@@ -102,8 +103,8 @@ const NewRecipe = () => {
     }
 
     /* Url and filename from Upload DropZone */
-    const { url, fileName } = urlFile;
-  
+    const { url, fileName } = urlFileRecipe;
+
     /* React hook form */
     const { register, handleSubmit, errors, control } = useForm({
         mode: "onChange"
@@ -132,7 +133,6 @@ const NewRecipe = () => {
                     }
                 }
             });
-            // console.log(data);
             /* Redirect to Home Page*/
             router.push('/');
 
@@ -163,26 +163,13 @@ const NewRecipe = () => {
                             <label
                                 className="block text-black text-md font-body font-bold mb-4"
                             >Recipe Image</label>
-                            { urlFile ? (
-                                <div 
-                                    className="md:flex-1 w-full mb-4 mt-3 lg:mt-0 flex flex-col items-center justify-center"
-                                >
-                                   <img 
-                                        style={{ width: 350 }}
-                                        key={fileName}
-                                        src={url}
-                                        alt={fileName}
-                                    />  
-                                </div>
-                            ) : (
-                                <Upload 
-                                    handleUrlFile={setUrlFile} 
-                                    handleMessage={setMessage}  
-                                    name="image"
-                                    childRef={register({required: { value: true, message: "An image is required" }})}
-                                    error={errors.image}  
-                                />              
-                            ) }
+                            <UploadImageRecipe
+                                handleUrlFileRecipe={setUrlFileRecipe} 
+                                handleMessage={setMessage}  
+                                name="image"
+                                childRef={register({required: { value: true, message: "An image is required" }})}
+                                error={errors.image}  
+                            />  
 
                             <Input
                                 label="Name"

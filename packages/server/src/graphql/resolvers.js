@@ -248,7 +248,7 @@ const resolvers = {
         },
 
         /* Files */
-        uploadFile: async (_, {file}) => {
+        uploadImageRecipe: async (_, {file}) => {
             const { createReadStream, filename } = await file;
             
             /* if mimetype !=== jpeg or jpg or png err */
@@ -262,6 +262,25 @@ const resolvers = {
 
             return { 
                 url : `http://localhost:4000/images/recipe/${randomName}`, 
+                fileName: randomName 
+            };
+
+        },
+
+        uploadImageUser: async (_, {file}) => {
+            const { createReadStream, filename } = await file;
+            
+            /* if mimetype !=== jpeg or jpg or png err */
+            const { ext } = path.parse(filename);
+            const randomName = shortid.generate()+ext;
+
+            const stream = createReadStream();
+            const pathName = path.join(__dirname, `../../images/user/${randomName}`);
+            
+            await stream.pipe(createWriteStream(pathName));
+
+            return { 
+                url : `http://localhost:4000/images/user/${randomName}`, 
                 fileName: randomName 
             };
 

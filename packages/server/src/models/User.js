@@ -18,6 +18,14 @@ const usersSchema = new Schema({
         required: true,
         trim: true
     },
+    image_url: {
+        type: String,
+        default: null
+    },
+    image_name: {
+        type: String,
+        default: null
+    },
     role: {
         type: String,
         default: "Member"
