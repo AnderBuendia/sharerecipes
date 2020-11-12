@@ -55,8 +55,8 @@ const startServer = async () => {
             try {
                 const user = jwt.verify(token.replace('Bearer ', ''), process.env.SECRET_JWT);
                 req.user = user;
-            } catch(e) {
-                console.error(e);
+            } catch {
+                return next();
             }
         }
         next();

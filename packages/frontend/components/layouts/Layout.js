@@ -22,7 +22,7 @@ const Layout = ({children}) => {
                 <div className="bg-gray-100 min-h-screen">
                 <Header />
                 <div className="container mx-auto">
-                    <main className="mt-10">
+                    <main className="mt-4">
                         {children}
                     </main>
                 </div>

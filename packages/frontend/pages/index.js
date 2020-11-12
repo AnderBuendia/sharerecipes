@@ -32,8 +32,8 @@ const Index = () => {
   
   return (
     <Layout>
-      { getRecipes.length === '' ? (
-        <p className="mt-5 text-center text-2xl">No Recipes</p>
+      { getRecipes.length === 0 ? (
+        <p className="text-4xl font-body font-bold text-center items-center justify-center mb-4">No Recipes</p>
       ) : (
         <>
           <h1 className="text-4xl font-body font-bold text-center items-center justify-center mb-4">New Recipes</h1>
