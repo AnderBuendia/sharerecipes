@@ -1,3 +1,4 @@
 node_modules
 src/config/variables.env
+images
 .DS_Store
