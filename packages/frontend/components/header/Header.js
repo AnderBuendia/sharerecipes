@@ -10,6 +10,8 @@ const GET_USER = gql`
             id
             name
             role
+            image_name
+            image_url
         }
     }
 `;
