@@ -20,11 +20,9 @@ const usersSchema = new Schema({
     },
     image_url: {
         type: String,
-        default: null
     },
     image_name: {
         type: String,
-        default: null
     },
     role: {
         type: String,

@@ -14,13 +14,17 @@ const GET_USER = gql`
             id
             name
             email
+            image_url
+            image_name
         }
     }
 `;
 
 const UPDATE_USER = gql`
     mutation updateUser($id: ID!, $input: UserInput) {
-        updateUser(id: $id, input: $input)
+        updateUser(id: $id, input: $input) { 
+            id
+        }
     }
 `;
 
@@ -35,7 +39,7 @@ const EditUserAccount = () => {
     /* To get url from DropZone */
     const [urlFileImage, setUrlFileImage] = useState('');
 
-    /* Url and filename from Upload DropZone */
+    /* Url and filename from Upload DropZone User */
     const { url, fileName } = urlFileImage;
 
     /* Apollo mutation to update data user */
@@ -67,6 +71,7 @@ const EditUserAccount = () => {
             /* Redirect to Home Page */
             setTimeout(() => {
                 setMessage(null);
+                location.reload();
             }, 2000);
         } catch (error) {
             setMessage(error.message.replace('GraphQL error: ', ''));
@@ -84,9 +89,6 @@ const EditUserAccount = () => {
     });
 
     if (loading) return null;
-
-    console.log(data.getUser);
-
     const { name, email } = data.getUser;
 
     const initialValues = {
@@ -111,6 +113,7 @@ const EditUserAccount = () => {
                             <UploadImageUser 
                                 handleUrlFileUser={setUrlFileImage}
                                 handleMessage={setMessage}
+                                userData={data.getUser}
                             />
 
                             <Input

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 import Link from 'next/link';
 import onClickOutside from 'react-onclickoutside';
-import UserImage from '../icons/userimage';
 
 const DropdownMenu = ({dataUser, client}) => {
     /* Routing */
     const router = useRouter();
 
-    const { id, name, role } = dataUser;
+    const { id, name, role, image_name, image_url } = dataUser;
 
     /* Dropdown user menu*/
     const [open, setOpen] = useState(false);
@@ -29,7 +29,18 @@ const DropdownMenu = ({dataUser, client}) => {
                         className="flex items-center justify-center rounded-full h-10 w-10 bg-gray-200 cursor-pointer border-2 hover:border-blue-800 hover:bg-gray-500" aria-expanded="true"
                         onClick={ () => setOpen(!open) }
                     >
-                        <img className="hover:bg-black rounded-full" src="/usericon.jpeg" />
+                        { image_url ? (
+                            <Image 
+                                className="hover:bg-black rounded-full"
+                                key={ image_url }
+                                src={ image_url }
+                                alt={ image_name }
+                                width={90}
+                                height={90}
+                            />
+                        ) : (
+                            <img className="hover:bg-black rounded-full" src="/usericon.jpeg" />
+                        )}
                     </div>
                 </span>       
             </div>

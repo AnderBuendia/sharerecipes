@@ -9,8 +9,10 @@ const typeDefs = gql`
         email: String
         password: String
         createdAt: String
-        confirmpassword: String
         role: String
+        image_url: String
+        image_name: String
+        confirmpassword: String
     }
 
     type Token {
@@ -50,6 +52,8 @@ const typeDefs = gql`
         email: String!
         password: String!
         role: String
+        image_url: String
+        image_name: String
     }
 
     input UserPasswordInput {
