@@ -6,12 +6,12 @@ import DropdownMenu from './dropdownMenu';
 
 const HeaderDesktop = ({dataUser, client}) => {
     return (
-        <div className="w-full text-black bg-gray-400 dark-mode:text-gray-200 dark-mode:bg-gray-800">
-            <div className="flex flex-col max-w-screen-xl px-4 mx-auto md:items-center md:justify-between md:flex-row">
+        <div className="w-full text-black bg-gray-300 dark-mode:text-gray-200 dark-mode:bg-gray-800">
+            <div className="flex flex-col px-4 mx-auto md:items-center md:justify-between md:flex-row">
                 <div className="py-2 flex flex-row items-center justify-between">
                     <IndexIcon />
                 </div>
-                <Search className="bg-white text-black h-10 px-4 md:pr-24 py-4 rounded-full text-sm focus:outline-none"/>
+                <Search className="bg-white text-black h-10 px-4 md:pr-40 py-4 rounded-full text-sm focus:outline-none"/>
                 <div className="text-black flex rounded-lg focus:outline-none focus:shadow-outline cursor-pointer">
                 { dataUser !== null ?
                     <>

@@ -24,6 +24,10 @@ const usersSchema = new Schema({
     image_name: {
         type: String,
     },
+    confirmed: {
+        type: Boolean,
+        default: false
+    },
     role: {
         type: String,
         default: "Member"

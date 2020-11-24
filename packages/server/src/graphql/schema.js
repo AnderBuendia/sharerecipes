@@ -19,6 +19,10 @@ const typeDefs = gql`
         token: String
     }
 
+    type Message {
+        message: String
+    }
+
     type Recipe {
         id: ID
         name: String
@@ -56,9 +60,18 @@ const typeDefs = gql`
         image_name: String
     }
 
+    input TokenInput {
+        token: String
+    }
+
+    input EmailInput {
+        email: String!
+    }
+
     input UserPasswordInput {
         password: String
         confirmpassword: String
+        token: String
     }
 
     input AuthenticateInput {
@@ -102,7 +115,6 @@ const typeDefs = gql`
         getRecipes: [Recipe]
         getUserRecipes: [Recipe]
         getRecipe(id: ID!): Recipe
-
     }
 
     # Mutations
@@ -115,6 +127,9 @@ const typeDefs = gql`
         updateUserPassword(id: ID!, input: UserPasswordInput): User
         deleteUser(id: ID!): String
 
+        # Confirm User
+        confirmUser(input: TokenInput): Message
+
         # Recipes
         newRecipe(input: RecipeInput): Recipe
         updateRecipe(id: ID!, input: RecipeInput): Recipe
@@ -124,6 +139,10 @@ const typeDefs = gql`
         # Files
         uploadImageRecipe(file: Upload!): File
         uploadImageUser(file: Upload!): File
+
+        # Recovery Password
+        forgotPassword(input: EmailInput): Message
+        resetPassword(input: UserPasswordInput): Message
     }
 `;
 

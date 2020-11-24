@@ -1,8 +1,11 @@
-// import AuthState from '../context/auth/authState';
 import { ApolloProvider } from '@apollo/client';
 import client from '../config/apollo';
 import ResolutionState from '../context/resolution/resolutionState';
 import '../styles/index.css';
+
+if (typeof window === 'undefined') {
+  global.window = {}
+}
 
 const MyApp = ({ Component, pageProps }) => {
   return (

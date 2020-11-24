@@ -1,23 +1,43 @@
 const User = require('../models/User');
 const Recipes = require('../models/Recipes');
 
-const { createWriteStream, rename } = require('fs');
+const { createWriteStream } = require('fs');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 const shortid = require('shortid');
-const multer = require('multer');
 require('dotenv').config({ path: 'src/config/variables.env' });
 
 /* Other fns */
-const files = [];
+const sendEmails = async (user, contentHTML) => {
+    const { email } = user;
 
-const createToken = (user, secret, expiresIn) => {
-    // console.log('TOKENUSER', user);
-    const { id } = user;
+    const transporter = nodemailer.createTransport({
+        host: 'smtp.ethereal.email',
+        port: 587,
+        auth: {
+            user: process.env.EMAILU,
+            pass: process.env.EMAILP
+        }
+    });
+  
+    const mailOptions = {
+        from: "no-reply@shareyourrecipes.com",
+        to: email,
+        subject: "Activate your Account",
+        html: contentHTML 
+    }
 
-    return jwt.sign({ id }, secret, { expiresIn });
-};
+    await transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.log('Error ocurred', err.message);
+        } else {
+            console.log('Email sent', info.messageId);
+            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+        }
+    })
+}
 
 /* Resolvers */
 const resolvers = {
@@ -63,7 +83,6 @@ const resolvers = {
                 console.log(error);
             }
         },
-  
     },
     Mutation: {
         /* Users */
@@ -75,7 +94,10 @@ const resolvers = {
             let user = await User.findOne({ email });
 
             if (user) {
-                throw new Error('User is already registered'); 
+                throw new Error(JSON.stringify({
+                    errorMessage: 'User is already registered', 
+                    classError: 'error'
+                }));
             }
 
             /* Hashing password */
@@ -85,6 +107,15 @@ const resolvers = {
             try {
                 user = new User(input);
                 await user.save();
+
+                /* Send an activation mail */
+                const emailToken = jwt.sign({ id: user.id }, process.env.SECRET_EMAIL, { expiresIn: '1h'});
+                const url = `${process.env.FRONTEND_URL}/confirmation/${emailToken}`;
+                const contentHTML = `<h1>Click on this link to activate your account</h1>
+                                <a href=${url}>${url}</a>`;
+
+                await sendEmails(user, contentHTML);
+
                 return user;      
             } catch (error) {
                 console.log(error);
@@ -98,20 +129,31 @@ const resolvers = {
             const user = await User.findOne({ email });
 
             if (!user) {
-                throw new Error('User does not exist'); 
+                throw new Error(JSON.stringify({
+                    errorMessage: 'User does not exist',
+                    classError: 'error'
+                })); 
+            } else if (user && !user.confirmed) {
+                throw new Error(JSON.stringify({
+                    errorMessage: 'Your account has not activated. Pleas check your email',
+                    classError: 'error'
+                })); 
             }
 
             /* Check if password is correct */
             const checkPassword = await bcrypt.compare(password, user.password);
             
             if (!checkPassword) {
-                throw new Error('Password is wrong');
+                throw new Error(JSON.stringify({
+                    errorMessage: 'Password is wrong',
+                    classError: 'error'
+                }));
             }
 
-            /* Create JWT */
-            return {
-                token: createToken(user, process.env.SECRET_JWT, '16h')
-            }
+            const { id } = user;
+            const token = jwt.sign({ id }, process.env.SECRET_JWT, { expiresIn: '16h' });
+            
+            return { token };
         },
 
         updateUser: async (_, {id, input}, ctx) => {
@@ -119,12 +161,18 @@ const resolvers = {
             let user = await User.findById(id);
 
             if (!user) {
-                throw new Error('User does not exist');
+                throw new Error(JSON.stringify({
+                    errorMessage: 'User does not exist',
+                    classError: 'error'
+                }));
             }
 
             /* Check if user is the editor */
             if (user.id !== ctx.req.user.id) {
-                throw new Error('Invalid credentials');
+                throw new Error(JSON.stringify({
+                    errorMessage: 'Invalid credentials',
+                    classError: 'error'
+                }));
             }
 
             /* Save data in DB */
@@ -149,14 +197,20 @@ const resolvers = {
 
             /* Check if user is the editor */
             if (user.id !== ctx.req.user.id) {
-                throw new Error('Invalid credentials');
+                throw new Error(JSON.stringify({
+                    errorMessage: 'Invalid credentials',
+                    classError: 'error'
+                }));
             }
 
             /* Check if password is correct */
             const checkPassword = await bcrypt.compare(password, user.password);
         
             if (!checkPassword) {
-                throw new Error('Your current password is wrong');
+                throw new Error(JSON.stringify({
+                    errorMessage: 'Your current password is wrong',
+                    classError: 'error'
+                }));
             }
 
             /* Hashing new password */
@@ -176,7 +230,10 @@ const resolvers = {
             const checkUser = await User.findById(id);
 
             if (!checkUser) {
-                throw new Error('User does not exist');
+                throw new Error(JSON.stringify({
+                    errorMessage: 'User does not exist',
+                    classError: 'error'
+                }));
             }
 
             /* Check if the admin is the one who deletes the user */
@@ -184,7 +241,10 @@ const resolvers = {
             console.log('ADMINUSER', adminUser);
 
             if (adminUser.role !== 'Admin') {
-                throw new Error('Invalid credentials');
+                throw new Error(JSON.stringify({
+                    errorMessage: 'Invalid credentials',
+                    classError: 'error'
+                }));
             }
 
             /* Delete data from DB */
@@ -196,8 +256,6 @@ const resolvers = {
         newRecipe: async (_, {input}, ctx) => {
             // console.log(ctx.req);
             const newRecipe = new Recipes(input);
-
-            //console.log(newRecipe);
 
             /* Assign the user creator */
             newRecipe.author = ctx.req.user.id;
@@ -280,11 +338,90 @@ const resolvers = {
             await stream.pipe(createWriteStream(pathName));
 
             return { 
-                url : `http://localhost:4000/images/user/${randomName}`, 
+                url: `http://localhost:4000/images/user/${randomName}`, 
                 fileName: randomName 
             };
 
         },
+
+        /* Confirm account */
+        confirmUser: async (_, {input}) => {
+            const { token } = input;
+            try {
+                const user = jwt.verify(token, process.env.SECRET_EMAIL);
+                await User.findByIdAndUpdate({ _id: user.id }, { confirmed: true });
+                
+                return { 
+                    message: `Your account has been activated.
+                    You will be redirected automatically to login` 
+                }
+            } catch (error) {
+            }
+        },
+
+        /* Recovery Password */
+        forgotPassword: async (_, {input}) => {
+            const { email } = input;
+            /* Check if user is already registered */
+            let user = await User.findOne({ email });
+
+            if (!user) {
+                throw new Error(JSON.stringify({
+                    errorMessage: 'This email does not registered',
+                    classError: 'error'
+                }));
+            }
+
+            try {
+                /* Send an activation mail */
+                const forgotToken = jwt.sign({ id: user.id }, process.env.SECRET_FORGOT, { expiresIn: '1h'});
+                const url = `${process.env.FRONTEND_URL}/forgot/${forgotToken}`;
+                const contentHTML = `<h1>Click on this link to change your current password</h1>
+                                <a href=${url}>${url}</a>`;
+
+                await sendEmails(user, contentHTML);
+
+                return user;   
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        resetPassword: async (_, {input}) => {
+            const { token, password } = input;
+
+            try {
+                let user = jwt.verify(token, process.env.SECRET_FORGOT, function(err, user) {
+                    if (err) {
+                        throw new Error(JSON.stringify({
+                            errorMessage: 'Link has expired. Try to send a new link',
+                            errorClass: 'error'
+                        }));    
+                    }
+
+                    return user;
+                });
+
+                /* Hashing new password */
+                const salt = await bcrypt.genSalt(10);
+                const newpassword = await bcrypt.hash(password, salt);
+
+                /* Save data in DB */
+                user = await User.findOneAndUpdate({ _id: user.id}, { password: newpassword }, {
+                    new: true
+                });
+
+                return { 
+                    message: `Your password has been changed.
+                    You will be redirected automatically to login` 
+                }
+            } catch (error) {
+                if(error instanceof jwt.TokenExpiredError) {
+                    return attemptRenewal()
+                }
+                throw new Error(error);
+            }
+        }
     }
 };
 

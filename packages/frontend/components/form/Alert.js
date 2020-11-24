@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Alert = ({message}) => {
+const Alert = ({message, error}) => {
     return ( 
-        <div className="bg-blue-200 border-l-4 border-blue-700 text-blue-700 font-roboto py-2 px-3 w-full my-3 max-w-lg text-center mx-auto">
+        <div className={`${ error ? 'bg-red-200 border-red-800 text-red-800' : 'bg-green-200 border-green-800 text-green-800' } border-l-4 font-roboto py-2 px-3 w-full my-3 max-w-lg text-center mx-auto`}>
             {message}
         </div> 
     );

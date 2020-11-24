@@ -48,7 +48,7 @@ const startServer = async () => {
     existsSync(path.join(__dirname, '../images/user')) || mkdirSync(path.join(__dirname, "../images/user"));
     app.use("/images/user", express.static(path.join(__dirname, "../images/user")));
 
-    // Setup JWT authentication middleware
+    /* Setup JWT authentication middleware */
     app.use((req, _, next) => {
         const token = req.headers['authorization'] || '';
         if(token) {

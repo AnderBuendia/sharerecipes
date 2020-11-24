@@ -10,7 +10,6 @@ import Input from '../components/form/Input';
 import Alert from '../components/form/Alert';
 import Img from '../components/form/Img';
 
-/* Apollo queries */
 const AUTH_USER = gql`
     mutation authenticateUser($input: AuthenticateInput) {
         authenticateUser(input: $input) {
@@ -25,6 +24,7 @@ const Login = () => {
 
     /* Set a message login */
     const [message, setMessage] = useState(null);
+    const [classAlert, setClassAlert] = useState(null);
 
     /* Apollo mutation */
     const [ authenticateUser ] = useMutation(AUTH_USER);
@@ -61,9 +61,12 @@ const Login = () => {
                 router.push('/');
             }, 2000);
         } catch (error) {
-            setMessage(error.message.replace('GraphQL error: ', ''));
+            const { errorMessage, classError } = JSON.parse(error.message);
+            setMessage(errorMessage);
+            setClassAlert(classError);
             setTimeout(() => {
                 setMessage(null);
+                setClassAlert(null);
             }, 3000);
         }
     };
@@ -76,7 +79,7 @@ const Login = () => {
                 </div>
                 <div className="flex justify-center mt-5">
                     <div className="w-full max-w-lg bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
-                        { message && <Alert message={message} /> }
+                        { message && <Alert message={message} error={classAlert} /> }
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center my-4">
                                 Login Your Account
@@ -121,7 +124,7 @@ const Login = () => {
                                   
                         <div>
                             <div className="w-full text-right mt-4">
-                                <Link href="/passwordreset">
+                                <Link href="/forgot">
                                     <a className="text-md font-roboto underline font-medium text-gray-500 mt-8 text-center">Forgot Password?</a>
                                 </Link>
                             </div>
