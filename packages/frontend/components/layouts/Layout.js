@@ -1,7 +1,11 @@
 import React from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import Header from '../header/Header';
+import dynamic from 'next/dynamic';
+
+const Header = dynamic(() => import('../header/Header'), {
+    ssr: false,
+});
 
 const Layout = ({children}) => {
     /* Routing */

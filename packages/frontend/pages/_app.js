@@ -1,15 +1,14 @@
 import { ApolloProvider } from '@apollo/client';
-import client from '../config/apollo';
+import { useApollo } from '../config/apollo';
 import ResolutionState from '../context/resolution/resolutionState';
 import '../styles/index.css';
 
-if (typeof window === 'undefined') {
-  global.window = {}
-}
 
 const MyApp = ({ Component, pageProps }) => {
+  const apolloClient = useApollo(pageProps.initialApolloState);
+
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={apolloClient}>
       <ResolutionState>
         <Component {...pageProps} />
       </ResolutionState>

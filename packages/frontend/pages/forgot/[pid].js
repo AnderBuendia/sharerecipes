@@ -19,11 +19,7 @@ const RESET_PASSWORD = gql`
     }
 `;
 
-const ResetPassword = () => {
-    /* Routing */
-    const router = useRouter();
-    const { query: { pid: token }} = router;
-
+function ResetPassword({token}) {
     /* useState alert message */
     const [message, setMessage] = useState(null);
     const [classAlert, setClassAlert] = useState(null);
@@ -131,4 +127,11 @@ const ResetPassword = () => {
     );
 }
  
+export const getServerSideProps = async ({params}) => {
+    const token = params.pid;
+    return {
+        props: {token}
+    }
+}
+
 export default ResetPassword;

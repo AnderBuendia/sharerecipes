@@ -6,7 +6,7 @@ import DropdownMenu from './dropdownMenu';
 
 const HeaderDesktop = ({dataUser, client}) => {
     return (
-        <div className="w-full text-black bg-gray-300 dark-mode:text-gray-200 dark-mode:bg-gray-800">
+        <div className="w-full text-black bg-gray-400 dark-mode:text-gray-200 dark-mode:bg-gray-800">
             <div className="flex flex-col px-4 mx-auto md:items-center md:justify-between md:flex-row">
                 <div className="py-2 flex flex-row items-center justify-between">
                     <IndexIcon />
