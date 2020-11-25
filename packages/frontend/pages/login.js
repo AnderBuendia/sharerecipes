@@ -52,7 +52,6 @@ const Login = () => {
             setTimeout(() => {
                 const { token } = data.authenticateUser;
                 localStorage.setItem('token', token);
-                console.log(token);
             }, 1000);
 
             /* Redirect to Home Page with user data */

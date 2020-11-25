@@ -1,30 +1,56 @@
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
-import fetch from 'node-fetch';
+import { useMemo } from 'react';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { setContext } from 'apollo-link-context';
 import { createUploadLink } from 'apollo-upload-client';
 
-// const httpLink = createHttpLink({
-//     uri: 'http://localhost:4000/graphql',
-//     fetch
-// });
+let apolloClient;
 
-const httpLink = createUploadLink({ uri: 'http://localhost:4000/graphql' });
+function createIsomorphLink() {
+    if (typeof window === 'undefined') {
+        return null;
+    } else {
+        const httpLink = createUploadLink({ uri: 'http://localhost:4000/graphql' });
 
-const authLink = setContext((_, {headers}) => {
-    /* Read storage token */
-    const token = localStorage.getItem('token');
-    return {
-        headers: {
-            ...headers,
-            authorization: token ? `Bearer ${token}` : ''
-        }
+        const authLink = setContext((_, {headers}) => {
+            /* Read storage token */
+            const token = localStorage.getItem('token');
+            return {
+                headers: {
+                    ...headers,
+                    authorization: token ? `Bearer ${token}` : ''
+                }
+            }
+        });
+
+        return authLink.concat(httpLink);
     }
-});
+}
 
-const client = new ApolloClient({
-    connectToDevTools: true,
-    cache: new InMemoryCache(),
-    link: authLink.concat(httpLink)
-});
+function createApolloClient() {
+    return new ApolloClient({
+        connectToDevTools: true,
+        ssrMode: typeof window === 'undefined',
+        link: createIsomorphLink(),
+        cache: new InMemoryCache(),
+    })
+}
 
-export default client;
+export function initializeApollo(initialState = null) {
+    const _apolloClient = apolloClient ?? createApolloClient();
+
+    if (initialState) {
+        const existingCache = _apolloClient.extract();
+        _apolloClient.cache.restore({ ...existingCache, ...initialState});
+    }
+
+    if (typeof window === 'undefined') return _apolloClient;
+
+    if (!apolloClient) apolloClient = _apolloClient;
+
+    return _apolloClient;
+}
+
+export function useApollo(initialState) {
+    const store = useMemo(() => initializeApollo(initialState), [initialState]);
+    return store;
+}

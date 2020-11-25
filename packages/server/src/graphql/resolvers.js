@@ -184,8 +184,6 @@ const resolvers = {
         },
 
         updateUserPassword: async (_, {id, input}, ctx) => {
-            console.log('ID ', id);
-            console.log('INPUT ', input);
             const { password, confirmpassword } = input;
 
             /* Check if user exists */
@@ -389,7 +387,6 @@ const resolvers = {
 
         resetPassword: async (_, {input}) => {
             const { token, password } = input;
-
             try {
                 let user = jwt.verify(token, process.env.SECRET_FORGOT, function(err, user) {
                     if (err) {
