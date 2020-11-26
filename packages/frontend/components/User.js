@@ -18,7 +18,7 @@ const GET_USERS = gql`
 `;
 
 const User = ({user}) => {
-    const { id, name, email, role } = user;
+    const { id, name, email, role, confirmed } = user;
 
     const [ deleteUser ] = useMutation(DELETE_USER, {
         update(cache) {
@@ -68,15 +68,16 @@ const User = ({user}) => {
     }
 
     return (  
-        <tr className="font-roboto">
-            <td className="border px-4 py-2">{name}</td>
-            <td className="border px-4 py-2">{email}</td>
-            <td className="border px-4 py-2">{role}</td>
-            <td className="border px-4 py-2">
+        <tr className="text-center font-roboto border-b border-gray-300">
+            <td className="p-3">{name}</td>
+            <td className="p-3">{email}</td>
+            <td className="p-3"><span className={`${role === 'Admin' ? 'bg-purple-600 border-purple-600' : 'bg-yellow-600 border-yellow-600' } px-2 py-1 uppercase text-sm text-white rounded-full`}>{role}</span></td>
+            <td className="p-3"><span className={`${confirmed ? 'bg-green-600 border-green-600' : 'bg-red-600 border-red-600'} rounded-full px-2 py-1 uppercase text-sm text-white`}>{confirmed ? 'Active' : 'No'}</span></td>
+            <td className="p-3">
                 <div className="flex w-full">
                     <button
                         type="button"
-                        className="flex-1 bg-red-700 py-2 px-4 text-white rounded text-xs uppercase font-bold"
+                        className="flex-1 bg-red-700 py-2 px-2 text-white rounded text-xs uppercase font-bold hover:bg-red-600"
                         onClick={ () => confirmDeleteUser() }
                     >
                         Delete

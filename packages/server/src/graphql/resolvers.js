@@ -55,8 +55,9 @@ const resolvers = {
         getUsers: async () => {
             try {
                 const users = await User.find({});
+                const total = await User.count({});
 
-                return users;
+                return { users, total };
             } catch (error) {
                 console.log(error);
             }
