@@ -28,8 +28,6 @@ const Index = () => {
 
   const { getRecipes } = data;
 
-  console.log(getRecipes);
-  
   return (
     <Layout>
       { getRecipes.length === 0 ? (

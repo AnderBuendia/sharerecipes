@@ -53,7 +53,7 @@ const DropdownMenu = ({dataUser, client}) => {
                             </Link> 
                             <div className="border-t border-gray-200"></div>
                             { role === 'Admin' &&
-                                <Link href="/admin/users">
+                                <Link href="/admin/users/[pid]" as={`/admin/users/${id}`}>
                                     <a className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-200 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Admin Menu</a>
                                 </Link>
                             }

@@ -8,11 +8,17 @@ const typeDefs = gql`
         name: String
         email: String
         password: String
+        confirmed: Boolean
         createdAt: String
         role: String
         image_url: String
         image_name: String
         confirmpassword: String
+    }
+
+    type TotalUsers {
+        total: Int
+        users: [User]
     }
 
     type Token {
@@ -109,7 +115,7 @@ const typeDefs = gql`
     type Query {
         # Users
         getUser: User
-        getUsers: [User]
+        getUsers: TotalUsers
 
         # Recipes
         getRecipes: [Recipe]

@@ -1,7 +1,7 @@
+@import "tailwindcss/base";
+
+@import "tailwindcss/components";
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Roboto:wght@400;700&display=swap');
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @import './buttons.css';
+
+@import "tailwindcss/utilities";
