@@ -52,10 +52,10 @@ const resolvers = {
             }
         },
 
-        getUsers: async () => {
+        getUsers: async (_, {offset = 0, limit = 10}) => {
             try {
-                const users = await User.find({});
-                const total = await User.count({});
+                const users = await User.find({}).skip(offset).limit(limit).exec();
+                const total = await User.countDocuments({});
 
                 return { users, total };
             } catch (error) {
@@ -136,7 +136,7 @@ const resolvers = {
                 })); 
             } else if (user && !user.confirmed) {
                 throw new Error(JSON.stringify({
-                    errorMessage: 'Your account has not activated. Pleas check your email',
+                    errorMessage: 'Your account has not activated. Please check your email',
                     classError: 'error'
                 })); 
             }

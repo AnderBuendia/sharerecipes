@@ -68,11 +68,11 @@ const User = ({user}) => {
     }
 
     return (  
-        <tr className="text-center font-roboto border-b border-gray-300">
+        <tr className="text-center font-roboto border-t border-gray-200">
             <td className="p-3">{name}</td>
             <td className="p-3">{email}</td>
             <td className="p-3"><span className={`${role === 'Admin' ? 'bg-purple-600 border-purple-600' : 'bg-yellow-600 border-yellow-600' } px-2 py-1 uppercase text-sm text-white rounded-full`}>{role}</span></td>
-            <td className="p-3"><span className={`${confirmed ? 'bg-green-600 border-green-600' : 'bg-red-600 border-red-600'} rounded-full px-2 py-1 uppercase text-sm text-white`}>{confirmed ? 'Active' : 'No'}</span></td>
+            <td className="p-3"><span className={`${confirmed ? 'bg-green-600 border-green-600' : 'bg-red-600 border-red-600'} rounded-full px-2 py-1 uppercase text-sm text-white`}>{confirmed ? 'Active' : 'Inactive'}</span></td>
             <td className="p-3">
                 <div className="flex w-full">
                     <button

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import IndexIcon from '../form/Img';
 import MenuMobileIcon from '../icons/menuMobileicon';
-import Search from './search';
+import Search from './Search';
 import DropdownMenu from './dropdownMenu';
 
 const HeaderMobile = ({dataUser, client}) => {

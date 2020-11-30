@@ -16,9 +16,9 @@ const typeDefs = gql`
         confirmpassword: String
     }
 
-    type TotalUsers {
-        total: Int
+    type Users {
         users: [User]
+        total: Int
     }
 
     type Token {
@@ -115,7 +115,7 @@ const typeDefs = gql`
     type Query {
         # Users
         getUser: User
-        getUsers: TotalUsers
+        getUsers(offset: Int, limit: Int): Users
 
         # Recipes
         getRecipes: [Recipe]

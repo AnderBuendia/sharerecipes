@@ -20,6 +20,9 @@ const RESET_PASSWORD = gql`
 `;
 
 function ResetPassword({token}) {
+    
+    const router = useRouter();
+    
     /* useState alert message */
     const [message, setMessage] = useState(null);
     const [classAlert, setClassAlert] = useState(null);
