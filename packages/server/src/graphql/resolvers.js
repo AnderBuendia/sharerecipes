@@ -51,7 +51,7 @@ const resolvers = {
                 return null;
             }
         },
-
+        
         getUsers: async (_, {offset = 0, limit = 10}) => {
             try {
                 const users = await User.find({}).skip(offset).limit(limit).exec();
@@ -237,7 +237,6 @@ const resolvers = {
 
             /* Check if the admin is the one who deletes the user */
             const adminUser = await User.findById(ctx.req.user.id);
-            console.log('ADMINUSER', adminUser);
 
             if (adminUser.role !== 'Admin') {
                 throw new Error(JSON.stringify({
@@ -268,7 +267,7 @@ const resolvers = {
             }
         },
 
-        updateCommentsRecipe: async (_, {id, input}) => {
+        sendCommentsRecipe: async (_, {id, input}) => {
             /* Check if recipe exists */
             const checkRecipe = await Recipes.findById(id);
 
@@ -276,14 +275,41 @@ const resolvers = {
                 throw new Error('Recipe does not exist');
             }
 
-            const { user_id, user_name, message } = input.comments;
+            const createdAt = new Date();
+            const addComments = Object.assign(input.comments, { createdAt });
 
-            checkRecipe.comments = [...checkRecipe.comments, {
-                user_id, user_name, message
-            }];
+            checkRecipe.comments = [...checkRecipe.comments, addComments];
 
             checkRecipe.save();
             return checkRecipe;
+        },
+
+        updateVoteRecipe: async (_, {id, input}, ctx) => {
+            const { votes } = input;
+
+            /* Check if recipe exists */
+            const checkRecipe = await Recipes.findById(id);
+
+            if (!checkRecipe) {
+                throw new Error('Recipe does not exist');
+            }
+
+            /* Check if user has voted */
+            if (checkRecipe.voted.includes(ctx.req.user.id)) {
+                throw new Error('You has voted this recipe');
+            }
+            
+            /* Calculate total votes and save data in DB */
+            checkRecipe.votes += votes;
+            checkRecipe.voted = [...checkRecipe.voted, ctx.req.user.id];
+
+            const averageVotes = (checkRecipe.votes/checkRecipe.voted.length);
+            const adjustMean = ((Math.ceil(averageVotes)+Math.floor(averageVotes))/2);
+
+            checkRecipe.average_vote = (averageVotes < adjustMean ? averageVotes : adjustMean); 
+            const res = await checkRecipe.save();
+            
+            return res;
         },
 
         deleteRecipe: async (_, {id}, ctx) => {
@@ -419,8 +445,8 @@ const resolvers = {
                 }
                 throw new Error(error);
             }
-        }
-    }
+        },
+    } 
 };
 
 module.exports = resolvers;

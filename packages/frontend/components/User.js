@@ -8,28 +8,23 @@ const DELETE_USER = gql`
     }
 `;
 
-const GET_USERS = gql`
-    query getUsers {
-        getUsers {
-            id
-            name
-        }
-    }
-`;
-
-const User = ({user}) => {
+const User = ({user, q, page}) => {
     const { id, name, email, role, confirmed } = user;
 
     const [ deleteUser ] = useMutation(DELETE_USER, {
         update(cache) {
-            /* copy from cache object */
-            const { getUsers } = cache.readQuery({ query: GET_USERS });
+            const { getUsers } = cache.readQuery({ 
+                query: q,
+                variables: {
+                    offset: page * 9,
+                    limit: 9
+                }
+            });
 
-            /* write cache object */
             cache.writeQuery({
-                query: GET_USERS,
+                query: q,
                 data: {
-                    getUsers: getUsers.filter(currentUser => currentUser.id !== id)
+                    getUsers: getUsers.users.filter(currentUser => currentUser.id !== id)
                 }
             })
         }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import Layout from '../../components/layouts/Layout';
@@ -31,6 +31,7 @@ const GET_USERS = gql`
 `;
 
 const AdminUsers = () => {
+    /* Routing */
     const router = useRouter();
     const { query: { page: numberpage } } = router;
 
@@ -57,7 +58,6 @@ const AdminUsers = () => {
         variables: {
             offset: page * 9,
             limit: 9,
-            sort: 'ander@correo.com'
         }
     });
    
@@ -112,7 +112,12 @@ const AdminUsers = () => {
                     </thead>
                     <tbody className="bg-white">
                         { users.map(user => (
-                            <User key={user.id} user={user} />
+                            <User 
+                                key={user.id} 
+                                user={user} 
+                                q={GET_USERS}
+                                page={page}
+                            />
                         ))}
                     </tbody>
                 </table>

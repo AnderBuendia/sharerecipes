@@ -41,7 +41,11 @@ const typeDefs = gql`
         description: String
         style: String
         comments: [CommentsRecipeGroup]
+        votes: Float
+        voted: [String]
+        average_vote: Float
         author: ID
+        createdAt: String
     }
 
     type File {
@@ -53,6 +57,7 @@ const typeDefs = gql`
         user_id: ID
         user_name: String
         message: String
+        createdAt: String
     }
     
     # Inputs
@@ -96,6 +101,7 @@ const typeDefs = gql`
         image_url: String
         image_name: String
         comments: CommentsRecipeInput
+        votes: Float
     }
 
     input CommentsRecipeInput {
@@ -120,7 +126,7 @@ const typeDefs = gql`
         # Recipes
         getRecipes: [Recipe]
         getUserRecipes: [Recipe]
-        getRecipe(id: ID!): Recipe
+        getRecipe(id: ID): Recipe
     }
 
     # Mutations
@@ -140,7 +146,8 @@ const typeDefs = gql`
         newRecipe(input: RecipeInput): Recipe
         updateRecipe(id: ID!, input: RecipeInput): Recipe
         deleteRecipe(id: ID!): String
-        updateCommentsRecipe(id: ID!, input: RecipeInput): Recipe
+        sendCommentsRecipe(id: ID!, input: RecipeInput): Recipe
+        updateVoteRecipe(id: ID!, input: RecipeInput): Recipe
 
         # Files
         uploadImageRecipe(file: Upload!): File
