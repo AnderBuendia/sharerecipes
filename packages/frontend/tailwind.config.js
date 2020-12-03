@@ -6,7 +6,8 @@ module.exports = {
   theme: {
     fontFamily: {
       roboto: ['Roboto'],
-      body: ['Open Sans']
+      body: ['Open Sans'],
+      work: ['Work Sans']
     },
     inset: {
       '0': 0,

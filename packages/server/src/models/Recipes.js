@@ -38,11 +38,14 @@ const recipesSchema = new Schema({
     comments: {
         type: Array,
     },
-    starrating: {
+    votes: {
         type: Number,
         default: 0
     },
-    votes: {
+    voted: {
+        type: Array,
+    },
+    average_vote: {
         type: Number,
         default: 0
     },
