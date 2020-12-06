@@ -32,7 +32,7 @@ const SEND_COMMENTS_RECIPES = gql`
 
 const Comments = ({user, recipe, qrecipe}) => {
 
-    const { id, comments } = recipe;
+    const { id } = recipe;
 
     /* Apollo mutation to update recipe comments */
     const [ sendCommentsRecipe ] = useMutation(SEND_COMMENTS_RECIPES, {
@@ -88,9 +88,9 @@ const Comments = ({user, recipe, qrecipe}) => {
         }
     });
 
+
     if (loading) return null;
-    const { getRecipeComments } = data;
-    console.log(getRecipeComments)
+    const { comments } = data.getRecipeComments;
 
     return (  
         <div className="mx-auto w-11/12 bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
@@ -124,15 +124,15 @@ const Comments = ({user, recipe, qrecipe}) => {
         </div>
         <div className="w-full mt-4">
             <div className="border-t border-gray-400 mb-4"></div>
-            { getRecipeComments.comments.map((comment, i) => (
+            { comments.map((comment, i) => (
                 <div key={comment.createdAt}>
                     <p className="font-body text-black text-lg font-bold">{comment.user_name}</p>
                     <p className="font-body mb-4">{comment.message}</p>
-                    { i === getRecipeComments.comments.length - 1 &&
+                    { i === comments.length - 1 &&
                         <Waypoint onEnter={() => fetchMore({ 
                             variables: {
                                 id,
-                                offset: i+1,
+                                offset: 0,
                                 limit: i+11
                             },
                         })} />

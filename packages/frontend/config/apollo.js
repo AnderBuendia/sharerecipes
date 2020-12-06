@@ -31,7 +31,22 @@ function createApolloClient() {
         connectToDevTools: true,
         ssrMode: typeof window === 'undefined',
         link: createIsomorphLink(),
-        cache: new InMemoryCache(),
+        cache: new InMemoryCache({
+            typePolicies: {
+                Query: {
+                    fields: {
+                        getRecipeComments: {
+                            keyArgs: false,
+                            comments: {
+                                merge(existing, incoming) {
+                                    return incoming;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }), 
     })
 }
 

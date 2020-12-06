@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import Layout from '../../components/layouts/Layout';
-import User from '../../components/User';
+import User from '../../components/adminpanel/User';
 import UsersGroup from '../../components/icons/usersgroup';
 import Pagination from '../../components/adminpanel/Pagination';
 

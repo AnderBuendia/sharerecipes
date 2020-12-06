@@ -127,6 +127,7 @@ const typeDefs = gql`
         getRecipes: [Recipe]
         getUserRecipes: [Recipe]
         getRecipe(id: ID): Recipe
+        getRecipeComments(id: ID, offset: Int, limit: Int): Recipe
     }
 
     # Mutations
