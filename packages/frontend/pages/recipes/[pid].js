@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
-import { useForm, Controller, get } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import Rating from '@material-ui/lab/Rating';
 import Layout from '../../components/layouts/Layout';
-import TextField from '@material-ui/core/TextField';
+import Comments from '../../components/recipe/Comments';
 
 const GET_RECIPES = gql`
     query getRecipes {
@@ -18,6 +17,7 @@ const GET_RECIPES = gql`
 const GET_RECIPE = gql`
     query getRecipe($id: ID) {
         getRecipe(id: $id) {
+            id
             name
             prep_time
             serves
@@ -36,19 +36,6 @@ const GET_RECIPE = gql`
             votes
             voted
             average_vote
-        }
-    }
-`;
-
-const SEND_COMMENTS_RECIPES = gql`
-    mutation sendCommentsRecipe($id: ID!, $input: RecipeInput) {
-        sendCommentsRecipe(id: $id, input: $input) {
-            comments {
-                user_id
-                user_name
-                message
-                createdAt
-            }
         }
     }
 `;
@@ -95,22 +82,6 @@ const Recipe = () => {
         }
     });
 
-    const [ sendCommentsRecipe ] = useMutation(SEND_COMMENTS_RECIPES, {
-        update(cache, { data: { sendCommentsRecipe } }) {
-            const { getRecipe } = cache.readQuery({
-                query: GET_RECIPE,
-                variables: { id }
-            });
-
-            cache.writeQuery({
-                query: GET_RECIPE,
-                data: {
-                    getRecipe: [...getRecipe.comments, sendCommentsRecipe]
-                }
-            });
-        }
-    });
-
     const [ updateVoteRecipe ] = useMutation(UPDATE_VOTE_RECIPE, {
         update(cache, { data: { updateVoteRecipe } }) {
             const { getRecipe } = cache.readQuery({
@@ -126,34 +97,6 @@ const Recipe = () => {
             });
         }
     });
-
-    /* React hook form */
-    const { register, handleSubmit, errors, control } = useForm({
-        mode: "onChange"
-    });
-
-    /* Comments react hook form */
-    const onSubmit = async data => {
-        const { message } = data;
-        const { id: user_id, name: user_name } = getUser;
-        try {
-            const { data } = await sendCommentsRecipe({
-                variables: {
-                    id,
-                    input: {
-                        comments: {
-                            user_id,
-                            user_name,
-                            message  
-                        }
-                    }
-                }
-            });
-            console.log('COMMENTS: ', data);
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     /* Update votes */
     const voteRecipe = async votes => {
@@ -261,7 +204,6 @@ const Recipe = () => {
                         
                         <div className="flex flex-col float-right items-center mt-4 xl:absolute xl:bottom-0 xl:right-0 xl:mt-6">
                             <Rating  
-
                                 name="half-rating" 
                                 size="large" 
                                 defaultValue={0}
@@ -303,46 +245,7 @@ const Recipe = () => {
                     ) : ''
                 }
             </div>
-            <div className="mx-auto w-11/12 bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
-                <h1 className="text-lg font-body font-bold mb-4">Discussion</h1> 
-                <div className="flex w-full">
-                    <div className="w-10">
-                        { getUser !== null ?
-                            <img className="w-8 h-8 rounded-full" src="/usericon.jpeg" />
-                            : <img className="w-8 h-8 rounded-full" src="/usericon.jpeg" />
-                        }
-                    </div>
-                    <div className="w-5/6 relative">
-                        <form onSubmit={handleSubmit(onSubmit)}>
-                        <Controller 
-                            name="message"
-                            as={<TextField
-                                className="w-10/12 md:w-11/12 border border-black rounded shadow-sm" 
-                                id="outlined-multiline-flexible"
-                                multiline
-                                rowsMax={3}
-                                placeholder="Introduce your message..."
-                                variant="outlined"
-                            />}
-                            defaultValue=""
-                            control={control}
-                        />
-                        
-                            <input className="ml-2 px-3 py-2 rounded-lg bg-black text-white font-roboto font-bold absolute top-0 hover:bg-gray-800 cursor-pointer" type="submit" value="SEND" />
-                        </form>   
-                    </div>            
-                </div>
-                <div className="w-full mt-4">
-                    <div className="border-t border-gray-400 mb-4"></div>
-                    { getRecipe.comments.map(comment => (
-                        <div key={comment.createdAt}>
-                            <p className="font-body text-black text-lg font-bold">{comment.user_name}</p>
-                            <p className="font-body mb-4">{comment.message}</p>
-                        </div>
-                        ))
-                    }
-                </div>
-            </div>
+            <Comments user={getUser} recipe={getRecipe} qrecipe={GET_RECIPE} />
         </Layout>
     );
 }

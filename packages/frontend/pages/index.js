@@ -1,7 +1,7 @@
 import React from 'react';
 import { gql, useQuery } from '@apollo/client';
 import Layout from '../components/layouts/Layout';
-import Recipe from '../components/Recipe';
+import Recipe from '../components/recipe/Recipe';
 
 const GET_RECIPES = gql`
   query getRecipes {

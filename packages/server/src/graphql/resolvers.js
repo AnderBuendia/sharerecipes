@@ -84,6 +84,16 @@ const resolvers = {
                 console.log(error);
             }
         },
+
+        getRecipeComments: async (_, {id, offset = 0, limit = 10}) => {
+            /* Check if recipe exists */
+            const comments = await Recipes.findById(id, {comments:{$slice: [offset, limit]}});
+            // if (!recipe) {
+            //     throw new Error('Recipe did not found');
+            // }
+
+            return comments;
+        },
     },
     Mutation: {
         /* Users */
