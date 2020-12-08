@@ -15,7 +15,7 @@ const GET_RECIPES = gql`
 `;
 
 const GET_RECIPE = gql`
-    query getRecipe($id: ID) {
+    query getRecipe($id: ID, $offset: Int, $limit: Int) {
         getRecipe(id: $id) {
             id
             name
@@ -26,12 +26,19 @@ const GET_RECIPE = gql`
             difficulty
             style
             image_url
-            author
-            comments {
-                user_id
-                user_name
+            author {
+                id
+                name
+            }
+            comments(offset: $offset, limit: $limit) {
+                id
                 message
-                createdAt
+                author {
+                    id
+                    name
+                    image_url
+                    image_name
+                }
             }
             votes
             voted
@@ -59,6 +66,8 @@ const GET_USER = gql`
         getUser {
             id
             name
+            image_url
+            image_name
         }
     }
 `;
@@ -83,16 +92,19 @@ const Recipe = () => {
     });
 
     const [ updateVoteRecipe ] = useMutation(UPDATE_VOTE_RECIPE, {
-        update(cache, { data: { updateVoteRecipe } }) {
-            const { getRecipe } = cache.readQuery({
-                query: GET_RECIPE,
-                variables: { id }
+        update(cache, { data: { updateVoteRecipe: { average_vote } } }) { 
+            const { getRecipe } = cache.readQuery({ query: GET_RECIPE,
+                variables: {
+                    id,
+                    offset: 0,
+                    limit: 10
+                }
             });
 
             cache.writeQuery({
                 query: GET_RECIPE,
                 data: {
-                    getRecipe: updateVoteRecipe
+                    getRecipe: {...getRecipe.average_vote, average_vote},
                 }
             });
         }
@@ -152,19 +164,18 @@ const Recipe = () => {
     }
 
     /* Apollo queries */
-    const { data: dataRecipe, loading: loadingRecipe } = useQuery(GET_RECIPE, {
+    const { data: dataRecipe, loading: loadingRecipe, fetchMore } = useQuery(GET_RECIPE, {
+        fetchPolicy: 'network-only',
         variables: {
-            id
+            id,
+            offset: 0,
+            limit: 10
         },
-        fetchPolicy: "cache-and-network"
     });
 
     const { data: dataUser, loading: loadingUser } = useQuery(GET_USER);
 
     if (loadingRecipe || loadingUser) return null;
-
-    console.log(dataRecipe);
-    console.log(dataUser);
 
     /* Apollo query data */
     const { getRecipe } = dataRecipe;
@@ -245,7 +256,12 @@ const Recipe = () => {
                     ) : ''
                 }
             </div>
-            <Comments user={getUser} recipe={getRecipe} qrecipe={GET_RECIPE} />
+            <Comments 
+                user={getUser} 
+                recipe={getRecipe} 
+                query={GET_RECIPE} 
+                fetchMore={fetchMore}
+            />
         </Layout>
     );
 }

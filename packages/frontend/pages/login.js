@@ -8,7 +8,7 @@ import { gql, useMutation } from '@apollo/client';
 import Layout from '../components/layouts/Layout';
 import Input from '../components/form/Input';
 import Alert from '../components/form/Alert';
-import Img from '../components/form/Img';
+import MuffinImg from '../components/images/MuffinImg';
 
 const AUTH_USER = gql`
     mutation authenticateUser($input: AuthenticateInput) {
@@ -74,7 +74,7 @@ const Login = () => {
         <Layout>
             <div className="md:w-4/5 xl:w-3/5 mx-auto mb-32">
                 <div className="flex justify-center mx-auto w-32">
-                    <Img />
+                    <MuffinImg />
                 </div>
                 <div className="flex justify-center mt-5">
                     <div className="w-full max-w-lg bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">

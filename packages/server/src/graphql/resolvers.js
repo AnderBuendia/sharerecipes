@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Recipes = require('../models/Recipes');
+const Comments = require('../models/Comments');
 
 const { createWriteStream } = require('fs');
 const path = require('path');
@@ -41,6 +42,26 @@ const sendEmails = async (user, contentHTML) => {
 
 /* Resolvers */
 const resolvers = {
+    /* Types to relation DBs */
+    Recipe: {
+        author: async ({author}) => {
+            const user = await User.findById(author);
+            return user;
+        },
+        comments: async ({id}, {offset, limit}) => {
+            const comments = await Comments.find({ recipe: id }).skip(offset).limit(limit).exec();
+            return comments;
+            
+        }
+    },
+
+    CommentsRecipe: {
+        author: async ({author}) => {
+            const user = await User.findById(author);
+            return user;
+        }
+    },
+
     Query: {
         /* Users */
         getUser: async (_, {}, ctx) => {
@@ -67,7 +88,6 @@ const resolvers = {
         getRecipe: async (_, {id}) => {
             /* Check if recipe exists */
             const recipe = await Recipes.findById(id);
-
             if (!recipe) {
                 throw new Error('Recipe did not found');
             }
@@ -78,23 +98,23 @@ const resolvers = {
         getRecipes: async () => {
             try {
                 const recipes = await Recipes.find({});
-
                 return recipes;
             } catch (error) {
                 console.log(error);
             }
         },
 
-        getRecipeComments: async (_, {id, offset = 0, limit = 10}) => {
-            /* Check if recipe exists */
-            const comments = await Recipes.findById(id, {comments:{$slice: [offset, limit]}});
-            // if (!recipe) {
-            //     throw new Error('Recipe did not found');
-            // }
-
-            return comments;
+        /* Comments */
+        getComments: async () => {
+            try {
+                const comments = await Comments.find({});
+                return comments;
+            } catch (error) {
+                console.log(error);
+            }
         },
     },
+
     Mutation: {
         /* Users */
         newUser: async (_, {input}) => {
@@ -277,21 +297,19 @@ const resolvers = {
             }
         },
 
-        sendCommentsRecipe: async (_, {id, input}) => {
-            /* Check if recipe exists */
-            const checkRecipe = await Recipes.findById(id);
+        sendCommentsRecipe: async (_, {input}, ctx) => {
+            const newComment = new Comments(input);
 
-            if (!checkRecipe) {
-                throw new Error('Recipe does not exist');
+            /* Assign user and recipe */
+            newComment.author = ctx.req.user.id;
+
+            /* Save Data in DB */
+            try {
+                const res = await newComment.save();
+                return res;
+            } catch (error) {
+                console.log(error);
             }
-
-            const createdAt = new Date();
-            const addComments = Object.assign(input.comments, { createdAt });
-
-            checkRecipe.comments = [...checkRecipe.comments, addComments];
-
-            checkRecipe.save();
-            return checkRecipe;
         },
 
         updateVoteRecipe: async (_, {id, input}, ctx) => {
@@ -341,7 +359,7 @@ const resolvers = {
         },
 
         /* Files */
-        uploadImageRecipe: async (_, {file}) => {
+        uploadRecipeImage: async (_, {file}) => {
             const { createReadStream, filename } = await file;
             
             /* if mimetype !=== jpeg or jpg or png err */
@@ -360,7 +378,7 @@ const resolvers = {
 
         },
 
-        uploadImageUser: async (_, {file}) => {
+        uploadUserImage: async (_, {file}) => {
             const { createReadStream, filename } = await file;
             
             /* if mimetype !=== jpeg or jpg or png err */

@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-const IndexIcon = () => {
+const MuffinImg = () => {
     const router = useRouter();
 
     const redirect = () => {
@@ -22,4 +22,4 @@ const IndexIcon = () => {
     );
 }
  
-export default IndexIcon;
+export default MuffinImg;

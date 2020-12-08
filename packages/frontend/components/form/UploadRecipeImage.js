@@ -4,20 +4,20 @@ import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
 
 const UPLOAD_IMAGES = gql`
-    mutation uploadImageRecipe($file: Upload!) {
-        uploadImageRecipe(file: $file) {
+    mutation uploadRecipeImage($file: Upload!) {
+        uploadRecipeImage(file: $file) {
             url
             fileName
         }
     }
 `;
 
-const UploadImageRecipe = ({handleUrlFileRecipe, handleMessage}) => {
+const UploadRecipeImage = ({handleUrlFileRecipe, handleMessage}) => {
     /* Image state to show in DropZone container */
     const [imageRecipe, setImageRecipe] = useState('');
     
     /* Apollo mutation to upload files */
-    const [ uploadImageRecipe ] = useMutation(UPLOAD_IMAGES);
+    const [ uploadRecipeImage ] = useMutation(UPLOAD_IMAGES);
 
     /* Get content from Dropzone */
     const onDropRejected = () => {
@@ -25,12 +25,12 @@ const UploadImageRecipe = ({handleUrlFileRecipe, handleMessage}) => {
     };
 
     const onDropAccepted = useCallback(async ([file]) => {
-        const { data } = await uploadImageRecipe({
+        const { data } = await uploadRecipeImage({
             variables: { file }
         });
         console.log(data);
-        setImageRecipe(data.uploadImageRecipe);
-        handleUrlFileRecipe(data.uploadImageRecipe);
+        setImageRecipe(data.uploadRecipeImage);
+        handleUrlFileRecipe(data.uploadRecipeImage);
     }, []);
 
     const { isDragActive, getRootProps, getInputProps } = useDropzone({ onDropAccepted, onDropRejected, maxFiles: 1, maxSize: 5000000, accept: 'image/jpeg, image/jpg, image/png' });
@@ -75,4 +75,4 @@ const UploadImageRecipe = ({handleUrlFileRecipe, handleMessage}) => {
     );
 }
  
-export default UploadImageRecipe;
+export default UploadRecipeImage;

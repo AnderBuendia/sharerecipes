@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { setContext } from 'apollo-link-context';
 import { createUploadLink } from 'apollo-upload-client';
+import { mergeDeep, offsetLimitPagination } from '@apollo/client/utilities';
 
 let apolloClient;
 
@@ -33,18 +34,17 @@ function createApolloClient() {
         link: createIsomorphLink(),
         cache: new InMemoryCache({
             typePolicies: {
-                Query: {
+                Recipe: {
                     fields: {
-                        getRecipeComments: {
-                            keyArgs: false,
-                            comments: {
-                                merge(existing, incoming) {
-                                    return incoming;
-                                }
+                        comments: offsetLimitPagination(), 
+                        keyArgs: false,
+                        voted: {
+                            merge(existing, incoming) {
+                                return incoming;
                             }
-                        }
+                        },
                     }
-                }
+                },
             }
         }), 
     })
