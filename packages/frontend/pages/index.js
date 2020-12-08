@@ -16,7 +16,9 @@ const GET_RECIPES = gql`
         image_url
         style
         description
-        author
+        author {
+          name
+        }
     }
   }
 `;

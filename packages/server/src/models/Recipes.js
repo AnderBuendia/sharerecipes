@@ -35,9 +35,6 @@ const recipesSchema = new Schema({
         type: String,
         default: "NONE"
     },
-    comments: {
-        type: Array,
-    },
     votes: {
         type: Number,
         default: 0

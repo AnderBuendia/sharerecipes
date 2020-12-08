@@ -6,7 +6,7 @@ import Layout from '../../../components/layouts/Layout';
 import Input from '../../../components/form/Input';
 import SelectMenu from '../../../components/edituserform/selectMenu';
 import Alert from '../../../components/form/Alert';
-import UploadImageUser from '../../../components/edituserform/UploadImageUser';
+import UploadUserImage from '../../../components/edituserform/UploadUserImage';
 
 const GET_USER = gql`
     query getUser {
@@ -110,7 +110,7 @@ const EditUserAccount = () => {
                                 Edit Your Account
                             </h2>
 
-                            <UploadImageUser 
+                            <UploadUserImage 
                                 handleUrlFileUser={setUrlFileImage}
                                 handleMessage={setMessage}
                                 userData={data.getUser}

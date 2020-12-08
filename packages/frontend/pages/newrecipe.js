@@ -4,10 +4,9 @@ import { useRouter } from 'next/router';
 import { gql, useMutation } from '@apollo/client';
 import Swal from 'sweetalert2';
 import ReactSelect from 'react-select';
-import Image from 'next/image';
 import Layout from '../components/layouts/Layout';
 import Input from '../components/form/Input';
-import UploadImageRecipe from '../components/form/UploadImageRecipe';
+import UploadRecipeImage from '../components/form/UploadRecipeImage';
 import Alert from '../components/form/Alert';
 
 const NEW_RECIPE = gql`
@@ -58,7 +57,7 @@ const NewRecipe = () => {
     const [selectedFoodStyle, setSelectedFoodStyle] = useState('');
     const [selectedDifficulty, setSelectedDifficulty] = useState('');
 
-    /* To get url from UploadImageRecipe */
+    /* To get url from UploadRecipeImage */
     const [urlFileRecipe, setUrlFileRecipe] = useState('');
 
     /* To get the ingredients */
@@ -163,7 +162,8 @@ const NewRecipe = () => {
                             <label
                                 className="block text-black text-md font-body font-bold mb-4"
                             >Recipe Image</label>
-                            <UploadImageRecipe
+
+                            <UploadRecipeImage
                                 handleUrlFileRecipe={setUrlFileRecipe} 
                                 handleMessage={setMessage}  
                                 name="image"

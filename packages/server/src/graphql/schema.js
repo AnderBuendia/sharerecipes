@@ -40,11 +40,11 @@ const typeDefs = gql`
         image_url: String
         description: String
         style: String
-        comments: [CommentsRecipeGroup]
+        comments(offset: Int, limit: Int): [CommentsRecipe]
         votes: Float
         voted: [String]
         average_vote: Float
-        author: ID
+        author: User
         createdAt: String
     }
 
@@ -53,10 +53,11 @@ const typeDefs = gql`
         fileName: String
     }
 
-    type CommentsRecipeGroup {
-        user_id: ID
-        user_name: String
+    type CommentsRecipe {
+        id: ID
         message: String
+        author: User
+        recipe: Recipe
         createdAt: String
     }
     
@@ -100,13 +101,11 @@ const typeDefs = gql`
         description: String
         image_url: String
         image_name: String
-        comments: CommentsRecipeInput
         votes: Float
     }
 
     input CommentsRecipeInput {
-        user_id: ID
-        user_name: String
+        recipe: ID
         message: String
     }
 
@@ -122,12 +121,12 @@ const typeDefs = gql`
         # Users
         getUser: User
         getUsers(offset: Int, limit: Int): Users
+        getComments: [CommentsRecipe]
 
         # Recipes
         getRecipes: [Recipe]
         getUserRecipes: [Recipe]
-        getRecipe(id: ID): Recipe
-        getRecipeComments(id: ID, offset: Int, limit: Int): Recipe
+        getRecipe(id: ID, offset: Int, limit: Int): Recipe
     }
 
     # Mutations
@@ -147,12 +146,12 @@ const typeDefs = gql`
         newRecipe(input: RecipeInput): Recipe
         updateRecipe(id: ID!, input: RecipeInput): Recipe
         deleteRecipe(id: ID!): String
-        sendCommentsRecipe(id: ID!, input: RecipeInput): Recipe
+        sendCommentsRecipe(input: CommentsRecipeInput): CommentsRecipe
         updateVoteRecipe(id: ID!, input: RecipeInput): Recipe
 
         # Files
-        uploadImageRecipe(file: Upload!): File
-        uploadImageUser(file: Upload!): File
+        uploadRecipeImage(file: Upload!): File
+        uploadUserImage(file: Upload!): File
 
         # Recovery Password
         forgotPassword(input: EmailInput): Message

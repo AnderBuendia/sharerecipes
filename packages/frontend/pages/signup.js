@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Layout from '../components/layouts/Layout';
 import Input from '../components/form/Input';
 import Alert from '../components/form/Alert';
-import Img from '../components/form/Img';
+import MuffinImg from '../components/images/MuffinImg';
 
 /* Apollo queries */
 const CREATE_USER = gql`
@@ -71,7 +71,7 @@ const SignUp = () => {
         <Layout>
             <div className="md:w-4/5 xl:w-3/5 mx-auto mb-32">
                 <div className="flex justify-center mx-auto w-32">
-                    <Img />
+                    <MuffinImg />
                 </div>
                 { message && <Alert message={message} error={classAlert} /> }
                 <div className="flex justify-center mt-5">

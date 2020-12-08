@@ -37,10 +37,9 @@ const Header = () => {
     }, []);
 
     /* Apollo query */
-    const { client, data, loading, error } = useQuery(
-        GET_USER,
-        { fetchPolicy: "network-only" }
-    );
+    const { client, data, loading, error } = useQuery(GET_USER, { 
+        fetchPolicy: "network-only" 
+    });
 
     /* Don't access data before get results */
     if (loading) return null;
