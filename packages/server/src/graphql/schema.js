@@ -58,6 +58,8 @@ const typeDefs = gql`
         message: String
         author: User
         recipe: Recipe
+        votes: Int
+        voted: [String]
         createdAt: String
     }
     
@@ -107,6 +109,7 @@ const typeDefs = gql`
     input CommentsRecipeInput {
         recipe: ID
         message: String
+        votes: Int
     }
 
     enum RecipeDifficulty {
@@ -121,12 +124,15 @@ const typeDefs = gql`
         # Users
         getUser: User
         getUsers(offset: Int, limit: Int): Users
-        getComments: [CommentsRecipe]
+   
 
         # Recipes
         getRecipes: [Recipe]
         getUserRecipes: [Recipe]
         getRecipe(id: ID, offset: Int, limit: Int): Recipe
+
+        # Comments
+        getCommentRecipe(id: ID): CommentsRecipe
     }
 
     # Mutations
@@ -146,8 +152,11 @@ const typeDefs = gql`
         newRecipe(input: RecipeInput): Recipe
         updateRecipe(id: ID!, input: RecipeInput): Recipe
         deleteRecipe(id: ID!): String
-        sendCommentsRecipe(input: CommentsRecipeInput): CommentsRecipe
         updateVoteRecipe(id: ID!, input: RecipeInput): Recipe
+
+        # RecipeComments
+        sendCommentsRecipe(input: CommentsRecipeInput): CommentsRecipe
+        voteCommentsRecipe(id: ID!, input: CommentsRecipeInput): CommentsRecipe
 
         # Files
         uploadRecipeImage(file: Upload!): File

@@ -30,17 +30,6 @@ const GET_RECIPES = gql`
     query getRecipes {
         getRecipes {
             id
-            name
-            prep_time
-            serves
-            ingredients
-            image_url
-            difficulty
-            image_name
-            image_url
-            description
-            style
-            author
         }
     }
 `;

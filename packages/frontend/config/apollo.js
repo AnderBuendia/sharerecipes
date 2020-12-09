@@ -42,7 +42,7 @@ function createApolloClient() {
                             merge(existing, incoming) {
                                 return incoming;
                             }
-                        },
+                        },   
                     }
                 },
             }

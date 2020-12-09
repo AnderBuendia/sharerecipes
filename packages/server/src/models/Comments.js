@@ -5,6 +5,13 @@ const commentsSchema = new Schema({
     message: {
         type: String
     },
+    votes: {
+        type: Number,
+        default: 0
+    },
+    voted: {
+        type: Array,
+    },
     recipe: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Recipes',
