@@ -5,9 +5,7 @@ import Layout from '../../components/layouts/Layout';
 
 const CONFIRM_USER = gql`
     mutation confirmUser($input: TokenInput) {
-        confirmUser(input: $input) {
-            message
-        }
+        confirmUser(input: $input)
     }
 `;
 
@@ -34,8 +32,7 @@ const Confirmation = () => {
                 }
             });
 
-            const { message } = data.confirmUser;
-            setMessageConfirmation(message);
+            setMessageConfirmation(data.confirmUser);
 
             /* Redirect to login */
             setTimeout(() => {

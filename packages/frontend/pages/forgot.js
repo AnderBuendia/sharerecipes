@@ -7,15 +7,13 @@ import { gql, useMutation } from '@apollo/client';
 /* Components */
 import Layout from '../components/layouts/Layout';
 import Input from '../components/form/Input';
-import MuffinImg from '../components/form/MuffinImg';
+import MuffinImg from '../components/images/MuffinImg';
 import Alert from '../components/form/Alert';
 
 /* Apollo queries */
 const FORGOT_PASSWORD = gql`
     mutation forgotPassword($input: EmailInput) {
-        forgotPassword(input: $input) {
-            message
-        }
+        forgotPassword(input: $input)
     }
 `;
 
@@ -45,8 +43,7 @@ const Forgot = () => {
                     }
                 }
             });
-            console.log(data);
-            setMessage('Please check your email and follow the instructions');
+            setMessage(data.forgotPassword);
 
             setTimeout(() => {
                 setMessage(null);

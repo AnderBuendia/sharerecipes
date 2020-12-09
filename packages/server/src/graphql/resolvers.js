@@ -441,10 +441,8 @@ const resolvers = {
                 const user = jwt.verify(token, process.env.SECRET_EMAIL);
                 await User.findByIdAndUpdate({ _id: user.id }, { confirmed: true });
                 
-                return { 
-                    message: `Your account has been activated.
-                    You will be redirected automatically to login` 
-                }
+                return `Your account has been activated.
+                    You will be redirected automatically to login`;
             } catch (error) {
             }
         },
@@ -471,7 +469,7 @@ const resolvers = {
 
                 await sendEmails(user, contentHTML);
 
-                return user;   
+                return 'Please check your email and follow the instructions';   
             } catch (error) {
                 console.log(error);
             }
@@ -500,10 +498,8 @@ const resolvers = {
                     new: true
                 });
 
-                return { 
-                    message: `Your password has been changed.
-                    You will be redirected automatically to login` 
-                }
+                return `Your password has been changed.
+                    You will be redirected automatically to login`;
             } catch (error) {
                 if(error instanceof jwt.TokenExpiredError) {
                     return attemptRenewal()

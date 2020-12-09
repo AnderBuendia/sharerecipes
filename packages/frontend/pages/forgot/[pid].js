@@ -13,9 +13,7 @@ import Alert from '../../components/form/Alert';
 /* Apollo queries */
 const RESET_PASSWORD = gql`
     mutation resetPassword($input: UserPasswordInput) {
-        resetPassword(input: $input) {
-            message
-        }
+        resetPassword(input: $input)
     }
 `;
 
@@ -45,8 +43,7 @@ function ResetPassword({token}) {
                     }
                 }
             });
-            const { message } = data.resetPassword;
-            setMessage(message);
+            setMessage(data.resetPassword);
 
             setTimeout(() => {
                 setMessage(null);
