@@ -146,7 +146,7 @@ const typeDefs = gql`
         deleteUser(id: ID!): String
 
         # Confirm User
-        confirmUser(input: TokenInput): Message
+        confirmUser(input: TokenInput): String
 
         # Recipes
         newRecipe(input: RecipeInput): Recipe
@@ -163,8 +163,8 @@ const typeDefs = gql`
         uploadUserImage(file: Upload!): File
 
         # Recovery Password
-        forgotPassword(input: EmailInput): Message
-        resetPassword(input: UserPasswordInput): Message
+        forgotPassword(input: EmailInput): String
+        resetPassword(input: UserPasswordInput): String
     }
 `;
 
