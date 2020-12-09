@@ -16,7 +16,6 @@ const Recipe = ({recipe}) => {
     return (
         <>
         <div 
-            key={id}
             className="rounded overflow-hidden shadow-lg"
             onClick={ () => handleRecipe() }
         >

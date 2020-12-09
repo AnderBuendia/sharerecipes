@@ -59,6 +59,9 @@ const resolvers = {
         author: async ({author}) => {
             const user = await User.findById(author);
             return user;
+        },
+        recipe: async ({recipe}) => {
+            return await Recipes.findById(recipe);
         }
     },
 
@@ -105,13 +108,14 @@ const resolvers = {
         },
 
         /* Comments */
-        getComments: async () => {
-            try {
-                const comments = await Comments.find({});
-                return comments;
-            } catch (error) {
-                console.log(error);
+        getCommentRecipe: async (_, {id}) => {
+            /* Check if recipe exists */
+            const comment = await Comments.findById(id);
+            if (!comment) {
+                throw new Error('Comment did not found');
             }
+
+            return comment;
         },
     },
 
@@ -206,6 +210,18 @@ const resolvers = {
                 }));
             }
 
+            /* Check if password is correct */
+            const checkPassword = await bcrypt.compare(input.password, user.password);
+    
+            if (!checkPassword) {
+                throw new Error(JSON.stringify({
+                    errorMessage: 'Your current password is wrong',
+                    classError: 'error'
+                }));
+            }
+
+            delete input.password;
+        
             /* Save data in DB */
             user = await User.findOneAndUpdate({ _id: id}, input, {
                 new: true
@@ -310,6 +326,27 @@ const resolvers = {
             } catch (error) {
                 console.log(error);
             }
+        },
+
+        voteCommentsRecipe: async (_, {id, input}, ctx) => {
+            /* Check if comment exists */
+            const checkComment = await Comments.findById(id);
+
+            if (!checkComment) {
+                throw new Error('Comment does not exist');
+            }
+
+            /* Check if user has voted */
+            if (checkComment.voted.includes(ctx.req.user.id)) {
+                throw new Error('You has voted this recipe');
+            }
+
+            /* Add user who voted and sum votes */
+            checkComment.voted = [...checkComment.voted, ctx.req.user.id];
+            checkComment.votes += input.votes;
+            const res = await checkComment.save();
+
+            return checkComment;
         },
 
         updateVoteRecipe: async (_, {id, input}, ctx) => {

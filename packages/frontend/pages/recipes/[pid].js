@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { gql, useQuery, useMutation } from '@apollo/client';
+import { filter } from 'graphql-anywhere';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import Rating from '@material-ui/lab/Rating';
 import Layout from '../../components/layouts/Layout';
-import Comments from '../../components/recipe/Comments';
+import Discussion from '../../components/recipe/Discussion';
 
 const GET_RECIPES = gql`
     query getRecipes {
@@ -30,21 +31,13 @@ const GET_RECIPE = gql`
                 id
                 name
             }
-            comments(offset: $offset, limit: $limit) {
-                id
-                message
-                author {
-                    id
-                    name
-                    image_url
-                    image_name
-                }
-            }
+            ...CommentsFragment
             votes
             voted
             average_vote
         }
     }
+    ${Discussion.fragments.comments}
 `;
 
 const UPDATE_VOTE_RECIPE = gql`
@@ -245,7 +238,7 @@ const Recipe = () => {
                         ))}
                     </div>
                 </div>
-                { getUser !== null && getRecipe.author === getUser.id ? (
+                { getUser && getRecipe.author.id === getUser.id ? (
                     <div className="flex w-full mt-6">
                         <button
                             type="button"
@@ -256,9 +249,11 @@ const Recipe = () => {
                     ) : ''
                 }
             </div>
-            <Comments 
+
+            <Discussion 
                 user={getUser} 
-                recipe={getRecipe} 
+                recipeId={getRecipe.id}
+                arrcomments={filter(Discussion.fragments.comments, getRecipe)} 
                 query={GET_RECIPE} 
                 fetchMore={fetchMore}
             />

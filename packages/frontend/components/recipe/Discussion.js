@@ -3,10 +3,10 @@ import { gql, useMutation } from '@apollo/client';
 import { useForm, Controller } from 'react-hook-form';
 import TextField from '@material-ui/core/TextField';
 import Image from 'next/image';
-import { Waypoint } from 'react-waypoint';
 import ModalSignup from './ModalSignup';
+import Comment from './Comment';
 
-const SEND_COMMENTS_RECIPES = gql`
+const SEND_COMMENTS_RECIPE = gql`
     mutation sendCommentsRecipe($input: CommentsRecipeInput) {
         sendCommentsRecipe(input: $input) {
             id
@@ -15,22 +15,46 @@ const SEND_COMMENTS_RECIPES = gql`
     }
 `;
 
-const Comments = ({user, recipe, query, fetchMore}) => {
+const COMMENTS_FRAGMENT = gql`
+    fragment CommentsFragment on Recipe {
+        comments(offset: $offset, limit: $limit) {
+            id
+            message
+            votes
+            recipe {
+                id
+                author {
+                    id
+                }
+            }
+            author {
+                id
+                name
+                image_url
+                image_name
+            }
+        }
+    }
+`;
+
+const Discussion = ({user, recipeId, arrcomments, query, fetchMore}) => {
     /* useState Modal */
     const [open, setOpen] = useState(false);
 
+    /* Comments */
+    const { comments } = arrcomments;
+
     /* Apollo mutation to update recipe comments */
-    const [ sendCommentsRecipe ] = useMutation(SEND_COMMENTS_RECIPES, {
+    const [ sendCommentsRecipe ] = useMutation(SEND_COMMENTS_RECIPE, {
         update(cache, { data: { sendCommentsRecipe } }) {
             const { getRecipe } = cache.readQuery({ 
                 query, 
                 variables: {
-                    id: recipe.id,
+                    id: recipeId,
                     offset: 0,
                     limit: 10
                 }
             });
-            console.log('CACHE GET RECIPE', getRecipe.comments)
             
             cache.writeQuery({
                 query,
@@ -55,7 +79,7 @@ const Comments = ({user, recipe, query, fetchMore}) => {
                 const { data } = await sendCommentsRecipe({
                     variables: {
                         input: {
-                            recipe: recipe.id,
+                            recipe: recipeId,
                             message  
                         }
                     }
@@ -106,43 +130,26 @@ const Comments = ({user, recipe, query, fetchMore}) => {
         </div>
         <div className="w-full mt-4">
             <div className="border-t border-gray-400 mb-4">
-            { recipe.comments.map((comment, i) => (
-                <div key={comment.id}>
-                    <div className="flex w-full items-center mt-4">
-                        <Image 
-                            className="block rounded-full"
-                            key={comment.author.image_url ? comment.author.image_url : '/usericon.jpeg'}
-                            src={comment.author.image_url ? comment.author.image_url : '/usericon.jpeg'}
-                            alt={comment.author.image_name ? comment.author.image_name : 'UserIcon Image'}
-                            width={28}
-                            height={28}
-                        />
-                        <p className="ml-2 font-roboto text-black text-md font-bold ">
-                            {comment.author.name} 
-                            { comment.author.id === recipe.author.id ? 
-                                <span className="ml-2 px-2 p-0.5 rounded-full bg-green-100 text-green-900 font-light text-xs uppercase">Chef</span> 
-                                : 
-                                '' 
-                            } 
-                        </p>
-                    </div>
-                    <p className="break-all ml-10 font-roboto text-gray-700 text-sm font-medium mb-5">{comment.message}</p>
-                    { i === recipe.comments.length - 1 &&
-                        <Waypoint onEnter={() => fetchMore({ 
-                            variables: {
-                                id: recipe.id,
-                                offset: 0,
-                                limit: i+11
-                            },
-                        })} />
-                    }         
-                </div>
-                ))
+            { comments.map((comment, i) => (
+                    <Comment 
+                        key={comment.id}
+                        comment={comment}
+                        i={i}
+                        query={query}
+                        fetchMore={fetchMore}
+                        user={user}
+                        numberOfComments={comments.length}
+                    />
+                )) 
             }
             </div>
         </div>
     </div>
     );
 }
+
+Discussion.fragments = {
+    comments: COMMENTS_FRAGMENT
+}
  
-export default Comments;
+export default Discussion;

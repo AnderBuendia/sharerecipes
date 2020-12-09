@@ -12,13 +12,9 @@ const GET_RECIPES = gql`
         ingredients
         prep_time
         difficulty
-        image_name
         image_url
         style
         description
-        author {
-          name
-        }
     }
   }
 `;
