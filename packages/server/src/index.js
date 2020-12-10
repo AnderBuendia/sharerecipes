@@ -6,8 +6,6 @@ const path = require('path');
 const cors = require('cors');
 const connectDB = require('./db/database');
 const jwt = require('jsonwebtoken');
-const typeDefs = require('./graphql/schema');
-const resolvers = require('./graphql/resolvers');
 require('dotenv').config({path: 'src/config/variables.env'});
 const mainGraphQL = require('./graphql/main');
 
