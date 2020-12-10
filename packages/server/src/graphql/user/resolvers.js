@@ -39,12 +39,11 @@ const sendEmails = async (user, contentHTML) => {
 const resolvers = {
     Query: {
         getUser: async (_, {}, ctx) => {
-            if (ctx.req.user) {
-                const user = await User.findById(ctx.req.user.id);
-                return user;
-            } else {
+            if (!ctx.req.user) {
                 return null;
             }
+
+            return await User.findById(ctx.req.user.id);
         },
         
         getUsers: async (_, {offset = 0, limit = 10}) => {
@@ -127,7 +126,6 @@ const resolvers = {
 
             const { id } = user;
             const token = jwt.sign({ id }, process.env.SECRET_JWT, { expiresIn: '16h' });
-            
             return { token };
         },
 

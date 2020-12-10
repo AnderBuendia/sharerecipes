@@ -4,11 +4,11 @@ import Link from 'next/link';
 import onClickOutside from 'react-onclickoutside';
 import Image from 'next/image';
 
-const DropdownMenu = ({dataUser, client}) => {
+const DropdownMenu = ({userData, client}) => {
     /* Routing */
     const router = useRouter();
 
-    const { id, name, role, image_name, image_url } = dataUser;
+    const { id, name, role, image_name, image_url } = userData;
 
     /* Dropdown user menu*/
     const [open, setOpen] = useState(false);
