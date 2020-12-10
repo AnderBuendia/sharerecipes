@@ -65,10 +65,9 @@ const GET_USER = gql`
     }
 `;
 
-const Recipe = () => {
+function Recipe({id}) {
     /* Get current ID - Routing */
     const router = useRouter();
-    const { query: { pid: id }} = router;
 
     /* Apollo mutation */
     const [ deleteRecipe ] = useMutation(DELETE_RECIPE, {
@@ -174,6 +173,7 @@ const Recipe = () => {
     const { getRecipe } = dataRecipe;
     const { getUser } = dataUser;
 
+    console.log('GETUSER', getUser)
     return (  
         <Layout>
             <div className="mx-auto w-11/12 bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
@@ -260,5 +260,12 @@ const Recipe = () => {
         </Layout>
     );
 }
- 
+
+export const getServerSideProps = async ({params}) => {
+    const id = params.pid;
+    return {
+        props: {id}
+    }
+}
+
 export default Recipe;
