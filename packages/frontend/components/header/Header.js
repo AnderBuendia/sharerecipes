@@ -48,9 +48,9 @@ const Header = () => {
     return ( 
         <>
             { width <= 768 ? 
-                <HeaderMobile dataUser={getUser} client={client}/>
+                <HeaderMobile userData={getUser} client={client}/>
                 :
-                <HeaderDesktop dataUser={getUser} client={client} />
+                <HeaderDesktop userData={getUser} client={client} />
             }  
         </>
     );

@@ -7,13 +7,14 @@ const cors = require('cors');
 const connectDB = require('./db/database');
 const jwt = require('jsonwebtoken');
 require('dotenv').config({path: 'src/config/variables.env'});
-const mainGraphQL = require('./graphql/main');
+const typeDefs = require('./graphql/mainTypeDefs');
+const resolvers = require('./graphql/mainResolvers');
 
 /* Apollo server */
 const startServer = async () => {
     const server = new ApolloServer({
-        typeDefs: mainGraphQL().typeDefs,
-        resolvers: mainGraphQL().resolvers,
+        typeDefs,
+        resolvers,
         context: ({req, res}) => ({req, res})
     });
 

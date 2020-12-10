@@ -165,13 +165,13 @@ function Recipe({id}) {
         },
     });
 
-    const { data: dataUser, loading: loadingUser } = useQuery(GET_USER);
+    const { data: userData, loading: loadingUser } = useQuery(GET_USER);
 
     if (loadingRecipe || loadingUser) return null;
 
     /* Apollo query data */
     const { getRecipe } = dataRecipe;
-    const { getUser } = dataUser;
+    const { getUser } = userData;
 
     console.log('GETUSER', getUser)
     return (  
