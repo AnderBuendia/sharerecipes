@@ -5,7 +5,7 @@ import MenuMobileIcon from '../icons/menuMobileicon';
 import Search from './Search';
 import DropdownMenu from './dropdownMenu';
 
-const HeaderMobile = ({userData, client}) => {
+const HeaderMobile = ({userData}) => {
     const [open, setOpen] = useState(false);
 
     return(
@@ -27,7 +27,6 @@ const HeaderMobile = ({userData, client}) => {
                                 <DropdownMenu 
                                         className="flex-1"
                                         userData={userData} 
-                                        client={client}
                                 />
                             </> 
                         ) : '' 

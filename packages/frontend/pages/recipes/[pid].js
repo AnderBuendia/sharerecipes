@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import Rating from '@material-ui/lab/Rating';
 import Layout from '../../components/layouts/Layout';
 import Discussion from '../../components/recipe/Discussion';
+import { initializeApollo } from '../../config/apollo';
 
 const GET_RECIPES = gql`
     query getRecipes {
@@ -173,7 +174,6 @@ function Recipe({id}) {
     const { getRecipe } = dataRecipe;
     const { getUser } = userData;
 
-    console.log('GETUSER', getUser)
     return (  
         <Layout>
             <div className="mx-auto w-11/12 bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
@@ -261,10 +261,23 @@ function Recipe({id}) {
     );
 }
 
-export const getServerSideProps = async ({params}) => {
+export const getServerSideProps = async ({params}, ctx) => {
+    const apolloClient = initializeApollo(null, ctx);
     const id = params.pid;
+
+    await apolloClient.query({
+        query: GET_RECIPE
+    });
+
+    await apolloClient.query({
+        query: GET_USER
+    });
+
     return {
-        props: {id}
+        props: {
+            id,
+            initialApolloState: apolloClient.cache.extract(),
+        }
     }
 }
 

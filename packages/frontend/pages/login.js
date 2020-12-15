@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { gql, useMutation } from '@apollo/client';
+import { setAccessToken } from '../lib/accessToken';
 
 /* Components */
 import Layout from '../components/layouts/Layout';
@@ -13,7 +14,7 @@ import MuffinImg from '../components/images/MuffinImg';
 const AUTH_USER = gql`
     mutation authenticateUser($input: AuthenticateInput) {
         authenticateUser(input: $input) {
-            token
+            accessToken
         }
     }
 `;
@@ -45,14 +46,12 @@ const Login = () => {
                     }
                 }
             });
-            // console.log(data);
-            setMessage('Authenticating...');
 
-            /* Save token in localStorage */
-            setTimeout(() => {
-                const { token } = data.authenticateUser;
-                localStorage.setItem('token', token);
-            }, 1000);
+            setMessage('Authenticating...');
+            
+            if (data) {
+                setAccessToken(data.authenticateUser.accessToken);
+            }
 
             /* Redirect to Home Page with user data */
             setTimeout(() => {

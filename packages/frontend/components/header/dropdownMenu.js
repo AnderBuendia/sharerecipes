@@ -1,13 +1,22 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { gql, useMutation } from '@apollo/client';
 import Link from 'next/link';
 import onClickOutside from 'react-onclickoutside';
+import { setAccessToken } from '../../lib/accessToken';
 import Image from 'next/image';
 
-const DropdownMenu = ({userData, client}) => {
+const LOGOUT_USER = gql`
+    mutation logoutUser {
+        logoutUser
+    }
+`;
+
+const DropdownMenu = ({userData}) => {
     /* Routing */
     const router = useRouter();
 
+    /* User data */
     const { id, name, role, image_name, image_url } = userData;
 
     /* Dropdown user menu*/
@@ -15,8 +24,12 @@ const DropdownMenu = ({userData, client}) => {
 
     DropdownMenu.handleClickOutside = () => setOpen(false);
 
-    const signOut = () => {
-        localStorage.removeItem('token');
+    /* Apollo mutation to logout */
+    const [ logoutUser, { client } ] = useMutation(LOGOUT_USER);
+
+    const signOut = async () => {
+        await logoutUser();
+        setAccessToken('');
         client.resetStore();
         router.push('/');
     };

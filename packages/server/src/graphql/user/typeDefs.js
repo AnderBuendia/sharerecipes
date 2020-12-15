@@ -21,7 +21,7 @@ const typeDefs = gql`
     }
 
     type Token {
-        token: String
+        accessToken: String
     }
     
     # Inputs
@@ -65,6 +65,7 @@ const typeDefs = gql`
         # Users
         newUser(input: UserInput): User
         authenticateUser(input: AuthenticateInput): Token
+        logoutUser: Boolean
         updateUser(id: ID!, input: UserInput): User
         updateUserPassword(id: ID!, input: UserPasswordInput): User
         deleteUser(id: ID!): String

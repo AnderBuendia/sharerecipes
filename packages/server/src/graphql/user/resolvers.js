@@ -3,6 +3,8 @@ const User = require('../../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const { createAccessToken, createRefreshToken } = require('../../utils/auth');
+const sendRefreshToken = require('../../utils/sendRefreshToken');
 require('dotenv').config({ path: 'src/config/variables.env' });
 
 /* Other fns */
@@ -39,11 +41,20 @@ const sendEmails = async (user, contentHTML) => {
 const resolvers = {
     Query: {
         getUser: async (_, {}, ctx) => {
-            if (!ctx.req.user) {
+            const authorization = ctx.req.headers['authorization'];
+
+            if(!authorization) {
                 return null;
             }
 
-            return await User.findById(ctx.req.user.id);
+            try {
+                const token = authorization.split(' ')[1];
+                const payload = jwt.verify(token, process.env.SECRET_JWT_ACCESS);
+                return await User.findOne({ _id: payload.id });
+            } catch (err) {
+                console.log(err);
+                return null;
+            }
         },
         
         getUsers: async (_, {offset = 0, limit = 10}) => {
@@ -96,7 +107,7 @@ const resolvers = {
             }
         },
 
-        authenticateUser: async (_, {input}) => {
+        authenticateUser: async (_, {input}, { res }) => {
             const { email, password } = input;
 
             /* Check if user is exists */
@@ -124,9 +135,15 @@ const resolvers = {
                 }));
             }
 
-            const { id } = user;
-            const token = jwt.sign({ id }, process.env.SECRET_JWT, { expiresIn: '16h' });
-            return { token };
+            sendRefreshToken(res, createRefreshToken(user));
+
+            return { accessToken: createAccessToken(user) };
+        },
+
+        logoutUser: async (_, {}, { res }) => {
+            sendRefreshToken(res, "");
+
+            return true;
         },
 
         updateUser: async (_, {id, input}, ctx) => {

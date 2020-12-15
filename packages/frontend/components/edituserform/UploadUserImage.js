@@ -48,9 +48,6 @@ const UploadUserImage = ({handleUrlFileUser, handleMessage, userData}) => {
         }
     }, [image_url])
 
-    console.log(userImage);
-    console.log(userData)
-
     return ( 
         <div 
             className="container m-auto inset-0 h-32 w-32 mb-3 rounded-full justify-center items-center text-center"

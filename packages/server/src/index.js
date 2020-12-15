@@ -1,14 +1,18 @@
+const User = require('./models/User');
+
 const express = require('express');
-const session = require('express-session');
 const { ApolloServer } = require('apollo-server-express');
 const { existsSync, mkdirSync } = require('fs');
 const path = require('path');
 const cors = require('cors');
 const connectDB = require('./db/database');
+const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 require('dotenv').config({path: 'src/config/variables.env'});
 const typeDefs = require('./graphql/mainTypeDefs');
 const resolvers = require('./graphql/mainResolvers');
+const { createAccessToken, createRefreshToken } = require("./utils/auth");
+const sendRefreshToken = require('./utils/sendRefreshToken');
 
 /* Apollo server */
 const startServer = async () => {
@@ -30,15 +34,12 @@ const startServer = async () => {
     app.use(express.json());
 
     /* App use cors */
-    app.use(cors());
-
-    /* App session */
-    app.use(session({
-        secret: process.env.SESSION_KEY || 'somesupersecret',
-        resave: true,
-        saveUninitialized: true,
-        cookie: {secure: false, maxAge: 1000*60*4}
+    app.use(cors({
+        origin: process.env.FRONTEND_URL,
+        credentials: true
     }));
+
+    app.use(cookieParser());
 
     /* Images dir */
     existsSync(path.join(__dirname, '../images')) || mkdirSync(path.join(__dirname, "../images"));
@@ -48,21 +49,40 @@ const startServer = async () => {
     existsSync(path.join(__dirname, '../images/user')) || mkdirSync(path.join(__dirname, "../images/user"));
     app.use("/images/user", express.static(path.join(__dirname, "../images/user")));
 
-    /* Setup JWT authentication middleware */
-    app.use((req, _, next) => {
-        const token = req.headers['authorization'] || '';
-        if(token) {
-            try {
-                const user = jwt.verify(token.replace('Bearer ', ''), process.env.SECRET_JWT);
-                req.user = user;
-            } catch {
-                return next();
-            }
+    /* Refresh Token */
+    app.post('/refresh_token', async (req, res) => {
+        const token = req.cookies.jid;
+
+        if (!token) {
+            return res.send({ ok: false, accessToken: '' });
         }
-        next();
+
+        let payload = null;
+
+        try {
+            payload = jwt.verify(token, process.env.SECRET_JWT_REFRESH);
+        } catch (err) {
+            console.log(err)
+            return res.send({ ok: false, accessToken: '' });
+        }
+
+        /* Token is valid and we can send back an access token */
+        const user = await User.findOne({ _id: payload.id });
+
+        if (!user) {
+            return res.send({ ok: false, accessToken: '' }); 
+        }
+
+        if (user.tokenVersion !== payload.tokenVersion) {
+            return res.send({ ok: false, accessToken: "" });
+        }
+
+        sendRefreshToken(res, createRefreshToken(user));
+
+        return res.send({ ok: true, accessToken: createAccessToken(user) })
     });
 
-    server.applyMiddleware({ app });
+    server.applyMiddleware({ app, cors: false });
 
     /* App port */
     const port = process.env.PORT || 4000;
