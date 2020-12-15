@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { setContext } from 'apollo-link-context';
 import { createUploadLink } from 'apollo-upload-client';
-import { mergeDeep, offsetLimitPagination } from '@apollo/client/utilities';
+import { offsetLimitPagination } from '@apollo/client/utilities';
+import { getAccessToken } from '../lib/accessToken';
 
 let apolloClient;
 
@@ -10,15 +11,19 @@ function createIsomorphLink() {
     if (typeof window === 'undefined') {
         return null;
     } else {
-        const httpLink = createUploadLink({ uri: 'http://localhost:4000/graphql' });
+        const httpLink = createHttpLink({ 
+            uri: 'http://localhost:4000/graphql',
+            credentials: 'include',
+        });
 
         const authLink = setContext((_, {headers}) => {
-            /* Read storage token */
-            const token = localStorage.getItem('token');
+            /* Read token */
+            const accessToken = getAccessToken();
+            
             return {
                 headers: {
                     ...headers,
-                    authorization: token ? `Bearer ${token}` : ''
+                    authorization: accessToken ? `bearer ${accessToken}` : ''
                 }
             }
         });
@@ -50,12 +55,12 @@ function createApolloClient() {
     })
 }
 
-export function initializeApollo(initialState = null) {
-    const _apolloClient = apolloClient ?? createApolloClient();
+export function initializeApollo(initialState = null, ctx = null) {
+    const _apolloClient = apolloClient ?? createApolloClient(ctx);
 
     if (initialState) {
-        const existingCache = _apolloClient.extract();
-        _apolloClient.cache.restore({ ...existingCache, ...initialState});
+        // const existingCache = _apolloClient.extract();
+        _apolloClient.cache.restore(initialState);
     }
 
     if (typeof window === 'undefined') return _apolloClient;
@@ -65,7 +70,10 @@ export function initializeApollo(initialState = null) {
     return _apolloClient;
 }
 
-export function useApollo(initialState) {
-    const store = useMemo(() => initializeApollo(initialState), [initialState]);
+export function useApollo(initialState, ctx = null) {
+    const store = useMemo(() => initializeApollo(initialState, ctx), [
+        initialState,
+        ctx
+    ]);
     return store;
 }

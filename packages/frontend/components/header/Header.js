@@ -3,6 +3,7 @@ import { useQuery, gql } from '@apollo/client';
 import dynamic from 'next/dynamic';
 import resolutionContext from '../../context/resolution/resolutionContext';
 import HeaderDesktop from './headerDesktop';
+import { initializeApollo } from '../../config/apollo';
 
 const GET_USER = gql`
     query getUser {
@@ -54,6 +55,20 @@ const Header = () => {
             }  
         </>
     );
-};
+}
+
+export const getServerSideProps = async ctx => {
+    const apolloClient = initializeApollo(null, ctx);
+
+    await apolloClient.query({
+        query: GET_USER
+    });
+
+    return {
+        props: {
+            initialApolloState: apolloClient.cache.extract(),
+        }
+    };
+}
  
 export default Header;

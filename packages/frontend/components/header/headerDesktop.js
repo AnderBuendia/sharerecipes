@@ -4,7 +4,7 @@ import Search from './Search';
 import MuffinImg from '../images/MuffinImg';
 import DropdownMenu from './dropdownMenu';
 
-const HeaderDesktop = ({userData, client}) => {
+const HeaderDesktop = ({userData}) => {
     return (
         <div className="w-full text-black bg-gray-400 dark-mode:text-gray-200 dark-mode:bg-gray-800">
             <div className="flex flex-col px-4 mx-auto md:items-center md:justify-between md:flex-row">
@@ -21,7 +21,6 @@ const HeaderDesktop = ({userData, client}) => {
                         <DropdownMenu 
                             className="flex-1"
                             userData={userData} 
-                            client={client}
                         />
                     </> :
                     <div>
