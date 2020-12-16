@@ -20,6 +20,7 @@ const COMMENTS_FRAGMENT = gql`
         comments(offset: $offset, limit: $limit) {
             id
             message
+            createdAt
             votes
             recipe {
                 id

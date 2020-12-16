@@ -2,6 +2,7 @@ import React from 'react';
 import { gql, useMutation } from '@apollo/client';
 import Image from 'next/image';
 import { Waypoint } from 'react-waypoint';
+import useTimeAgo from '../../hooks/useTimeAgo';
 import ChevronUp from '../icons/chevronUp';
 
 const VOTE_COMMENTS_RECIPE = gql`
@@ -15,7 +16,10 @@ const VOTE_COMMENTS_RECIPE = gql`
 `;
 
 const Comment = ({comment, i, query, fetchMore, user, numberOfComments}) => {
-    const { id, message, votes, author, recipe } = comment;
+    const { id, message, votes, author, recipe, createdAt } = comment;
+
+    /* TimeAgo Hook */
+    const timeago = useTimeAgo(createdAt);
 
     const [ voteCommentsRecipe ] = useMutation(VOTE_COMMENTS_RECIPE, {
         update(cache, { data: voteCommentsRecipe }) {
@@ -79,6 +83,7 @@ const Comment = ({comment, i, query, fetchMore, user, numberOfComments}) => {
                         '' 
                     } 
                 </p>
+                <p className="text-sm text-gray-500 ml-2">{timeago}</p>
             </div>
             <div className="ml-10 mb-5">
                 <p className="break-all font-roboto text-gray-900 text-sm font-medium">{message}</p>
