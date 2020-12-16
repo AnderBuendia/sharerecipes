@@ -124,7 +124,7 @@ const resolvers = {
         /* Comments Recipe */
         sendCommentsRecipe: async (_, {input}, ctx) => {
             const newComment = new Comments(input);
-
+            
             /* Assign user and recipe */
             newComment.author = ctx.req.user.id;
 

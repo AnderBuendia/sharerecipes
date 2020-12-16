@@ -50,6 +50,15 @@ function createApolloClient() {
                         },   
                     }
                 },
+                Query: {
+                    fields: {
+                        getRecipe: {
+                            merge(existing, incoming) {
+                                return incoming;
+                            }
+                        }
+                    }
+                }
             }
         }), 
     })
