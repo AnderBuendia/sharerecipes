@@ -19,7 +19,23 @@ const startServer = async () => {
     const server = new ApolloServer({
         typeDefs,
         resolvers,
-        context: ({req, res}) => ({req, res})
+        context: ({req, res}) => {
+            const authorization = req.headers['authorization'];
+
+            if(authorization) {
+                try {
+                    const token = authorization.split(' ')[1];
+                    const payload = jwt.verify(token, process.env.SECRET_JWT_ACCESS);
+                    req.user = payload;
+                } catch (err) {
+                    console.log(err);
+                }
+
+                return { req, res }
+            }
+
+            return { req, res }
+        }
     });
 
     /* Db Setup */

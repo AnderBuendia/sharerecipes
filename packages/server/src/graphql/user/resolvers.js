@@ -41,20 +41,11 @@ const sendEmails = async (user, contentHTML) => {
 const resolvers = {
     Query: {
         getUser: async (_, {}, ctx) => {
-            const authorization = ctx.req.headers['authorization'];
-
-            if(!authorization) {
+            if (!ctx.req.user) {
                 return null;
             }
-
-            try {
-                const token = authorization.split(' ')[1];
-                const payload = jwt.verify(token, process.env.SECRET_JWT_ACCESS);
-                return await User.findOne({ _id: payload.id });
-            } catch (err) {
-                console.log(err);
-                return null;
-            }
+            
+            return await User.findById(ctx.req.user.id);
         },
         
         getUsers: async (_, {offset = 0, limit = 10}) => {
