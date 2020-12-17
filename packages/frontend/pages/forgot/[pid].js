@@ -130,7 +130,9 @@ function ResetPassword({token}) {
 export const getServerSideProps = async ({params}) => {
     const token = params.pid;
     return {
-        props: {token}
+        props: {
+            token
+        }
     }
 }
 

@@ -5,7 +5,6 @@ import Layout from '../../components/layouts/Layout';
 import User from '../../components/adminpanel/User';
 import UsersGroup from '../../components/icons/usersgroup';
 import Pagination from '../../components/adminpanel/Pagination';
-import { initializeApollo } from '../../config/apollo';
 
 const GET_USER = gql`
     query getUser {
@@ -137,22 +136,4 @@ const AdminUsers = () => {
     );
 }
 
-export const getServerSideProps = async ctx => {
-    const apolloClient = initializeApollo(null, ctx);
-  
-    await apolloClient.query({
-      query: GET_USER
-    });
-
-    await apolloClient.query({
-        query: GET_USERS
-    });
-  
-    return {
-      props: {
-        initialApolloState: apolloClient.cache.extract(),
-      }
-    };
-  }
- 
 export default AdminUsers;

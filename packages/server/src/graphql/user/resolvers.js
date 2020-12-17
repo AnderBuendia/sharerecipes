@@ -131,7 +131,7 @@ const resolvers = {
             return { accessToken: createAccessToken(user) };
         },
 
-        logoutUser: async (_, {}, { res }) => {
+        signOutUser: async (_, {}, { res }) => {
             sendRefreshToken(res, "");
 
             return true;

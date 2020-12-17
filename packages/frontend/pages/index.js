@@ -2,7 +2,6 @@ import React from 'react';
 import { gql, useQuery } from '@apollo/client';
 import Layout from '../components/layouts/Layout';
 import Recipe from '../components/recipe/Recipe';
-import { initializeApollo } from '../config/apollo';
 
 const GET_RECIPES = gql`
   query getRecipes {
@@ -48,20 +47,6 @@ const Index = () => {
       )}
     </Layout>
   )
-}
-
-export const getServerSideProps = async ctx => {
-  const apolloClient = initializeApollo(null, ctx);
-
-  await apolloClient.query({
-    query: GET_RECIPES
-  });
-
-  return {
-    props: {
-      initialApolloState: apolloClient.cache.extract(),
-    }
-  };
 }
 
 export default Index;
