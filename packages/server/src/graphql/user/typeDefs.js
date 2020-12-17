@@ -65,7 +65,7 @@ const typeDefs = gql`
         # Users
         newUser(input: UserInput): User
         authenticateUser(input: AuthenticateInput): Token
-        logoutUser: Boolean
+        signOutUser: Boolean
         updateUser(id: ID!, input: UserInput): User
         updateUserPassword(id: ID!, input: UserPasswordInput): User
         deleteUser(id: ID!): String

@@ -7,7 +7,6 @@ import Input from '../../../components/form/Input';
 import SelectMenu from '../../../components/edituserform/selectMenu';
 import Alert from '../../../components/form/Alert';
 import UploadUserImage from '../../../components/edituserform/UploadUserImage';
-import { initializeApollo } from '../../../config/apollo';
 
 const GET_USER = gql`
     query getUser {
@@ -168,18 +167,4 @@ const EditUserAccount = () => {
     );
 }
 
-export const getServerSideProps = async (ctx) => {
-    const apolloClient = initializeApollo(null, ctx);
-
-    await apolloClient.query({
-        query: GET_USER
-    });
-
-    return {
-        props: {
-            initialApolloState: apolloClient.cache.extract(),
-        }
-    }
-}
- 
 export default EditUserAccount;

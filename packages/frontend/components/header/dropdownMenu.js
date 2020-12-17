@@ -6,9 +6,9 @@ import onClickOutside from 'react-onclickoutside';
 import { setAccessToken } from '../../lib/accessToken';
 import Image from 'next/image';
 
-const LOGOUT_USER = gql`
-    mutation logoutUser {
-        logoutUser
+const SIGNOUT_USER = gql`
+    mutation signOutUser {
+        signOutUser
     }
 `;
 
@@ -25,10 +25,10 @@ const DropdownMenu = ({userData}) => {
     DropdownMenu.handleClickOutside = () => setOpen(false);
 
     /* Apollo mutation to logout */
-    const [ logoutUser, { client } ] = useMutation(LOGOUT_USER);
+    const [ signOutUser, { client } ] = useMutation(SIGNOUT_USER);
 
     const signOut = async () => {
-        await logoutUser();
+        await signOutUser();
         setAccessToken('');
         client.resetStore();
         router.push('/');
