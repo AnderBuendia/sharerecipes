@@ -34,7 +34,7 @@ const Index = () => {
         <>
           <h1 className="text-4xl font-body font-bold text-center items-center justify-center mb-4">New Recipes</h1>
           <div 
-            className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-3/5 md:w-full justify-center items-center gap-4 mb-2 cursor-pointer"
+            className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-3/5 md:w-full justify-center items-center gap-5 cursor-pointer"
           >
             {getRecipes.map(recipe => (
               <Recipe

@@ -16,7 +16,7 @@ const Recipe = ({recipe}) => {
     return (
         <>
         <div 
-            className="rounded overflow-hidden shadow-lg"
+            className="rounded overflow-hidden shadow-2xl transition duration-500 ease-in-out transform hover:scale-105 hover:shadow-md"
             onClick={ () => handleRecipe() }
         >
             <div 
@@ -24,11 +24,23 @@ const Recipe = ({recipe}) => {
                 style={{ backgroundImage: `linear-gradient(180deg,transparent 0,rgba(0,0,0,.9) 150%), url(${image_url})` }}>
                 <div className="font-bold text-xl mb-4 text-white absolute bottom-0 ">{name}</div>
             </div>
-            <div className="w-full px-3 pt-2 pb-2">
-                <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{style}</span>
-                <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{difficulty}</span>
-                <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Preparation time: {prep_time}</span>
-                <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Serves: {serves}</span>
+            <div className="w-full flex flex-wrap overflow-hidden text-center p-1">
+                <div className="w-1/2 overflow-hidden p-1 border-r border-b border-gray-300">
+                    <p className="font-light text-gray-500 text-xs uppercase">Prep time</p>
+                    <span className="font-bold">{prep_time} mins</span>
+                </div>
+                <div className="w-1/2 overflow-hidden p-1 border-b border-gray-300">
+                    <p className="font-light text-gray-500 text-xs uppercase">Serves</p>
+                    <span className="font-bold">{serves}</span> 
+                </div>
+                <div className="w-1/2 overflow-hidden p-1 border-r border-gray-300">
+                    <p className="font-light text-gray-500 text-xs uppercase">Difficulty</p>
+                    <span className="font-bold uppercase">{difficulty}</span>
+                </div>
+                <div className="w-1/2 overflow-hidden p-1">
+                    <p className="font-light text-gray-500 text-xs uppercase">Style</p>
+                    <span className="font-bold uppercase">{style}</span> 
+                </div>
             </div>
         </div>
         </>
