@@ -31,7 +31,17 @@ const usersSchema = new Schema({
     role: {
         type: String,
         default: "Member"
-    }
+    },
+    refreshTokens: [
+        {
+            hash: {
+                type: String,
+            },
+            expiry: {
+                type: Date,
+            },
+        },
+    ],
 }, {
     timestamps: true
 });

@@ -126,14 +126,42 @@ const resolvers = {
                 }));
             }
 
-            sendRefreshToken(res, createRefreshToken(user));
+            const refreshToken = createRefreshToken(user);
+
+            /* Save data Token to refresh in DB */
+            const refreshTokenExpiry = new Date();
+            refreshTokenExpiry.setHours(refreshTokenExpiry.getHours() + 4);
+            refreshTokenExpiry.setMilliseconds(0);
+
+            const salt = await bcrypt.genSalt(10);
+            const refreshTokenHash = await bcrypt.hash(refreshToken, salt);
+
+            user.refreshTokens.push({
+                hash: refreshTokenHash,
+                expiry: refreshTokenExpiry,
+            });
+
+            await user.save();
+
+            /* Set cookie token */
+            sendRefreshToken(res, refreshToken);
 
             return { accessToken: createAccessToken(user) };
         },
 
-        signOutUser: async (_, {}, { res }) => {
-            sendRefreshToken(res, "");
+        signOutUser: async (_, {}, ctx) => {
+            const user = await User.findById(ctx.req.user.id);
+            const token = ctx.req.cookies.jid;
 
+            /* find matching token in database and filter it out */
+            user.refreshTokens = user.refreshTokens.filter(storedToken => 
+                !bcrypt.compareSync(token, storedToken.hash)
+            );
+
+            await user.save();
+            
+            /* Send void data to the cookie */
+            sendRefreshToken(ctx.res, "");
             return true;
         },
 

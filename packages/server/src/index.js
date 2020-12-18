@@ -8,6 +8,7 @@ const cors = require('cors');
 const connectDB = require('./db/database');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 require('dotenv').config({path: 'src/config/variables.env'});
 const typeDefs = require('./graphql/mainTypeDefs');
 const resolvers = require('./graphql/mainResolvers');
@@ -88,8 +89,42 @@ const startServer = async () => {
         if (!user) {
             return res.send({ ok: false, accessToken: '' }); 
         }
+
+        /* Refresh Token Validation */
+        let isRefreshTokenValid = false;
+
+        user.refreshTokens = user.refreshTokens.filter(storedToken => {
+            const isMatch = bcrypt.compareSync(token, storedToken.hash);
+            const isValid = storedToken.expiry > Date.now();
+            if (isMatch && isValid) {
+                isRefreshTokenValid = true;
+            }
+
+            return !isMatch && isValid;
+        });
+
+        if (!isRefreshTokenValid) throw new Error('Invalid refresh token');
+
+        const newRefreshToken = createRefreshToken(user);
         
-        sendRefreshToken(res, createRefreshToken(user));
+        /* Save data Token to refresh in DB */
+        const newRefreshTokenExpiry = new Date();
+        newRefreshTokenExpiry.setHours(newRefreshTokenExpiry.getHours() + 4);
+        newRefreshTokenExpiry.setMilliseconds(0);
+
+
+        const salt = await bcrypt.genSalt(10);
+        const newRefreshTokenHash = await bcrypt.hash(newRefreshToken, salt);
+
+        user.refreshTokens.push({
+            hash: newRefreshTokenHash,
+            expiry: newRefreshTokenExpiry,
+        });
+
+        await user.save();
+        
+        /* Send the cookie with the new token */
+        sendRefreshToken(res, newRefreshToken);
 
         return res.send({ ok: true, accessToken: createAccessToken(user) })
     });

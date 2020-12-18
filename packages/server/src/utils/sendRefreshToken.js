@@ -1,5 +1,5 @@
 const sendRefreshToken = (res, token) => {
-    res.cookie('jid', token, { maxAge: 900000*8, httpOnly: true }); 
+    res.cookie('jid', token, { httpOnly: true }); 
 }
 
 module.exports = sendRefreshToken;
