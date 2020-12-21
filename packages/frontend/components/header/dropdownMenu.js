@@ -5,6 +5,7 @@ import Link from 'next/link';
 import onClickOutside from 'react-onclickoutside';
 import { setAccessToken } from '../../lib/accessToken';
 import Image from 'next/image';
+import { useToasts } from 'react-toast-notifications';
 
 const SIGNOUT_USER = gql`
     mutation signOutUser {
@@ -19,6 +20,9 @@ const DropdownMenu = ({userData}) => {
     /* User data */
     const { id, name, role, image_name, image_url } = userData;
 
+    /* Set Toast Notification */
+    const { addToast } = useToasts();
+
     /* Dropdown user menu*/
     const [open, setOpen] = useState(false);
 
@@ -32,6 +36,7 @@ const DropdownMenu = ({userData}) => {
         setAccessToken('');
         client.resetStore();
         router.push('/');
+        addToast('You have been disconnected', { appearance: 'info' });
     };
 
     return (  
