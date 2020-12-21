@@ -1,19 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ApolloProvider } from '@apollo/client';
-import { useApollo } from '../config/apollo';
 import { withApollo } from '../config/apollo';
+import { ToastProvider } from 'react-toast-notifications';
 import ResolutionState from '../context/resolution/resolutionState';
-import { setAccessToken } from '../lib/accessToken';
 import '../styles/index.css';
-
 
 const MyApp = ({ Component, pageProps, apolloClient }) => {
 
   return (
     <ApolloProvider client={apolloClient}>
-      <ResolutionState>
-        <Component {...pageProps} />
-      </ResolutionState>
+      <ToastProvider
+        autoDismiss
+        autoDismissTimeout={2000}
+        placement='top-center'
+      >
+        <ResolutionState>
+          <Component {...pageProps} />
+        </ResolutionState>
+      </ToastProvider>
     </ApolloProvider>
   )
 }

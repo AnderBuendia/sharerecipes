@@ -4,10 +4,10 @@ import { useRouter } from 'next/router';
 import { gql, useMutation } from '@apollo/client';
 import Swal from 'sweetalert2';
 import ReactSelect from 'react-select';
+import { useToasts } from 'react-toast-notifications';
 import Layout from '../components/layouts/Layout';
 import Input from '../components/form/Input';
 import UploadRecipeImage from '../components/form/UploadRecipeImage';
-import Alert from '../components/form/Alert';
 
 const NEW_RECIPE = gql`
     mutation newRecipe($input: RecipeInput) {
@@ -38,10 +38,10 @@ const NewRecipe = () => {
     /* Routing */
     const router = useRouter();
 
-     /* useStates */
-    /* Set error message alert */
-    const [message, setMessage] = useState(null);
+    /* Set Toast Notification */
+    const { addToast } = useToasts();
 
+    /* useStates */
     /* To select options */
     const [selectedFoodStyle, setSelectedFoodStyle] = useState('');
     const [selectedDifficulty, setSelectedDifficulty] = useState('');
@@ -131,10 +131,7 @@ const NewRecipe = () => {
                 'success'
             );
         } catch (error) {
-            setMessage(error.message.replace('GraphQL error: ', ''));
-            setTimeout(() => {
-                setMessage(null);
-            }, 3000);
+            addToast(error.message.replace('GraphQL error: ', ''), { appearance: 'error' });
         }
     };
 
@@ -143,7 +140,6 @@ const NewRecipe = () => {
             <div className="md:w-11/12 xl:w-10/12 mx-auto">
                 <div className="flex justify-center mt-5">
                     <div className="w-full max-w-lg bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
-                        { message && <Alert message={message} /> }
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center my-4">
                                 Create New Recipe

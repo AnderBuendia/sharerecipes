@@ -3,12 +3,12 @@ import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { gql, useMutation } from '@apollo/client';
+import { useToasts } from 'react-toast-notifications';
 
 /* Components */
 import Layout from '../../components/layouts/Layout';
 import Input from '../../components/form/Input';
 import MuffinImg from '../../components/images/MuffinImg';
-import Alert from '../../components/form/Alert';
 
 /* Apollo queries */
 const RESET_PASSWORD = gql`
@@ -18,12 +18,11 @@ const RESET_PASSWORD = gql`
 `;
 
 function ResetPassword({token}) {
-    
+    /* Routing */
     const router = useRouter();
     
-    /* useState alert message */
-    const [message, setMessage] = useState(null);
-    const [classAlert, setClassAlert] = useState(null);
+    /* Set Toast Notification */
+    const { addToast } = useToasts();
 
     /* Apollo mutation */
     const [ resetPassword ] = useMutation(RESET_PASSWORD);
@@ -43,20 +42,15 @@ function ResetPassword({token}) {
                     }
                 }
             });
-            setMessage(data.resetPassword);
+            addToast(data.resetPassword, { appearance: 'success' });
 
             setTimeout(() => {
-                setMessage(null);
                 router.push('/login');
-            }, 4000);
+            }, 3000);
         } catch (error) {
-            console.log(error.message)
-            const { errorMessage, errorClass } = JSON.parse(error.message.replace('Error:', ''));
-            setMessage(errorMessage);
-            setClassAlert(errorClass);
+            addToast(error.message.replace('GraphQL error: ', ''), { appearance: 'error' });
+            
             setTimeout(() => {
-                setMessage(null);
-                setClassAlert(null);
                 router.push('/forgot');
             }, 3000);
         }
@@ -70,7 +64,6 @@ function ResetPassword({token}) {
                 </div>
                 <div className="flex justify-center mt-5">
                     <div className="w-full max-w-lg bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
-                        { message && <Alert message={message} error={classAlert} /> }
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center my-4">
                                 Reset Your Password

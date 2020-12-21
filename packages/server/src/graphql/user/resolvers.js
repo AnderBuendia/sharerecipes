@@ -70,10 +70,7 @@ const resolvers = {
             let user = await User.findOne({ email });
 
             if (user) {
-                throw new Error(JSON.stringify({
-                    errorMessage: 'User is already registered', 
-                    classError: 'error'
-                }));
+                throw new Error('User is already registered');
             }
 
             /* Hashing password */
@@ -105,25 +102,16 @@ const resolvers = {
             const user = await User.findOne({ email });
 
             if (!user) {
-                throw new Error(JSON.stringify({
-                    errorMessage: 'User does not exist',
-                    classError: 'error'
-                })); 
+                throw new Error('User does not exist'); 
             } else if (user && !user.confirmed) {
-                throw new Error(JSON.stringify({
-                    errorMessage: 'Your account has not activated. Please check your email',
-                    classError: 'error'
-                })); 
+                throw new Error('Your account has not activated. Please check your email'); 
             }
 
             /* Check if password is correct */
             const checkPassword = await bcrypt.compare(password, user.password);
             
             if (!checkPassword) {
-                throw new Error(JSON.stringify({
-                    errorMessage: 'Password is wrong',
-                    classError: 'error'
-                }));
+                throw new Error('Password is wrong');
             }
 
             const refreshToken = createRefreshToken(user);
@@ -170,28 +158,19 @@ const resolvers = {
             let user = await User.findById(id);
 
             if (!user) {
-                throw new Error(JSON.stringify({
-                    errorMessage: 'User does not exist',
-                    classError: 'error'
-                }));
+                throw new Error('User does not exist');
             }
 
             /* Check if user is the editor */
             if (user.id !== ctx.req.user.id) {
-                throw new Error(JSON.stringify({
-                    errorMessage: 'Invalid credentials',
-                    classError: 'error'
-                }));
+                throw new Error('Invalid credentials');
             }
 
             /* Check if password is correct */
             const checkPassword = await bcrypt.compare(input.password, user.password);
     
             if (!checkPassword) {
-                throw new Error(JSON.stringify({
-                    errorMessage: 'Your current password is wrong',
-                    classError: 'error'
-                }));
+                throw new Error('Your current password is wrong');
             }
 
             delete input.password;
@@ -216,20 +195,14 @@ const resolvers = {
 
             /* Check if user is the editor */
             if (user.id !== ctx.req.user.id) {
-                throw new Error(JSON.stringify({
-                    errorMessage: 'Invalid credentials',
-                    classError: 'error'
-                }));
+                throw new Error('Invalid credentials');
             }
 
             /* Check if password is correct */
             const checkPassword = await bcrypt.compare(password, user.password);
         
             if (!checkPassword) {
-                throw new Error(JSON.stringify({
-                    errorMessage: 'Your current password is wrong',
-                    classError: 'error'
-                }));
+                throw new Error('Your current password is wrong');
             }
 
             /* Hashing new password */
@@ -249,20 +222,14 @@ const resolvers = {
             const checkUser = await User.findById(id);
 
             if (!checkUser) {
-                throw new Error(JSON.stringify({
-                    errorMessage: 'User does not exist',
-                    classError: 'error'
-                }));
+                throw new Error('User does not exist');
             }
 
             /* Check if the admin is the one who deletes the user */
             const adminUser = await User.findById(ctx.req.user.id);
 
             if (adminUser.role !== 'Admin') {
-                throw new Error(JSON.stringify({
-                    errorMessage: 'Invalid credentials',
-                    classError: 'error'
-                }));
+                throw new Error('Invalid credentials');
             }
 
             /* Delete data from DB */
@@ -290,10 +257,7 @@ const resolvers = {
             let user = await User.findOne({ email });
 
             if (!user) {
-                throw new Error(JSON.stringify({
-                    errorMessage: 'This email does not registered',
-                    classError: 'error'
-                }));
+                throw new Error('This email does not registered');
             }
 
             try {
@@ -316,10 +280,7 @@ const resolvers = {
             try {
                 let user = jwt.verify(token, process.env.SECRET_FORGOT, function(err, user) {
                     if (err) {
-                        throw new Error(JSON.stringify({
-                            errorMessage: 'Link has expired. Try to send a new link',
-                            errorClass: 'error'
-                        }));    
+                        throw new Error('Link has expired. Try to send a new link');    
                     }
 
                     return user;

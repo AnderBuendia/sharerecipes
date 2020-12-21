@@ -5,7 +5,7 @@ import { gql, useMutation } from '@apollo/client';
 import Layout from '../../../components/layouts/Layout';
 import Input from '../../../components/form/Input';
 import SelectMenu from '../../../components/edituserform/selectMenu';
-import Alert from '../../../components/form/Alert';
+import { useToasts } from 'react-toast-notifications';
 
 const UPDATE_USER_PASSWORD = gql`
     mutation updateUserPassword($id: ID!, $input: UserPasswordInput) {
@@ -20,8 +20,8 @@ const EditUserAccount = () => {
     const router = useRouter();
     const { query: { pid: id }} = router;
 
-    /* Set a message login */
-    const [message, setMessage] = useState(null);
+    /* Set Toast Notification */
+    const { addToast } = useToasts();
 
     /* Apollo mutation to update data user */
     const [ updateUserPassword ] = useMutation(UPDATE_USER_PASSWORD);
@@ -44,17 +44,9 @@ const EditUserAccount = () => {
                 }
             });
 
-            setMessage("Your password has been changed");
-
-            /* Redirect to Home Page */
-            setTimeout(() => {
-                setMessage(null);
-            }, 2000);
+            addToast('Your password has been changed', { appearance: 'success' });
         } catch (error) {
-            setMessage(error.message.replace('GraphQL error: ', ''));
-            setTimeout(() => {
-                setMessage(null);
-            }, 3000);
+            addToast(error.message.replace('GraphQL error: ', ''), { appearance: 'error' });
         }
     }
   
@@ -66,7 +58,6 @@ const EditUserAccount = () => {
                 </div>
                 <div className="flex justify-center mt-5">
                     <div className="w-full max-w-lg bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
-                        { message && <Alert message={message} /> }
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center my-4">
                                 Change your Password

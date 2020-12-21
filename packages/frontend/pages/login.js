@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { gql, useMutation } from '@apollo/client';
 import { setAccessToken } from '../lib/accessToken';
+import { useToasts } from 'react-toast-notifications';
 
 /* Components */
 import Layout from '../components/layouts/Layout';
 import Input from '../components/form/Input';
-import Alert from '../components/form/Alert';
 import MuffinImg from '../components/images/MuffinImg';
 
 const AUTH_USER = gql`
@@ -23,9 +23,8 @@ const Login = () => {
     /* Routing */
     const router = useRouter();
 
-    /* Set a message login */
-    const [message, setMessage] = useState(null);
-    const [classAlert, setClassAlert] = useState(null);
+    /* Set Toast Notification */
+    const { addToast } = useToasts();
 
     /* Apollo mutation */
     const [ authenticateUser ] = useMutation(AUTH_USER);
@@ -46,26 +45,18 @@ const Login = () => {
                     }
                 }
             });
+            addToast('Authenticating...', { appearance: 'success' });
 
-            setMessage('Authenticating...');
-            
             if (data) {
                 setAccessToken(data.authenticateUser.accessToken);
             }
 
             /* Redirect to Home Page with user data */
             setTimeout(() => {
-                setMessage(null);
                 router.push('/');
-            }, 2000);
-        } catch (error) {
-            const { errorMessage, classError } = JSON.parse(error.message);
-            setMessage(errorMessage);
-            setClassAlert(classError);
-            setTimeout(() => {
-                setMessage(null);
-                setClassAlert(null);
             }, 3000);
+        } catch (error) {
+            addToast(error.message.replace('GraphQL error: ', ''), { appearance: 'error' });
         }
     };
 
@@ -77,7 +68,6 @@ const Login = () => {
                 </div>
                 <div className="flex justify-center mt-5">
                     <div className="w-full max-w-lg bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
-                        { message && <Alert message={message} error={classAlert} /> }
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center my-4">
                                 Login Your Account
