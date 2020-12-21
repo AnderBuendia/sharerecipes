@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { gql, useMutation } from '@apollo/client';
+import { useToasts } from 'react-toast-notifications';
 
 /* Components */
 import Layout from '../components/layouts/Layout';
 import Input from '../components/form/Input';
 import MuffinImg from '../components/images/MuffinImg';
-import Alert from '../components/form/Alert';
 
 /* Apollo queries */
 const FORGOT_PASSWORD = gql`
@@ -18,12 +17,8 @@ const FORGOT_PASSWORD = gql`
 `;
 
 const Forgot = () => {
-    /* Routing */
-    const router = useRouter();
-
-    /* useState alert message */
-    const [message, setMessage] = useState(null);
-    const [classAlert, setClassAlert] = useState(null);
+    /* Set Toast Notification */
+    const { addToast } = useToasts();
 
     /* Apollo mutation */
     const [ forgotPassword ] = useMutation(FORGOT_PASSWORD);
@@ -43,20 +38,9 @@ const Forgot = () => {
                     }
                 }
             });
-            setMessage(data.forgotPassword);
-
-            setTimeout(() => {
-                setMessage(null);
-            }, 4000);
+            addToast(data.forgotPassword, { appearance: 'success' });
         } catch (error) {
-            console.log('Error', error.message);
-            const { errorMessage, classError } = JSON.parse(error.message);
-            setMessage(errorMessage);
-            setClassAlert(classError);
-            setTimeout(() => {
-                setMessage(null);
-                setClassAlert(null);
-            }, 3000);
+            addToast(error.message.replace('GraphQL error: ', ''), { appearance: 'error' });
         }
     };
 
@@ -68,7 +52,6 @@ const Forgot = () => {
                 </div>
                 <div className="flex justify-center mt-5">
                     <div className="w-full max-w-lg bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
-                        { message && <Alert message={message} error={classAlert} /> }
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center my-4">
                                 Can't login?

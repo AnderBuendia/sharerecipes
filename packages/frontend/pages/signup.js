@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { gql, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useToasts } from 'react-toast-notifications';
 import Layout from '../components/layouts/Layout';
 import Input from '../components/form/Input';
-import Alert from '../components/form/Alert';
 import MuffinImg from '../components/images/MuffinImg';
 
 /* Apollo queries */
@@ -23,9 +23,8 @@ const SignUp = () => {
     /* Routing */
     const router = useRouter();
 
-    /* Set message state */
-    const [message, setMessage] = useState(null);
-    const [classAlert, setClassAlert] = useState(null);
+    /* Set Toast Notification */
+    const { addToast } = useToasts();
 
     /* Apollo mutation */
     const [ newUser ] = useMutation(CREATE_USER);
@@ -47,23 +46,15 @@ const SignUp = () => {
                     }
                 }
             });
-
-            setMessage(`User was created succesfully created.
-                Please, check your email to confirm your account.`);
-
+            addToast(`User was created succesfully created.
+            Please, check your email to confirm your account.`, { appearance: 'success' });
+            
             /* Redirect to Home Page */
             setTimeout(() => {
-                setMessage(null);
                 router.push('/');
             }, 3000);
         } catch (error) {
-            const { errorMessage, classError } = JSON.parse(error.message);
-            setMessage(errorMessage);
-            setClassAlert(classError);
-            setTimeout(() => {
-                setMessage(null);
-                setClassAlert(null);
-            }, 4000);
+            addToast(error.message.replace('GraphQL error: ', ''), { appearance: 'error' });
         }
     };
 
@@ -73,12 +64,12 @@ const SignUp = () => {
                 <div className="flex justify-center mx-auto w-32">
                     <MuffinImg />
                 </div>
-                { message && <Alert message={message} error={classAlert} /> }
                 <div className="flex justify-center mt-5">
                     <div className="w-full max-w-lg bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
                         <form onSubmit={handleSubmit(onSubmit)}>
-                            <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center my-4">Create Your Account</h2>
-                            
+                            <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center my-4">
+                                Create Your Account
+                            </h2>
                             <Input
                                 label="Username"
                                 name="name"
@@ -124,13 +115,11 @@ const SignUp = () => {
                                 value="Create Account"
                             />
                         </form>
-
                         <p className="text-lg font-roboto font-bold text-gray-800 mt-8 text-center">Have an account? <Link href="/login"><a className="underline text-blue-400">Log in</a></Link></p>
                     </div>
                 </div>
             </div>
         </Layout>
-
     );
 }
  
