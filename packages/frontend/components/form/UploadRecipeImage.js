@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
+import { useToasts } from 'react-toast-notifications';
 
 const UPLOAD_IMAGES = gql`
     mutation uploadRecipeImage($file: Upload!) {
@@ -12,16 +13,19 @@ const UPLOAD_IMAGES = gql`
     }
 `;
 
-const UploadRecipeImage = ({handleUrlFileRecipe, handleMessage}) => {
+const UploadRecipeImage = ({handleUrlFileRecipe}) => {
     /* Image state to show in DropZone container */
     const [imageRecipe, setImageRecipe] = useState('');
+    
+    /* Set Toast Notification */
+    const { addToast } = useToasts();
     
     /* Apollo mutation to upload files */
     const [ uploadRecipeImage ] = useMutation(UPLOAD_IMAGES);
 
     /* Get content from Dropzone */
     const onDropRejected = () => {
-            handleMessage('Could not upload file. File is not an image or is greater than 5MB');
+        addToast('File is not an image or is greater than 2MB', { appearance: 'error' });
     };
 
     const onDropAccepted = useCallback(async ([file]) => {
@@ -33,7 +37,7 @@ const UploadRecipeImage = ({handleUrlFileRecipe, handleMessage}) => {
         handleUrlFileRecipe(data.uploadRecipeImage);
     }, []);
 
-    const { isDragActive, getRootProps, getInputProps } = useDropzone({ onDropAccepted, onDropRejected, maxFiles: 1, maxSize: 5000000, accept: 'image/jpeg, image/jpg, image/png' });
+    const { isDragActive, getRootProps, getInputProps } = useDropzone({ onDropAccepted, onDropRejected, maxFiles: 1, maxSize: 2000000, accept: 'image/jpeg, image/jpg, image/png' });
 
     return ( 
             <div 

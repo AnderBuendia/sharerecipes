@@ -2,6 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
+import { useToasts } from 'react-toast-notifications';
 
 const UPLOAD_IMAGES = gql`
     mutation uploadUserImage($file: Upload!) {
@@ -12,19 +13,22 @@ const UPLOAD_IMAGES = gql`
     }
 `;
 
-const UploadUserImage = ({handleUrlFileUser, handleMessage, userData}) => {
+const UploadUserImage = ({handleUrlFileUser, userData}) => {
     /* Image state */
     const [userImage, setUserImage] = useState('');
 
     /* User data to set image */
     const { image_url, image_name } = userData;
 
+    /* Set Toast Notification */
+    const { addToast } = useToasts();
+
     /* Apollo mutation to upload files */
     const [ uploadUserImage ] = useMutation(UPLOAD_IMAGES);
 
     /* Get content from Dropzone */
     const onDropRejected = () => {
-            handleMessage('Could not upload file. File is not a image (jpg, jpeg) or is greater than 1MB');
+        addToast('File is not a image (jpg, jpeg) or is greater than 1MB', { appearance: 'error' });
     };
 
     const onDropAccepted = useCallback(async ([file]) => {

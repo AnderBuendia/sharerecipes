@@ -150,7 +150,6 @@ const NewRecipe = () => {
 
                             <UploadRecipeImage
                                 handleUrlFileRecipe={setUrlFileRecipe} 
-                                handleMessage={setMessage}  
                                 name="image"
                                 childRef={register({required: { value: true, message: "An image is required" }})}
                                 error={errors.image}  

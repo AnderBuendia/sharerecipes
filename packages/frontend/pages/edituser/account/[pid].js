@@ -106,7 +106,6 @@ const EditUserAccount = () => {
 
                             <UploadUserImage 
                                 handleUrlFileUser={setUrlFileImage}
-                                handleMessage={setMessage}
                                 userData={data.getUser}
                             />
 
