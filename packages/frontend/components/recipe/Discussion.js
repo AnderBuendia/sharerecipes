@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Image from 'next/image';
 import ModalSignup from './ModalSignup';
 import Comment from './Comment';
+import { useToasts } from 'react-toast-notifications';
 
 const SEND_COMMENTS_RECIPE = gql`
     mutation sendCommentsRecipe($input: CommentsRecipeInput) {
@@ -20,6 +21,7 @@ const COMMENTS_FRAGMENT = gql`
         comments(offset: $offset, limit: $limit) {
             id
             message
+            edited
             createdAt
             votes
             recipe {
@@ -38,12 +40,15 @@ const COMMENTS_FRAGMENT = gql`
     }
 `;
 
-const Discussion = ({user, recipeId, arrcomments, query, fetchMore}) => {
+const Discussion = ({user, recipeId, arrComments, query, fetchMore}) => {
     /* useState Modal */
     const [open, setOpen] = useState(false);
 
+    /* Set Toast Notification */
+    const { addToast } = useToasts();
+
     /* Comments */
-    const { comments } = arrcomments;
+    const { comments } = arrComments;
 
     /* Apollo mutation to update recipe comments */
     const [ sendCommentsRecipe ] = useMutation(SEND_COMMENTS_RECIPE, {
@@ -85,9 +90,8 @@ const Discussion = ({user, recipeId, arrcomments, query, fetchMore}) => {
                         }
                     }
                 });
-                console.log('COMMENTS: ', data);
             } catch (error) {
-                console.log(error);
+                addToast(error.message.replace('GraphQL error: ', ''), { appearance: 'error' });
             }
         } else {
             setOpen(true)

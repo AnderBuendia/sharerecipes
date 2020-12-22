@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import Rating from '@material-ui/lab/Rating';
 import Layout from '../../components/layouts/Layout';
 import Discussion from '../../components/recipe/Discussion';
+import { useToasts } from 'react-toast-notifications';
 
 const GET_RECIPES = gql`
     query getRecipes {
@@ -69,6 +70,9 @@ function Recipe({id}) {
     /* Get current ID - Routing */
     const router = useRouter();
 
+    /* Set Toast Notification */
+    const { addToast } = useToasts();
+
     /* Apollo mutation */
     const [ deleteRecipe ] = useMutation(DELETE_RECIPE, {
         update(cache) {
@@ -113,10 +117,8 @@ function Recipe({id}) {
                     }
                 }
             });
-
-            console.log('DATA', data)
         } catch (error) {
-            console.log(error)
+            addToast(error.message.replace('GraphQL error: ', ''), { appearance: 'error' });
         }
     }
 
@@ -252,7 +254,7 @@ function Recipe({id}) {
             <Discussion 
                 user={getUser} 
                 recipeId={getRecipe.id}
-                arrcomments={filter(Discussion.fragments.comments, getRecipe)} 
+                arrComments={filter(Discussion.fragments.comments, getRecipe)} 
                 query={GET_RECIPE} 
                 fetchMore={fetchMore}
             />

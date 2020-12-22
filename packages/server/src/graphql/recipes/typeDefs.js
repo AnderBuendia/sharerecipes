@@ -24,6 +24,7 @@ const typeDefs = gql`
     type CommentsRecipe {
         id: ID
         message: String
+        edited: Boolean
         author: User
         recipe: Recipe
         votes: Int
@@ -48,6 +49,7 @@ const typeDefs = gql`
     input CommentsRecipeInput {
         recipe: ID
         message: String
+        edited: Boolean
         votes: Int
     }
 
@@ -77,6 +79,7 @@ const typeDefs = gql`
         # RecipeComments
         sendCommentsRecipe(input: CommentsRecipeInput): CommentsRecipe
         voteCommentsRecipe(id: ID!, input: CommentsRecipeInput): CommentsRecipe
+        editCommentsRecipe(id: ID!, input: CommentsRecipeInput): CommentsRecipe
     }
 `;
 
