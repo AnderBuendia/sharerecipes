@@ -15,7 +15,7 @@ const UPDATE_USER_PASSWORD = gql`
     }
 `;
 
-const EditUserAccount = () => {
+const ChangePassword = () => {
     /* Get current ID */
     const router = useRouter();
     const { query: { pid: id }} = router;
@@ -117,4 +117,4 @@ const EditUserAccount = () => {
     );
 }
  
-export default EditUserAccount;
+export default ChangePassword;
