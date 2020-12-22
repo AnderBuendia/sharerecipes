@@ -21,6 +21,10 @@ const commentsSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Users',
         default: null
+    },
+    edited: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

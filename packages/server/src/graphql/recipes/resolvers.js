@@ -123,6 +123,11 @@ const resolvers = {
 
         /* Comments Recipe */
         sendCommentsRecipe: async (_, {input}, ctx) => {
+            
+            if (!input.message) {
+                throw new Error('Please introduce your message');
+            }
+
             const newComment = new Comments(input);
             
             /* Assign user and recipe */
@@ -137,6 +142,22 @@ const resolvers = {
             }
         },
 
+        editCommentsRecipe: async (_, {id, input}) => {
+            /* Check if comment exists */
+            let checkComment = await Comments.findById(id);
+
+            if (!checkComment) {
+                throw new Error('Comment does not exist');
+            }
+
+            /* Edit the comment text and save data in DB */
+            checkComment = await Comments.findOneAndUpdate({ _id: id}, input, {
+                new: true
+            });
+
+            return checkComment;
+        },
+
         voteCommentsRecipe: async (_, {id, input}, ctx) => {
             /* Check if comment exists */
             const checkComment = await Comments.findById(id);
@@ -147,7 +168,7 @@ const resolvers = {
 
             /* Check if user has voted */
             if (checkComment.voted.includes(ctx.req.user.id)) {
-                throw new Error('You has voted this recipe');
+                throw new Error('You has voted this comment');
             }
 
             /* Add user who voted and sum votes */
