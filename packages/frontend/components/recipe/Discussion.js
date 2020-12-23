@@ -98,6 +98,7 @@ const Discussion = ({user, recipeId, arrComments, query, fetchMore}) => {
         }
     }
 
+    console.log(user)
     return (  
     <div className="mx-auto w-11/12 bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
         { open && <ModalSignup open={open} handleOpen={setOpen} /> }
@@ -106,11 +107,11 @@ const Discussion = ({user, recipeId, arrComments, query, fetchMore}) => {
             <div className="w-10 mr-2">
                     <Image 
                         className="block rounded-full"
-                        key={user ? user.image_url : '/usericon.jpeg'}
-                        src={user ? user.image_url : '/usericon.jpeg'}
-                        alt={user ? user.image_name : 'UserIcon Image'}
-                        width={36}
-                        height={36}
+                        key={user.image_url ? user.image_url : '/usericon.jpeg'}
+                        src={user.image_url ? user.image_url : '/usericon.jpeg'}
+                        alt={user.image_url ? user.image_name : 'UserIcon Image'}
+                        width={256}
+                        height={256}
                     />
             </div>
             <div className="w-5/6 relative">
