@@ -37,7 +37,7 @@ const UploadRecipeImage = ({handleUrlFileRecipe}) => {
         handleUrlFileRecipe(data.uploadRecipeImage);
     }, []);
 
-    const { isDragActive, getRootProps, getInputProps } = useDropzone({ onDropAccepted, onDropRejected, maxFiles: 1, maxSize: 2000000, accept: 'image/jpeg, image/jpg, image/png' });
+    const { isDragActive, getRootProps, getInputProps } = useDropzone({ onDropAccepted, onDropRejected, maxFiles: 1, maxSize: 2000000, resizeQuality: 0.7, accept: 'image/jpeg, image/jpg, image/png' });
 
     return ( 
             <div 

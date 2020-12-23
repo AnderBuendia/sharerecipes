@@ -40,83 +40,78 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
     }
 
     if (ssr || PageComponent.getInitialProps) {
-        WithApollo.getInitialProps = async (ctx) => {
-          const {
-            AppTree,
-            ctx: { req, res }
-        } = ctx;
+        WithApollo.getInitialProps = async (context) => {
+            const { AppTree, ctx } = context;
     
-        let serverAccessToken = "";
-    
-        if (isServer()) {
-            const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : '';
-            if (cookies.jid) {
-                const response = await fetch("http://localhost:4000/refresh_token", {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    cookie: "jid=" + cookies.jid
+            let serverAccessToken = "";
+            if (isServer()) {
+                const cookies = ctx.req.headers.cookie ? cookie.parse(ctx.req.headers.cookie) : '';
+                if (cookies.jid) {
+                    const response = await fetch("http://localhost:4000/refresh_token", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        cookie: "jid=" + cookies.jid
+                    }
+                    });
+                    const data = await response.json();
+                    serverAccessToken = data.accessToken;
                 }
-                });
-                const data = await response.json();
-                serverAccessToken = data.accessToken;
             }
-        }
     
-        /* Run all GraphQL queries in the component tree
-        *  and extract the resulting data */
-        const apolloClient = (ctx.ctx.apolloClient = initApolloClient(
-            {},
-            serverAccessToken
-        ));
+            /* Run all GraphQL queries in the component tree
+            *  and extract the resulting data */
+            const apolloClient = (context.ctx.apolloClient = initApolloClient(
+                {},
+                serverAccessToken
+            ));
     
-        const pageProps = PageComponent.getInitialProps
-            ? await PageComponent.getInitialProps(ctx)
-            : {};
+            const pageProps = PageComponent.getInitialProps
+                ? await PageComponent.getInitialProps(ctx)
+                : {};
 
-        /* Only on the server */
-        if (typeof window === "undefined") {
-            /* When redirecting, the response is finished.
-            *  No point in continuing to render */
-            if (res && res.finished) {
-                return {};
+            /* Only on the server */
+            if (typeof window === "undefined") {
+                /* When redirecting, the response is finished.
+                *  No point in continuing to render */
+                if (ctx.res && ctx.res.finished) {
+                    return {};
+                }
+        
+                if (ssr) {
+                try {
+                    /* Run all GraphQL queries */
+                    const { getDataFromTree } = await import("@apollo/client/react/ssr");
+                    await getDataFromTree(
+                    <AppTree
+                        pageProps={{
+                        ...pageProps,
+                        apolloClient
+                        }}
+                        apolloClient={apolloClient}
+                    />
+                    );
+                } catch (error) {
+                    /* Prevent Apollo Client GraphQL errors from crashing SSR. */
+                    console.error("Error while running `getDataFromTree`", error);
+                }
+                }
+        
+                /* getDataFromTree does not call componentWillUnmount
+                *  head side effect therefore need to be cleared manually */
+                Head.rewind();
             }
-    
-            if (ssr) {
-              try {
-                /* Run all GraphQL queries */
-                const { getDataFromTree } = await import("@apollo/client/react/ssr");
-                await getDataFromTree(
-                  <AppTree
-                    pageProps={{
-                      ...pageProps,
-                      apolloClient
-                    }}
-                    apolloClient={apolloClient}
-                  />
-                );
-              } catch (error) {
-                /* Prevent Apollo Client GraphQL errors from crashing SSR. */
-                console.error("Error while running `getDataFromTree`", error);
-              }
-            }
-    
-            /* getDataFromTree does not call componentWillUnmount
-            *  head side effect therefore need to be cleared manually */
-            Head.rewind();
-          }
-    
-          /* Extract query data from the Apollo store */
-          const apolloState = apolloClient.cache.extract();
-    
-          return {
-            ...pageProps,
-            apolloState,
-            serverAccessToken
-          };
+        
+            /* Extract query data from the Apollo store */
+            const apolloState = apolloClient.cache.extract();
+        
+            return {
+                ...pageProps,
+                apolloState,
+                serverAccessToken
+            };
         };
     }
-
     return WithApollo;
 }
 
