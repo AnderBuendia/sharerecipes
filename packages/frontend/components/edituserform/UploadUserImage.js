@@ -41,7 +41,7 @@ const UploadUserImage = ({handleUrlFileUser, userData}) => {
         setUserImage(data.uploadUserImage);
     }, []);
 
-    const { getRootProps, getInputProps } = useDropzone({ onDropAccepted, onDropRejected, maxFiles: 1, resizeQuality: 0.6, resizeWidth: 90, resizeHeight: 90, maxSize: 1000000, accept: 'image/jpeg, image/jpg' });
+    const { getRootProps, getInputProps } = useDropzone({ onDropAccepted, onDropRejected, maxFiles: 1, resizeQuality: 0.6, resizeWidth: 200, resizeHeight: 200, maxSize: 1000000, accept: 'image/jpeg, image/jpg' });
 
     useEffect(() => {
         if (image_url) {

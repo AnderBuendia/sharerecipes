@@ -66,9 +66,10 @@ const GET_USER = gql`
     }
 `;
 
-function Recipe({id}) {
+const Recipe = () => {
     /* Get current ID - Routing */
     const router = useRouter();
+    const { query: { pid: id }} = router;
 
     /* Set Toast Notification */
     const { addToast } = useToasts();
@@ -159,7 +160,6 @@ function Recipe({id}) {
 
     /* Apollo queries */
     const { data: dataRecipe, loading: loadingRecipe, fetchMore } = useQuery(GET_RECIPE, {
-        fetchPolicy: 'network-only',
         variables: {
             id,
             offset: 0,
@@ -260,15 +260,6 @@ function Recipe({id}) {
             />
         </Layout>
     );
-}
-
-export const getServerSideProps = async ({params}) => {
-    const id = params.pid;
-    return {
-        props: {
-            id,
-        }
-    }
 }
 
 export default Recipe;
