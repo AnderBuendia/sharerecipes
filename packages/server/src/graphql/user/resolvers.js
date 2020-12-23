@@ -147,9 +147,9 @@ const resolvers = {
             );
 
             await user.save();
-            
+
             /* Send void data to the cookie */
-            sendRefreshToken(ctx.res, "");
+            sendRefreshToken(ctx.res, '');
             return true;
         },
 

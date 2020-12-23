@@ -14,7 +14,6 @@ const resolvers = {
 
             const stream = createReadStream();
             const pathName = path.join(__dirname, `../../images/recipe/${randomName}`);
-            
             await stream.pipe(createWriteStream(pathName));
 
             return { 

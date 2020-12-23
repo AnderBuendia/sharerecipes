@@ -46,25 +46,25 @@ const startServer = async () => {
     /* Create server */
     const app = express();
 
-    /* Read JSON body values */
-    app.use(express.urlencoded({ extended: false }));
-    app.use(express.json());
-
     /* App use cors */
     app.use(cors({
         origin: process.env.FRONTEND_URL,
         credentials: true
     }));
 
+    /* Read JSON body values */
+    app.use(express.urlencoded({ extended: false }));
+    app.use(express.json());
+
     app.use(cookieParser());
 
     /* Images dir */
-    existsSync(path.join(__dirname, '../images')) || mkdirSync(path.join(__dirname, "../images"));
-    app.use("/images", express.static(path.join(__dirname, "../images")));
-    existsSync(path.join(__dirname, '../images/recipe')) || mkdirSync(path.join(__dirname, "../images/recipe"));
-    app.use("/images/recipe", express.static(path.join(__dirname, "../images/user")));
-    existsSync(path.join(__dirname, '../images/user')) || mkdirSync(path.join(__dirname, "../images/user"));
-    app.use("/images/user", express.static(path.join(__dirname, "../images/user")));
+    existsSync(path.join(__dirname, '/images')) || mkdirSync(path.join(__dirname, "/images"));
+    app.use("/images", express.static(path.join(__dirname, "/images")));
+    existsSync(path.join(__dirname, '/images/recipe')) || mkdirSync(path.join(__dirname, "/images/recipe"));
+    app.use("/images/recipe", express.static(path.join(__dirname, "/images/user")));
+    existsSync(path.join(__dirname, '/images/user')) || mkdirSync(path.join(__dirname, "/images/user"));
+    app.use("/images/user", express.static(path.join(__dirname, "/images/user")));
 
     /* Refresh Token */
     app.post('/refresh_token', async (req, res) => {
@@ -122,10 +122,9 @@ const startServer = async () => {
         });
 
         await user.save();
-        
-        /* Send the cookie with the new token */
-        sendRefreshToken(res, newRefreshToken);
 
+        sendRefreshToken(res, newRefreshToken)
+        
         return res.send({ ok: true, accessToken: createAccessToken(user) })
     });
 

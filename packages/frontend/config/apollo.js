@@ -1,6 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
-import { ApolloClient, InMemoryCache, createHttpLink, ApolloLink } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloLink } from '@apollo/client';
+import { createUploadLink } from 'apollo-upload-client';
 import { setContext } from 'apollo-link-context';
 import { onError } from 'apollo-link-error';
 import cookie from "cookie";
@@ -46,14 +47,18 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
             let serverAccessToken = "";
             if (isServer()) {
                 const cookies = ctx.req.headers.cookie ? cookie.parse(ctx.req.headers.cookie) : '';
+                console.log('prueba', cookies)
                 if (cookies.jid) {
                     const response = await fetch("http://localhost:4000/refresh_token", {
                     method: "POST",
                     credentials: "include",
                     headers: {
                         cookie: "jid=" + cookies.jid
-                    }
-                    });
+                    }});
+                    ctx.res.setHeader(
+                        'Set-Cookie',
+                        response.headers.get('set-cookie') ?? ''
+                    );
                     const data = await response.json();
                     serverAccessToken = data.accessToken;
                 }
@@ -108,7 +113,7 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
             return {
                 ...pageProps,
                 apolloState,
-                serverAccessToken
+                serverAccessToken,
             };
         };
     }
@@ -135,11 +140,11 @@ function initApolloClient(initState, serverAccessToken) {
     return apolloClient;
   }
 
-function createApolloClient(initialState = {}, serverAccessToken) {
-    const httpLink = createHttpLink({ 
+function createApolloClient(initialState = {}, serverAccessToken, ctx) {
+    const httpLink = createUploadLink({ 
         uri: 'http://localhost:4000/graphql',
-        credentials: 'include',
-        fetch
+        fetch,
+        credentials: 'include'
     });
 
     const refreshLink = new TokenRefreshLink({
@@ -163,12 +168,12 @@ function createApolloClient(initialState = {}, serverAccessToken) {
             }
         },
         fetchAccessToken: () => {
-            return fetch("http://localhost:4000/refresh_token", {
+                return fetch("http://localhost:4000/refresh_token", {
                 method: "POST",
-                credentials: "include"
-            });
+                credentials: 'include',
+            });  
         },
-        handleFetch: accessToken => {
+        handleFetch: (accessToken) => {
             setAccessToken(accessToken);
         },
         handleError: err => {
@@ -176,11 +181,11 @@ function createApolloClient(initialState = {}, serverAccessToken) {
             console.error(err);
         }
     });
-
+   
     const authLink = setContext((_, {headers}) => {
         /* Read token */
         const accessToken = isServer() ? serverAccessToken : getAccessToken();
-        
+
         return {
             headers: {
                 ...headers,
