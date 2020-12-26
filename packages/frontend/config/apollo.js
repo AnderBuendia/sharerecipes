@@ -47,7 +47,6 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
             let serverAccessToken = "";
             if (isServer()) {
                 const cookies = ctx.req.headers.cookie ? cookie.parse(ctx.req.headers.cookie) : '';
-                console.log('prueba', cookies)
                 if (cookies.jid) {
                     const response = await fetch("http://localhost:4000/refresh_token", {
                     method: "POST",

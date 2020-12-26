@@ -61,11 +61,7 @@ const startServer = async () => {
     /* Images dir */
     existsSync(path.join(__dirname, '/images')) || mkdirSync(path.join(__dirname, "/images"));
     app.use("/images", express.static(path.join(__dirname, "/images")));
-    existsSync(path.join(__dirname, '/images/recipe')) || mkdirSync(path.join(__dirname, "/images/recipe"));
-    app.use("/images/recipe", express.static(path.join(__dirname, "/images/user")));
-    existsSync(path.join(__dirname, '/images/user')) || mkdirSync(path.join(__dirname, "/images/user"));
-    app.use("/images/user", express.static(path.join(__dirname, "/images/user")));
-
+    
     /* Refresh Token */
     app.post('/refresh_token', async (req, res) => {
         const token = req.cookies.jid;
