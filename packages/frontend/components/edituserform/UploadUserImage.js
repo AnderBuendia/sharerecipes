@@ -37,6 +37,8 @@ const UploadUserImage = ({handleUrlFileUser, userData}) => {
             variables: { file }
         });
 
+        console.log(data)
+
         handleUrlFileUser(data.uploadUserImage);
         setUserImage(data.uploadUserImage);
     }, []);
