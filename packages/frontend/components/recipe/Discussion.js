@@ -43,6 +43,7 @@ const COMMENTS_FRAGMENT = gql`
 const Discussion = ({user, recipeId, arrComments, query, fetchMore}) => {
     /* useState Modal */
     const [open, setOpen] = useState(false);
+    const [defaultMessage, setDefaultMessage] = useState('');
 
     /* Set Toast Notification */
     const { addToast } = useToasts();
@@ -79,8 +80,9 @@ const Discussion = ({user, recipeId, arrComments, query, fetchMore}) => {
     });
     
     /* React hook form */
-    const { handleSubmit, control } = useForm({
-        mode: "onChange"
+    const { handleSubmit, control, reset } = useForm({
+        mode: "onChange",
+        defaultValues: defaultMessage
     });
 
     /* Comments react hook form */
@@ -97,6 +99,8 @@ const Discussion = ({user, recipeId, arrComments, query, fetchMore}) => {
                         }
                     }
                 });
+
+               reset(setDefaultMessage(''));
             } catch (error) {
                 addToast(error.message.replace('GraphQL error: ', ''), { appearance: 'error' });
             }
@@ -132,7 +136,7 @@ const Discussion = ({user, recipeId, arrComments, query, fetchMore}) => {
                             placeholder="Introduce your message..."
                             variant="outlined"
                         />}   
-                        defaultValue=""
+                        defaultValue={defaultMessage}
                         control={control}
                     />
                     
