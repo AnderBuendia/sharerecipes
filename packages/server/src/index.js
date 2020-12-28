@@ -29,7 +29,6 @@ const startServer = async () => {
                     const payload = jwt.verify(token, process.env.SECRET_JWT_ACCESS);
                     req.user = payload;
                 } catch (err) {
-                    console.log(err);
                 }
 
                 return { req, res }

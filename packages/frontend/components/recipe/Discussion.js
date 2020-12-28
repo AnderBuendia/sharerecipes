@@ -64,10 +64,17 @@ const Discussion = ({user, recipeId, arrComments, query, fetchMore}) => {
             
             cache.writeQuery({
                 query,
+                variables: {
+                    id: recipeId,
+                    offset: 0,
+                    limit: 10
+                },
                 data: {
-                    getRecipe: [...getRecipe.comments, sendCommentsRecipe],
+                    getRecipe: {
+                        comments: [...getRecipe.comments, sendCommentsRecipe]
+                    }
                 }
-            }) 
+            });
         }
     });
     
@@ -98,7 +105,6 @@ const Discussion = ({user, recipeId, arrComments, query, fetchMore}) => {
         }
     }
 
-    console.log(user)
     return (  
     <div className="mx-auto w-11/12 bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
         { open && <ModalSignup open={open} handleOpen={setOpen} /> }

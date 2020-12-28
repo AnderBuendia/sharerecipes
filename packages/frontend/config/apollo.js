@@ -30,12 +30,12 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
         /* Find correct display name */
         const displayName =
           PageComponent.displayName || PageComponent.name || "Component";
-    
+
         /* Warn if old way of installing apollo is used */
         if (displayName === "App") {
           console.warn("This withApollo HOC only works with PageComponents.");
         }
-    
+
         /* Set correct display name for devtools */
         WithApollo.displayName = `withApollo(${displayName})`;
     }
@@ -43,7 +43,7 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
     if (ssr || PageComponent.getInitialProps) {
         WithApollo.getInitialProps = async (context) => {
             const { AppTree, ctx } = context;
-    
+
             let serverAccessToken = "";
             if (isServer()) {
                 const cookies = ctx.req.headers.cookie ? cookie.parse(ctx.req.headers.cookie) : '';
@@ -62,14 +62,14 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
                     serverAccessToken = data.accessToken;
                 }
             }
-    
+
             /* Run all GraphQL queries in the component tree
             *  and extract the resulting data */
             const apolloClient = (context.ctx.apolloClient = initApolloClient(
                 {},
                 serverAccessToken
             ));
-    
+
             const pageProps = PageComponent.getInitialProps
                 ? await PageComponent.getInitialProps(ctx)
                 : {};
@@ -81,7 +81,7 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
                 if (ctx.res && ctx.res.finished) {
                     return {};
                 }
-        
+
                 if (ssr) {
                 try {
                     /* Run all GraphQL queries */
@@ -100,15 +100,15 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
                     console.error("Error while running `getDataFromTree`", error);
                 }
                 }
-        
+
                 /* getDataFromTree does not call componentWillUnmount
                 *  head side effect therefore need to be cleared manually */
                 Head.rewind();
             }
-        
+
             /* Extract query data from the Apollo store */
             const apolloState = apolloClient.cache.extract();
-        
+
             return {
                 ...pageProps,
                 apolloState,
@@ -129,18 +129,18 @@ function initApolloClient(initState, serverAccessToken) {
     if (isServer()) {
       return createApolloClient(initState, serverAccessToken);
     }
-  
+
     // Reuse client on the client-side
     if (!apolloClient) {
       // setAccessToken(cookie.parse(document.cookie).test);
       apolloClient = createApolloClient(initState);
     }
-  
+
     return apolloClient;
   }
 
 function createApolloClient(initialState = {}, serverAccessToken, ctx) {
-    const httpLink = createUploadLink({ 
+    const httpLink = createUploadLink({
         uri: 'http://localhost:4000/graphql',
         fetch,
         credentials: 'include'
@@ -150,11 +150,11 @@ function createApolloClient(initialState = {}, serverAccessToken, ctx) {
         accessTokenField: "accessToken",
         isTokenValidOrUndefined: () => {
             const token = getAccessToken();
-        
+
             if (!token) {
                 return true;
             }
-        
+
             try {
                 const { exp } = jwtDecode(token);
                 if (Date.now() >= exp * 1000) {
@@ -170,7 +170,7 @@ function createApolloClient(initialState = {}, serverAccessToken, ctx) {
                 return fetch("http://localhost:4000/refresh_token", {
                 method: "POST",
                 credentials: 'include',
-            });  
+            });
         },
         handleFetch: (accessToken) => {
             setAccessToken(accessToken);
@@ -180,7 +180,7 @@ function createApolloClient(initialState = {}, serverAccessToken, ctx) {
             console.error(err);
         }
     });
-   
+
     const authLink = setContext((_, {headers}) => {
         /* Read token */
         const accessToken = isServer() ? serverAccessToken : getAccessToken();
@@ -199,20 +199,20 @@ function createApolloClient(initialState = {}, serverAccessToken, ctx) {
     });
 
     return new ApolloClient({
-        // connectToDevTools: true,
+        connectToDevTools: true,
         ssrMode: typeof window === 'undefined',
         link: ApolloLink.from([refreshLink, authLink, errorLink, httpLink]),
         cache: new InMemoryCache({
             typePolicies: {
                 Recipe: {
                     fields: {
-                        comments: offsetLimitPagination(), 
+                        comments: offsetLimitPagination(),
                         keyArgs: false,
                         voted: {
                             merge(existing, incoming) {
                                 return incoming;
                             }
-                        },   
+                        },
                     }
                 },
                 Query: {
@@ -221,10 +221,15 @@ function createApolloClient(initialState = {}, serverAccessToken, ctx) {
                             merge(existing, incoming) {
                                 return incoming;
                             }
+                        },
+                        getRecipes: {
+                            merge(existing, incoming) {
+                                return incoming;
+                            }
                         }
                     }
                 }
             }
-        }).restore(initialState), 
+        }).restore(initialState),
     });
 }

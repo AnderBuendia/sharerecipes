@@ -26,7 +26,7 @@ const EDIT_COMMENTS_RECIPE = gql`
     }
 `;
 
-const Comment = ({comment, i, query, fetchMore, user, numberOfComments}) => {
+const Comment = ({comment, query, user, i, numberOfComments, fetchMore}) => {
     const { id, message, votes, author, recipe, createdAt, edited } = comment;
 
     /* TimeAgo Hook */
@@ -185,7 +185,7 @@ const Comment = ({comment, i, query, fetchMore, user, numberOfComments}) => {
                         limit: i+11
                     },
                 })} />
-            }         
+            }
         </div>
     );
 }
