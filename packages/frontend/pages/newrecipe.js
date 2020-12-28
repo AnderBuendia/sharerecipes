@@ -101,6 +101,7 @@ const NewRecipe = () => {
     const onSubmit = async data => {
         // console.log(data);
         const { name, prep_time, serves, ingredients, difficulty, description, other_style } = data;
+        
         /* Parse field numbers */
         const prep_timeParse = parseInt(prep_time);
         const servesParse = parseInt(serves);
@@ -191,20 +192,26 @@ const NewRecipe = () => {
                                     return (
                                         <div className="mx-3 my-3" name={fieldName} key={fieldName}>
                                             <input
-                                                className="font-body shadow appearance-none border rounded w-10/12 py-2 px-3 
-                                                text-gray-800 leading-tight focus:outline-none focus:shadow-outline mr-4"
+                                                className="font-body shadow appearance-none border rounded w-11/12 py-2 px-3 
+                                                text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
                                                 name={fieldName}
                                                 type="text"
                                                 placeholder="Introduce your ingredients"
-                                                ref={register}
+                                                ref={register({required: { value: true, message: "Ingredients are required" }})}
+                                                error={errors.ingredients ? errors.ingredients[index] : ''}
                                             />
+
                                             <button 
                                                 type="button"
-                                                className="w-1/12 bg-red-700 p-1 text-white text-center rounded"
+                                                className="w-7 bg-red-700 ml-1 p-1 text-white text-center rounded"
                                                 onClick={() => removeIngredient(index)}
-                                            >
-                                                -
-                                            </button>
+                                            >-</button>
+                                            
+                                            { errors.ingredients &&
+                                                <div className="my-3 bg-red-200 border-l-4 border-red-700 text-red-700 p-2">
+                                                    <p>{errors.ingredients[index].message}</p>
+                                                </div>
+                                            }
                                         </div>
                                     );
                                 }) }

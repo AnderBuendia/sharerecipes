@@ -100,6 +100,11 @@ const Recipe = () => {
 
             cache.writeQuery({
                 query: GET_RECIPE,
+                variables: {
+                    id,
+                    offset: 0,
+                    limit: 10
+                },
                 data: {
                     getRecipe: {...getRecipe.average_vote, average_vote},
                 }
