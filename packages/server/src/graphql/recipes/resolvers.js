@@ -2,6 +2,9 @@ const User = require('../../models/User');
 const Recipes = require('../../models/Recipes');
 const Comments = require('../../models/Comments');
 
+const fs = require('fs');
+const path = require('path');
+
 const resolvers = {
     /* Types to relation DBs */
     Recipe: {
@@ -45,17 +48,6 @@ const resolvers = {
                 console.log(error);
             }
         },
-
-        /* Comments Recipe */
-        getCommentRecipe: async (_, {id}) => {
-            /* Check if recipe exists */
-            const comment = await Comments.findById(id);
-            if (!comment) {
-                throw new Error('Comment did not found');
-            }
-
-            return comment;
-        },
     },
 
     Mutation: {
@@ -77,18 +69,23 @@ const resolvers = {
 
         deleteRecipe: async (_, {id}, ctx) => {
             /* Check if recipe exists */
-            const checkRecipe = await Recipes.findById(id);
+            const recipe = await Recipes.findById(id);
 
-            if (!checkRecipe) {
+            if (!recipe) {
                 throw new Error('Recipe does not exist');
             }
 
             /* Check if the author is the one who deletes the order */
-            if (checkRecipe.author.toString() !== ctx.req.user.id) {
+            if (recipe.author.toString() !== ctx.req.user.id) {
                 throw new Error('Invalid credentials');
             }
 
+            /* Delete recipe image from server */
+            const pathName = path.join(__dirname, `../../images/${recipe.image_name}`);
+            fs.unlinkSync(pathName);
+
             /* Delete data from DB */
+            await Comments.deleteMany({ recipe: id });
             await Recipes.findOneAndDelete({ _id: id });
             return 'Recipe has been deleted';
         },
