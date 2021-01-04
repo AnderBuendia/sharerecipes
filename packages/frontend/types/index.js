@@ -1,13 +1,6 @@
-/* authContext */
-export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
-export const SIGNUP_ERROR = 'SIGNUP_ERROR';
-
-export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-export const LOGIN_ERROR = 'LOGIN_ERROR';
-
-export const CLEAN_ALERT = 'CLEAN_ALERT';
-
-export const AUTHENTICATED_USER = 'AUTHENTICATED_USER';
+/* imagesContext */
+export const USER_IMAGE_URL = 'USER_IMAGE_URL';
+export const RECIPE_IMAGE_URL = 'RECIPE_IMAGE_URL';
 
 /* resolutionContext */
 export const SCREEN_MOBILE = 'SCREEN_MOBILE';

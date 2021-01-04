@@ -3,6 +3,7 @@ import { ApolloProvider } from '@apollo/client';
 import { withApollo } from '../config/apollo';
 import { ToastProvider } from 'react-toast-notifications';
 import ResolutionState from '../context/resolution/resolutionState';
+import ImagesState from '../context/images/imagesState';
 import '../styles/index.css';
 
 const MyApp = ({ Component, pageProps, apolloClient }) => {
@@ -15,7 +16,9 @@ const MyApp = ({ Component, pageProps, apolloClient }) => {
         placement='top-center'
       >
         <ResolutionState>
-          <Component {...pageProps} />
+          <ImagesState>
+            <Component {...pageProps} />
+          </ImagesState>
         </ResolutionState>
       </ToastProvider>
     </ApolloProvider>

@@ -123,6 +123,9 @@ const startServer = async () => {
         return res.send({ ok: true, accessToken: createAccessToken(user) })
     });
 
+    /* Route to upload images with multer */
+    app.use('/upload', require('./routes/uploads'));
+
     server.applyMiddleware({ app, cors: false });
 
     /* App port */

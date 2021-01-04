@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { gql, useQuery, useMutation } from '@apollo/client';
@@ -6,7 +6,8 @@ import { useToasts } from 'react-toast-notifications';
 import Layout from '../../../components/layouts/Layout';
 import Input from '../../../components/form/Input';
 import SelectMenu from '../../../components/edituserform/selectMenu';
-import UploadUserImage from '../../../components/edituserform/UploadUserImage';
+import DragDropImage from '../../../components/form/DragDropImage';
+import imagesContext from '../../../context/images/imagesContext';
 
 const GET_USER = gql`
     query getUser {
@@ -36,11 +37,10 @@ const EditUserAccount = () => {
     /* Set Toast Notification */
     const { addToast } = useToasts();
 
-    /* To get url from DropZone */
-    const [urlFileImage, setUrlFileImage] = useState('');
-
-    /* Url and filename from Upload DropZone User */
-    const { url, fileName } = urlFileImage;
+    /* Set new user image */
+    const ImagesContext = useContext(imagesContext);
+    const { user_image, setUserImage } = ImagesContext;
+    const { image_url: user_image_url } = user_image;
 
     /* Apollo mutation to update data user */
     const [ updateUser ] = useMutation(UPDATE_USER);
@@ -59,9 +59,7 @@ const EditUserAccount = () => {
                     input: {
                         name,
                         email,
-                        password,
-                        image_url: url,
-                        image_name: fileName
+                        password
                     }
                 }  
             });
@@ -84,7 +82,7 @@ const EditUserAccount = () => {
     });
 
     if (loading) return null;
-    const { name, email } = data.getUser;
+    const { name, email, image_url } = data.getUser;
 
     const initialValues = {
         name,
@@ -99,16 +97,21 @@ const EditUserAccount = () => {
                 </div>
                 <div className="flex justify-center mt-5">
                     <div className="w-full max-w-lg bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
-                        <form onSubmit={handleSubmit(onSubmit)}>
-                            <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center my-4">
-                                Edit Your Account
-                            </h2>
-
-                            <UploadUserImage 
-                                handleUrlFileUser={setUrlFileImage}
+                        <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center my-4">
+                            Edit Your Account
+                        </h2>
+                        <div className="flex w-32 h-32 overflow-hidden mx-auto rounded-full my-4">
+                            <DragDropImage 
+                                url={process.env.backendURL + '/upload/user'}
+                                current={user_image_url ? user_image_url : image_url}
                                 userData={data.getUser}
+                                name='photo'
+                                ratio={1}
+                                rounded
+                                onChange={url => setUserImage(url)}
                             />
-
+                        </div>
+                        <form onSubmit={handleSubmit(onSubmit)}>
                             <Input
                                 label="Username"
                                 name="name"
