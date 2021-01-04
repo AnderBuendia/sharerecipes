@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { gql, useMutation } from '@apollo/client';
 import Link from 'next/link';
@@ -6,6 +6,7 @@ import onClickOutside from 'react-onclickoutside';
 import { setAccessToken } from '../../lib/accessToken';
 import Image from 'next/image';
 import { useToasts } from 'react-toast-notifications';
+import imagesContext from '../../context/images/imagesContext';
 
 const SIGNOUT_USER = gql`
     mutation signOutUser {
@@ -18,8 +19,13 @@ const DropdownMenu = ({userData}) => {
     const router = useRouter();
 
     /* User data */
-    const { id, name, role, image_name, image_url } = userData;
+    const { id, name, role, image_url } = userData;
 
+    /* Update new image user */
+    const ImagesContext = useContext(imagesContext);
+    const { user_image } = ImagesContext;
+    const { image_url: user_image_url } = user_image;
+    
     /* Set Toast Notification */
     const { addToast } = useToasts();
 
@@ -47,9 +53,9 @@ const DropdownMenu = ({userData}) => {
             >
                 <Image 
                     className="rounded-full"
-                    key={image_url ? image_url : '/usericon.jpeg'}
-                    src={image_url ? image_url : '/usericon.jpeg'}
-                    alt={image_name ? image_name : 'UserIcon Image'}
+                    key={user_image_url ? user_image_url : (image_url ? image_url : '/usericon.jpeg')}
+                    src={user_image_url ? user_image_url : (image_url ? image_url : '/usericon.jpeg')}
+                    alt={'UserIcon Image'}
                     width={44}
                     height={44}
                 />

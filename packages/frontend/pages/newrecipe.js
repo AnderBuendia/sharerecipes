@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { gql, useMutation } from '@apollo/client';
@@ -7,7 +7,8 @@ import ReactSelect from 'react-select';
 import { useToasts } from 'react-toast-notifications';
 import Layout from '../components/layouts/Layout';
 import Input from '../components/form/Input';
-import UploadRecipeImage from '../components/form/UploadRecipeImage';
+import imagesContext from '../context/images/imagesContext';
+import DragDropImage from '../components/form/DragDropImage';
 
 const NEW_RECIPE = gql`
     mutation newRecipe($input: RecipeInput) {
@@ -41,13 +42,15 @@ const NewRecipe = () => {
     /* Set Toast Notification */
     const { addToast } = useToasts();
 
+    /* Set new recipe image */
+    const ImagesContext = useContext(imagesContext);
+    const { recipe_image, setRecipeImage } = ImagesContext;
+    const { image_url, filename } = recipe_image;
+
     /* useStates */
     /* To select options */
     const [selectedFoodStyle, setSelectedFoodStyle] = useState('');
     const [selectedDifficulty, setSelectedDifficulty] = useState('');
-
-    /* To get url from UploadRecipeImage */
-    const [urlFileRecipe, setUrlFileRecipe] = useState('');
 
     /* To get the ingredients */
     const [indexes, setIndexes] = useState([]);
@@ -90,9 +93,6 @@ const NewRecipe = () => {
         setCounter(prevCounter => prevCounter + 1);
     }
 
-    /* Url and filename from Upload DropZone */
-    const { url, fileName } = urlFileRecipe;
-
     /* React hook form */
     const { register, handleSubmit, errors, control } = useForm({
         mode: "onChange"
@@ -116,12 +116,16 @@ const NewRecipe = () => {
                         ingredients,
                         difficulty: difficulty.value,
                         style: other_style ? other_style : selectedFoodStyle.value,
-                        image_url: url,
-                        image_name: fileName,
+                        image_url,
+                        image_name: filename,
                         description
                     }
                 }
             });
+
+            /* Recipe Image State */
+            setRecipeImage('');
+
             /* Redirect to Home Page*/
             router.push('/');
 
@@ -148,13 +152,15 @@ const NewRecipe = () => {
                             <label
                                 className="block text-black text-md font-body font-bold mb-4"
                             >Recipe Image</label>
-
-                            <UploadRecipeImage
-                                handleUrlFileRecipe={setUrlFileRecipe} 
-                                name="image"
-                                childRef={register({required: { value: true, message: "An image is required" }})}
-                                error={errors.image}  
-                            />  
+                            <div className="flex w-128 h-56 overflow-hidden mx-auto my-4 rounded-md">
+                                <DragDropImage 
+                                    url={process.env.backendURL + '/upload/recipes'}
+                                    current={image_url}
+                                    name='photo'
+                                    ratio={1}
+                                    onChange={url => setRecipeImage(url)}
+                                />
+                            </div>
 
                             <Input
                                 label="Name"

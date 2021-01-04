@@ -7,7 +7,7 @@ const ResolutionReducer = (state, action) =>  {
         case SCREEN_MOBILE: 
             return {
                 ...state,
-                customer: action.payload
+                width: action.payload
             }
         default: 
             return state

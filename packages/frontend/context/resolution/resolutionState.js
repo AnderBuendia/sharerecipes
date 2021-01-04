@@ -14,9 +14,8 @@ const ResolutionState = ({ children }) => {
 
     const [state, dispatch] = useReducer(resolutionReducer, initialState);
 
-     /* Modify customer */
+     /* Set screen width */
      const screenWidth = width => {
-        // console.log(customer);
         dispatch({
             type: SCREEN_MOBILE,
             payload: width

@@ -1,0 +1,67 @@
+.avatar-editor .uppy-size--lg .uppy-Dashboard-Item {
+	width: calc(100% - 15px - 15px);
+	height: 350px;
+}
+
+.avatar-editor .uppy-Dashboard-Item-preview {
+	@apply h-full;
+}
+.avatar-editor .uppy-Dashboard-Item-previewImg {
+	object-fit: contain;
+}
+
+.avatar-editor .uppy-Dashboard-Item-action--remove {
+	@apply hidden;
+}
+
+.avatar-editor.rounded-full .uppy-Root {
+	border-radius: 9999px;
+}
+.avatar-editor.rounded-full .cropper-view-box {
+	border-radius: 9999px;
+}
+
+.avatar-editor .uppy-DragDrop-inner {
+	@apply p-1;
+	z-index: 10;
+}
+
+.avatar-editor .uppy-DragDrop-arrow {
+	@apply hidden;
+}
+
+.avatar-editor .uppy-DragDrop-label {
+	@apply font-medium;
+	margin: 0;
+    @apply transition-all;
+    @apply ease-in-out;
+    @apply duration-300;
+	@apply opacity-0;
+}
+
+.avatar-editor:hover .uppy-DragDrop-label {
+	@apply opacity-100;
+}
+
+.avatar-editor > div {
+	@apply h-full;
+}
+
+.uppy-Dashboard-Item-action--edit {
+	@apply w-3;
+	@apply h-3;
+	@apply bg-red-300;
+	@apply rounded-full;
+	@apply overflow-hidden;
+	@apply text-white;
+	@apply p-1;
+}
+
+.uppy-Dashboard-Item-action--edit:hover {
+	@apply text-white;
+}
+
+.uppy-Dashboard-Item-action--edit > svg {
+	@apply w-full;
+	@apply h-full;
+}
