@@ -2,7 +2,7 @@ import React from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { withApollo } from '../config/apollo';
 import { ToastProvider } from 'react-toast-notifications';
-import ResolutionState from '../context/resolution/resolutionState';
+import AppState from '../context/app/appState';
 import ImagesState from '../context/images/imagesState';
 import '../styles/index.css';
 
@@ -15,11 +15,11 @@ const MyApp = ({ Component, pageProps, apolloClient }) => {
         autoDismissTimeout={2000}
         placement='top-center'
       >
-        <ResolutionState>
+        <AppState>
           <ImagesState>
             <Component {...pageProps} />
           </ImagesState>
-        </ResolutionState>
+        </AppState>
       </ToastProvider>
     </ApolloProvider>
   )

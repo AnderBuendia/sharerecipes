@@ -26,8 +26,8 @@ const EDIT_COMMENTS_RECIPE = gql`
     }
 `;
 
-const Comment = ({comment, query, user, i, numberOfComments, fetchMore}) => {
-    const { id, message, votes, author, recipe, createdAt, edited } = comment;
+const Comment = ({comment, query, user, recipe, i, numberOfComments, fetchMore}) => {
+    const { id, message, votes, author, createdAt, edited } = comment;
 
     /* TimeAgo Hook */
     const timeago = useTimeAgo(createdAt);
@@ -59,6 +59,11 @@ const Comment = ({comment, query, user, i, numberOfComments, fetchMore}) => {
 
             cache.writeQuery({
                 query,
+                variables: {
+                    id: recipe.id,
+                    offset: 0,
+                    limit: 10
+                },
                 data: {
                     getRecipe: {...getRecipe} 
                 }

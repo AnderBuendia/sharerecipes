@@ -26,7 +26,6 @@ const typeDefs = gql`
         message: String
         edited: Boolean
         author: User
-        recipe: Recipe
         votes: Int
         voted: [String]
         createdAt: String
@@ -62,8 +61,12 @@ const typeDefs = gql`
     # Query
     extend type Query {
         getRecipes: [Recipe]
+        getBestRecipes: [Recipe]
         getUserRecipes: [Recipe]
         getRecipe(id: ID, offset: Int, limit: Int): Recipe
+
+        # RecipeComments
+        getNumberOfComments(id: ID!): [CommentsRecipe]
     }
 
     # Mutation
@@ -74,7 +77,7 @@ const typeDefs = gql`
         updateVoteRecipe(id: ID!, input: RecipeInput): Recipe
     
         # RecipeComments
-        sendCommentsRecipe(input: CommentsRecipeInput): CommentsRecipe
+        sendCommentsRecipe(id: ID!, input: CommentsRecipeInput): CommentsRecipe
         voteCommentsRecipe(id: ID!, input: CommentsRecipeInput): CommentsRecipe
         editCommentsRecipe(id: ID!, input: CommentsRecipeInput): CommentsRecipe
     }

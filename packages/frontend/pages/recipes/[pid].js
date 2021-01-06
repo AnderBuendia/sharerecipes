@@ -258,7 +258,7 @@ const Recipe = () => {
 
             <Discussion 
                 user={getUser} 
-                recipeId={getRecipe.id}
+                recipe={getRecipe}
                 arrComments={filter(Discussion.fragments.comments, getRecipe)} 
                 query={GET_RECIPE} 
                 fetchMore={fetchMore}

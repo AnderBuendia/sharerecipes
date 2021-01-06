@@ -50,7 +50,12 @@ const recipesSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Users',
         default: null
-    }
+    },
+    comments: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comments',
+        default: null
+    }]
 }, {
     timestamps: true
 });

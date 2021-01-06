@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import dynamic from 'next/dynamic';
-import resolutionContext from '../../context/resolution/resolutionContext';
+import appContext from '../../context/app/appContext';
 import HeaderDesktop from './headerDesktop';
 
 const GET_USER = gql`
@@ -21,8 +21,8 @@ const HeaderMobile = dynamic(() => import('./headerMobile'), {
 });
    
 const Header = () => {
-    const ResolutionContext = useContext(resolutionContext);
-    const { screenWidth } = ResolutionContext;
+    const AppContext = useContext(appContext);
+    const { screenWidth } = AppContext;
 
     const [width, setWidth] = useState(window.innerWidth);
     const handleWindowResize = () => {

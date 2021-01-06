@@ -12,9 +12,9 @@ const resolvers = {
             const user = await User.findById(author);
             return user;
         },
-        comments: async ({id}, {offset, limit}) => {
-            const comments = await Comments.find({ recipe: id }).skip(offset).limit(limit).exec();
-            return comments;
+        comments: async ({comments}, {offset, limit}) => {
+            const recipeComments = await Comments.find({ _id: { $in: comments } }).skip(offset).limit(limit).exec();
+            return recipeComments;
             
         }
     },
@@ -24,9 +24,6 @@ const resolvers = {
             const user = await User.findById(author);
             return user;
         },
-        recipe: async ({recipe}) => {
-            return await Recipes.findById(recipe);
-        }
     },
 
     Query: {
@@ -42,12 +39,35 @@ const resolvers = {
 
         getRecipes: async () => {
             try {
-                const recipes = await Recipes.find({});
+                const recipes = await Recipes.find({}).sort({ createdAt: -1 });
                 return recipes;
             } catch (error) {
                 console.log(error);
             }
         },
+
+        getBestRecipes: async () => {
+            try {
+                const recipes = await Recipes.find({}).sort({ average_vote: -1 });
+                return recipes;
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+        getNumberOfComments: async (_, {id}) => {
+            /* Check recipe */
+            let recipe = await Recipes.findById(id);
+
+            if (!recipe) {
+                throw new Error('Recipe does not exist');
+            }
+
+            /* Get comments from this recipe */
+            const comments = await Comments.find({ _id: { $in: recipe.comments } });
+
+            return comments;
+        }
     },
 
     Mutation: {
@@ -119,8 +139,14 @@ const resolvers = {
         },
 
         /* Comments Recipe */
-        sendCommentsRecipe: async (_, {input}, ctx) => {
+        sendCommentsRecipe: async (_, {id, input}, ctx) => {
             
+            /* Check errors */
+            let recipe = await Recipes.findById(id);
+            if (!recipe) {
+                throw new Error('Recipe does not exist');
+            }
+
             if (!input.message) {
                 throw new Error('Please introduce your message');
             }
@@ -129,6 +155,9 @@ const resolvers = {
             
             /* Assign user and recipe */
             newComment.author = ctx.req.user.id;
+            
+            recipe.comments = [...recipe.comments, newComment._id];
+            await recipe.save();
 
             /* Save Data in DB */
             try {

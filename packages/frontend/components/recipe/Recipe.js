@@ -1,10 +1,21 @@
 import React from 'react';
+import { gql, useQuery } from '@apollo/client';
 import Router from 'next/router';
+import ChatIcon from '../icons/chaticon';
+import StarIcon from '../icons/staricon';
 
+const GET_NUMBER_OF_COMMENTS = gql`
+    query getNumberOfComments($id: ID!) {
+        getNumberOfComments(id: $id) {
+            id
+            message
+        }
+    }
+`;
 
 const Recipe = ({recipe}) => {
 
-    const { id, name, prep_time, serves, difficulty, style, image_url } = recipe;
+    const { id, name, prep_time, serves, difficulty, style, image_url, average_vote } = recipe;
 
     const handleRecipe = () => {
         Router.push({
@@ -13,6 +24,15 @@ const Recipe = ({recipe}) => {
         })
     }
 
+    const { data, loading } = useQuery(GET_NUMBER_OF_COMMENTS, {
+        variables: {
+            id
+        }
+    });
+
+    if (loading) return null;
+    const { getNumberOfComments } = data;
+
     return (
         <>
         <div 
@@ -20,9 +40,15 @@ const Recipe = ({recipe}) => {
             onClick={ () => handleRecipe() }
         >
             <div 
-                className="px-3 py-3 bg-auto bg-center h-64 relative" 
+                className="px-3 py-3 bg-auto bg-center h-56 relative" 
                 style={{ backgroundImage: `linear-gradient(180deg,transparent 0,rgba(0,0,0,.9) 150%), url(${image_url})` }}>
-                <div className="font-bold text-xl mb-4 text-white absolute bottom-0 ">{name}</div>
+                <div className="grid sm:flex justify-between items-center absolute bottom-0 mb-2 w-full">
+                    <div className="font-bold text-xl text-white">{name}</div>
+                    <div className="flex items-center mr-auto sm:mr-5 px-2 bg-white rounded-full">
+                        <ChatIcon className="w-4 h-4 mr-0.5" /> <span className="text-sm mr-1">{getNumberOfComments.length}</span> 
+                        <StarIcon className="w-4 h-4 text-yellow-400 mr-0.5" /> <span className="text-sm">{average_vote}</span>
+                    </div>
+                </div>
             </div>
             <div className="w-full flex flex-wrap overflow-hidden text-center p-1">
                 <div className="w-1/2 overflow-hidden p-1 border-r border-b border-gray-300">

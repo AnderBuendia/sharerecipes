@@ -7,8 +7,6 @@ import { getAccessToken } from '../../lib/accessToken';
 
 const DragDropImage = ({name, ratio, onChange, url, current, rounded}) => {
 	const [modal, setModal] = useState(false);
-	console.log('CURRENT', current);
-	console.log('URL', url)
 
 	const uppy = useMemo(() => {
 		/* Do all the configuration here */
