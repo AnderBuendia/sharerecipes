@@ -117,9 +117,9 @@ const Discussion = ({user, recipeId, arrComments, query, fetchMore}) => {
             <div className="w-10 mr-2">
                     <Image 
                         className="block rounded-full"
-                        key={user.image_url ? user.image_url : '/usericon.jpeg'}
-                        src={user.image_url ? user.image_url : '/usericon.jpeg'}
-                        alt={user.image_url ? user.image_name : 'UserIcon Image'}
+                        key={user && user.image_url ? user.image_url : '/usericon.jpeg'}
+                        src={user && user.image_url ? user.image_url : '/usericon.jpeg'}
+                        alt={user && user.image_name ? user.image_name : 'UserIcon Image'}
                         width={256}
                         height={256}
                     />

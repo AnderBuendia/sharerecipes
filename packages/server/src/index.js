@@ -74,7 +74,6 @@ const startServer = async () => {
         try {
             payload = jwt.verify(token, process.env.SECRET_JWT_REFRESH);
         } catch (err) {
-            console.log(err)
             return res.send({ ok: false, accessToken: '' });
         }
 
