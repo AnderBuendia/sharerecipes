@@ -12,11 +12,6 @@ const commentsSchema = new Schema({
     voted: {
         type: Array,
     },
-    recipe: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Recipes',
-        default: null
-    },
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Users',

@@ -2,7 +2,7 @@ import {
     SCREEN_MOBILE
 } from '../../types';
 
-const ResolutionReducer = (state, action) =>  {
+const AppReducer = (state, action) =>  {
     switch(action.type) {
         case SCREEN_MOBILE: 
             return {
@@ -14,4 +14,4 @@ const ResolutionReducer = (state, action) =>  {
     }
 }
 
-export default ResolutionReducer;
+export default AppReducer;

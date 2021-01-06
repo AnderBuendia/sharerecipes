@@ -8,8 +8,8 @@ import Comment from './Comment';
 import { useToasts } from 'react-toast-notifications';
 
 const SEND_COMMENTS_RECIPE = gql`
-    mutation sendCommentsRecipe($input: CommentsRecipeInput) {
-        sendCommentsRecipe(input: $input) {
+    mutation sendCommentsRecipe($id: ID!, $input: CommentsRecipeInput) {
+        sendCommentsRecipe(id: $id, input: $input) {
             id
             message
         }
@@ -24,12 +24,6 @@ const COMMENTS_FRAGMENT = gql`
             edited
             createdAt
             votes
-            recipe {
-                id
-                author {
-                    id
-                }
-            }
             author {
                 id
                 name
@@ -40,7 +34,7 @@ const COMMENTS_FRAGMENT = gql`
     }
 `;
 
-const Discussion = ({user, recipeId, arrComments, query, fetchMore}) => {
+const Discussion = ({user, recipe, arrComments, query, fetchMore}) => {
     /* useState Modal */
     const [open, setOpen] = useState(false);
     const [defaultMessage, setDefaultMessage] = useState('');
@@ -57,7 +51,7 @@ const Discussion = ({user, recipeId, arrComments, query, fetchMore}) => {
             const { getRecipe } = cache.readQuery({ 
                 query, 
                 variables: {
-                    id: recipeId,
+                    id: recipe.id,
                     offset: 0,
                     limit: 10
                 }
@@ -66,7 +60,7 @@ const Discussion = ({user, recipeId, arrComments, query, fetchMore}) => {
             cache.writeQuery({
                 query,
                 variables: {
-                    id: recipeId,
+                    id: recipe.id,
                     offset: 0,
                     limit: 10
                 },
@@ -93,8 +87,8 @@ const Discussion = ({user, recipeId, arrComments, query, fetchMore}) => {
             try {
                 const { data } = await sendCommentsRecipe({
                     variables: {
+                        id: recipe.id,
                         input: {
-                            recipe: recipeId,
                             message  
                         }
                     }
@@ -154,6 +148,7 @@ const Discussion = ({user, recipeId, arrComments, query, fetchMore}) => {
                         query={query}
                         fetchMore={fetchMore}
                         user={user}
+                        recipe={recipe}
                         numberOfComments={comments.length}
                     />
                 )) 
