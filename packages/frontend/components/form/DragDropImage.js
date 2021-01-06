@@ -18,6 +18,7 @@ const DragDropImage = ({name, ratio, onChange, url, current, rounded}) => {
 				allowedFileTypes: ['image/*'],
 				minNumberOfFiles: 1,
 				maxNumberOfFiles: 1,
+				maxFileSize: 1000000
 			},
 			onBeforeFileAdded: () => {
 				setModal(true);
@@ -25,6 +26,7 @@ const DragDropImage = ({name, ratio, onChange, url, current, rounded}) => {
 			},
 		})
 			.use(ImageEditor, {
+				quality: 0.8,
 				cropperOptions: { initialAspectRatio: ratio, aspectRatio: ratio },
 				actions: {
 					cropSquare: false,
