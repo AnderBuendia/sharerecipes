@@ -3,7 +3,7 @@ import Link from 'next/link';
 import onClickOutside from 'react-onclickoutside';
 import MuffinImg from '../images/MuffinImg';
 import MenuMobileIcon from '../icons/menuMobileicon';
-import Search from './Search';
+import SearchBar from './SearchBar';
 import DropdownMenu from './dropdownMenu';
 
 const HeaderMobile = ({userData}) => {
@@ -68,7 +68,7 @@ const HeaderMobile = ({userData}) => {
                             </>
                         ) 
                         }
-                        <Search className="w-full bg-white text-black placeholder-black h-10 px-4 py-4 rounded-full text-sm focus:outline-none" />
+                        <SearchBar className="w-full bg-white text-black placeholder-black h-10 px-4 py-4 rounded-full text-sm focus:outline-none" />
                     </div>  
                 } 
             </div>

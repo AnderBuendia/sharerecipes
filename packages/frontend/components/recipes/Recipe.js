@@ -8,7 +8,6 @@ const GET_NUMBER_OF_COMMENTS = gql`
     query getNumberOfComments($id: ID!) {
         getNumberOfComments(id: $id) {
             id
-            message
         }
     }
 `;

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import Image from 'next/image';
 import { Waypoint } from 'react-waypoint';
-import useTimeAgo from '../../hooks/useTimeAgo';
-import ChevronUp from '../icons/chevronUp';
+import useTimeAgo from '../../../hooks/useTimeAgo';
+import ChevronUp from '../../icons/chevronUp';
 import { useToasts } from 'react-toast-notifications';
 
 const VOTE_COMMENTS_RECIPE = gql`
