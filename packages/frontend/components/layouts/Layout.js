@@ -25,15 +25,12 @@ const Layout = ({children}) => {
                         </div>
                     </div>
                 ) : (
-                    <div className="bg-gray-50 min-h-screen">
-                    <Header />
-                        <div className="container mx-auto">
-                            <main className="mt-4">
-                                {children}
-                            </main>
+                    <div className="bg-gray-200 min-h-screen">
+                        <Header />
+                        <div className="container mx-auto mt-4">
+                            {children}
                         </div>
                     </div>
-    
                 )
             }
         </>

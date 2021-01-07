@@ -1,12 +1,12 @@
 import React from 'react';
 import { gql, useQuery, useMutation } from '@apollo/client';
-import { filter } from 'graphql-anywhere';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import Rating from '@material-ui/lab/Rating';
+import { useToasts } from 'react-toast-notifications';
 import Layout from '../../components/layouts/Layout';
 import Discussion from '../../components/recipe/Discussion';
-import { useToasts } from 'react-toast-notifications';
+import Spinner from '../../components/generic/Spinner';
 
 const GET_RECIPES = gql`
     query getRecipes {
@@ -174,7 +174,7 @@ const Recipe = () => {
 
     const { data: userData, loading: loadingUser } = useQuery(GET_USER);
 
-    if (loadingRecipe || loadingUser) return null;
+    if (loadingRecipe || loadingUser) return <Spinner />;
 
     /* Apollo query data */
     const { getRecipe } = dataRecipe;
@@ -259,7 +259,6 @@ const Recipe = () => {
             <Discussion 
                 user={getUser} 
                 recipe={getRecipe}
-                arrComments={filter(Discussion.fragments.comments, getRecipe)} 
                 query={GET_RECIPE} 
                 fetchMore={fetchMore}
             />

@@ -26,7 +26,7 @@ const EDIT_COMMENTS_RECIPE = gql`
     }
 `;
 
-const Comment = ({comment, query, user, recipe, i, numberOfComments, fetchMore}) => {
+const Comment = ({comment, query, user, recipe, i, fetchMore}) => {
     const { id, message, votes, author, createdAt, edited } = comment;
 
     /* TimeAgo Hook */
@@ -182,7 +182,7 @@ const Comment = ({comment, query, user, recipe, i, numberOfComments, fetchMore})
                     }
                 </div>
             </div>
-            { i === numberOfComments - 1 &&
+            { i === recipe.comments.length - 1 &&
                 <Waypoint onEnter={() => fetchMore({ 
                     variables: {
                         id: recipe.id,

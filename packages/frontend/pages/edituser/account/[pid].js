@@ -3,11 +3,13 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import { useToasts } from 'react-toast-notifications';
+import imagesContext from '../../../context/images/imagesContext';
 import Layout from '../../../components/layouts/Layout';
 import Input from '../../../components/form/Input';
 import SelectMenu from '../../../components/edituserform/selectMenu';
 import DragDropImage from '../../../components/form/DragDropImage';
-import imagesContext from '../../../context/images/imagesContext';
+import Spinner from '../../../components/generic/Spinner';
+
 
 const GET_USER = gql`
     query getUser {
@@ -81,7 +83,8 @@ const EditUserAccount = () => {
         }
     });
 
-    if (loading) return null;
+    if (loading) return <Spinner />;
+
     const { name, email, image_url } = data.getUser;
 
     const initialValues = {

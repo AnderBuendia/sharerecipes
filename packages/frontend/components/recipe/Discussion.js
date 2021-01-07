@@ -34,16 +34,13 @@ const COMMENTS_FRAGMENT = gql`
     }
 `;
 
-const Discussion = ({user, recipe, arrComments, query, fetchMore}) => {
+const Discussion = ({user, recipe, query, fetchMore}) => {
     /* useState Modal */
     const [open, setOpen] = useState(false);
     const [defaultMessage, setDefaultMessage] = useState('');
 
     /* Set Toast Notification */
     const { addToast } = useToasts();
-
-    /* Comments */
-    const { comments } = arrComments;
 
     /* Apollo mutation to update recipe comments */
     const [ sendCommentsRecipe ] = useMutation(SEND_COMMENTS_RECIPE, {
@@ -140,7 +137,7 @@ const Discussion = ({user, recipe, arrComments, query, fetchMore}) => {
         </div>
         <div className="w-full mt-4">
             <div className="border-t border-gray-400 mb-4">
-            { comments.map((comment, i) => (
+            { recipe.comments.map((comment, i) => (
                     <Comment 
                         key={comment.id}
                         comment={comment}
@@ -149,7 +146,6 @@ const Discussion = ({user, recipe, arrComments, query, fetchMore}) => {
                         fetchMore={fetchMore}
                         user={user}
                         recipe={recipe}
-                        numberOfComments={comments.length}
                     />
                 )) 
             }
