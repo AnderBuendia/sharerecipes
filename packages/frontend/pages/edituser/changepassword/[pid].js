@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { gql, useMutation } from '@apollo/client';
@@ -52,16 +52,16 @@ const ChangePassword = () => {
   
     return (  
         <Layout>
-              <div className="md:w-4/5 xl:w-3/5 mx-auto mb-32">
+              <div className="mx-auto w-11/12">
                 <div className="flex justify-center mt-5">
                     <SelectMenu initialValue="changepassword" id={id} />
                 </div>
                 <div className="flex justify-center mt-5">
-                    <div className="w-full max-w-lg bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
+                    <div className="w-full max-w-lg bg-white rounded-lg shadow-md p-5">
+                        <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center mt-2 mb-4">
+                            Change your Password
+                        </h2>
                         <form onSubmit={handleSubmit(onSubmit)}>
-                            <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center my-4">
-                                Change your Password
-                            </h2>
                             <Input
                                 label="Password"
                                 name="password"

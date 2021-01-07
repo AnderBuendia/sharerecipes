@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import Rating from '@material-ui/lab/Rating';
 import { useToasts } from 'react-toast-notifications';
 import Layout from '../../components/layouts/Layout';
-import Discussion from '../../components/recipe/Discussion';
+import Discussion from '../../components/recipes/recipe/Discussion';
 import Spinner from '../../components/generic/Spinner';
 
 const GET_RECIPES = gql`

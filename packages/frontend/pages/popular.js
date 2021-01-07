@@ -1,7 +1,7 @@
 import React from 'react';
 import { gql, useQuery } from '@apollo/client';
 import Layout from '../components/layouts/Layout';
-import Recipe from '../components/recipe/Recipe';
+import RecipesContainer from '../components/recipes/RecipesContainer';
 import Spinner from '../components/generic/Spinner';
 
 const GET_BEST_RECIPES = gql`
@@ -39,18 +39,7 @@ const Popular = () => {
             <p className="font-bold text-lg">Popular Recipes</p>
           </div>
             
-          <div className="p-4 bg-white rounded-md shadow-md">
-            <div 
-              className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 cursor-pointer"
-            >
-              {getBestRecipes.map(recipe => (
-                <Recipe
-                  key={recipe.id}
-                  recipe={recipe}
-                />
-              ))}
-            </div>
-          </div>
+          <RecipesContainer recipes={getBestRecipes} />
         </div>
         </>
       )}

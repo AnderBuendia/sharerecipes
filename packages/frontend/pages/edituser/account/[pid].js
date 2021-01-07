@@ -94,13 +94,13 @@ const EditUserAccount = () => {
   
     return (  
         <Layout>
-              <div className="md:w-4/5 xl:w-3/5 mx-auto mb-32">
+            <div className="mx-auto w-11/12">
                 <div className="flex justify-center mt-5">
                     <SelectMenu initialValue="account" id={id} />
                 </div>
                 <div className="flex justify-center mt-5">
-                    <div className="w-full max-w-lg bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
-                        <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center my-4">
+                    <div className="w-full max-w-lg bg-white rounded-lg shadow-md p-5">
+                        <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center mt-2 mb-4">
                             Edit Your Account
                         </h2>
                         <div className="flex w-32 h-32 overflow-hidden mx-auto rounded-full my-4">
@@ -157,7 +157,6 @@ const EditUserAccount = () => {
                                 type="submit"
                                 value="Edit account"
                             />
-                         
                         </form>  
                     </div>
                 </div>

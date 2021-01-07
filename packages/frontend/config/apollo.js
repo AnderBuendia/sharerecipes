@@ -130,9 +130,8 @@ function initApolloClient(initState, serverAccessToken) {
       return createApolloClient(initState, serverAccessToken);
     }
 
-    // Reuse client on the client-side
+    /* Reuse client on the client-side */
     if (!apolloClient) {
-      // setAccessToken(cookie.parse(document.cookie).test);
       apolloClient = createApolloClient(initState);
     }
 
