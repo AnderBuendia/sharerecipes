@@ -182,7 +182,7 @@ const Recipe = () => {
 
     return (  
         <Layout>
-            <div className="mx-auto w-11/12 bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
+            <div className="mx-auto w-11/12 bg-white rounded-lg shadow-md px-5 pt-6 pb-8 mb-4">
                 <h1 className="break-all text-2xl font-body font-bold mb-2">{getRecipe.name}</h1>  
                 <div className="w-full flex flex-col lg:flex-row lg:justify-between">
                     <div className="xl:2/4">

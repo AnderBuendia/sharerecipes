@@ -13,7 +13,7 @@ const resolvers = {
             return user;
         },
         comments: async ({comments}, {offset, limit}) => {
-            const recipeComments = await Comments.find({ _id: { $in: comments } }).skip(offset).limit(limit).exec();
+            const recipeComments = await Comments.find({ _id: { $in: comments } }).sort({ createdAt: -1 }).skip(offset).limit(limit).exec();
             return recipeComments;
             
         }

@@ -101,7 +101,7 @@ const Discussion = ({user, recipe, query, fetchMore}) => {
     }
 
     return (  
-    <div className="mx-auto w-11/12 bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
+    <div className="mx-auto w-11/12 bg-white rounded-lg shadow-md px-5 py-4">
         { open && <ModalSignup open={open} handleOpen={setOpen} /> }
         <h1 className="text-lg font-body font-bold mb-4">Discussion</h1> 
         <div className="flex w-full">
@@ -120,7 +120,7 @@ const Discussion = ({user, recipe, query, fetchMore}) => {
                     <Controller 
                         name="message"
                         as={<TextField
-                            className="w-11/12 border border-black rounded shadow-sm"
+                            className="w-10/12 sm:w-11/12 border border-black rounded shadow-sm"
                             id="outlined-multiline-flexible"
                             multiline
                             rowsMax={3}
@@ -131,7 +131,7 @@ const Discussion = ({user, recipe, query, fetchMore}) => {
                         control={control}
                     />
                     
-                    <input className="ml-2 px-3 py-2 rounded-lg bg-black text-white font-roboto font-bold absolute top-0 hover:bg-gray-800 cursor-pointer" type="submit" value="SEND" />
+                    <input className="ml-1 px-2 py-2 rounded-lg bg-black text-white font-roboto font-bold absolute top-0 hover:bg-gray-800 cursor-pointer" type="submit" value="SEND" />
                 </form>
             </div>               
         </div>

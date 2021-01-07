@@ -37,7 +37,7 @@ const Index = () => {
         <div className="container mx-auto w-9/12 sm:w-11/12"> 
           <div className="flex justify-between items-center mb-1">
             <p className="font-bold text-lg">New Recipes</p>
-            <Link href="/newest">
+            <Link href="/popular">
               <a className="ml-auto w-36 bg-purple-500 px-2 rounded-full shadow-lg cursor-pointer hover:bg-purple-600 
                 transition duration-200 ease-in-out transform hover:scale-105 text-center text-gray-200 uppercase font-roboto text-sm hover:font-bold">
                 Popular Recipes

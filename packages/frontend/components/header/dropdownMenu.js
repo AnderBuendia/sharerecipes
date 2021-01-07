@@ -61,7 +61,7 @@ const DropdownMenu = ({userData}) => {
                 />
             </div>      
             { open && 
-                <div className="origin-top-right absolute z-10 right-0 mt-2 w-56 rounded-md shadow-lg font-roboto">
+                <div className="origin-top-right absolute z-20 right-0 mt-2 w-56 rounded-md shadow-lg font-roboto">
                     <div className="rounded-md bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                         <div className="py-1">
                             <p className="block px-4 py-2 text-sm font-bold leading-5 text-gray-700" role="menuitem">Hi, {name}</p>

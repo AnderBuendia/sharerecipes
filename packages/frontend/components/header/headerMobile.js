@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import onClickOutside from 'react-onclickoutside';
 import MuffinImg from '../images/MuffinImg';
 import MenuMobileIcon from '../icons/menuMobileicon';
 import Search from './Search';
@@ -8,10 +9,12 @@ import DropdownMenu from './dropdownMenu';
 const HeaderMobile = ({userData}) => {
     const [open, setOpen] = useState(false);
 
+    HeaderMobile.handleClickOutside = () => setOpen(false);
+
     return(
         <div className="w-full text-black bg-gray-400 dark-mode:text-gray-200 dark-mode:bg-gray-800">
-            <div className="flex flex-col max-w-screen-xl px-4 py-2 mx-auto">
-                <div className="flex flex-row items-center justify-between">
+            <div className="flex flex-col max-w-screen-xl py-2 mx-auto">
+                <div className="flex flex-row px-4 items-center justify-between">
                     <MuffinImg />
                     
                     <div className={`${userData ? 'flex ' : ''}`}>
@@ -34,21 +37,33 @@ const HeaderMobile = ({userData}) => {
                     </div>
                     
                 </div>
+                
                 { open &&
-                    <div className="w-full flex-col flex-grow p-2 border-t border-black">
+                
+                    <div className="w-full bg-gray-400 top-0 absolute mt-20 z-10 p-2 pb-3 rounded-lg">
+                         <div className="w-11/12 m-auto border-gray border-t block text-center mb-2"></div>
                         { userData === null ? (
                             <>
                                 <Link href="/login">
-                                    <a className="flex flex-row px-4 py-2 text-md font-semibold font-roboto bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">Login</a>
+                                    <a className="flex flex-row px-4 py-2 text-md font-semibold font-roboto bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 
+                                        dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
+                                        Login
+                                    </a>
                                 </Link>
                                 <Link href="/signup">
-                                    <a className="flex flex-row px-4 py-2 mt-2 mb-2 text-md font-semibold font-roboto bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">Sign Up</a>
+                                    <a className="flex flex-row px-4 py-2 mt-2 mb-2 text-md font-semibold font-roboto bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 
+                                        dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
+                                        Sign Up
+                                    </a>
                                 </Link>
                             </> 
                         ) : (
                             <>
                                 <Link href="/newrecipe">
-                                    <a className="flex flex-row px-4 py-2 mb-2 text-md font-semibold font-roboto bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">Create a Recipe</a>
+                                    <a className="flex flex-row px-4 py-2 mb-2 text-md font-semibold font-roboto bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 
+                                        dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
+                                        Create a Recipe
+                                    </a>
                                 </Link>
                             </>
                         ) 
@@ -61,4 +76,8 @@ const HeaderMobile = ({userData}) => {
     );
 }
  
-export default HeaderMobile;
+const clickOutsideConfig = {
+    handleClickOutside: () => HeaderMobile.handleClickOutside
+};
+
+export default onClickOutside(HeaderMobile, clickOutsideConfig);

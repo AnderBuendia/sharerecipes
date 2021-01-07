@@ -21,7 +21,7 @@ const GET_BEST_RECIPES = gql`
   }
 `;
 
-const Newest = () => {
+const Popular = () => {
   const { data, loading, error } = useQuery(GET_BEST_RECIPES);
 
   if (loading) return <Spinner />;
@@ -58,4 +58,4 @@ const Newest = () => {
   )
 }
 
-export default Newest;
+export default Popular;
