@@ -5,6 +5,7 @@ import Layout from '../../components/layouts/Layout';
 import User from '../../components/adminpanel/User';
 import UsersGroup from '../../components/icons/usersgroup';
 import Pagination from '../../components/adminpanel/Pagination';
+import Spinner from '../../components/generic/Spinner';
 
 const GET_USER = gql`
     query getUser {
@@ -61,7 +62,7 @@ const AdminUsers = () => {
         }
     });
    
-    if (loadingGetUser || loadingGetUsers) return null;
+    if (loadingGetUser || loadingGetUsers) return <Spinner />;
 
     const { getUser } = dataGetUser;
     const totalPages = dataGetUsers ? Math.ceil(dataGetUsers.getUsers.total / 9) : null

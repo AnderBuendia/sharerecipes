@@ -55,6 +55,7 @@ const resolvers = {
             }
         },
 
+        /* Recipe comments */
         getNumberOfComments: async (_, {id}) => {
             /* Check recipe */
             let recipe = await Recipes.findById(id);
