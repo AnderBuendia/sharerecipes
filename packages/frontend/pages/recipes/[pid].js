@@ -1,9 +1,11 @@
 import React from 'react';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 import Swal from 'sweetalert2';
 import Rating from '@material-ui/lab/Rating';
 import { useToasts } from 'react-toast-notifications';
+import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon } from 'react-share';
 import Layout from '../../components/layouts/Layout';
 import Discussion from '../../components/recipes/recipe/Discussion';
 import Spinner from '../../components/generic/Spinner';
@@ -182,11 +184,18 @@ const Recipe = () => {
 
     return (  
         <Layout>
-            <div className="mx-auto w-11/12 bg-white rounded-lg shadow-md px-5 pt-6 pb-8 mb-4">
+            <div className="container mx-auto w-11/12 bg-white rounded-lg shadow-md p-5 mb-4">
                 <h1 className="break-all text-2xl font-body font-bold mb-2">{getRecipe.name}</h1>  
                 <div className="w-full flex flex-col lg:flex-row lg:justify-between">
                     <div className="xl:2/4">
-                        <img src={getRecipe.image_url} className="rounded-sm mb-3" />
+                        <Image 
+                            className="rounded-sm mb-3"
+                            key={getRecipe.image_url}
+                            src={getRecipe.image_url}
+                            alt={getRecipe.image_name}
+                            width={1024}
+                            height={612}
+                        />
                     </div>
                     
                     <div className="w-full lg:flex-col lg:ml-3 lg:mt-1 xl:w-2/4 relative">
@@ -212,21 +221,40 @@ const Recipe = () => {
                             </div>
                         </div>
                         
-                        <div className="flex flex-col float-right items-center mt-4 xl:absolute xl:bottom-0 xl:right-0 xl:mt-6">
-                            <Rating  
-                                name="half-rating" 
-                                size="large" 
-                                defaultValue={0}
-                                disabled={!getUser ? true : false}
-                                value={getRecipe.average_vote} 
-                                precision={0.5} 
-                                onChange={ (event, newValue) => voteRecipe(newValue) }
-                            />
-                            <p className="ml-1 text-lg text-gray-500">
-                                ({getRecipe.average_vote} from {getRecipe.voted.length} votes)
-                            </p>
-                           
+                        <div className="flex flex-row justify-between items-center xl:flex-col xl:items-end xl:absolute xl:bottom-0 xl:right-0 xl:mt-6">
+                            <div className="flex flex-row">
+                                <FacebookShareButton
+                                    url={`http://localhost:3000/recipes/${id}`}
+                                    quote='Visit my new recipe'
+                                    className="cursor-pointer mr-3"
+                                >
+                                    <FacebookIcon size={28} className="rounded-full" />
+                                </FacebookShareButton>
+                                <TwitterShareButton
+                                    url={`https://localhost:3000/recipes/${id}`}
+                                    title='Visit my new recipe'
+                                    className="cursor-pointer"
+                                >
+                                    <TwitterIcon size={28} className="rounded-full" />
+                                </TwitterShareButton>
+                            </div>
+                            <div className="flex flex-col float-right items-end mt-4 ">
+                                <Rating  
+                                    name="half-rating" 
+                                    size="large" 
+                                    defaultValue={0}
+                                    disabled={!getUser ? true : false}
+                                    value={getRecipe.average_vote} 
+                                    precision={0.5} 
+                                    onChange={ (event, newValue) => voteRecipe(newValue) }
+                                />
+                                <p className="ml-1 text-lg text-gray-500">
+                                    ({getRecipe.average_vote} from {getRecipe.voted.length} votes)
+                                </p>
+                            
+                            </div>
                         </div>
+                       
                     </div>
                 </div>
                
@@ -263,6 +291,7 @@ const Recipe = () => {
                 fetchMore={fetchMore}
             />
         </Layout>
+
     );
 }
 
