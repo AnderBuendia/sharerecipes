@@ -17,6 +17,7 @@ const typeDefs = gql`
         votes: Float
         voted: [String]
         average_vote: Float
+        url: String
         author: User
         createdAt: String
     }
@@ -63,21 +64,21 @@ const typeDefs = gql`
         getRecipes: [Recipe]
         getBestRecipes: [Recipe]
         getUserRecipes: [Recipe]
-        getRecipe(id: ID, offset: Int, limit: Int): Recipe
+        getRecipe(recipeUrl: String!, offset: Int, limit: Int): Recipe
 
         # RecipeComments
-        getNumberOfComments(id: ID!): [CommentsRecipe]
+        getNumberOfComments(recipeUrl: String!): [CommentsRecipe]
     }
 
     # Mutation
     extend type Mutation {
         newRecipe(input: RecipeInput): Recipe
         updateRecipe(id: ID!, input: RecipeInput): Recipe
-        deleteRecipe(id: ID!): String
-        updateVoteRecipe(id: ID!, input: RecipeInput): Recipe
+        deleteRecipe(recipeUrl: String!): String
+        updateVoteRecipe(recipeUrl: String!, input: RecipeInput): Recipe
     
         # RecipeComments
-        sendCommentsRecipe(id: ID!, input: CommentsRecipeInput): CommentsRecipe
+        sendCommentsRecipe(recipeUrl: String!, input: CommentsRecipeInput): CommentsRecipe
         voteCommentsRecipe(id: ID!, input: CommentsRecipeInput): CommentsRecipe
         editCommentsRecipe(id: ID!, input: CommentsRecipeInput): CommentsRecipe
     }

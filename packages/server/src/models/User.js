@@ -30,7 +30,7 @@ const usersSchema = new Schema({
     },
     role: {
         type: String,
-        default: "Member"
+        default: "MEMBER"
     },
     refreshTokens: [
         {

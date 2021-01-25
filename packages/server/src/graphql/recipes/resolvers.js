@@ -2,6 +2,7 @@ const User = require('../../models/User');
 const Recipes = require('../../models/Recipes');
 const Comments = require('../../models/Comments');
 
+const { ApolloError } = require('apollo-server-express');
 const fs = require('fs');
 const path = require('path');
 
@@ -27,11 +28,12 @@ const resolvers = {
     },
 
     Query: {
-        getRecipe: async (_, {id}) => {
+        getRecipe: async (_, {recipeUrl}) => {
             /* Check if recipe exists */
-            const recipe = await Recipes.findById(id);
+            const recipe = await Recipes.findOne({url: recipeUrl});
+
             if (!recipe) {
-                throw new Error('Recipe did not found');
+                throw new ApolloError('Recipe not found', 401);
             }
 
             return recipe;
@@ -56,12 +58,12 @@ const resolvers = {
         },
 
         /* Recipe comments */
-        getNumberOfComments: async (_, {id}) => {
+        getNumberOfComments: async (_, {recipeUrl}) => {
             /* Check recipe */
-            let recipe = await Recipes.findById(id);
+            let recipe = await Recipes.findOne({ url: recipeUrl });
 
             if (!recipe) {
-                throw new Error('Recipe does not exist');
+                throw new ApolloError('Recipe not found', 404);
             }
 
             /* Get comments from this recipe */
@@ -74,6 +76,18 @@ const resolvers = {
     Mutation: {
         newRecipe: async (_, {input}, ctx) => {
             // console.log(ctx.req);
+   
+            const urlName = input.name.replace(' ', '-').toLowerCase();
+
+            const recipes = await 
+                Recipes.countDocuments({ name: input.name }).collation({ locale: 'en', strength: 2 });
+                                        
+            if (recipes > 0) {
+                input.url = `${urlName}-${recipes}`;
+            } else {
+                input.url = urlName;
+            }
+
             const newRecipe = new Recipes(input);
 
             /* Assign the user creator */
@@ -88,17 +102,17 @@ const resolvers = {
             }
         },
 
-        deleteRecipe: async (_, {id}, ctx) => {
+        deleteRecipe: async (_, {recipeUrl}, ctx) => {
             /* Check if recipe exists */
-            const recipe = await Recipes.findById(id);
+            const recipe = await Recipes.findOne({ url: recipeUrl });
 
             if (!recipe) {
-                throw new Error('Recipe does not exist');
+                throw new ApolloError('Recipe not found', 404);
             }
 
             /* Check if the author is the one who deletes the order */
             if (recipe.author.toString() !== ctx.req.user.id) {
-                throw new Error('Invalid credentials');
+                throw new ApolloError('Invalid credentials', 401);
             }
 
             /* Delete recipe image from server */
@@ -106,24 +120,25 @@ const resolvers = {
             fs.unlinkSync(pathName);
 
             /* Delete data from DB */
-            await Comments.deleteMany({ recipe: id });
-            await Recipes.findOneAndDelete({ _id: id });
+            // TODO: revisar los comentarios para eliminar de la receta
+            await Comments.deleteMany({ recipe: recipe._id });
+            await Recipes.findOneAndDelete({ _id: recipe._id });
             return 'Recipe has been deleted';
         },
 
-        updateVoteRecipe: async (_, {id, input}, ctx) => {
+        updateVoteRecipe: async (_, {recipeUrl, input}, ctx) => {
             const { votes } = input;
 
             /* Check if recipe exists */
-            const checkRecipe = await Recipes.findById(id);
+            const checkRecipe = await Recipes.findOne({ url: recipeUrl });
 
             if (!checkRecipe) {
-                throw new Error('Recipe does not exist');
+                throw new ApolloError('Recipe not found', 404);
             }
 
             /* Check if user has voted */
             if (checkRecipe.voted.includes(ctx.req.user.id)) {
-                throw new Error('You has voted this recipe');
+                throw new ApolloError('You has voted this recipe', 406);
             }
             
             /* Calculate total votes and save data in DB */
@@ -140,16 +155,16 @@ const resolvers = {
         },
 
         /* Comments Recipe */
-        sendCommentsRecipe: async (_, {id, input}, ctx) => {
-            
+        sendCommentsRecipe: async (_, {recipeUrl, input}, ctx) => {
             /* Check errors */
-            let recipe = await Recipes.findById(id);
+            let recipe = await Recipes.findOne({ url: recipeUrl });
+
             if (!recipe) {
-                throw new Error('Recipe does not exist');
+                throw new ApolloError('Recipe not found', 404);
             }
 
             if (!input.message) {
-                throw new Error('Please introduce your message');
+                throw new ApolloError('Please introduce your message', 204);
             }
 
             const newComment = new Comments(input);
@@ -174,7 +189,7 @@ const resolvers = {
             let checkComment = await Comments.findById(id);
 
             if (!checkComment) {
-                throw new Error('Comment does not exist');
+                throw new ApolloError('Comment not found', 404);
             }
 
             /* Edit the comment text and save data in DB */
@@ -190,12 +205,12 @@ const resolvers = {
             const checkComment = await Comments.findById(id);
 
             if (!checkComment) {
-                throw new Error('Comment does not exist');
+                throw new ApolloError('Comment not found', 404);
             }
 
             /* Check if user has voted */
             if (checkComment.voted.includes(ctx.req.user.id)) {
-                throw new Error('You has voted this comment');
+                throw new ApolloError('You has voted this comment', 406);
             }
 
             /* Add user who voted and sum votes */
