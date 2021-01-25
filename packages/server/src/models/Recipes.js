@@ -46,6 +46,9 @@ const recipesSchema = new Schema({
         type: Number,
         default: 0
     },
+    url: {
+        type: String,
+    },
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Users',

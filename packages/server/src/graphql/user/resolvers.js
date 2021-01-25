@@ -3,17 +3,16 @@ const User = require('../../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
-const { createAccessToken, createRefreshToken } = require('../../utils/auth');
-const sendRefreshToken = require('../../utils/sendRefreshToken');
+const { createAccessToken } = require('../../utils/auth.utils');
+const { ApolloError } = require('apollo-server-express');
 require('dotenv').config({ path: 'src/config/variables.env' });
 
 /* Other fns */
-const sendEmails = async (user, contentHTML) => {
-    const { email } = user;
-
+const sendEmails = async (email, contentHTML) => {
     const transporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
         port: 587,
+        secure: false,
         auth: {
             user: process.env.EMAILU,
             pass: process.env.EMAILP
@@ -29,7 +28,7 @@ const sendEmails = async (user, contentHTML) => {
 
     await transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            console.log('Error ocurred', err.message);
+            console.log('Error occurred', error.message);
         } else {
             console.log('Email sent', info.messageId);
             console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
@@ -63,14 +62,13 @@ const resolvers = {
     Mutation: {
         /* Users */
         newUser: async (_, {input}) => {
-            //console.log(input);
             const { email, password } = input;
 
             /* Check if user is already registered */
             let user = await User.findOne({ email });
 
             if (user) {
-                throw new Error('User is already registered');
+                throw new ApolloError('User is already registered', 401);
             }
 
             /* Hashing password */
@@ -83,74 +81,45 @@ const resolvers = {
 
                 /* Send an activation mail */
                 const emailToken = jwt.sign({ id: user.id }, process.env.SECRET_EMAIL, { expiresIn: '1h'});
-                const url = `${process.env.FRONTEND_URL}/confirmation/${emailToken}`;
+                const url = `${process.env.HOST_FRONT}/confirmation/${emailToken}`;
                 const contentHTML = `<h1>Click on this link to activate your account</h1>
                                 <a href=${url}>${url}</a>`;
 
-                await sendEmails(user, contentHTML);
+                await sendEmails(user.email, contentHTML);
 
-                return user;      
+                return { message: `User was created succesfully created.
+                    Please, check your email to confirm your account.` };      
             } catch (error) {
                 console.log(error);
             }
         },
 
-        authenticateUser: async (_, {input}, { res }) => {
+        authenticateUser: async (_, {input}) => {
             const { email, password } = input;
-
+            
             /* Check if user is exists */
             const user = await User.findOne({ email });
 
             if (!user) {
-                throw new Error('User does not exist'); 
+                throw new ApolloError('User does not exist', 401); 
             } else if (user && !user.confirmed) {
-                throw new Error('Your account has not activated. Please check your email'); 
+                throw new ApolloError('Your account has not activated. Please check your email', 401); 
             }
 
             /* Check if password is correct */
             const checkPassword = await bcrypt.compare(password, user.password);
             
             if (!checkPassword) {
-                throw new Error('Password is wrong');
+                throw new ApolloError('Password is wrong', 401);
             }
 
-            const refreshToken = createRefreshToken(user);
-
-            /* Save data Token to refresh in DB */
-            const refreshTokenExpiry = new Date();
-            refreshTokenExpiry.setHours(refreshTokenExpiry.getHours() + 4);
-            refreshTokenExpiry.setMilliseconds(0);
-
-            const salt = await bcrypt.genSalt(10);
-            const refreshTokenHash = await bcrypt.hash(refreshToken, salt);
-
-            user.refreshTokens.push({
-                hash: refreshTokenHash,
-                expiry: refreshTokenExpiry,
-            });
-
+            const token = createAccessToken(user);
             await user.save();
 
-            /* Set cookie token */
-            sendRefreshToken(res, refreshToken);
-
-            return { accessToken: createAccessToken(user) };
-        },
-
-        signOutUser: async (_, {}, ctx) => {
-            const user = await User.findById(ctx.req.user.id);
-            const token = ctx.req.cookies.jid;
-
-            /* find matching token in database and filter it out */
-            user.refreshTokens = user.refreshTokens.filter(storedToken => 
-                !bcrypt.compareSync(token, storedToken.hash)
-            );
-
-            await user.save();
-
-            /* Send void data to the cookie */
-            sendRefreshToken(ctx.res, '');
-            return true;
+            return { 
+                token,
+                user: { ...user.toJSON() }
+            };
         },
 
         updateUser: async (_, {id, input}, ctx) => {
@@ -158,19 +127,19 @@ const resolvers = {
             let user = await User.findById(id);
 
             if (!user) {
-                throw new Error('User does not exist');
+                throw new ApolloError('User does not exist', 401);
             }
 
             /* Check if user is the editor */
             if (user.id !== ctx.req.user.id) {
-                throw new Error('Invalid credentials');
+                throw new ApolloError('Invalid credentials', 401);
             }
 
             /* Check if password is correct */
             const checkPassword = await bcrypt.compare(input.password, user.password);
     
             if (!checkPassword) {
-                throw new Error('Your current password is wrong');
+                throw new ApolloError('Your current password is wrong', 401);
             }
 
             delete input.password;
@@ -190,19 +159,19 @@ const resolvers = {
             let user = await User.findById(id);
 
             if (!user) {
-                throw new Error('User does not exist');
+                throw new ApolloError('User does not exist', 401);
             }
 
             /* Check if user is the editor */
             if (user.id !== ctx.req.user.id) {
-                throw new Error('Invalid credentials');
+                throw new ApolloError('Invalid credentials', 401);
             }
 
             /* Check if password is correct */
             const checkPassword = await bcrypt.compare(password, user.password);
         
             if (!checkPassword) {
-                throw new Error('Your current password is wrong');
+                throw new ApolloError('Your current password is wrong', 401);
             }
 
             /* Hashing new password */
@@ -222,14 +191,14 @@ const resolvers = {
             const checkUser = await User.findById(id);
 
             if (!checkUser) {
-                throw new Error('User does not exist');
+                throw new ApolloError('User does not exist', 401);
             }
 
             /* Check if the admin is the one who deletes the user */
             const adminUser = await User.findById(ctx.req.user.id);
 
             if (adminUser.role !== 'Admin') {
-                throw new Error('Invalid credentials');
+                throw new ApolloError('Invalid credentials', 401);
             }
 
             /* Delete data from DB */
@@ -244,8 +213,8 @@ const resolvers = {
                 const user = jwt.verify(token, process.env.SECRET_EMAIL);
                 await User.findByIdAndUpdate({ _id: user.id }, { confirmed: true });
                 
-                return `Your account has been activated.
-                    You will be redirected automatically to login`;
+                return { message: `Your account has been activated.
+                    You will be redirected automatically to login` };
             } catch (error) {
             }
         },
@@ -257,19 +226,20 @@ const resolvers = {
             let user = await User.findOne({ email });
 
             if (!user) {
-                throw new Error('This email does not registered');
+                throw new ApolloError('This email does not registered', 401);
             }
 
             try {
                 /* Send an activation mail */
                 const forgotToken = jwt.sign({ id: user.id }, process.env.SECRET_FORGOT, { expiresIn: '1h'});
-                const url = `${process.env.FRONTEND_URL}/forgot/${forgotToken}`;
+                const url = `${process.env.HOST_FRONT}/forgot-pass/${forgotToken}`;
                 const contentHTML = `<h1>Click on this link to change your current password</h1>
                                 <a href=${url}>${url}</a>`;
 
                 await sendEmails(user, contentHTML);
 
-                return 'Please check your email and follow the instructions';   
+                return { message: `Please check your email 
+                    and follow the instructions` };   
             } catch (error) {
                 console.log(error);
             }
@@ -280,7 +250,7 @@ const resolvers = {
             try {
                 let user = jwt.verify(token, process.env.SECRET_FORGOT, function(err, user) {
                     if (err) {
-                        throw new Error('Link has expired. Try to send a new link');    
+                        throw new ApolloError('Link has expired. Try to send a new link', 401);    
                     }
 
                     return user;
@@ -295,13 +265,13 @@ const resolvers = {
                     new: true
                 });
 
-                return `Your password has been changed.
-                    You will be redirected automatically to login`;
+                return { message: `Your password has been changed.
+                You will be redirected automatically to login` };
             } catch (error) {
                 if(error instanceof jwt.TokenExpiredError) {
                     return attemptRenewal()
                 }
-                throw new Error(error);
+                throw new ApolloError(error, 401);
             }
         },
     }

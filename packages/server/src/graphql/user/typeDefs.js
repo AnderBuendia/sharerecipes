@@ -6,13 +6,18 @@ const typeDefs = gql`
         id: ID
         name: String
         email: String
-        password: String
-        confirmed: Boolean
-        createdAt: String
         role: String
         image_url: String
         image_name: String
+        createdAt: String
+        confirmed: Boolean
         confirmpassword: String
+        
+    }
+
+    type UserLogin {
+        user: User
+        token: String
     }
 
     type Users {
@@ -20,8 +25,8 @@ const typeDefs = gql`
         total: Int
     }
 
-    type Token {
-        accessToken: String
+    type Message {
+        message: String
     }
     
     # Inputs
@@ -63,19 +68,18 @@ const typeDefs = gql`
     # Mutations
     extend type Mutation {
         # Users
-        newUser(input: UserInput): User
-        authenticateUser(input: AuthenticateInput): Token
-        signOutUser: Boolean
+        newUser(input: UserInput): Message
+        authenticateUser(input: AuthenticateInput): UserLogin
         updateUser(id: ID!, input: UserInput): User
         updateUserPassword(id: ID!, input: UserPasswordInput): User
         deleteUser(id: ID!): String
 
         # Confirm User
-        confirmUser(input: TokenInput): String
+        confirmUser(input: TokenInput): Message
     
         # Recovery Password
-        forgotPassword(input: EmailInput): String
-        resetPassword(input: UserPasswordInput): String
+        forgotPassword(input: EmailInput): Message
+        resetPassword(input: UserPasswordInput): Message
     }
 `;
 
