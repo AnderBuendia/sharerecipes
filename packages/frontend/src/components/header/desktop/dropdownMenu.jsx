@@ -78,16 +78,13 @@ const DropdownMenu = ({user, setAuth}) => {
                                     </a>
                                 </Link>
                             }
-                            {/* {/* <Link href={{
-                                pathname: '/profile/account/[pid]',
-                                query: { pid: id }
-                            }}>
+                            <Link href='/profile'>
                                 <a className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-200 hover:text-gray-900 
                                     focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem"
                                     >
                                     Profile
                                 </a>
-                            </Link> */}
+                            </Link>
                         </div>
                         <div className="border-t border-gray-200"></div>
                         <div className="py-1">

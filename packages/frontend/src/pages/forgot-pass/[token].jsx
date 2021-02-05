@@ -2,11 +2,12 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useToasts } from 'react-toast-notifications';
 import { withCSRRedirect } from '../../lib/hoc/with-csr-redirect.hoc';
 import { removeJwtCookie } from '../../lib/utils/jwt-cookie.utils';
 import { serverRedirect } from '../../lib/utils/ssr.utils';
+import { RESET_PASSWORD } from '../../lib/graphql/user/query';
 
 /* enums */
 import { MainPaths } from '../../enums/paths/main-paths';
@@ -16,15 +17,6 @@ import { RedirectConditions } from '../../enums/redirect-conditions';
 import MainLayout from '../../components/layouts/MainLayout';
 import Input from '../../components/generic/Input';
 import MuffinIcon from '../../components/icons/muffinicon';
-
-/* Apollo queries */
-const RESET_PASSWORD = gql`
-    mutation resetPassword($input: UserPasswordInput) {
-        resetPassword(input: $input) {
-            message
-        }
-    }
-`;
 
 function ResetPasswordToken({token}) {
     /* Routing */
@@ -51,7 +43,8 @@ function ResetPasswordToken({token}) {
                     }
                 }
             });
-            addToast(data.resetPassword.message, { appearance: 'success' });
+            addToast(`Your password has been changed.
+            You will be redirected automatically to login`, { appearance: 'success' });
 
             setTimeout(() => {
                 router.push(MainPaths.LOGIN);
