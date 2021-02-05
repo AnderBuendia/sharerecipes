@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useContext } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useRouter } from 'next/router';
@@ -18,8 +19,8 @@ import { RedirectConditions } from '../enums/redirect-conditions';
 
 /* components */
 import MainLayout from '../components/layouts/MainLayout';
-import Input from '../components/form/Input';
-import DragDropImage from '../components/form/DragDropImage';
+import Input from '../components/generic/Input';
+import DragDropImage from '../components/generic/DragDropImage';
 
 const NEW_RECIPE = gql`
     mutation newRecipe($input: RecipeInput) {

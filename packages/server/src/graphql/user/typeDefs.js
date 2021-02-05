@@ -70,7 +70,7 @@ const typeDefs = gql`
         # Users
         newUser(input: UserInput): Message
         authenticateUser(input: AuthenticateInput): UserLogin
-        updateUser(id: ID!, input: UserInput): User
+        updateUser(input: UserInput): User
         updateUserPassword(id: ID!, input: UserPasswordInput): User
         deleteUser(id: ID!): String
 

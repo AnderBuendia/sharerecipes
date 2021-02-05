@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useReducer } from 'react';
 import ImagesContext from './imagesContext';
 import ImagesReducer from './imagesReducer';

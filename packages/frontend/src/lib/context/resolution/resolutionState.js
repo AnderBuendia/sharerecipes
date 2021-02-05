@@ -5,7 +5,7 @@ import { SWITCH_RESOLUTION } from '../../types/index';
 
 const ResolutionState = ({ children }) => {
     const initialState = {
-        width: 0,
+        width: null,
     };
 
     const [state, dispatch] = useReducer(
@@ -33,17 +33,20 @@ const ResolutionState = ({ children }) => {
 };
 
 export const useBrowserPreferences = () => {
-    const { width, setWidth } = useContext(
-        ResolutionContext
-    );
+    const { width, setWidth } = useContext(ResolutionContext);
    
+    const initialWidth = window.innerWidth;
+
     const handleWindowResize = () => {
         setWidth(window.innerWidth);
     };
 
     useEffect(() => {
-        window.addEventListener("resize", handleWindowResize);
-        return () => window.removeEventListener("resize", handleWindowResize);
+        if (!width) setWidth(initialWidth);
+        else {
+            window.addEventListener("resize", handleWindowResize);
+            return () => window.removeEventListener("resize", handleWindowResize);
+        }
     }, [width]);
 
     return { width };

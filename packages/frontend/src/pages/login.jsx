@@ -17,7 +17,7 @@ import { RedirectConditions } from '../enums/redirect-conditions';
 
 /* Components */
 import MainLayout from '../components/layouts/MainLayout';
-import Input from '../components/form/Input';
+import Input from '../components/generic/Input';
 import MuffinIcon from '../components/icons/muffinicon';
 
 const Login = () => {

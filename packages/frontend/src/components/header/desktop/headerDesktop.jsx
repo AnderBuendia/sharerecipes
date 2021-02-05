@@ -12,7 +12,7 @@ const HeaderDesktop = ({user, setAuth}) => {
                 <a><MuffinIcon className="w-14 h-14" /></a>
             </Link>
      
-            <SearchBar className="w-full p-3 bg-white placeholder-gray-600 rounded-full text-sm focus:outline-none" />
+            <SearchBar />
 
             <div className="flex text-black items-center cursor-pointer">
             { user ? (

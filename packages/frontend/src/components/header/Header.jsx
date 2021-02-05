@@ -1,21 +1,23 @@
 import React, { useContext } from 'react';
-import dynamic from 'next/dynamic';
 import AuthContext from '../../lib/context/auth/authContext';
+import { useBrowserPreferences } from '../../lib/context/resolution/resolutionState';
 import HeaderDesktop from './desktop/headerDesktop';
+import HeaderMobile from './mobile/headerMobile';
+import { ResolutionBreakPoints } from '../../enums/config/resolution-breakpoints';
 
-const HeaderMobile = dynamic(() => import('./mobile/headerMobile'), {
-    ssr: false,
-});
-   
+
 const Header = () => {
     /* authContext */
     const { authState, setAuth } = useContext(AuthContext);
+    const { width } = useBrowserPreferences();
 
     return (
         <>
-            <HeaderDesktop user={authState.user} setAuth={setAuth} />
-
-            <HeaderMobile user={authState.user} setAuth={setAuth} />
+            { width > ResolutionBreakPoints.SM ? (
+                <HeaderDesktop user={authState.user} setAuth={setAuth} />
+            ) : (
+                <HeaderMobile user={authState.user} setAuth={setAuth} />
+            )}
         </>
     );
 };

@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+// @ts-nocheck
+import React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
 import onClickOutside from 'react-onclickoutside';
-import ImagesContext from '../../../lib/context/images/imagesContext';
+import { useToasts } from 'react-toast-notifications';
 import CloseIcon from '../../icons/closeicon';
 import DocumentIcon from '../../icons/documenticon';
 import { MainPaths } from '../../../enums/paths/main-paths';
@@ -13,12 +14,7 @@ const MenuMobile = ({open, setOpen, user, setAuth}) => {
     MenuMobile.handleClickOutside = () => setOpen(false);
 
     const router = useRouter();
-
-    /* Update new image user */
-    const { user_image } = useContext(ImagesContext);
-    const { image_url } = user_image;
-    const imageMenu = image_url ? image_url : (
-        user?.image_url ? user?.image_url : '/usericon.jpeg');
+    const { addToast } = useToasts();
     
     const onClickSignOut = async (router, setAuth, setOpen) => {
         try {
@@ -45,7 +41,7 @@ const MenuMobile = ({open, setOpen, user, setAuth}) => {
         <aside className={`${open ? 'translate-x-0' : 'translate-x-full'} transform top-0 right-0 w-64
         bg-white fixed h-full shadow-lg overflow-auto ease-in-out transition-all duration-300 z-30`}>
             <CloseIcon 
-                className="p-2 w-10 left-0 cursor-pointer"
+                className="ml-1 mt-1 p-2 w-10 left-0 cursor-pointer hover:bg-gray-100"
                 onClick={ () => setOpen(false) }
             />
             <div className="flex flex-col items-center w-full px-6">
@@ -53,8 +49,8 @@ const MenuMobile = ({open, setOpen, user, setAuth}) => {
                     <>
                         <Image 
                             className="rounded-full"
-                            key={imageMenu}
-                            src={imageMenu}
+                            key={ user?.image_url ? user.image_url : '/usericon.jpeg' }
+                            src={ user?.image_url ? user.image_url : '/usericon.jpeg' }
                             alt={'UserIcon Image'}
                             width={80}
                             height={80}

@@ -122,9 +122,11 @@ const resolvers = {
             };
         },
 
-        updateUser: async (_, {id, input}, ctx) => {
+        updateUser: async (_, {input}, ctx) => {
+            const { email, name, password } = input;
+            console.log(input)
             /* Check if user exists */
-            let user = await User.findById(id);
+            let user = await User.findOne({ email });
 
             if (!user) {
                 throw new ApolloError('User does not exist', 401);
@@ -136,7 +138,7 @@ const resolvers = {
             }
 
             /* Check if password is correct */
-            const checkPassword = await bcrypt.compare(input.password, user.password);
+            const checkPassword = await bcrypt.compare(password, user.password);
     
             if (!checkPassword) {
                 throw new ApolloError('Your current password is wrong', 401);
@@ -145,7 +147,7 @@ const resolvers = {
             delete input.password;
         
             /* Save data in DB */
-            user = await User.findOneAndUpdate({ _id: id}, input, {
+            user = await User.findOneAndUpdate({ email }, name, {
                 new: true
             });
 

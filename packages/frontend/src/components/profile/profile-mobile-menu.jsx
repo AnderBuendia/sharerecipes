@@ -3,16 +3,17 @@ import Router from 'next/router';
 import ReactSelect from 'react-select';
 import LockClosed from '../icons/lockclosed';
 import HomeIcon from '../icons/homeicon';
+import { ProfilePaths } from '../../enums/paths/profile-paths';
 
-const SelectMenu = ({initialValue, id}) => {
+const ProfileMobileMenu = ({path}) => {
     /* React select options values */ 
     const accountOptions = [
-        {value: 'account', label: (
+        {value: ProfilePaths.MAIN, label: (
             <>
-                <p><HomeIcon className="w-4 float-left py-1 mr-2" /><span> Edit Profile</span></p>
+                <p><HomeIcon className="w-4 float-left py-1 mr-2" /><span> Profile</span></p>
             </>
         )},
-        {value: 'changepassword', label: (
+        {value: ProfilePaths.PASSWORD, label: (
             <>
                 <p><LockClosed className="w-4 float-left py-1 mr-2" /><span> Change Password</span></p>
             </>
@@ -21,8 +22,7 @@ const SelectMenu = ({initialValue, id}) => {
 
     const setSelectedMenu = selected => {
         Router.push({
-            pathname: `http://localhost:3000/profile/${selected.value}/[pid]`,
-            query: { pid: id }
+            pathname: selected.value,
         });
     }
 
@@ -33,9 +33,9 @@ const SelectMenu = ({initialValue, id}) => {
             options={accountOptions}
             onChange={ selected => setSelectedMenu(selected) }
             name="style"
-            value={accountOptions.filter(option => option.value === initialValue)}
+            value={accountOptions.filter(option => option.value === path)}
         />
     );
 }
  
-export default SelectMenu;
+export default ProfileMobileMenu;
