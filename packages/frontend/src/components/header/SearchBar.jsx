@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Router from 'next/router';
 import onClickOutside from 'react-onclickoutside';
 import SearchIcon from '../icons/searchicon';
@@ -6,7 +6,7 @@ import CloseIcon from '../icons/closeicon';
 import { MainPaths } from '../../enums/paths/main-paths';
 
 
-const SearchBar = ({className, openSearchBar, setOpenSearchBar}) => {
+const SearchBar = ({openSearchBar, setOpenSearchBar}) => {
     const [search, setSearch] = useState('');
 
     const searchRecipes = e => {
@@ -58,7 +58,7 @@ const SearchBar = ({className, openSearchBar, setOpenSearchBar}) => {
                             type="search"
                             placeholder="Search..."
                             onChange={e => setSearch(e.target.value)}
-                            className={className}
+                            className="w-full p-3 bg-white placeholder-gray-600 rounded-full text-sm focus:outline-none"
                         />
                         <button type="submit" className="absolute right-0 top-0 p-2 mt-1 mr-1 rounded-full bg-white focus:outline-none">
                             <SearchIcon className="w-5" />
