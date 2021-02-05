@@ -7,7 +7,7 @@ const MenuLiLink = ({href, active, label}) => {
 
     active ? 
     classNames.push('font-bold li-border-l-menu')
-    : classNames.push('cursor-pointer hover:bg-gray-100');
+    : classNames.push('cursor-pointer hover:bg-gray-100 hover:font-bold');
     
     return (  
         <li className={classNames.join(' ')}>

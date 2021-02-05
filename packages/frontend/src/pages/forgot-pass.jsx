@@ -2,12 +2,13 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useToasts } from 'react-toast-notifications';
 import { createApolloClient } from '../lib/apollo/apollo-client';
 import { withCSRRedirect } from '../lib/hoc/with-csr-redirect.hoc';
 import { getJwtFromCookie } from '../lib/utils/jwt-cookie.utils';
 import { isRequestSSR, loadAuthProps, serverRedirect } from '../lib/utils/ssr.utils';
+import { FORGOT_PASSWORD } from '../lib/graphql/user/query';
 
 /* enum conditions */
 import { MainPaths } from '../enums/paths/main-paths';
@@ -17,15 +18,6 @@ import { RedirectConditions } from '../enums/redirect-conditions';
 import MainLayout from '../components/layouts/MainLayout';
 import Input from '../components/generic/Input';
 import MuffinIcon from '../components/icons/muffinicon';
-
-/* Apollo queries */
-const FORGOT_PASSWORD = gql`
-    mutation forgotPassword($input: EmailInput) {
-        forgotPassword(input: $input) {
-            message
-        }
-    }
-`;
 
 const ForgotPass = () => {
     const router = useRouter();
@@ -51,7 +43,8 @@ const ForgotPass = () => {
                     }
                 }
             });
-            addToast(data.forgotPassword.message, { appearance: 'success' });
+            addToast(`Please check your email 
+                and follow the instructions`, { appearance: 'success' });
 
             setTimeout(() => {
                 router.push(MainPaths.INDEX);

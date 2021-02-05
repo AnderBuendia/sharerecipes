@@ -3,6 +3,7 @@ import Router from 'next/router';
 import ReactSelect from 'react-select';
 import LockClosed from '../icons/lockclosed';
 import HomeIcon from '../icons/homeicon';
+import DocumentIcon from '../icons/documenticon';
 import { ProfilePaths } from '../../enums/paths/profile-paths';
 
 const ProfileMobileMenu = ({path}) => {
@@ -17,7 +18,12 @@ const ProfileMobileMenu = ({path}) => {
             <>
                 <p><LockClosed className="w-4 float-left py-1 mr-2" /><span> Change Password</span></p>
             </>
-        )}
+        )},
+        {value: ProfilePaths.RECIPES, label: (
+            <>
+                <p><DocumentIcon className="w-4 float-left py-1 mr-2" /><span> My Recipes</span></p>
+            </>
+        )},
     ];
 
     const setSelectedMenu = selected => {

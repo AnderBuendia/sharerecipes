@@ -48,6 +48,7 @@ const typeDefs = gql`
     }
 
     input UserPasswordInput {
+        email: String
         password: String
         confirmpassword: String
         token: String
@@ -68,18 +69,18 @@ const typeDefs = gql`
     # Mutations
     extend type Mutation {
         # Users
-        newUser(input: UserInput): Message
+        newUser(input: UserInput): Boolean
         authenticateUser(input: AuthenticateInput): UserLogin
         updateUser(input: UserInput): User
-        updateUserPassword(id: ID!, input: UserPasswordInput): User
-        deleteUser(id: ID!): String
+        updateUserPassword(input: UserPasswordInput): Boolean
+        deleteUser(id: ID!): Boolean
 
         # Confirm User
-        confirmUser(input: TokenInput): Message
+        confirmUser(input: TokenInput): Boolean
     
         # Recovery Password
-        forgotPassword(input: EmailInput): Message
-        resetPassword(input: UserPasswordInput): Message
+        forgotPassword(input: EmailInput): Boolean
+        resetPassword(input: UserPasswordInput): Boolean
     }
 `;
 

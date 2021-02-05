@@ -27,7 +27,7 @@ const ProfileLayout = ({path}) => {
         },
         [ProfilePaths.PASSWORD]: {
             Component: ProfilePassword,
-            title: 'Password',
+            title: 'Change Password',
         },
         [ProfilePaths.RECIPES]: {
             Component: ProfileRecipes,
@@ -42,7 +42,9 @@ const ProfileLayout = ({path}) => {
     return isMobile ? (
         <>
             <ProfileMobileMenu path={path} />
-            <h1>{title}</h1>
+            <h1 className="text-center text-2xl font-bold font-roboto">
+                {title}
+            </h1>
             <Component />
         </>
     ) : (

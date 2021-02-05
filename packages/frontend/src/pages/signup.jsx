@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useToasts } from 'react-toast-notifications';
@@ -9,6 +9,7 @@ import { createApolloClient } from '../lib/apollo/apollo-client';
 import { withCSRRedirect } from '../lib/hoc/with-csr-redirect.hoc';
 import { getJwtFromCookie } from '../lib/utils/jwt-cookie.utils';
 import { isRequestSSR, loadAuthProps, serverRedirect } from '../lib/utils/ssr.utils';
+import { CREATE_USER } from '../lib/graphql/user/mutation';
 
 /* enum conditions */
 import { MainPaths } from '../enums/paths/main-paths';
@@ -18,15 +19,6 @@ import { RedirectConditions } from '../enums/redirect-conditions';
 import MainLayout from '../components/layouts/MainLayout';
 import Input from '../components/generic/Input';
 import MuffinIcon from '../components/icons/muffinicon';
-
-/* Apollo queries */
-const CREATE_USER = gql`
-    mutation newUser($input: UserInput) {
-        newUser(input: $input) {
-            message
-        }
-    }
-`;
 
 const SignUp = () => {
     /* Routing */
@@ -42,6 +34,7 @@ const SignUp = () => {
     const { register, handleSubmit, errors } = useForm({
         mode: "onChange"
     });
+    
     const onSubmit = async data => {
         const { name, email, password } = data;
 
@@ -55,7 +48,9 @@ const SignUp = () => {
                     }
                 }
             });
-            addToast(data.newUser.message, { appearance: 'success' });
+
+            addToast(`User was created succesfully created.
+            Please, check your email to confirm your account.`, { appearance: 'success' });
             
             /* Redirect to Home Page */
             setTimeout(() => {

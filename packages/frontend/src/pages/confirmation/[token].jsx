@@ -5,14 +5,7 @@ import { removeJwtCookie } from '../../lib/utils/jwt-cookie.utils';
 import { HTTPStatusCodes } from '../../enums/config/http-status-codes';
 import { MainPaths } from '../../enums/paths/main-paths';
 import MainLayout from '../../components/layouts/MainLayout';
-
-const CONFIRM_USER = gql`
-    mutation confirmUser($input: TokenInput) {
-        confirmUser(input: $input) {
-            message
-        }
-    }
-`;
+import { CONFIRM_USER } from '../../lib/graphql/user/mutation';
 
 const ConfirmationToken = ({token}) => {
     const router = useRouter();
@@ -23,7 +16,7 @@ const ConfirmationToken = ({token}) => {
     /* Apollo mutation */
     const [ confirmUser ] = useMutation(CONFIRM_USER);
 
-    useEffect(() => {
+    useEffect(token => {
         response(token);
     }, [token]);
 
@@ -37,7 +30,8 @@ const ConfirmationToken = ({token}) => {
                 }
             });
 
-            setMessageConfirmation(data.confirmUser.message);
+            setMessageConfirmation(`Your account has been activated.
+            You will be redirected automatically to login`);
 
             /* Redirect to login */
             setTimeout(() => {

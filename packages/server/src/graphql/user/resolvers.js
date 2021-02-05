@@ -87,8 +87,7 @@ const resolvers = {
 
                 await sendEmails(user.email, contentHTML);
 
-                return { message: `User was created succesfully created.
-                    Please, check your email to confirm your account.` };      
+                return true;      
             } catch (error) {
                 console.log(error);
             }
@@ -154,11 +153,11 @@ const resolvers = {
             return user;
         },
 
-        updateUserPassword: async (_, {id, input}, ctx) => {
-            const { password, confirmpassword } = input;
+        updateUserPassword: async (_, {input}, ctx) => {
+            const { email, password, confirmpassword } = input;
 
             /* Check if user exists */
-            let user = await User.findById(id);
+            let user = await User.findOne({ email });
 
             if (!user) {
                 throw new ApolloError('User does not exist', 401);
@@ -181,11 +180,11 @@ const resolvers = {
             const newpassword = await bcrypt.hash(confirmpassword, salt);
 
             /* Save data in DB */
-            user = await User.findOneAndUpdate({ _id: id}, { password: newpassword }, {
+            user = await User.findOneAndUpdate({ email }, { password: newpassword }, {
                 new: true
             });
-  
-            return user;
+
+            return true;
         },
 
         deleteUser: async (_, {id}, ctx) => {
@@ -205,7 +204,7 @@ const resolvers = {
 
             /* Delete data from DB */
             await User.findOneAndDelete({ _id: id });
-            return 'User has been deleted';
+            return true;
         },
 
         /* Confirm account */
@@ -215,8 +214,7 @@ const resolvers = {
                 const user = jwt.verify(token, process.env.SECRET_EMAIL);
                 await User.findByIdAndUpdate({ _id: user.id }, { confirmed: true });
                 
-                return { message: `Your account has been activated.
-                    You will be redirected automatically to login` };
+                return true;
             } catch (error) {
             }
         },
@@ -240,8 +238,7 @@ const resolvers = {
 
                 await sendEmails(user, contentHTML);
 
-                return { message: `Please check your email 
-                    and follow the instructions` };   
+                return true;   
             } catch (error) {
                 console.log(error);
             }
@@ -267,8 +264,7 @@ const resolvers = {
                     new: true
                 });
 
-                return { message: `Your password has been changed.
-                You will be redirected automatically to login` };
+                return true;
             } catch (error) {
                 if(error instanceof jwt.TokenExpiredError) {
                     return attemptRenewal()
