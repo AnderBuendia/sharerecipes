@@ -8,7 +8,7 @@ const ProfileMenu = () => {
     const currentPath = router.asPath.split('?')[0];
 
     return (  
-        <div className="w-11/12 mx-auto border ">
+        <div className="w-11/12 mx-auto">
             <ul className="h-full bg-white border border-gray-400 rounded-md">
                 <MenuLiLink 
                     href={ProfilePaths.MAIN}

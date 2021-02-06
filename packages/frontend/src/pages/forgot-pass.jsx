@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { useMutation } from '@apollo/client';
 import { useToasts } from 'react-toast-notifications';
+import { decode } from 'jsonwebtoken';
 import { createApolloClient } from '../lib/apollo/apollo-client';
 import { withCSRRedirect } from '../lib/hoc/with-csr-redirect.hoc';
 import { getJwtFromCookie } from '../lib/utils/jwt-cookie.utils';
@@ -15,9 +16,8 @@ import { MainPaths } from '../enums/paths/main-paths';
 import { RedirectConditions } from '../enums/redirect-conditions';
 
 /* Components */
-import MainLayout from '../components/layouts/MainLayout';
+import FormLayout from '../components/layouts/FormLayout';
 import Input from '../components/generic/Input';
-import MuffinIcon from '../components/icons/muffinicon';
 
 const ForgotPass = () => {
     const router = useRouter();
@@ -54,52 +54,42 @@ const ForgotPass = () => {
         }
     };
 
-    return ( 
-        <MainLayout>
-            <div className="md:w-4/5 xl:w-3/5 mx-auto mb-32">
-                <div className="flex justify-center">
-                    <Link href={MainPaths.INDEX}>
-                        <a><MuffinIcon className="w-16 h-16" /></a>
-                    </Link>
-                </div>
-                <div className="flex justify-center mt-5">
-                    <div className="w-full max-w-lg bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
-                        <form onSubmit={handleSubmit(onSubmit)}>
-                            <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center my-4">
-                                Can't login?
-                            </h2>
-                            <Input
-                                label="We'll send a recovery link to"
-                                name="email"
-                                type="text"
-                                placeholder="example@example.com"
-                                childRef={register({
-                                    required: "Email is required", 
-                                    pattern: {
-                                        value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                                        message: "This format is invalid. Please, make sure it's written like example@email.com"
-                                    }
-                                })}
-                                error={errors.email}
-                            />
+    return (
+        <FormLayout 
+            title="Can' t login?"
+            description="Have you forgot password?"
+            url={MainPaths.FORGOT_PASS}
+        >
+             <form onSubmit={handleSubmit(onSubmit)}>
+                <Input
+                    label="We'll send a recovery link to"
+                    name="email"
+                    type="text"
+                    placeholder="example@example.com"
+                    childRef={register({
+                        required: "Email is required", 
+                        pattern: {
+                            value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                            message: "This format is invalid. Please, make sure it's written like example@email.com"
+                        }
+                    })}
+                    error={errors.email}
+                />
 
-                            <input 
-                                className="btn-primary"
-                                type="submit"
-                                value="Send Recovery Link"
-                            />
-                         
-                        </form>       
-                        <div>
-                            <div className="border-gray border-t-2 block mt-8 text-center"></div>
-                            <div className="w-full">
-                                <Link href={MainPaths.LOGIN}><a className="btn-default">Return to Login</a></Link>
-                            </div>
-                        </div>
-                    </div>
+                <input 
+                    className="btn-primary"
+                    type="submit"
+                    value="Send Recovery Link"
+                />
+                
+            </form>       
+            <div>
+                <div className="border-gray border-t-2 block mt-8 text-center"></div>
+                <div className="w-full">
+                    <Link href={MainPaths.LOGIN}><a className="btn-default">Return to Login</a></Link>
                 </div>
             </div>
-        </MainLayout>
+        </FormLayout>
     );
 }
 

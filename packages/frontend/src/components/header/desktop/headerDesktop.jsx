@@ -3,13 +3,13 @@ import Link from 'next/link';
 import SearchBar from '../SearchBar';
 import DropdownMenu from './dropdownMenu';
 import { MainPaths } from '../../../enums/paths/main-paths';
-import MuffinIcon from '../../icons/muffinicon';
+import RamenIcon from '../../icons/ramenicon';
 
 const HeaderDesktop = ({user, setAuth}) => {
     return (
         <div className="xssm:hidden w-full py-2 px-4 flex flex-row items-center justify-between text-black bg-gray-400">
             <Link href={MainPaths.INDEX}>
-                <a><MuffinIcon className="w-14 h-14" /></a>
+                <a><RamenIcon className="w-14 h-14" /></a>
             </Link>
      
             <SearchBar />

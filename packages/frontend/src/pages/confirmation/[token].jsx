@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { removeJwtCookie } from '../../lib/utils/jwt-cookie.utils';
 import { HTTPStatusCodes } from '../../enums/config/http-status-codes';
 import { MainPaths } from '../../enums/paths/main-paths';
@@ -44,7 +44,11 @@ const ConfirmationToken = ({token}) => {
     }
 
     return (  
-        <MainLayout>
+        <MainLayout
+            title="Account confirmation"
+            description="Your account has been confirmed"
+            url={MainPaths.CONFIRMATION}
+        >
             <div className="flex w-full mx-auto mt-8 justify-center">
                 <div className="bg-white text-black rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
                     <div className="w-full max-w-lg bg-green-200 text-black rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">

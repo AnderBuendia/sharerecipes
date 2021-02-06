@@ -1,25 +1,9 @@
-import { gql } from '@apollo/client';
 import { ApolloError } from '@apollo/client';
 import { createApolloClient } from '../../lib/apollo/apollo-client';
 import { setJwtCookie } from '../../lib/utils/jwt-cookie.utils';
 import { HTTPStatusCodes } from '../../enums/config/http-status-codes';
 import { AlertMessages, FormMessages } from '../../enums/config/messages';
-
-const AUTH_USER = gql`
-    mutation authenticateUser($input: AuthenticateInput) {
-        authenticateUser(input: $input) {
-            user {
-                name
-                email
-                role
-                image_url
-                image_name
-                confirmed
-            }
-            token
-        }
-    }
-`;
+import { AUTH_USER } from '../../lib/graphql/user/mutation';
 
 const login = async (req, res) => {
     if (req.method !== 'POST') {

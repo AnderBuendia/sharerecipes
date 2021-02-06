@@ -1,18 +1,4 @@
-import { gql } from '@apollo/client';
-
-const GET_USER = gql`
-    query getUser {
-        getUser {
-            id
-            name
-            email
-            role
-            image_url
-            image_name
-            confirmed
-        }
-    }
-`;
+import { GET_USER } from '../graphql/user/query';
 
 export const loadCurrentUserSSR = async (jwt, apolloClient) => {
     const response = await apolloClient.query({

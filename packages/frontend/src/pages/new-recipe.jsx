@@ -1,8 +1,7 @@
-// @ts-nocheck
 import React, { useState, useContext } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import Swal from 'sweetalert2';
 import ReactSelect from 'react-select';
 import { useToasts } from 'react-toast-notifications';
@@ -12,6 +11,8 @@ import { withCSRRedirect } from '../lib/hoc/with-csr-redirect.hoc';
 import { createApolloClient } from '../lib/apollo/apollo-client';
 import { getJwtFromCookie } from '../lib/utils/jwt-cookie.utils';
 import { isRequestSSR, loadAuthProps, serverRedirect } from '../lib/utils/ssr.utils';
+import { NEW_RECIPE } from '../lib/graphql/recipe/mutation';
+import { GET_RECIPES } from '../lib/graphql/recipe/query';
 
 /* enum conditions */
 import { MainPaths } from '../enums/paths/main-paths';
@@ -21,31 +22,6 @@ import { RedirectConditions } from '../enums/redirect-conditions';
 import MainLayout from '../components/layouts/MainLayout';
 import Input from '../components/generic/Input';
 import DragDropImage from '../components/generic/DragDropImage';
-
-const NEW_RECIPE = gql`
-    mutation newRecipe($input: RecipeInput) {
-        newRecipe(input: $input) {
-            id
-            name
-            prep_time
-            serves
-            ingredients
-            difficulty
-            style
-            description
-            image_url
-            image_name
-        }
-    }
-`;
-
-const GET_RECIPES = gql`
-    query getRecipes {
-        getRecipes {
-            id
-        }
-    }
-`;
 
 const NewRecipe = () => {
     /* Routing */
@@ -151,8 +127,12 @@ const NewRecipe = () => {
     };
 
     return (  
-        <MainLayout>
-            <div className="md:w-11/12 xl:w-10/12 mx-auto">
+        <MainLayout
+            title="Create a recipe"
+            description="Create a new recipe"
+            url={MainPaths.NEW_RECIPE}
+        >
+            <div className="w-11/12 xl:w-10/12 mx-auto">
                 <div className="flex justify-center mt-5">
                     <div className="w-full max-w-lg bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
                         <form onSubmit={handleSubmit(onSubmit)}>
@@ -167,6 +147,7 @@ const NewRecipe = () => {
                                     url={`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/recipes`}
                                     current={image_url}
                                     name='photo'
+                                    rounded={null}
                                     ratio={1}
                                     onChange={url => setRecipeImage(url)}
                                 />

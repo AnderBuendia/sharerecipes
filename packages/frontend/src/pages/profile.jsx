@@ -14,7 +14,11 @@ import MainLayout from "../components/layouts/MainLayout";
 import ProfileLayout from "../components/layouts/ProfileLayout";
 
 const Profile = () => (
-    <MainLayout>
+    <MainLayout
+        title="Your Profile"
+        description="This is your ShareYourRecipes profile"
+        url={MainPaths.PROFILE}
+    >
         <ProfileLayout path={ProfilePaths.MAIN} />
     </MainLayout>
 );

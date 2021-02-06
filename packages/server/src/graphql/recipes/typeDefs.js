@@ -73,8 +73,8 @@ const typeDefs = gql`
     # Mutation
     extend type Mutation {
         newRecipe(input: RecipeInput): Recipe
-        updateRecipe(id: ID!, input: RecipeInput): Recipe
-        deleteRecipe(recipeUrl: String!): String
+        updateRecipe(recipeUrl: String!, input: RecipeInput): Recipe
+        deleteRecipe(recipeUrl: String!): Boolean
         updateVoteRecipe(recipeUrl: String!, input: RecipeInput): Recipe
     
         # RecipeComments

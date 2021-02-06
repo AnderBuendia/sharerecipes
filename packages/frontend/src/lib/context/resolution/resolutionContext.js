@@ -1,5 +1,5 @@
 import { createContext } from 'react';
 
-const ResolutionContext = createContext();
+const ResolutionContext = createContext('');
 
 export default ResolutionContext;

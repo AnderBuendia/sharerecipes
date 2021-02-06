@@ -49,8 +49,8 @@ const MenuMobile = ({open, setOpen, user, setAuth}) => {
                     <>
                         <Image 
                             className="rounded-full"
-                            key={ user?.image_url ? user.image_url : '/usericon.jpeg' }
-                            src={ user?.image_url ? user.image_url : '/usericon.jpeg' }
+                            key={user?.image_url ? user.image_url : '/usericon.jpeg'}
+                            src={user?.image_url ? user.image_url : '/usericon.jpeg'}
                             alt={'UserIcon Image'}
                             width={80}
                             height={80}
@@ -117,7 +117,7 @@ const MenuMobile = ({open, setOpen, user, setAuth}) => {
             </div>
 
             <div className="w-full bg-black fixed bottom-0 p-4">
-                <p className="text-center text-white">ShareRecipes</p>
+                <p className="text-center text-white">anderb - 2021</p>
             </div>
         </aside>
     );

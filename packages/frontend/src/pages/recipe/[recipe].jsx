@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Swal from 'sweetalert2';
@@ -14,54 +14,11 @@ import AuthContext from '../../lib/context/auth/authContext';
 import MainLayout from '../../components/layouts/MainLayout';
 import Discussion from '../../components/recipes/recipe/Discussion';
 import Spinner from '../../components/generic/Spinner';
-
-const GET_RECIPES = gql`
-    query getRecipes {
-        getRecipes {
-            id
-        }
-    }
-`;
-
-const GET_RECIPE = gql`
-    query getRecipe($recipeUrl: String!, $offset: Int!, $limit: Int!) {
-        getRecipe(recipeUrl: $recipeUrl) {
-            id
-            name
-            prep_time
-            serves
-            ingredients
-            description
-            difficulty
-            style
-            image_url
-            author {
-                name
-                email
-            }
-            ...CommentsFragment
-            votes
-            voted
-            average_vote
-            url
-        }
-    }
-    ${Discussion.fragments.comments}
-`;
-
-const UPDATE_VOTE_RECIPE = gql`
-    mutation updateVoteRecipe($recipeUrl: String!, $input: RecipeInput) {
-        updateVoteRecipe(recipeUrl: $recipeUrl, input: $input) {
-            average_vote
-        }
-    }
-`;
-
-const DELETE_RECIPE = gql`
-    mutation deleteRecipe($recipeUrl: String!) {
-        deleteRecipe(recipeUrl: $recipeUrl)
-    }        
-`;
+import { GET_RECIPES } from '../../lib/graphql/recipe/query';
+import { UPDATE_VOTE_RECIPE } from '../../lib/graphql/recipe/mutation';
+import { DELETE_RECIPE } from '../../lib/graphql/recipe/mutation';
+import { GET_RECIPE } from '../../lib/graphql/recipe/query';
+import { MainPaths } from '../../enums/paths/main-paths';
 
 const Recipe = () => {
     /* Get current url name - Routing */
@@ -151,7 +108,7 @@ const Recipe = () => {
                     
                     Swal.fire(
                         'Deleted!',
-                        data.deleteRecipe,
+                        'Recipe has been deleted',
                         'success'
                     )
 
@@ -177,7 +134,11 @@ const Recipe = () => {
     const recipe = data ? data.getRecipe : null;
 
     return loading ? ( <Spinner /> ) : (  
-        <MainLayout>
+        <MainLayout
+            title={recipe.name}
+            description={`Recipe ${recipe.name}`}
+            url={MainPaths.RECIPE}
+        >
             <div className="container mx-auto w-11/12 bg-white rounded-lg shadow-md p-5 mb-4">
                 <h1 className="break-all text-2xl font-body font-bold mb-2">{recipe.name}</h1>  
                 <div className="w-full flex flex-col lgxl:flex-row lgxl:justify-between">
@@ -219,14 +180,14 @@ const Recipe = () => {
                             xl:flex-col xl:items-end xl:absolute xl:bottom-0 xl:right-0 xl:mt-6">
                             <div className="flex flex-row">
                                 <FacebookShareButton
-                                    url={`http://localhost:3000/recipes/${url}`}
+                                    url={process.env.NEXT_PUBLIC_SITE_URL + `/recipe/${url}`}
                                     quote='Visit my new recipe'
                                     className="cursor-pointer mr-3"
                                 >
                                     <FacebookIcon size={28} className="rounded-full" />
                                 </FacebookShareButton>
                                 <TwitterShareButton
-                                    url={`https://localhost:3000/recipes/${url}`}
+                                    url={process.env.NEXT_PUBLIC_SITE_URL + `/recipe/${url}`}
                                     title='Visit my new recipe'
                                     className="cursor-pointer"
                                 >
