@@ -1,10 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import onClickOutside from 'react-onclickoutside';
 import Image from 'next/image';
 import { useToasts } from 'react-toast-notifications';
-import ImagesContext from '../../../lib/context/images/imagesContext';
 import { MainPaths } from '../../../enums/paths/main-paths';
 import { RestEndPoints } from '../../../enums/paths/rest-endpoints';
 import { UserRoles } from '../../../enums/user/user-roles';
@@ -12,12 +11,6 @@ import { UserRoles } from '../../../enums/user/user-roles';
 const DropdownMenu = ({user, setAuth}) => {
     /* Routing */
     const router = useRouter();
-
-    /* Update new image user */
-    const { user_image } = useContext(ImagesContext);
-    const { image_url } = user_image;
-    const imageMenu = image_url ? image_url : (
-        user?.image_url ? user?.image_url : '/usericon.jpeg');
     
     /* Set Toast Notification */
     const { addToast } = useToasts();
@@ -56,8 +49,8 @@ const DropdownMenu = ({user, setAuth}) => {
             >
                 <Image 
                     className="rounded-full"
-                    key={imageMenu}
-                    src={imageMenu}
+                    key={user?.image_url ? user.image_url : '/usericon.jpeg'}
+                    src={user?.image_url ? user.image_url : '/usericon.jpeg'}
                     alt={'UserIcon Image'}
                     width={46}
                     height={46}

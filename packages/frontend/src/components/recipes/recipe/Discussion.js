@@ -7,17 +7,9 @@ import ModalSignup from './ModalSignup';
 import Comment from './Comment';
 import { useToasts } from 'react-toast-notifications';
 import AuthContext from '../../../lib/context/auth/authContext';
+import { SEND_COMMENTS_RECIPE } from '../../../lib/graphql/comments/mutation';
 
-const SEND_COMMENTS_RECIPE = gql`
-    mutation sendCommentsRecipe($recipeUrl: String!, $input: CommentsRecipeInput) {
-        sendCommentsRecipe(recipeUrl: $recipeUrl, input: $input) {
-            id
-            message
-        }
-    }
-`;
-
-const COMMENTS_FRAGMENT = gql`
+export const COMMENTS_FRAGMENT = gql`
     fragment CommentsFragment on Recipe {
         comments(offset: $offset, limit: $limit) {
             id

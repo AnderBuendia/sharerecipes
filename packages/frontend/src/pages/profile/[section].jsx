@@ -13,7 +13,11 @@ import { MainPaths } from '../../enums/paths/main-paths';
 import { RedirectConditions } from '../../enums/redirect-conditions';
 
 const ProfileSection = ({path}) => ( 
-    <MainLayout>
+    <MainLayout
+        title="Other actions"
+        description="Other actions in your profile"
+        url={path}
+    >
         <ProfileLayout path={path} /> 
     </MainLayout>
 );

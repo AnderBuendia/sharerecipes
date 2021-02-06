@@ -1,21 +1,17 @@
 import React from 'react';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import Swal from 'sweetalert2';
+import { DELETE_USER } from '../../lib/graphql/user/mutation';
 import { UserRoles } from '../../enums/user/user-roles';
+import { GET_USERS } from '../../lib/graphql/user/query';
 
-const DELETE_USER = gql`
-    mutation deleteUser($id: ID!) {
-        deleteUser(id: $id)
-    }
-`;
-
-const User = ({user, q, page}) => {
-    const { id, name, email, role, confirmed } = user;
+const User = ({user, page}) => {
+    const { name, email, role, confirmed } = user;
 
     const [ deleteUser ] = useMutation(DELETE_USER, {
         update(cache) {
             const { getUsers } = cache.readQuery({ 
-                query: q,
+                query: GET_USERS,
                 variables: {
                     offset: page * 9,
                     limit: 9
@@ -23,15 +19,15 @@ const User = ({user, q, page}) => {
             });
 
             cache.writeQuery({
-                query: q,
+                query: GET_USERS,
                 data: {
-                    getUsers: getUsers.users.filter(currentUser => currentUser.id !== id)
+                    getUsers: getUsers.users.filter(currentUser => currentUser.email !== email)
                 }
             })
         }
     });
 
-    const confirmDeleteUser = async () => {
+    const confirmDeleteUser = async email => {
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -46,14 +42,14 @@ const User = ({user, q, page}) => {
                 try {
                     const { data } = await deleteUser({
                         variables: {
-                            id
+                            email,
                         }
                     });
         
                     /* Show alerts */
                     Swal.fire(
                         'Correct',
-                        data.deleteUser,
+                        'User has been deleted',
                         'success'
                     );
                 } catch (error) {
@@ -74,7 +70,7 @@ const User = ({user, q, page}) => {
                     <button
                         type="button"
                         className="flex-1 bg-red-700 py-2 px-2 text-white rounded text-xs uppercase font-bold hover:bg-red-600"
-                        onClick={ () => confirmDeleteUser() }
+                        onClick={ () => confirmDeleteUser(email) }
                     >
                         Delete
                     </button>

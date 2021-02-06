@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { decode } from 'jsonwebtoken';
 import { withCSRRedirect } from '../../lib/hoc/with-csr-redirect.hoc';
@@ -7,6 +7,7 @@ import { withCSRRoles } from '../../lib/hoc/with-csr-roles.hoc';
 import { createApolloClient } from '../../lib/apollo/apollo-client';
 import { getJwtFromCookie } from '../../lib/utils/jwt-cookie.utils';
 import { isRequestSSR, loadAuthProps, serverRedirect } from '../../lib/utils/ssr.utils';
+import { GET_USERS } from '../../lib/graphql/user/query';
 
 /* enum conditions */
 import { MainPaths } from '../../enums/paths/main-paths';
@@ -19,21 +20,6 @@ import User from '../../components/adminpanel/User';
 import UsersGroup from '../../components/icons/usersgroup';
 import Pagination from '../../components/adminpanel/Pagination';
 import Spinner from '../../components/generic/Spinner';
-
-const GET_USERS = gql`
-    query getUsers($offset: Int, $limit: Int) {
-        getUsers(offset: $offset, limit: $limit) {
-            users {
-                id
-                name
-                email
-                role
-                confirmed
-            }
-            total
-        }
-    }
-`;
 
 const AdminUsers = () => {
     /* Routing */
@@ -75,7 +61,11 @@ const AdminUsers = () => {
     }
 
     return (  
-        <MainLayout>
+        <MainLayout
+            title="Admin Panel"
+            description="Users management"
+            url={MainPaths.ADMIN}
+        >
             <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center my-4">
                 All Users
             </h2>
@@ -114,8 +104,7 @@ const AdminUsers = () => {
                         { users.map((user, index) => (
                             <User 
                                 key={index} 
-                                user={user} 
-                                q={GET_USERS}
+                                user={user}
                                 page={page}
                             />
                         ))}

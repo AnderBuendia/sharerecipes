@@ -123,7 +123,7 @@ const resolvers = {
             // TODO: revisar los comentarios para eliminar de la receta
             await Comments.deleteMany({ recipe: recipe._id });
             await Recipes.findOneAndDelete({ _id: recipe._id });
-            return 'Recipe has been deleted';
+            return true;
         },
 
         updateVoteRecipe: async (_, {recipeUrl, input}, ctx) => {
@@ -208,11 +208,12 @@ const resolvers = {
                 throw new ApolloError('Comment not found', 404);
             }
 
-            /* Check if user has voted */
-            if (checkComment.voted.includes(ctx.req.user.id)) {
+            if (!ctx.req.user) {
+                 throw new ApolloError('You are not logged in', 401);
+            } else if (checkComment.voted.includes(ctx.req.user.id)) {
                 throw new ApolloError('You has voted this comment', 406);
             }
-
+           
             /* Add user who voted and sum votes */
             checkComment.voted = [...checkComment.voted, ctx.req.user.id];
             checkComment.votes += input.votes;

@@ -14,9 +14,8 @@ import { MainPaths } from '../../enums/paths/main-paths';
 import { RedirectConditions } from '../../enums/redirect-conditions';
 
 /* Components */
-import MainLayout from '../../components/layouts/MainLayout';
+import FormLayout from '../../components/layouts/FormLayout';
 import Input from '../../components/generic/Input';
-import MuffinIcon from '../../components/icons/muffinicon';
 
 function ResetPasswordToken({token}) {
     /* Routing */
@@ -59,70 +58,60 @@ function ResetPasswordToken({token}) {
     };
 
     return ( 
-        <MainLayout>
-            <div className="md:w-4/5 xl:w-3/5 mx-auto mb-32">
-                <div className="flex justify-center">
-                    <Link href={MainPaths.INDEX}>
-                        <a><MuffinIcon className="w-16 h-16" /></a>
+        <FormLayout 
+            title="Reset Your Password"
+            description="Reset your password if you have forgotten it"
+            url={MainPaths.FORGOT_PASS_CONFIRM}
+        >
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <Input
+                    label="New Password"
+                    name="password"
+                    type="password"
+                    placeholder="Introduce a New Password"
+                    childRef={register({ 
+                        required: "A new password is required",
+                        minLength: {
+                            value: 7,
+                            message: 'Minimum 7 characters'
+                        }, 
+                    })}
+                    error={errors.password}
+                />
+
+                <Input
+                    label="Confirm Password"
+                    name="confirmpassword"
+                    type="password"
+                    placeholder="Confirm New Password"
+                    childRef={register({ 
+                        required:  "Please, confirm new password",
+                        validate: {
+                            matchesPreviousPassword: value => {
+                                const { password } = getValues();
+                                return password === value || "Passwords should match!";
+                            }
+                        }
+                    })}
+                    error={errors.confirmpassword}
+                />
+                
+                <input 
+                    className="btn-primary"
+                    type="submit"
+                    value="Reset Password"
+                />
+                
+            </form>       
+            <div>
+                <div className="border-gray border-t-2 block mt-8 text-center"></div>
+                <div className="w-full">
+                    <Link href={MainPaths.LOGIN}>
+                        <a className="btn-default">Return to Login</a>
                     </Link>
                 </div>
-                <div className="flex justify-center mt-5">
-                    <div className="w-full max-w-lg bg-white rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
-                        <form onSubmit={handleSubmit(onSubmit)}>
-                            <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center my-4">
-                                Reset Your Password
-                            </h2>
-                            <Input
-                                label="New Password"
-                                name="password"
-                                type="password"
-                                placeholder="Introduce a New Password"
-                                childRef={register({ 
-                                    required: "A new password is required",
-                                    minLength: {
-                                        value: 7,
-                                        message: 'Minimum 7 characters'
-                                    }, 
-                                })}
-                                error={errors.password}
-                            />
-
-                            <Input
-                                label="Confirm Password"
-                                name="confirmpassword"
-                                type="password"
-                                placeholder="Confirm New Password"
-                                childRef={register({ 
-                                    required:  "Please, confirm new password",
-                                    validate: {
-                                        matchesPreviousPassword: value => {
-                                            const { password } = getValues();
-                                            return password === value || "Passwords should match!";
-                                        }
-                                    }
-                                })}
-                                error={errors.confirmpassword}
-                            />
-                            
-                            <input 
-                                className="btn-primary"
-                                type="submit"
-                                value="Reset Password"
-                            />
-                         
-                        </form>       
-                        <div>
-                            <div className="border-gray border-t-2 block mt-8 text-center"></div>
-                            <div className="w-full">
-                                <Link href={MainPaths.LOGIN}>
-                                    <a className="btn-default">Return to Login</a>
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-        </MainLayout>
+        </FormLayout>
     );
 };
 

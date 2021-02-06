@@ -31,9 +31,9 @@ const typeDefs = gql`
     
     # Inputs
     input UserInput {
-        name: String!
         email: String!
         password: String!
+        name: String
         role: String
         image_url: String
         image_name: String
@@ -73,7 +73,7 @@ const typeDefs = gql`
         authenticateUser(input: AuthenticateInput): UserLogin
         updateUser(input: UserInput): User
         updateUserPassword(input: UserPasswordInput): Boolean
-        deleteUser(id: ID!): Boolean
+        deleteUser(email: String!): Boolean
 
         # Confirm User
         confirmUser(input: TokenInput): Boolean

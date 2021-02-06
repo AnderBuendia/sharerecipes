@@ -8,7 +8,8 @@ export const MainPaths = {
     SEARCH: '/search',
     PROFILE: '/profile',
     FORGOT_PASS: '/forgot-pass',
-    FORGOT_PASS_CONFIRM: 'forgot-pass/[pid]',
-    CONFIRMATION: '/confirmation/[pid]',
+    FORGOT_PASS_CONFIRM: 'forgot-pass/[token]',
+    CONFIRMATION: '/confirmation/[token]',
     NOT_FOUND: '/404',
+    ADMIN: '/admin/users',
 };

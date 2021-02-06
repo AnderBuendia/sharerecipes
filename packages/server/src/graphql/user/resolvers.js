@@ -187,9 +187,9 @@ const resolvers = {
             return true;
         },
 
-        deleteUser: async (_, {id}, ctx) => {
+        deleteUser: async (_, {email}, ctx) => {
             /* Check if user exists */
-            const checkUser = await User.findById(id);
+            const checkUser = await User.findOne({ email });
 
             if (!checkUser) {
                 throw new ApolloError('User does not exist', 401);
@@ -198,12 +198,13 @@ const resolvers = {
             /* Check if the admin is the one who deletes the user */
             const adminUser = await User.findById(ctx.req.user.id);
 
-            if (adminUser.role !== 'Admin') {
+            if (adminUser.role !== 'ADMIN') {
                 throw new ApolloError('Invalid credentials', 401);
             }
 
             /* Delete data from DB */
-            await User.findOneAndDelete({ _id: id });
+            await User.findOneAndDelete({ email });
+            
             return true;
         },
 

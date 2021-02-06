@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useReducer, useContext, useEffect } from 'react';
 import ResolutionContext from './resolutionContext';
 import ResolutionReducer from './resolutionReducer';
@@ -13,7 +14,7 @@ const ResolutionState = ({ children }) => {
         initialState,
     );
 
-    const setWidth = (payload) => {
+    const setWidth = payload => {
         dispatch({
             type: SWITCH_RESOLUTION,
             payload,

@@ -1,5 +1,4 @@
 import React, { useContext } from 'react'
-import { useRouter } from 'next/router';
 import ResolutionContext from '../../lib/context/resolution/resolutionContext';
 
 /* components */
@@ -16,8 +15,6 @@ import { ResolutionBreakPoints } from '../../enums/config/resolution-breakpoints
 const ProfileLayout = ({path}) => {
     const { width } = useContext(ResolutionContext);
     
-    const router = useRouter();
-    const rootPath = path === ProfilePaths.MAIN;
     const isMobile = width <= ResolutionBreakPoints.SM ? true : false;
 
     const components = {
@@ -40,13 +37,13 @@ const ProfileLayout = ({path}) => {
     if (!Component) return <div>Prueba</div>;
 
     return isMobile ? (
-        <>
+        <div className="container mx-auto w-11/12">
             <ProfileMobileMenu path={path} />
             <h1 className="text-center text-2xl font-bold font-roboto">
                 {title}
             </h1>
             <Component />
-        </>
+        </div>
     ) : (
         <div className="flex container mx-auto my-4">
             <div className="w-1/4">

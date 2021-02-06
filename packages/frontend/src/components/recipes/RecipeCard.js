@@ -1,16 +1,9 @@
 import React from 'react';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import Link from 'next/link';
+import { GET_NUMBER_OF_COMMENTS } from '../../lib/graphql/comments/query';
 import ChatIcon from '../icons/chaticon';
 import StarIcon from '../icons/staricon';
-
-const GET_NUMBER_OF_COMMENTS = gql`
-    query getNumberOfComments($recipeUrl: String!) {
-        getNumberOfComments(recipeUrl: $recipeUrl) {
-            id
-        }
-    }
-`;
 
 const Recipe = ({recipe}) => {
     const { 
@@ -49,7 +42,7 @@ const Recipe = ({recipe}) => {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-wrap overflow-hidden text-center p-1">
+                <div className="flex flex-wrap overflow-hidden text-center p-1 bg-white">
                     <div className="w-1/2 overflow-hidden p-1 border-r border-b border-gray-300">
                         <p className="font-light text-gray-500 text-xs uppercase">Prep time</p>
                         <span className="font-bold">{prep_time} mins</span>
