@@ -93,13 +93,13 @@ const MenuMobile = ({open, setOpen, user, setAuth}) => {
             
                 <div className='flex flex-col w-full mb-5'>
 					<Link href="#">
-						<a className='px-1 pb-1'>Política de privacidad</a>
+						<a className='px-1 pb-1'>Privacy Policy</a>
 					</Link>
 					<Link href="#">
-						<a className='p-1'>Política de cookies</a>
+						<a className='p-1'>Cookies Policy</a>
 					</Link>
 					<Link href="#">
-						<a className='p-1'>Aviso legal</a>
+						<a className='p-1'>Legal Notice</a>
 					</Link>
 				</div>
 
