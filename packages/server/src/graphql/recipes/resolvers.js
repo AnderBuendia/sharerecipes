@@ -5,6 +5,8 @@ const Comments = require('../../models/Comments');
 const { ApolloError } = require('apollo-server-express');
 const fs = require('fs');
 const path = require('path');
+const RecipeErrors = require('../../enums/recipe.errors');
+const HttpStatusCode = require('../../enums/http-status-code');
 
 const resolvers = {
     /* Types to relation DBs */
@@ -33,7 +35,7 @@ const resolvers = {
             const recipe = await Recipes.findOne({url: recipeUrl});
 
             if (!recipe) {
-                throw new ApolloError('Recipe not found', 401);
+                throw new ApolloError(RecipeErrors.RECIPE_NOT_FOUND, HttpStatusCode.NOT_FOUND);
             }
 
             return recipe;
@@ -63,7 +65,7 @@ const resolvers = {
             let recipe = await Recipes.findOne({ url: recipeUrl });
 
             if (!recipe) {
-                throw new ApolloError('Recipe not found', 404);
+                throw new ApolloError(RecipeErrors.RECIPE_NOT_FOUND, HttpStatusCode.NOT_FOUND);
             }
 
             /* Get comments from this recipe */
@@ -107,12 +109,12 @@ const resolvers = {
             const recipe = await Recipes.findOne({ url: recipeUrl });
 
             if (!recipe) {
-                throw new ApolloError('Recipe not found', 404);
+                throw new ApolloError(RecipeErrors.RECIPE_NOT_FOUND, HttpStatusCode.NOT_FOUND);
             }
 
             /* Check if the author is the one who deletes the order */
             if (recipe.author.toString() !== ctx.req.user.id) {
-                throw new ApolloError('Invalid credentials', 401);
+                throw new ApolloError(RecipeErrors.INVALID_CREDENTIALS, HttpStatusCode.NOT_AUTHORIZED);
             }
 
             /* Delete recipe image from server */
@@ -133,12 +135,14 @@ const resolvers = {
             const checkRecipe = await Recipes.findOne({ url: recipeUrl });
 
             if (!checkRecipe) {
-                throw new ApolloError('Recipe not found', 404);
+                throw new ApolloError(RecipeErrors.RECIPE_NOT_FOUND, HttpStatusCode.NOT_FOUND);
             }
 
             /* Check if user has voted */
-            if (checkRecipe.voted.includes(ctx.req.user.id)) {
-                throw new ApolloError('You has voted this recipe', 406);
+            if (!ctx.req.user) {
+                throw new ApolloError(RecipeErrors.NOT_LOGGED_IN, HttpStatusCode.NOT_AUTHORIZED);
+            } else if (checkRecipe.voted.includes(ctx.req.user.id)) {
+                throw new ApolloError(RecipeErrors.RECIPE_VOTED, HttpStatusCode.NOT_ACCEPTABLE);
             }
             
             /* Calculate total votes and save data in DB */
@@ -160,11 +164,11 @@ const resolvers = {
             let recipe = await Recipes.findOne({ url: recipeUrl });
 
             if (!recipe) {
-                throw new ApolloError('Recipe not found', 404);
+                throw new ApolloError(RecipeErrors.RECIPE_NOT_FOUND, HttpStatusCode.NOT_FOUND);
             }
 
             if (!input.message) {
-                throw new ApolloError('Please introduce your message', 204);
+                throw new ApolloError(RecipeErrors.NO_MESSAGE, HttpStatusCode.NO_CONTENT);
             }
 
             const newComment = new Comments(input);
@@ -189,7 +193,7 @@ const resolvers = {
             let checkComment = await Comments.findById(id);
 
             if (!checkComment) {
-                throw new ApolloError('Comment not found', 404);
+                throw new ApolloError(RecipeErrors.COMMENT_NOT_FOUND, HttpStatusCode.NOT_FOUND);
             }
 
             /* Edit the comment text and save data in DB */
@@ -205,13 +209,13 @@ const resolvers = {
             const checkComment = await Comments.findById(id);
 
             if (!checkComment) {
-                throw new ApolloError('Comment not found', 404);
+                throw new ApolloError(RecipeErrors.COMMENT_NOT_FOUND, HttpStatusCode.NOT_FOUND);
             }
 
             if (!ctx.req.user) {
-                 throw new ApolloError('You are not logged in', 401);
+                 throw new ApolloError(RecipeErrors.NOT_LOGGED_IN, HttpStatusCode.NOT_AUTHORIZED);
             } else if (checkComment.voted.includes(ctx.req.user.id)) {
-                throw new ApolloError('You has voted this comment', 406);
+                throw new ApolloError(RecipeErrors.COMMENT_VOTED, HttpStatusCode.NOT_ACCEPTABLE);
             }
            
             /* Add user who voted and sum votes */

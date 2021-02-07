@@ -157,22 +157,22 @@ const Recipe = () => {
                         <div className="w-full flex flex-row border-gray-400 border-t p-3 lgxl:p-0 lgxl:flex-col">
                             <div className="w-full text-center lgxl:w-full lgxl:my-3">
                                 <p className="font-light text-gray-500 text-xs uppercase">Preparation time</p>
-                                <span className="font-bold text-lg">{recipe.prep_time} mins</span>
+                                <span className="font-bold text-md">{recipe.prep_time} mins</span>
                             </div>
                             <div className="w-full text-center border-l border-gray-400 lgxl:border-l-0 lg:p-2 lgxl:border-t lgxl:py-3">
                                 <p className="font-light text-gray-500 text-xs uppercase">Serves</p>
-                                <span className="font-bold text-lg">{recipe.serves}</span>
+                                <span className="font-bold text-md">{recipe.serves}</span>
                             </div>
                         </div>
                         
                         <div className="w-full flex flex-row border-gray-400 border-t border-b p-3 lgxl:p-0 lgxl:flex-col">
                             <div className="w-full text-center lgxl:w-full lgxl:my-3">
                                 <p className="font-light text-gray-500 text-xs uppercase">Difficulty</p>
-                                <span className="font-bold text-lg">{recipe.difficulty}</span>
+                                <span className="font-bold text-md">{recipe.difficulty}</span>
                             </div>
                             <div className="w-full text-center border-l border-gray-400 lgxl:border-l-0 lgxl:p-3 lgxl:border-t lgxl:py-3">
                                 <p className="font-light text-gray-500 text-xs uppercase">Style</p>
-                                <span className="font-bold text-lg uppercase">{recipe.style}</span>
+                                <span className="font-bold text-md uppercase">{recipe.style}</span>
                             </div>
                         </div>
                         

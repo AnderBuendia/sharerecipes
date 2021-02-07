@@ -2,39 +2,12 @@ const User = require('../../models/User');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
 const { createAccessToken } = require('../../utils/auth.utils');
 const { ApolloError } = require('apollo-server-express');
+const { sendEmails } = require('../../utils/sendEmails.utils');
+const UserErrors = require('../../enums/user.errors');
+const HTTPStatusCodes = require('../../enums/http-status-code');
 require('dotenv').config({ path: 'src/config/variables.env' });
-
-/* Other fns */
-const sendEmails = async (email, contentHTML) => {
-    const transporter = nodemailer.createTransport({
-        host: 'smtp.ethereal.email',
-        port: 587,
-        secure: false,
-        auth: {
-            user: process.env.EMAILU,
-            pass: process.env.EMAILP
-        }
-    });
-  
-    const mailOptions = {
-        from: "no-reply@shareyourrecipes.com",
-        to: email,
-        subject: "Activate your Account",
-        html: contentHTML 
-    }
-
-    await transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log('Error occurred', error.message);
-        } else {
-            console.log('Email sent', info.messageId);
-            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-        }
-    })
-}
 
 /* User Resolvers */
 const resolvers = {
@@ -68,7 +41,7 @@ const resolvers = {
             let user = await User.findOne({ email });
 
             if (user) {
-                throw new ApolloError('User is already registered', 401);
+                throw new ApolloError(UserErrors.REGISTERED, HTTPStatusCodes.NOT_AUTHORIZED);
             }
 
             /* Hashing password */
@@ -100,9 +73,9 @@ const resolvers = {
             const user = await User.findOne({ email });
 
             if (!user) {
-                throw new ApolloError('User does not exist', 401); 
+                throw new ApolloError(UserErrors.USER_NOT_FOUND, HTTPStatusCodes.NOT_FOUND); 
             } else if (user && !user.confirmed) {
-                throw new ApolloError('Your account has not activated. Please check your email', 401); 
+                throw new ApolloError(UserErrors.NOT_ACTIVATED, HTTPStatusCodes.NOT_AUTHORIZED); 
             }
 
             /* Check if password is correct */
@@ -128,19 +101,19 @@ const resolvers = {
             let user = await User.findOne({ email });
 
             if (!user) {
-                throw new ApolloError('User does not exist', 401);
+                throw new ApolloError(UserErrors.USER_NOT_FOUND, HTTPStatusCodes.NOT_FOUND);
             }
 
             /* Check if user is the editor */
             if (user.id !== ctx.req.user.id) {
-                throw new ApolloError('Invalid credentials', 401);
+                throw new ApolloError(UserErrors.INVALID_CREDENTIALS, HTTPStatusCodes.NOT_AUTHORIZED);
             }
 
             /* Check if password is correct */
             const checkPassword = await bcrypt.compare(password, user.password);
     
             if (!checkPassword) {
-                throw new ApolloError('Your current password is wrong', 401);
+                throw new ApolloError(UserErrors.CURRENT_PASSWORD, HTTPStatusCodes.NOT_AUTHORIZED);
             }
 
             delete input.password;
@@ -160,19 +133,19 @@ const resolvers = {
             let user = await User.findOne({ email });
 
             if (!user) {
-                throw new ApolloError('User does not exist', 401);
+                throw new ApolloError(UserErrors.USER_NOT_FOUND, HTTPStatusCodes.NOT_FOUND);
             }
 
             /* Check if user is the editor */
             if (user.id !== ctx.req.user.id) {
-                throw new ApolloError('Invalid credentials', 401);
+                throw new ApolloError(UserErrors.INVALID_CREDENTIALS, HTTPStatusCodes.NOT_AUTHORIZED);
             }
 
             /* Check if password is correct */
             const checkPassword = await bcrypt.compare(password, user.password);
         
             if (!checkPassword) {
-                throw new ApolloError('Your current password is wrong', 401);
+                throw new ApolloError(UserErrors.CURRENT_PASSWORD, HTTPStatusCodes.NOT_AUTHORIZED);
             }
 
             /* Hashing new password */
@@ -192,14 +165,14 @@ const resolvers = {
             const checkUser = await User.findOne({ email });
 
             if (!checkUser) {
-                throw new ApolloError('User does not exist', 401);
+                throw new ApolloError(UserErrors.USER_NOT_FOUND, HTTPStatusCodes.NOT_FOUND);
             }
 
             /* Check if the admin is the one who deletes the user */
             const adminUser = await User.findById(ctx.req.user.id);
 
             if (adminUser.role !== 'ADMIN') {
-                throw new ApolloError('Invalid credentials', 401);
+                throw new ApolloError(UserErrors.INVALID_CREDENTIALS, HTTPStatusCodes.NOT_AUTHORIZED);
             }
 
             /* Delete data from DB */
@@ -227,7 +200,7 @@ const resolvers = {
             let user = await User.findOne({ email });
 
             if (!user) {
-                throw new ApolloError('This email does not registered', 401);
+                throw new ApolloError(UserErrors.EMAIL_NOT_FOUND, HTTPStatusCodes.NOT_FOUND);
             }
 
             try {
@@ -250,7 +223,7 @@ const resolvers = {
             try {
                 let user = jwt.verify(token, process.env.SECRET_FORGOT, function(err, user) {
                     if (err) {
-                        throw new ApolloError('Link has expired. Try to send a new link', 401);    
+                        throw new ApolloError(UserErrors.LINK_EXPIRED, HTTPStatusCodes.NOT_AUTHORIZED);    
                     }
 
                     return user;
@@ -270,7 +243,7 @@ const resolvers = {
                 if(error instanceof jwt.TokenExpiredError) {
                     return attemptRenewal()
                 }
-                throw new ApolloError(error, 401);
+                throw new ApolloError(error, HTTPStatusCodes.NOT_AUTHORIZED);
             }
         },
     }
