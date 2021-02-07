@@ -7,7 +7,8 @@
     "dev": "node server/index.js",
     "build": "next build",
     "start": "next start",
-    "build:css": "postcss assets/tailwind.css -o assets/main.css"
+    "build:css": "postcss assets/tailwind.css -o assets/main.css",
+    "test": "echo testing frontend with version: $npm_package_version"
   },
   "dependencies": {
     "@apollo/client": "^3.2.8",
