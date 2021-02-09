@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 
 const sendEmails = async (email, contentHTML) => {
     const transporter = nodemailer.createTransport({
-        host: 'smtp.ethereal.email',
+        host: 'mail.anderb.me',
         port: 587,
         secure: false,
         auth: {
@@ -12,7 +12,7 @@ const sendEmails = async (email, contentHTML) => {
     });
   
     const mailOptions = {
-        from: "no-reply@shareyourrecipes.com",
+        from: "no-reply@anderb.me",
         to: email,
         subject: "Activate your Account",
         html: contentHTML 

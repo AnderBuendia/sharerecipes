@@ -14,6 +14,7 @@ import { isRequestSSR, loadAuthProps, serverRedirect } from '../lib/utils/ssr.ut
 import { MainPaths } from '../enums/paths/main-paths';
 import { RestEndPoints } from '../enums/paths/rest-endpoints';
 import { RedirectConditions } from '../enums/redirect-conditions';
+import { AlertMessages, FormMessages } from '../enums/config/messages';
 
 /* Components */
 import FormLayout from '../components/layouts/FormLayout';
@@ -46,10 +47,10 @@ const Login = () => {
                     type="text"
                     placeholder="example@example.com"
                     childRef={register({
-                        required: "Email is required", 
+                        required: FormMessages.EMAIL_REQUIRED, 
                         pattern: {
                             value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                            message: "This format is invalid. Please, make sure it's written like example@email.com"
+                            message: FormMessages.EMAIL_FORMAT_INVALID,
                         }
                     })}
                     error={errors.email}
@@ -61,10 +62,10 @@ const Login = () => {
                     type="password"
                     placeholder="Password"
                     childRef={register({
-                        required: "Password is required", 
+                        required: FormMessages.PASSWORD_REQUIRED, 
                         minLength: {
                             value: 7,
-                            message: 'Minimum 7 characters'
+                            message: FormMessages.MIN_LENGTH,
                         },
                     })}
                     error={errors.password}
@@ -124,7 +125,7 @@ const getLoginRequest = (router) => {
                 // @ts-ignore
                 setAuth({ user, jwt });
 
-                addToast('Authenticating...', { appearance: 'success' });
+                addToast(AlertMessages.LOGIN, { appearance: 'success' });
                 
                 setTimeout(() => {
                     router.push(MainPaths.INDEX);

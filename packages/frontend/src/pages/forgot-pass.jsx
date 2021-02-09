@@ -14,6 +14,7 @@ import { FORGOT_PASSWORD } from '../lib/graphql/user/query';
 /* enum conditions */
 import { MainPaths } from '../enums/paths/main-paths';
 import { RedirectConditions } from '../enums/redirect-conditions';
+import { AlertMessages, FormMessages } from '../enums/config/messages';
 
 /* Components */
 import FormLayout from '../components/layouts/FormLayout';
@@ -43,8 +44,7 @@ const ForgotPass = () => {
                     }
                 }
             });
-            addToast(`Please check your email 
-                and follow the instructions`, { appearance: 'success' });
+            addToast(AlertMessages.CHECK_ACTIVATION_MAIL, { appearance: 'success' });
 
             setTimeout(() => {
                 router.push(MainPaths.INDEX);
@@ -67,10 +67,10 @@ const ForgotPass = () => {
                     type="text"
                     placeholder="example@example.com"
                     childRef={register({
-                        required: "Email is required", 
+                        required: FormMessages.EMAIL_REQUIRED, 
                         pattern: {
                             value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                            message: "This format is invalid. Please, make sure it's written like example@email.com"
+                            message: FormMessages.EMAIL_FORMAT_INVALID,
                         }
                     })}
                     error={errors.email}

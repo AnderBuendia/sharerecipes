@@ -1,47 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useMutation } from '@apollo/client';
 import { removeJwtCookie } from '../../lib/utils/jwt-cookie.utils';
+import { checkActivationToken } from '../../lib/utils/user.utils';
 import { HTTPStatusCodes } from '../../enums/config/http-status-codes';
 import { MainPaths } from '../../enums/paths/main-paths';
+import { AlertMessages } from '../../enums/config/messages';
 import MainLayout from '../../components/layouts/MainLayout';
-import { CONFIRM_USER } from '../../lib/graphql/user/mutation';
 
-const ConfirmationToken = ({token}) => {
+
+const ConfirmationToken = () => {
     const router = useRouter();
 
-    /* Confirmation message state */
-    const [messageConfirmation, setMessageConfirmation] = useState(null);
-
-    /* Apollo mutation */
-    const [ confirmUser ] = useMutation(CONFIRM_USER);
-
-    useEffect(token => {
-        response(token);
-    }, [token]);
-
-    const response = async token => { 
-        try {
-            const { data } = await confirmUser({
-                variables: {
-                    input: {
-                        token
-                    }
-                }
-            });
-
-            setMessageConfirmation(`Your account has been activated.
-            You will be redirected automatically to login`);
-
-            /* Redirect to login */
-            setTimeout(() => {
-                setMessageConfirmation(null);
-                router.push(MainPaths.LOGIN);
-            }, 4000);
-
-        } catch (error) {
-        }
-    }
+    useEffect(() => {
+        setTimeout(() => {
+            router.push(MainPaths.LOGIN);
+        }, 4000);
+    }, [router]);
 
     return (  
         <MainLayout
@@ -52,7 +26,7 @@ const ConfirmationToken = ({token}) => {
             <div className="flex w-full mx-auto mt-8 justify-center">
                 <div className="bg-white text-black rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
                     <div className="w-full max-w-lg bg-green-200 text-black rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
-                        <p>{messageConfirmation}</p>
+                        <p>{AlertMessages.ACTIVATE_ACCOUNT}</p>
                     </div>
                 </div>
             </div>
@@ -63,8 +37,17 @@ const ConfirmationToken = ({token}) => {
 export const getServerSideProps = async ({params, res}) => {
     const props = {};
 
-    if (params && params.token) removeJwtCookie(res);
-    else res.statusCode = HTTPStatusCodes.NOT_FOUND;
+    console.log(params)
+
+    if (params && params.token) { 
+        const activationToken = await checkActivationToken(params.token)
+
+        if (activationToken) {
+            removeJwtCookie(res);
+        } else {
+            res.statusCode = HTTPStatusCodes.NOT_FOUND;
+        }
+    }
 
     props.componentProps = {
         token: params?.token,

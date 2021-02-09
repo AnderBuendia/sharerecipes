@@ -14,6 +14,7 @@ import { CREATE_USER } from '../lib/graphql/user/mutation';
 /* enum conditions */
 import { MainPaths } from '../enums/paths/main-paths';
 import { RedirectConditions } from '../enums/redirect-conditions';
+import { AlertMessages, FormMessages } from '../enums/config/messages';
 
 /* components */
 import FormLayout from '../components/layouts/FormLayout';
@@ -48,8 +49,7 @@ const SignUp = () => {
                 }
             });
 
-            addToast(`User was created succesfully created.
-            Please, check your email to confirm your account.`, { appearance: 'success' });
+            addToast(AlertMessages.USER_CREATED, { appearance: 'success' });
             
             /* Redirect to Home Page */
             setTimeout(() => {
@@ -72,7 +72,7 @@ const SignUp = () => {
                     name="name"
                     type="text"
                     placeholder="Introduce your Name"
-                    childRef={register({required: { value: true, message: "User is required" }})}
+                    childRef={register({required: { value: true, message: FormMessages.USER_REQUIRED, }})}
                     error={errors.name}
                 />
 
@@ -85,7 +85,7 @@ const SignUp = () => {
                         required: "Email is required", 
                         pattern: {
                             value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                            message: "This format is invalid. Please, make sure it's written like example@email.com"
+                            message: FormMessages.EMAIL_FORMAT_INVALID,
                         }
                     })}
                     error={errors.email}
@@ -97,10 +97,10 @@ const SignUp = () => {
                     type="password"
                     placeholder="Password"
                     childRef={register({
-                        required: "Password is required", 
+                        required: FormMessages.PASSWORD_REQUIRED,
                         minLength: {
                             value: 7,
-                            message: 'Minimum 7 characters'
+                            message: FormMessages.MIN_LENGTH,
                         },
                     })}
                     error={errors.password}
@@ -112,7 +112,9 @@ const SignUp = () => {
                     value="Create Account"
                 />
             </form>
-            <p className="text-lg font-roboto font-bold text-gray-800 mt-8 text-center">Have an account? <Link href="/login"><a className="underline text-blue-400">Log in</a></Link></p>
+            <p className="text-lg font-roboto font-bold text-gray-800 mt-8 text-center">
+                Have an account? <Link href="/login"><a className="underline text-blue-400">Log in</a></Link>
+            </p>
         </FormLayout>
     );
 }

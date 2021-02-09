@@ -23,10 +23,10 @@ const login = async (req, res) => {
         return;
     }
 
-    const client = createApolloClient();
+    const apolloClient = createApolloClient();
 
     try {
-        let response = await client.mutate({
+        let response = await apolloClient.mutate({
             mutation: AUTH_USER,
             variables: {
                 input: {

@@ -1,4 +1,7 @@
+import { useMutation } from '@apollo/client';
+import { createApolloClient } from '../apollo/apollo-client';
 import { GET_USER } from '../graphql/user/query';
+import { CONFIRM_USER } from '../../lib/graphql/user/mutation';
 
 export const loadCurrentUserSSR = async (jwt, apolloClient) => {
     const response = await apolloClient.query({
@@ -36,4 +39,25 @@ export const loadCurrentUserSSR = async (jwt, apolloClient) => {
     };
 
     return authProps;
+};
+
+export const checkActivationToken = async token => {
+    const apolloClient = createApolloClient();
+
+    try {
+        if (typeof token === 'string') {
+            const res = await apolloClient.mutate({
+                mutation: CONFIRM_USER,
+                variables: {
+                    input: { token }
+                }
+            });
+
+                if (res.data.confirmUser) return true;
+            };
+
+        return false;
+    } catch (e) {
+        return false;
+    }
 };

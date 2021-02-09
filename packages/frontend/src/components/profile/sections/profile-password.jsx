@@ -6,6 +6,7 @@ import { useToasts } from 'react-toast-notifications';
 import AuthContext from '../../../lib/context/auth/authContext';
 import { UPDATE_USER_PASSWORD } from '../../../lib/graphql/user/mutation';
 import { ProfilePaths } from '../../../enums/paths/profile-paths';
+import { AlertMessages, FormMessages } from '../../../enums/config/messages';
 import Input from '../../generic/Input';
 
 const ProfilePassword = () => {
@@ -35,7 +36,7 @@ const ProfilePassword = () => {
                 }
             });
 
-            addToast('Your password has been changed', { appearance: 'success' });
+            addToast(AlertMessages.PASSWORD_UPDATED, { appearance: 'success' });
             router.push(ProfilePaths.MAIN);
         } catch (error) {
             addToast(error.message.replace('GraphQL error: ', ''), { appearance: 'error' });
@@ -50,7 +51,7 @@ const ProfilePassword = () => {
                     name="password"
                     type="password"
                     placeholder="Introduce your Password"
-                    childRef={register({ required: "Your current password is required" })}
+                    childRef={register({ required: FormMessages.CURRENT_PASSWORD_REQUIRED })}
                     error={errors.password}
                 />
 
@@ -60,10 +61,10 @@ const ProfilePassword = () => {
                     type="password"
                     placeholder="Introduce a New Password"
                     childRef={register({ 
-                        required: "A new password is required",
+                        required: FormMessages.NEW_PASSWORD_REQUIRED,
                         minLength: {
                             value: 7,
-                            message: 'Minimum 7 characters'
+                            message: FormMessages.MIN_LENGTH,
                         },
                     })}
                     error={errors.newpassword}
@@ -75,11 +76,11 @@ const ProfilePassword = () => {
                     type="password"
                     placeholder="Confirm New Password"
                     childRef={register({ 
-                        required:  "Please, confirm new password",
+                        required:  FormMessages.CONFIRM_NEW_PASSWORD,
                         validate: {
                             matchesPreviousPassword: value => {
                                 const { newpassword } = getValues();
-                                return newpassword === value || "Passwords should match!";
+                                return newpassword === value || FormMessages.MATCH_PASSWORDS;
                             }
                         }
                     })}

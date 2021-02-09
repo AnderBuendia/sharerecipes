@@ -7,6 +7,7 @@ import { useToasts } from 'react-toast-notifications';
 import { MainPaths } from '../../../enums/paths/main-paths';
 import { RestEndPoints } from '../../../enums/paths/rest-endpoints';
 import { UserRoles } from '../../../enums/user/user-roles';
+import { AlertMessages } from '../../../enums/config/messages';
 
 const DropdownMenu = ({user, setAuth}) => {
     /* Routing */
@@ -34,7 +35,7 @@ const DropdownMenu = ({user, setAuth}) => {
             });
     
             
-            addToast('You have been disconnected', { appearance: 'info' });
+            addToast(AlertMessages.LOGOUT, { appearance: 'info' });
         } catch (error) {
             console.log(error);
         }

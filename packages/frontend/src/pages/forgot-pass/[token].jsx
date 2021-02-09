@@ -12,6 +12,7 @@ import { RESET_PASSWORD } from '../../lib/graphql/user/query';
 /* enums */
 import { MainPaths } from '../../enums/paths/main-paths';
 import { RedirectConditions } from '../../enums/redirect-conditions';
+import { AlertMessages, FormMessages } from '../../enums/config/messages';
 
 /* Components */
 import FormLayout from '../../components/layouts/FormLayout';
@@ -42,8 +43,7 @@ function ResetPasswordToken({token}) {
                     }
                 }
             });
-            addToast(`Your password has been changed.
-            You will be redirected automatically to login`, { appearance: 'success' });
+            addToast(AlertMessages.PASSWORD_UPDATED_LOGIN, { appearance: 'success' });
 
             setTimeout(() => {
                 router.push(MainPaths.LOGIN);
@@ -70,7 +70,7 @@ function ResetPasswordToken({token}) {
                     type="password"
                     placeholder="Introduce a New Password"
                     childRef={register({ 
-                        required: "A new password is required",
+                        required: FormMessages.PASSWORD_REQUIRED,
                         minLength: {
                             value: 7,
                             message: 'Minimum 7 characters'
@@ -85,11 +85,11 @@ function ResetPasswordToken({token}) {
                     type="password"
                     placeholder="Confirm New Password"
                     childRef={register({ 
-                        required:  "Please, confirm new password",
+                        required:  FormMessages.CONFIRM_NEW_PASSWORD,
                         validate: {
                             matchesPreviousPassword: value => {
                                 const { password } = getValues();
-                                return password === value || "Passwords should match!";
+                                return password === value || FormMessages.MATCH_PASSWORDS;
                             }
                         }
                     })}

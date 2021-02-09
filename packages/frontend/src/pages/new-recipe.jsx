@@ -17,6 +17,7 @@ import { GET_RECIPES } from '../lib/graphql/recipe/query';
 /* enum conditions */
 import { MainPaths } from '../enums/paths/main-paths';
 import { RedirectConditions } from '../enums/redirect-conditions';
+import { AlertMessages, FormMessages } from '../enums/config/messages';
 
 /* components */
 import MainLayout from '../components/layouts/MainLayout';
@@ -118,8 +119,8 @@ const NewRecipe = () => {
             /* Show alerts */
             Swal.fire(
                 'Correct',
-                'Recipe has been created successfully',
-                'success'
+                AlertMessages.RECIPE_CREATED,
+                'success',
             );
         } catch (error) {
             addToast(error.message.replace('GraphQL error: ', ''), { appearance: 'error' });
@@ -158,7 +159,7 @@ const NewRecipe = () => {
                                 name="name"
                                 type="text"
                                 placeholder="Recipe Name"
-                                childRef={register({required: { value: true, message: "User is required" }})}
+                                childRef={register({required: { value: true, message: FormMessages.USER_REQUIRED, }})}
                                 error={errors.name}
                             />
         
@@ -167,7 +168,7 @@ const NewRecipe = () => {
                                 name="prep_time"
                                 type="number"
                                 placeholder="Preparation Time"
-                                childRef={register({required: { value: true, message: "Prep time is required" }})}
+                                childRef={register({required: { value: true, message: FormMessages.PREP_TIME_REQUIRED, }})}
                                 error={errors.prep_time}
                             />
 
@@ -176,7 +177,7 @@ const NewRecipe = () => {
                                 name="serves"
                                 type="number"
                                 placeholder="Number of Serves"
-                                childRef={register({required: { value: true, message: "Number of serves is required" }})}
+                                childRef={register({required: { value: true, message: FormMessages.SERVES_REQUIRED, }})}
                                 error={errors.serves}
                             />
 
@@ -271,7 +272,7 @@ const NewRecipe = () => {
                                 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
                                 name="description"
                                 placeholder="Introduce your recipe..."
-                                ref={register({required: { value: true, message: "Your recipe is required" }})}
+                                ref={register({required: { value: true, message: FormMessages.DESCRIPTION_REQUIRED }})}
                             />
                         
                             <input 

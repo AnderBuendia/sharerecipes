@@ -184,10 +184,12 @@ const resolvers = {
         /* Confirm account */
         confirmUser: async (_, {input}) => {
             const { token } = input;
+            console.log(token)
             try {
                 const user = jwt.verify(token, process.env.SECRET_EMAIL);
                 await User.findByIdAndUpdate({ _id: user.id }, { confirmed: true });
                 
+                console.log(user)
                 return true;
             } catch (error) {
             }

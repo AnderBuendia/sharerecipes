@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useToasts } from 'react-toast-notifications';
 import AuthContext from '../../../lib/context/auth/authContext';
 import { UPDATE_USER } from '../../../lib/graphql/user/mutation';
+import { AlertMessages, FormMessages } from '../../../enums/config/messages';
 import DragDropImage from '../../generic/DragDropImage';
 import Input from '../../generic/Input';
 
@@ -64,7 +65,7 @@ const ProfileData = () => {
                 }
             });
 
-            addToast('Your profile has been updated', { appearance: 'success' });
+            addToast(AlertMessages.PROFILE_UPDATED, { appearance: 'success' });
         } catch (error) {
             addToast(error.message.replace('GraphQL error: ', ''), { appearance: 'error' });
         }
@@ -100,7 +101,7 @@ const ProfileData = () => {
                         initialValue={initialValues.name}
                         childRef={register({
                             required: { 
-                                value: true, message: "User is required" 
+                                value: true, message: FormMessages.USER_REQUIRED
                             }
                         })}
                         error={errors.name}
@@ -112,7 +113,7 @@ const ProfileData = () => {
                         type="password"
                         placeholder="Password"
                         childRef={register({
-                            required: "Your current password is required"
+                            required: FormMessages.CURRENT_PASSWORD_REQUIRED
                         })}
                         error={errors.password}
                     />

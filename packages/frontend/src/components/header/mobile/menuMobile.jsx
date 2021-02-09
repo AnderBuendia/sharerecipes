@@ -9,6 +9,7 @@ import CloseIcon from '../../icons/closeicon';
 import DocumentIcon from '../../icons/documenticon';
 import { MainPaths } from '../../../enums/paths/main-paths';
 import { RestEndPoints } from '../../../enums/paths/rest-endpoints';
+import { AlertMessages } from '../../../enums/config/messages';
 
 const MenuMobile = ({open, setOpen, user, setAuth}) => {
     MenuMobile.handleClickOutside = () => setOpen(false);
@@ -31,7 +32,7 @@ const MenuMobile = ({open, setOpen, user, setAuth}) => {
                 jwt: null,
             });
 
-            addToast('You have been disconnected', { appearance: 'info' });
+            addToast(AlertMessages.LOGOUT, { appearance: 'info' });
         } catch (error) {
             console.log(error);
         }
