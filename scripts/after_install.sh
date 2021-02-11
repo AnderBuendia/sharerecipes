@@ -21,6 +21,8 @@ npm install pm2 -g
 
 sudo ln -s ~/.nvm/versions/node/$(node -v)/bin/npm /usr/bin/pm2
 
+npm run initialize
+
 # cp env and run build
 cd ~/sharerecipes/packages/frontend
 cp example-front.env .env.production.local
