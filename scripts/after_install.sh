@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Give permission for everything in the sharerecipes directory *
-sudo chmod -R 777 ~/sharerecipes
+sudo chmod -R 755 ~/sharerecipes
 
 # Add npm and node to path // Install pm2
 
@@ -20,8 +20,6 @@ sudo ln -s ~/.nvm/versions/node/$(node -v)/bin/npm /usr/bin/npm
 npm install pm2 -g
 
 sudo ln -s ~/.nvm/versions/node/$(node -v)/bin/npm /usr/bin/pm2
-
-npm run initialize
 
 # cp env and run build
 cd ~/sharerecipes/packages/frontend
