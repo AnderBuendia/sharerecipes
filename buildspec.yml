@@ -4,6 +4,8 @@ phases:
   pre_build:
     commands:
       #installs dependencies into the node_modules/ directory
+      - echo Test
+      - pwd
       - npm install
       - npm run initialize
   build:
