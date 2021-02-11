@@ -19,6 +19,7 @@
     "@uppy/react": "^1.11.0",
     "@uppy/xhr-upload": "^1.6.8",
     "cookie": "^0.4.1",
+    "cross-env": "^7.0.3",
     "graphql": "^15.4.0",
     "jsonwebtoken": "^8.5.1",
     "next": "^10.0.3",
