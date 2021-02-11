@@ -62,7 +62,7 @@ const startServer = async () => {
     server.applyMiddleware({ app, cors: false });
 
     /* App port */
-    const port = process.env.PORT || 4000;
+    const port = process.env.BACK_PORT || 4000;
 
     /* App setup */
     app.listen(port, '0.0.0.0', () => {
