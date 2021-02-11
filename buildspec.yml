@@ -6,9 +6,10 @@ phases:
       #installs dependencies into the node_modules/ directory
       - echo Test
       - pwd
-      - lerna run test
       - cd sharerecipes
+      - pwd
       - npm install
+      - npm run test
       - npm run initialize
   build:
     commands:
