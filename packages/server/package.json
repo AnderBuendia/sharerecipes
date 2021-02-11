@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nohup node ./src/index.js &",
+    "start": "node ./src/index.js",
     "dev": "nodemon ./src/index.js",
     "test": "echo testing frontend with version: $npm_package_version"
   },

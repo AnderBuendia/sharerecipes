@@ -2,7 +2,7 @@
 
 # Run server *
 cd /home/ec2-user/sharerecipes/packages/frontend
-npm run start
+pm2 start npm --name "front" -- start
 
 cd ../server
-npm run start
+pm2 start npm --name "back" -- start
