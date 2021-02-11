@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "old-dev": "next dev",
-    "dev": "node server/index.js",
+    "dev": "node server/index.js &",
     "build": "next build",
-    "start": "next start",
+    "start": "cross-env NODE_ENV=production && npm run start-pm2",
+    "start-pm2": "nohup node server/index.js &",
     "build:css": "postcss assets/tailwind.css -o assets/main.css",
     "test": "echo testing frontend with version: $npm_package_version"
   },
