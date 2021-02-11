@@ -6,8 +6,6 @@ phases:
       #installs dependencies into the node_modules/ directory
       - echo Test
       - pwd
-      - cd sharerecipes
-      - pwd
       - npm install
       - npm run test
       - npm run initialize
@@ -15,7 +13,8 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Compiling
-      - cd packages/frontend && npm run build
+      - cd packages/server && npm install
+      - cd ../frontend && npm run build
   post_build:
     commands:
       - echo Build completed on `date`
