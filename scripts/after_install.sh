@@ -15,11 +15,11 @@ nvm use --lts
 nvm alias default $(node -v)
 
 # sudo ln -s ~/.nvm/versions/node/$(node -v)/bin/node /usr/bin/node
-# sudo ln -s ~/.nvm/versions/node/$(node -v)/bin/npm /usr/bin/npm
+sudo ln -s ~/.nvm/versions/node/$(node -v)/bin/npm /usr/bin/npm
 
 npm install pm2 -g
 
-# sudo ln -s ~/.nvm/versions/node/$(node -v)/bin/npm /usr/bin/pm2
+sudo ln -s ~/.nvm/versions/node/$(node -v)/bin/npm /usr/bin/pm2
 
 
 # DB connection
