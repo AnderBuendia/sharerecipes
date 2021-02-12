@@ -1,4 +1,4 @@
 node_modules
-src/config/variables.env
+src/variables.env
 images
 .DS_Store

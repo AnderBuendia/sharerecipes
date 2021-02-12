@@ -7,7 +7,7 @@ const { ApolloError } = require('apollo-server-express');
 const { sendEmails } = require('../../utils/sendEmails.utils');
 const UserErrors = require('../../enums/user.errors');
 const HTTPStatusCodes = require('../../enums/http-status-code');
-require('dotenv').config({ path: 'src/config/variables.env' });
+require('dotenv').config({ path: 'src/variables.env' });
 
 /* User Resolvers */
 const resolvers = {

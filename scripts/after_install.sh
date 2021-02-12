@@ -21,6 +21,10 @@ npm install pm2 -g
 
 # sudo ln -s ~/.nvm/versions/node/$(node -v)/bin/npm /usr/bin/pm2
 
+
+# DB connection
+echo DB_URL=$(aws ssm get-parameters --output text --region eu-west-3 --names DB_URL --with-decryption --query Parameters[0].Value) > ~/sharerecipes/packages/server/src/variables.env
+
 # cp env and run build
 cd ~/sharerecipes/packages/frontend
 cp example-front.env .env.production.local
