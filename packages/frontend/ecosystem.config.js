@@ -1,6 +1,6 @@
 module.exports = {
     apps: [{
-        name: "sharerecipes",
+        name: "front",
         script: "node server/index.js",
         env: {
             NODE_ENV: "dev"

@@ -77,8 +77,6 @@ const resolvers = {
 
     Mutation: {
         newRecipe: async (_, {input}, ctx) => {
-            // console.log(ctx.req);
-   
             const urlName = input.name.replace(' ', '-').toLowerCase();
 
             const recipes = await 

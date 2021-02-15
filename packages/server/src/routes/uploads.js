@@ -10,7 +10,7 @@ const uploadImage = require('../middleware/uploadImage');
 router.post('/user', uploadImage, async (req, res) => {
     if (req.file) {
         const { filename } = req.file
-        const image_url = `http://localhost:4000/images/${filename}`;
+        const image_url = `${process.env.HOST_FRONT}/images/${filename}`;
         const authorization = req.headers['authorization'];
 
         if(authorization) {
@@ -48,7 +48,7 @@ router.post('/user', uploadImage, async (req, res) => {
 router.post('/recipes', uploadImage, async (req, res) => {
     if (req.file) {
         const { filename } = req.file;
-        const image_url = `http://localhost:4000/images/${filename}`;
+        const image_url = `${process.env.HOST_FRONT}/images/${filename}`;
         const authorization = req.headers['authorization'];
 
         if(authorization) {

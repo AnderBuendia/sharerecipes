@@ -133,7 +133,7 @@ const Comment = ({comment, query, recipe, i, fetchMore}) => {
                 />
                 <p className="ml-2 font-roboto text-black text-sm font-bold">
                     {author.name} 
-                    { author.id === recipe.author.id &&
+                    { author.email === recipe.author.email &&
                         <span className="ml-1 px-2 rounded-full bg-green-100 text-green-900 font-light text-xs uppercase">
                             Chef
                         </span> 

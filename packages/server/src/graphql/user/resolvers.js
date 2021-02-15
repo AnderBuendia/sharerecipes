@@ -54,11 +54,12 @@ const resolvers = {
 
                 /* Send an activation mail */
                 const emailToken = jwt.sign({ id: user.id }, process.env.SECRET_EMAIL, { expiresIn: '1h'});
-                const url = `${process.env.HOST_FRONT}/confirmation/${emailToken}`;
-                const contentHTML = `<h1>Click on this link to activate your account</h1>
-                                <a href=${url}>${url}</a>`;
+                const mailContent = {
+                    url: `${process.env.HOST_FRONT}/confirmation/${emailToken}`,
+                    text: 'Activate your Account',
+                }
 
-                await sendEmails(user.email, contentHTML);
+                await sendEmails(user.email, mailContent);
 
                 return true;      
             } catch (error) {
@@ -82,7 +83,7 @@ const resolvers = {
             const checkPassword = await bcrypt.compare(password, user.password);
             
             if (!checkPassword) {
-                throw new ApolloError('Password is wrong', 401);
+                throw new ApolloError(UserErrors.PASSWORED, HTTPStatusCodes.NOT_AUTHORIZED);
             }
 
             const token = createAccessToken(user);
@@ -96,7 +97,7 @@ const resolvers = {
 
         updateUser: async (_, {input}, ctx) => {
             const { email, name, password } = input;
-            console.log(input)
+            
             /* Check if user exists */
             let user = await User.findOne({ email });
 
@@ -184,12 +185,11 @@ const resolvers = {
         /* Confirm account */
         confirmUser: async (_, {input}) => {
             const { token } = input;
-            console.log(token)
+
             try {
                 const user = jwt.verify(token, process.env.SECRET_EMAIL);
                 await User.findByIdAndUpdate({ _id: user.id }, { confirmed: true });
                 
-                console.log(user)
                 return true;
             } catch (error) {
             }
@@ -208,11 +208,12 @@ const resolvers = {
             try {
                 /* Send an activation mail */
                 const forgotToken = jwt.sign({ id: user.id }, process.env.SECRET_FORGOT, { expiresIn: '1h'});
-                const url = `${process.env.HOST_FRONT}/forgot-pass/${forgotToken}`;
-                const contentHTML = `<h1>Click on this link to change your current password</h1>
-                                <a href=${url}>${url}</a>`;
-
-                await sendEmails(user, contentHTML);
+                const mailContent = {
+                    url: `${process.env.HOST_FRONT}/forgot-pass/${forgotToken}`,
+                    text: 'Change your Password',
+                };
+                
+                await sendEmails(user, mailContent);
 
                 return true;   
             } catch (error) {

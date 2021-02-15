@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-const sendEmails = async (email, contentHTML) => {
+const sendEmails = async (email, mailContent) => {
     const transporter = nodemailer.createTransport({
         host: 'mail.anderb.me',
         port: 587,
@@ -8,14 +8,38 @@ const sendEmails = async (email, contentHTML) => {
         auth: {
             user: process.env.EMAILU,
             pass: process.env.EMAILP
+        },
+        tls: {
+            rejectUnauthorized: false,
         }
     });
   
     const mailOptions = {
         from: "no-reply@anderb.me",
         to: email,
-        subject: "Activate your Account",
-        html: contentHTML 
+        subject: `${mailContent.text}`,
+        html: `
+        <html lang="en">
+            <body>
+                <div style="width:100%; text-align:left">
+                    <div>
+                        <h2>${mailContent.text}</h2>
+                        <a 
+                            style="font-weight:bold; padding: 10px; background: green; 
+                            color: white; border-radius: 20px; text-decoration: none;"
+                            href=${mailContent.url}
+                        >
+                            ${mailContent.text}
+                        </a>
+                    </div>
+                    <div style="width:70%; border:1px solid grey; margin-top: 20px"></div>
+                    <div>
+                        <p style="font-weight:bold;">You can redirect through this link</p>
+                        <p>${mailContent.url}</p>
+                    </div>
+                </div>    
+            </body>
+        </html>`,
     }
 
     await transporter.sendMail(mailOptions, (error, info) => {

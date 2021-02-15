@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/client';
 import { createApolloClient } from '../apollo/apollo-client';
 import { GET_USER } from '../graphql/user/query';
 import { CONFIRM_USER } from '../../lib/graphql/user/mutation';

@@ -11,7 +11,9 @@ phases:
       - npm run initialize
       - echo Build started on `date`
       - echo Compiling
-      - cd packages/frontend && npm run build
+      - cd packages/frontend 
+      - cp example-front.env .env.production
+      - npm run build
   post_build:
     commands:
       - echo Build completed on `date`

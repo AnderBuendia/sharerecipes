@@ -1,5 +1,8 @@
 module.exports = {
     images: {
-        domains: ['localhost'],
+        domains: [
+            'sharerecipes.anderb.me',
+            'localhost',
+        ],
     },
 }

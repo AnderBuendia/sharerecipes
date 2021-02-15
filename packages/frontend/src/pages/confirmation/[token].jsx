@@ -37,8 +37,6 @@ const ConfirmationToken = () => {
 export const getServerSideProps = async ({params, res}) => {
     const props = {};
 
-    console.log(params)
-
     if (params && params.token) { 
         const activationToken = await checkActivationToken(params.token)
 

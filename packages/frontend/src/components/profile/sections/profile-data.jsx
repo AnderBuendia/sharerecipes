@@ -30,7 +30,6 @@ const ProfileData = () => {
     const getUpdateUser = setAuth => {
         const [ updateUser ] = useMutation(UPDATE_USER, {
             onCompleted: ({ updateUser: response }) => {
-                console.log(response)
                 setAuth({
                     ...authState,
                     user: {
