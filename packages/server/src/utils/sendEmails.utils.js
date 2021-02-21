@@ -7,7 +7,7 @@ const sendEmails = async (email, mailContent) => {
         secure: false,
         auth: {
             user: process.env.EMAILU,
-            pass: process.env.EMAILP
+            pass: process.env.EMAILP,
         },
         tls: {
             rejectUnauthorized: false,
@@ -18,10 +18,7 @@ const sendEmails = async (email, mailContent) => {
         from: "no-reply@anderb.me",
         to: email,
         subject: `${mailContent.text}`,
-        html: `
-        <html lang="en">
-            <body>
-                <div style="width:100%; text-align:left">
+        html: `<div style="width:100%; text-align:left">
                     <div>
                         <h2>${mailContent.text}</h2>
                         <a 
@@ -37,9 +34,7 @@ const sendEmails = async (email, mailContent) => {
                         <p style="font-weight:bold;">You can redirect through this link</p>
                         <p>${mailContent.url}</p>
                     </div>
-                </div>    
-            </body>
-        </html>`,
+                </div>`,
     }
 
     await transporter.sendMail(mailOptions, (error, info) => {

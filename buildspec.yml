@@ -12,7 +12,7 @@ phases:
       - echo Build started on `date`
       - echo Compiling
       - cd packages/frontend 
-      - cp example-front.env .env.production
+      - cp example.env .env.production
       - npm run build
   post_build:
     commands:
