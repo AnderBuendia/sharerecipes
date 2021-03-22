@@ -58,7 +58,7 @@ const typeDefs = gql`
     password: String!
   }
 
-  input InputTest {
+  input TestInput {
     name: String
     alias: String
   }
@@ -66,7 +66,7 @@ const typeDefs = gql`
   # Queries
   extend type Query {
     # Test
-    hello(input: InputTest): String
+    hello(input: TestInput): String
 
     # Users
     getUser: User

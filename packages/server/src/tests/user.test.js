@@ -2,33 +2,71 @@ const supertest = require('supertest');
 const mongoose = require('mongoose');
 const { app, server } = require('../index');
 const api = supertest(app);
+const UserErrors = require('../enums/user.errors');
 
-describe('Initial server tests', () => {
-  test('should respond for health check', async () => {
-    await api
-      .get('/health')
-      .expect(200)
-      .expect('Content-Type', /text\/html/);
-  });
-
-  afterAll(() => {
-    mongoose.connection.close();
-    server.close();
-  });
-
-  test('Initial query for test graphQL server', async () => {
+describe('User Tests', () => {
+  test('New user - Bad email', async () => {
     await api
       .post('/graphql')
       .send({
         query: `
-          query {
-            hello(input: { name: "Ander", alias: "Dolan" })
+          mutation {
+            newUser(input: { 
+              name: "Dolan", 
+              email: "test@email",
+              password: "Test_123"
+            })
           }
         `,
       })
       .expect(200)
       .expect(({ body }) => {
-        expect(body.data.hello).toBe('Hello Ander, Dolan');
+        expect(body.errors[0].message).toBe(UserErrors.EMAIL_FORMAT);
       });
   });
+
+  test('New user - Email already registered', async () => {
+    await api
+      .post('/graphql')
+      .send({
+        query: `
+          mutation {
+            newUser(input: { 
+              name: "prueba201", 
+              email: "prueba201@correo.com",
+              password: "Ander_123"
+            })
+          }
+        `,
+      })
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body.errors[0].message).toBe(UserErrors.REGISTERED);
+      });
+  });
+
+  test('Create new user', async () => {
+    await api
+      .post('/graphql')
+      .send({
+        query: `
+          mutation {
+            newUser(input: { 
+              name: "testname", 
+              email: "test@email.com",
+              password: "Test_123"
+            })
+          }
+        `,
+      })
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body.data.newUser).toBe(true);
+      });
+  });
+});
+
+afterAll(() => {
+  mongoose.connection.close();
+  server.close();
 });

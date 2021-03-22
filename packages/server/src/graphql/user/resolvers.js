@@ -8,6 +8,7 @@ const { ApolloError } = require('apollo-server-express');
 const { sendEmails } = require('../../utils/sendEmails.utils');
 const UserErrors = require('../../enums/user.errors');
 const HTTPStatusCodes = require('../../enums/http-status-code');
+const { emailValidation } = require('../../utils/formValidation.utils');
 require('dotenv').config({ path: 'src/variables.env' });
 
 /* User Resolvers */
@@ -51,6 +52,11 @@ const resolvers = {
           UserErrors.REGISTERED,
           HTTPStatusCodes.NOT_AUTHORIZED
         );
+      } else if (!emailValidation(email)) {
+        throw new ApolloError(
+          UserErrors.EMAIL_FORMAT,
+          HTTPStatusCodes.NOT_ACCEPTABLE
+        );
       }
 
       /* Hashing password */
@@ -81,7 +87,7 @@ const resolvers = {
     authenticateUser: async (_, { input }) => {
       const { email, password } = input;
 
-      /* Check if user is exists */
+      /* Check if user exists */
       const user = await User.findOne({ email });
 
       if (!user) {
@@ -108,8 +114,6 @@ const resolvers = {
 
       const token = createAccessToken(user);
       await user.save();
-
-      console.log(user);
 
       return {
         token,
