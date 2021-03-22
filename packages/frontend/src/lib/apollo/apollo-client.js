@@ -37,7 +37,7 @@ export const createApolloClient = (jwt = null) => {
 
   const httpLink = createHttpLink({
     uri: process.env.NEXT_PUBLIC_GQL_URI,
-    credentials: 'include',
+    credentials: 'same-origin',
   });
 
   return new ApolloClient({

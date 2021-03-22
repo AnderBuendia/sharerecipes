@@ -148,8 +148,8 @@ const Recipe = () => {
                             key={recipe.image_url}
                             src={recipe.image_url}
                             alt={recipe.image_name}
-                            width={1024}
-                            height={612}
+                            width={600}
+                            height={400}
                         />
                     </div>
                     
