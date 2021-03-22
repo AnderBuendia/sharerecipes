@@ -3,71 +3,76 @@ const { ApolloServer } = require('apollo-server-express');
 const { existsSync, mkdirSync } = require('fs');
 const path = require('path');
 const cors = require('cors');
-const connectDB = require('./db/database');
+require('./db/database');
 const jwt = require('jsonwebtoken');
-require('dotenv').config({path: 'src/variables.env'});
+require('dotenv').config({ path: 'src/variables.env' });
 const typeDefs = require('./graphql/mainTypeDefs');
 const resolvers = require('./graphql/mainResolvers');
 
+/* Create server */
+const app = express();
+
 /* Apollo server */
-const startServer = async () => {
-    const server = new ApolloServer({
-        typeDefs,
-        resolvers,
-        context: ({req, res}) => {
-            const authorization = req.headers['authorization'];
-            
-            const url = req.protocol + '://' + req.get('host') + req.originalUrl;
-            req.url = url;
+const apolloServer = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: ({ req, res }) => {
+    const authorization = req.headers['authorization'];
 
-            if (authorization) {
-                try {
-                    const token = authorization.split(' ')[1];
-                    const payload = jwt.verify(token, process.env.SECRET_JWT_ACCESS);
-                    req.user = payload;
-                } catch (err) {
-                }
+    const url = req.protocol + '://' + req.get('host') + req.originalUrl;
+    req.url = url;
 
-                return { req, res }
-            }
+    if (authorization) {
+      try {
+        const token = authorization.split(' ')[1];
+        const payload = jwt.verify(token, process.env.SECRET_JWT_ACCESS);
+        req.user = payload;
+      } catch (err) {}
 
-            return { req, res }
-        }
-    });
+      return { req, res };
+    }
 
-    /* Db Setup */
-    connectDB();
-    console.log('Initializing Server...');
+    return { req, res };
+  },
+});
 
-    /* Create server */
-    const app = express();
+/* Db Setup */
+// connectDB();
+console.log('Initializing Server...');
 
-    /* App use cors */
-    app.use(cors({
-        origin: process.env.HOST_FRONT,
-        credentials: true
-    }));
+/* App use cors */
+app.use(
+  cors({
+    origin: process.env.HOST_FRONT,
+    credentials: true,
+  })
+);
 
-    /* Read JSON body values */
-    app.use(express.urlencoded({ extended: false }));
-    app.use(express.json());
-    
-    /* Images dir */
-    existsSync(path.join(__dirname, '/images')) || mkdirSync(path.join(__dirname, "/images"));
-    app.use("/images", express.static(path.join(__dirname, "/images")));
-    
-    /* Route to upload images with multer */
-    app.use('/upload', require('./routes/uploads'));
+/* Read JSON body values */
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
-    server.applyMiddleware({ app, cors: false });
+/* Images dir */
+existsSync(path.join(__dirname, '/images')) ||
+  mkdirSync(path.join(__dirname, '/images'));
+app.use('/images', express.static(path.join(__dirname, '/images')));
 
-    /* App port */
-    const port = process.env.BACK_PORT || 4000;
+app.get('/health', (ctxt, res) => {
+  ctxt.body = 'ok';
+  res.send('Hello World!');
+});
 
-    /* App setup */
-    app.listen(port, '0.0.0.0', () => {
-        console.log(`Server is running on port ${port}${server.graphqlPath}`);
-    });
-};
+/* Route to upload images with multer */
+app.use('/upload', require('./routes/uploads'));
 
-startServer();
+apolloServer.applyMiddleware({ app, cors: false });
+
+/* App port */
+const port = parseInt(process.env.BACK_PORT) || 4000;
+
+/* App setup */
+const server = app.listen(port, () => {
+  console.log(`Server is running on port ${port}${apolloServer.graphqlPath}`);
+});
+
+module.exports = { app, server };
