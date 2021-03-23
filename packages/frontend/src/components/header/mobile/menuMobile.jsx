@@ -7,9 +7,11 @@ import onClickOutside from 'react-onclickoutside';
 import { useToasts } from 'react-toast-notifications';
 import CloseIcon from '../../icons/closeicon';
 import DocumentIcon from '../../icons/documenticon';
+import AdminIcon from '../../icons/adminicon';
 import { MainPaths } from '../../../enums/paths/main-paths';
 import { RestEndPoints } from '../../../enums/paths/rest-endpoints';
 import { AlertMessages } from '../../../enums/config/messages';
+import { UserRoles } from '../../../enums/user/user-roles';
 
 const MenuMobile = ({open, setOpen, user, setAuth}) => {
     MenuMobile.handleClickOutside = () => setOpen(false);
@@ -72,6 +74,14 @@ const MenuMobile = ({open, setOpen, user, setAuth}) => {
                                 <DocumentIcon className="w-5 mr-1" /> <span>New Recipe</span>
                             </a>
                         </Link>
+                        {
+                            user?.role?.includes(UserRoles.ADMIN) &&
+                            <Link href={MainPaths.ADMIN}>
+                                <a className="flex flex-row self-start mt-3">
+                                    <AdminIcon className="w-5 mr-1" /> <span>Admin Menu</span>
+                                </a>
+                            </Link>
+                        }
                     </>
                 ) : (
                     <>

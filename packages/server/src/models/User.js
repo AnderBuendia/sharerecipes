@@ -1,49 +1,50 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
+const Schema = mongoose.Schema;
 
-const usersSchema = new Schema({
+const userSchema = new Schema(
+  {
     name: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
     email: {
-        type: String,
-        required: true,
-        trim: true,
-        unique: true,
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
     },
     password: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
     image_url: {
-        type: String,
+      type: String,
     },
     image_name: {
-        type: String,
+      type: String,
     },
     confirmed: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
     role: {
-        type: String,
-        default: "MEMBER"
+      type: String,
+      default: 'MEMBER',
     },
-    refreshTokens: [
-        {
-            hash: {
-                type: String,
-            },
-            expiry: {
-                type: Date,
-            },
-        },
-    ],
-}, {
-    timestamps: true
+  },
+  {
+    timestamps: true,
+  }
+);
+
+/* Remove the password when a query is made (for security). */
+userSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    delete returnedObject.__v;
+    delete returnedObject.password;
+  },
 });
 
-module.exports = mongoose.model('Users', usersSchema);
+module.exports = mongoose.model('User', userSchema);

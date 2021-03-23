@@ -73,7 +73,7 @@ const AdminUsers = () => {
                 <div className="mx-auto flex w-2/6 lg:w-1/5 bg-white rounded-lg shadow-md p-4">
                     <UsersGroup className="w-2/4" />
                     <div className="flex-col">
-                        <p className="flex-1 flex-col mb-2 font-bold">Total Users</p>
+                        <p className="flex-1 flex-col mb-2 ml-2 font-bold">Total Users</p>
                         <p className="flex-1 flex-col font-bold text-center">{data.getUsers.total}</p>
                     </div>
                 </div>

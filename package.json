@@ -13,7 +13,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "lerna": "^3.22.1"
+    "lerna": "^3.22.1",
+    "ssri": "^8.0.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "mongoose": "^5.11.18"
+  }
 }

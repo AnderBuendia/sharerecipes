@@ -64,7 +64,7 @@ const DropdownMenu = ({user, setAuth}) => {
                             <p className="block px-4 py-2 text-sm font-bold leading-5 text-gray-700" role="menuitem">Hi, {user?.name}</p>
                             <div className="border-t border-gray-200"></div>
                             { user?.role?.includes(UserRoles.ADMIN) &&
-                                <Link href="/admin/users">
+                                <Link href={MainPaths.ADMIN}>
                                     <a className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-200 
                                         hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem"
                                     >
