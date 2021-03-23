@@ -68,19 +68,23 @@ const resolvers = {
 
     /* Recipe comments */
     getNumberOfComments: async (_, { recipeUrl }) => {
-      /* Check recipe */
-      const recipe = await Recipe.findOne({ url: recipeUrl });
+      try {
+        /* Check recipe */
+        const recipe = await Recipe.findOne({ url: recipeUrl });
 
-      if (!recipe) {
-        throw new ApolloError(
-          RecipeErrors.RECIPE_NOT_FOUND,
-          HttpStatusCode.NOT_FOUND
-        );
+        if (!recipe) {
+          throw new ApolloError(
+            RecipeErrors.RECIPE_NOT_FOUND,
+            HttpStatusCode.NOT_FOUND
+          );
+        }
+
+        /* Get comments from this recipe */
+        const comments = await Comment.find({ _id: { $in: recipe.comments } });
+        return comments;
+      } catch (error) {
+        console.log(error);
       }
-
-      /* Get comments from this recipe */
-      const comments = await Comment.find({ _id: { $in: recipe.comments } });
-      return comments;
     },
   },
 
@@ -88,25 +92,25 @@ const resolvers = {
     newRecipe: async (_, { input }, ctx) => {
       const urlName = input.name.replace(' ', '-').toLowerCase();
 
-      const recipes = await Recipe.countDocuments({
-        name: input.name,
-      }).collation({ locale: 'en', strength: 2 });
-
-      if (recipes > 0) {
-        input.url = `${urlName}-${recipes}`;
-      } else {
-        input.url = urlName;
-      }
-
-      const newInput = {
-        ...input,
-        author: ctx.req.user.id,
-      };
-
-      const newRecipe = new Recipe(newInput);
-
-      /* Save data in DB */
       try {
+        const recipes = await Recipe.countDocuments({
+          name: input.name,
+        }).collation({ locale: 'en', strength: 2 });
+
+        if (recipes > 0) {
+          input.url = `${urlName}-${recipes}`;
+        } else {
+          input.url = urlName;
+        }
+
+        const newInput = {
+          ...input,
+          author: ctx.req.user.id,
+        };
+
+        const newRecipe = new Recipe(newInput);
+
+        /* Save data in DB */
         const res = await newRecipe.save();
         return res;
       } catch (error) {
@@ -115,77 +119,82 @@ const resolvers = {
     },
 
     deleteRecipe: async (_, { recipeUrl }, ctx) => {
-      /* Check if recipe exists */
-      const recipe = await Recipe.findOne({ url: recipeUrl });
+      try {
+        /* Check if recipe exists // Author is the one who deletes the order */
+        const recipe = await Recipe.findOne({ url: recipeUrl });
 
-      if (!recipe) {
-        throw new ApolloError(
-          RecipeErrors.RECIPE_NOT_FOUND,
-          HttpStatusCode.NOT_FOUND
+        if (!recipe) {
+          throw new ApolloError(
+            RecipeErrors.RECIPE_NOT_FOUND,
+            HttpStatusCode.NOT_FOUND
+          );
+        } else if (recipe.author.toString() !== ctx.req.user.id) {
+          throw new ApolloError(
+            RecipeErrors.INVALID_CREDENTIALS,
+            HttpStatusCode.NOT_AUTHORIZED
+          );
+        }
+
+        /* Delete recipe image from server */
+        const pathName = path.join(
+          __dirname,
+          `../../images/${recipe.image_name}`
         );
+        fs.unlinkSync(pathName);
+
+        /* Delete data from DB */
+        await Comment.deleteMany({ recipe: recipe._id });
+        await Recipe.findOneAndDelete({ _id: recipe._id });
+
+        return true;
+      } catch (error) {
+        console.log(error);
       }
-
-      /* Check if the author is the one who deletes the order */
-      if (recipe.author.toString() !== ctx.req.user.id) {
-        throw new ApolloError(
-          RecipeErrors.INVALID_CREDENTIALS,
-          HttpStatusCode.NOT_AUTHORIZED
-        );
-      }
-
-      /* Delete recipe image from server */
-      const pathName = path.join(
-        __dirname,
-        `../../images/${recipe.image_name}`
-      );
-      fs.unlinkSync(pathName);
-
-      /* Delete data from DB */
-      // TODO: revisar los comentarios para eliminar de la receta
-      await Comment.deleteMany({ recipe: recipe._id });
-      await Recipe.findOneAndDelete({ _id: recipe._id });
-      return true;
     },
 
     updateVoteRecipe: async (_, { recipeUrl, input }, ctx) => {
       const { votes } = input;
 
-      /* Check if recipe exists */
-      const checkRecipe = await Recipe.findOne({ url: recipeUrl });
+      try {
+        /* Check if recipe exists */
+        const checkRecipe = await Recipe.findOne({ url: recipeUrl });
 
-      if (!checkRecipe) {
-        throw new ApolloError(
-          RecipeErrors.RECIPE_NOT_FOUND,
-          HttpStatusCode.NOT_FOUND
-        );
+        if (!checkRecipe) {
+          throw new ApolloError(
+            RecipeErrors.RECIPE_NOT_FOUND,
+            HttpStatusCode.NOT_FOUND
+          );
+        }
+
+        /* Check if user has voted */
+        if (!ctx.req.user) {
+          throw new ApolloError(
+            RecipeErrors.NOT_LOGGED_IN,
+            HttpStatusCode.NOT_AUTHORIZED
+          );
+        } else if (checkRecipe.voted.includes(ctx.req.user.id)) {
+          throw new ApolloError(
+            RecipeErrors.RECIPE_VOTED,
+            HttpStatusCode.NOT_ACCEPTABLE
+          );
+        }
+
+        /* Calculate total votes and save data in DB */
+        checkRecipe.votes += votes;
+        checkRecipe.voted = [...checkRecipe.voted, ctx.req.user.id];
+
+        const averageVotes = checkRecipe.votes / checkRecipe.voted.length;
+        const adjustMean =
+          (Math.ceil(averageVotes) + Math.floor(averageVotes)) / 2;
+
+        checkRecipe.average_vote =
+          averageVotes < adjustMean ? averageVotes : adjustMean;
+        const res = await checkRecipe.save();
+
+        return res;
+      } catch (error) {
+        console.log(error);
       }
-
-      /* Check if user has voted */
-      if (!ctx.req.user) {
-        throw new ApolloError(
-          RecipeErrors.NOT_LOGGED_IN,
-          HttpStatusCode.NOT_AUTHORIZED
-        );
-      } else if (checkRecipe.voted.includes(ctx.req.user.id)) {
-        throw new ApolloError(
-          RecipeErrors.RECIPE_VOTED,
-          HttpStatusCode.NOT_ACCEPTABLE
-        );
-      }
-
-      /* Calculate total votes and save data in DB */
-      checkRecipe.votes += votes;
-      checkRecipe.voted = [...checkRecipe.voted, ctx.req.user.id];
-
-      const averageVotes = checkRecipe.votes / checkRecipe.voted.length;
-      const adjustMean =
-        (Math.ceil(averageVotes) + Math.floor(averageVotes)) / 2;
-
-      checkRecipe.average_vote =
-        averageVotes < adjustMean ? averageVotes : adjustMean;
-      const res = await checkRecipe.save();
-
-      return res;
     },
 
     /* Comments Recipe */
