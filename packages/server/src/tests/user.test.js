@@ -53,7 +53,7 @@ describe('User Tests', () => {
           mutation {
             newUser(input: { 
               name: "testname", 
-              email: "test@email.com",
+              email: "test2@email.com",
               password: "Test_123"
             })
           }

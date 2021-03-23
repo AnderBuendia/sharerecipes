@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node ./src/index.js",
     "dev": "nodemon --trace-warnings --trace-deprecation ./src/index.js",
-    "test": "NODE_ENV=test jest --watch --detectOpenHandles --silent"
+    "test": "jest",
+    "test:watch": "NODE_ENV=test jest --watch --detectOpenHandles --silent"
   },
   "keywords": [],
   "author": "",
