@@ -37,7 +37,6 @@ const apolloServer = new ApolloServer({
 });
 
 /* Db Setup */
-// connectDB();
 console.log('Initializing Server...');
 
 /* App use cors */

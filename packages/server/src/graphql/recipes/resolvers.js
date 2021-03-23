@@ -148,7 +148,7 @@ const resolvers = {
 
         return true;
       } catch (error) {
-        console.log(error);
+        throw error;
       }
     },
 
@@ -193,94 +193,104 @@ const resolvers = {
 
         return res;
       } catch (error) {
-        console.log(error);
+        throw error;
       }
     },
 
     /* Comments Recipe */
     sendCommentsRecipe: async (_, { recipeUrl, input }, ctx) => {
-      /* Check errors */
-      let recipe = await Recipe.findOne({ url: recipeUrl });
-
-      if (!recipe) {
-        throw new ApolloError(
-          RecipeErrors.RECIPE_NOT_FOUND,
-          HttpStatusCode.NOT_FOUND
-        );
-      }
-
-      if (!input.message) {
-        throw new ApolloError(
-          RecipeErrors.NO_MESSAGE,
-          HttpStatusCode.NO_CONTENT
-        );
-      }
-
-      const newComment = new Comment(input);
-
-      /* Assign user and recipe */
-      newComment.author = ctx.req.user.id;
-
-      recipe.comments = [...recipe.comments, newComment._id];
-      await recipe.save();
-
-      /* Save Data in DB */
       try {
+        /* Check errors */
+        let recipe = await Recipe.findOne({ url: recipeUrl });
+
+        if (!recipe) {
+          throw new ApolloError(
+            RecipeErrors.RECIPE_NOT_FOUND,
+            HttpStatusCode.NOT_FOUND
+          );
+        }
+
+        if (!input.message) {
+          throw new ApolloError(
+            RecipeErrors.NO_MESSAGE,
+            HttpStatusCode.NO_CONTENT
+          );
+        }
+
+        const newInput = {
+          ...input,
+          author: ctx.req.user.id,
+        };
+
+        const newComment = new Comment(newInput);
+        console.log(newComment);
+        recipe.comments = [...recipe.comments, newComment._id];
+
+        await recipe.save();
+
+        /* Save Data in DB */
         const res = await newComment.save();
         return res;
       } catch (error) {
-        console.log(error);
+        throw error;
       }
     },
 
     editCommentsRecipe: async (_, { id, input }) => {
-      /* Check if comment exists */
-      let checkComment = await Comment.findById(id);
+      try {
+        /* Check if comment exists */
+        let checkComment = await Comment.findById(id);
 
-      if (!checkComment) {
-        throw new ApolloError(
-          RecipeErrors.COMMENT_NOT_FOUND,
-          HttpStatusCode.NOT_FOUND
-        );
+        if (!checkComment) {
+          throw new ApolloError(
+            RecipeErrors.COMMENT_NOT_FOUND,
+            HttpStatusCode.NOT_FOUND
+          );
+        }
+
+        /* Edit the comment text and save data in DB */
+        checkComment = await Comment.findOneAndUpdate({ _id: id }, input, {
+          new: true,
+        });
+
+        return checkComment;
+      } catch (error) {
+        throw error;
       }
-
-      /* Edit the comment text and save data in DB */
-      checkComment = await Comment.findOneAndUpdate({ _id: id }, input, {
-        new: true,
-      });
-
-      return checkComment;
     },
 
     voteCommentsRecipe: async (_, { id, input }, ctx) => {
-      /* Check if comment exists */
-      const checkComment = await Comment.findById(id);
+      try {
+        const checkComment = await Comment.findById(id);
+        /* Check if comment exists */
+        if (!checkComment) {
+          throw new ApolloError(
+            RecipeErrors.COMMENT_NOT_FOUND,
+            HttpStatusCode.NOT_FOUND
+          );
+        }
 
-      if (!checkComment) {
-        throw new ApolloError(
-          RecipeErrors.COMMENT_NOT_FOUND,
-          HttpStatusCode.NOT_FOUND
-        );
+        if (!ctx.req.user) {
+          throw new ApolloError(
+            RecipeErrors.NOT_LOGGED_IN,
+            HttpStatusCode.NOT_AUTHORIZED
+          );
+        } else if (checkComment.voted.includes(ctx.req.user.id)) {
+          throw new ApolloError(
+            RecipeErrors.COMMENT_VOTED,
+            HttpStatusCode.NOT_ACCEPTABLE
+          );
+        }
+
+        /* Add user who voted and sum votes */
+        checkComment.voted = [...checkComment.voted, ctx.req.user.id];
+        checkComment.votes += input.votes;
+        const res = await checkComment.save();
+
+        return res;
+      } catch (error) {
+        throw error;
       }
-
-      if (!ctx.req.user) {
-        throw new ApolloError(
-          RecipeErrors.NOT_LOGGED_IN,
-          HttpStatusCode.NOT_AUTHORIZED
-        );
-      } else if (checkComment.voted.includes(ctx.req.user.id)) {
-        throw new ApolloError(
-          RecipeErrors.COMMENT_VOTED,
-          HttpStatusCode.NOT_ACCEPTABLE
-        );
-      }
-
-      /* Add user who voted and sum votes */
-      checkComment.voted = [...checkComment.voted, ctx.req.user.id];
-      checkComment.votes += input.votes;
-      const res = await checkComment.save();
-
-      return res;
     },
   },
 };

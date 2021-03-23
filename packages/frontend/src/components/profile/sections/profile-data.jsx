@@ -63,7 +63,7 @@ const ProfileData = () => {
                     }
                 }
             });
-
+            
             addToast(AlertMessages.PROFILE_UPDATED, { appearance: 'success' });
         } catch (error) {
             addToast(error.message.replace('GraphQL error: ', ''), { appearance: 'error' });
@@ -99,9 +99,7 @@ const ProfileData = () => {
                         placeholder="Introduce your Name"
                         initialValue={initialValues.name}
                         childRef={register({
-                            required: { 
-                                value: true, message: FormMessages.USER_REQUIRED
-                            }
+                            required: FormMessages.USER_REQUIRED,
                         })}
                         error={errors.name}
                     />
@@ -112,7 +110,11 @@ const ProfileData = () => {
                         type="password"
                         placeholder="Password"
                         childRef={register({
-                            required: FormMessages.CURRENT_PASSWORD_REQUIRED
+                            required: FormMessages.CURRENT_PASSWORD_REQUIRED,
+                            minLength: {
+                                value: 7,
+                                message: FormMessages.MIN_LENGTH,
+                            },
                         })}
                         error={errors.password}
                     />

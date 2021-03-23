@@ -8,7 +8,10 @@ const { ApolloError } = require('apollo-server-express');
 const { sendEmails } = require('../../utils/sendEmails.utils');
 const UserErrors = require('../../enums/user.errors');
 const HTTPStatusCodes = require('../../enums/http-status-code');
-const { emailValidation } = require('../../utils/formValidation.utils');
+const {
+  usernameValidation,
+  emailValidation,
+} = require('../../utils/formValidation.utils');
 require('dotenv').config({ path: 'src/variables.env' });
 
 /* User Resolvers */
@@ -52,15 +55,20 @@ const resolvers = {
         /* Check if user is already registered */
         let user = await User.findOne({ email });
 
-        if (user) {
+        if (!usernameValidation(name)) {
           throw new ApolloError(
-            UserErrors.REGISTERED,
+            UserErrors.USERNAME_FORMAT,
             HTTPStatusCodes.NOT_AUTHORIZED
           );
         } else if (!emailValidation(email)) {
           throw new ApolloError(
             UserErrors.EMAIL_FORMAT,
             HTTPStatusCodes.NOT_ACCEPTABLE
+          );
+        } else if (user) {
+          throw new ApolloError(
+            UserErrors.REGISTERED,
+            HTTPStatusCodes.NOT_AUTHORIZED
           );
         }
 
@@ -76,6 +84,8 @@ const resolvers = {
         const emailToken = jwt.sign({ id: user.id }, process.env.SECRET_EMAIL, {
           expiresIn: '1h',
         });
+
+        console.log(emailToken);
         const mailContent = {
           url: `${process.env.HOST_FRONT}/confirmation/${emailToken}`,
           text: 'Activate your Account',
@@ -85,21 +95,23 @@ const resolvers = {
 
         return true;
       } catch (error) {
-        console.log(error);
+        throw error;
       }
     },
 
     authenticateUser: async (_, { input }) => {
       const { email, password } = input;
 
-      console.log(input);
-
       try {
         /* Check if user exists and if password is correct */
         const user = await User.findOne({ email });
 
-        // TODO: add password validation < 7 length
-        if (!user) {
+        if (!emailValidation(email)) {
+          throw new ApolloError(
+            UserErrors.EMAIL_FORMAT,
+            HTTPStatusCodes.NOT_ACCEPTABLE
+          );
+        } else if (!user) {
           throw new ApolloError(
             UserErrors.USER_NOT_FOUND,
             HTTPStatusCodes.NOT_FOUND
@@ -119,7 +131,6 @@ const resolvers = {
         const token = createAccessToken(user);
         await user.save();
 
-        // TODO: check user.toJSON()
         return {
           token,
           user: { ...user.toJSON() },
@@ -137,30 +148,38 @@ const resolvers = {
         let user = await User.findOne({ email });
 
         if (!user) {
-          return new ApolloError(
+          throw new ApolloError(
             UserErrors.USER_NOT_FOUND,
             HTTPStatusCodes.NOT_FOUND
           );
         } else if (user.id !== ctx.req.user.id) {
-          return new ApolloError(
+          throw new ApolloError(
             UserErrors.INVALID_CREDENTIALS,
             HTTPStatusCodes.NOT_AUTHORIZED
           );
         } else if (!bcrypt.compareSync(password, user.password)) {
-          return new ApolloError(
+          throw new ApolloError(
             UserErrors.CURRENT_PASSWORD,
             HTTPStatusCodes.NOT_AUTHORIZED
           );
         }
 
         /* Save data in DB */
-        user = await User.findOneAndUpdate({ email }, name, {
-          new: true,
-        });
+        user = await User.findOneAndUpdate(
+          {
+            email,
+          },
+          {
+            name,
+          },
+          {
+            new: true,
+          }
+        );
 
         return user;
       } catch (error) {
-        console.log(error);
+        throw error;
       }
     },
 
@@ -172,17 +191,17 @@ const resolvers = {
         let user = await User.findOne({ email });
 
         if (!user) {
-          return new ApolloError(
+          throw new ApolloError(
             UserErrors.USER_NOT_FOUND,
             HTTPStatusCodes.NOT_FOUND
           );
         } else if (user.id !== ctx.req.user.id) {
-          return new ApolloError(
+          throw new ApolloError(
             UserErrors.INVALID_CREDENTIALS,
             HTTPStatusCodes.NOT_AUTHORIZED
           );
         } else if (!bcrypt.compareSync(password, user.password)) {
-          return new ApolloError(
+          throw new ApolloError(
             UserErrors.CURRENT_PASSWORD,
             HTTPStatusCodes.NOT_AUTHORIZED
           );
@@ -198,7 +217,9 @@ const resolvers = {
         );
 
         return true;
-      } catch (error) {}
+      } catch (error) {
+        throw error;
+      }
     },
 
     deleteUser: async (_, { email }, ctx) => {
