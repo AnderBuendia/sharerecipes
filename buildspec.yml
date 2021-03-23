@@ -5,13 +5,14 @@ phases:
     commands:
       #installs dependencies into the node_modules/ directory
       - npm install
-      - npm run test
+      - npm i -g jest
   build:
     commands:
       - npm run initialize
       - echo Build started on `date`
       - echo Compiling
-      - cd packages/frontend 
+      - npm run test
+      - cd packages/frontend
       - cp example.env .env.production
       - npm run build
   post_build:
@@ -19,4 +20,4 @@ phases:
       - echo Build completed on `date`
 artifacts:
   files:
-      - '**/*'
+    - '**/*'
