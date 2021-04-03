@@ -23,7 +23,6 @@ const usernameValidation = (value) => {
  * @returns Is valid
  */
 const emailValidation = (value) => {
-  console.log(value);
   const email = value.trim();
   const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 

@@ -18,7 +18,6 @@ require('dotenv').config({ path: 'src/variables.env' });
 const resolvers = {
   Query: {
     hello: (_, { input }) => {
-      console.log(input);
       return `Hello ${input.name}, ${input.alias}`;
     },
 
@@ -85,7 +84,6 @@ const resolvers = {
           expiresIn: '1h',
         });
 
-        console.log(emailToken);
         const mailContent = {
           url: `${process.env.HOST_FRONT}/confirmation/${emailToken}`,
           text: 'Activate your Account',

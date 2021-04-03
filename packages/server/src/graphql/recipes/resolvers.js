@@ -48,9 +48,13 @@ const resolvers = {
       return recipe;
     },
 
-    getRecipes: async () => {
+    getRecipes: async (_, { offset = 0, limit = 10 }) => {
       try {
-        const recipes = await Recipe.find({}).sort({ createdAt: -1 });
+        const recipes = await Recipe.find({})
+          .sort({ createdAt: -1 })
+          .skip(offset)
+          .limit(limit)
+          .exec();
         return recipes;
       } catch (error) {
         console.log(error);
@@ -223,7 +227,6 @@ const resolvers = {
         };
 
         const newComment = new Comment(newInput);
-        console.log(newComment);
         recipe.comments = [...recipe.comments, newComment._id];
 
         await recipe.save();
