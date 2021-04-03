@@ -1,4 +1,3 @@
-import React from 'react';
 import { useQuery } from '@apollo/client';
 import Spinner from '../components/generic/Spinner';
 import { decode } from 'jsonwebtoken';
@@ -12,7 +11,12 @@ import RecipesList from '../components/recipes/RecipesList';
 import RecipeCard from '../components/recipes/RecipeCard';
 
 const Index = () => {
-  const { data, loading } = useQuery(GET_RECIPES);
+  const { data, loading, fetchMore } = useQuery(GET_RECIPES, {
+    variables: {
+      offset: 0,
+      limit: 10,
+    },
+  });
 
   if (loading) return <Spinner />;
   const recipes = data ? data.getRecipes : null;
@@ -20,28 +24,31 @@ const Index = () => {
   const recipesRendered = recipes ? (
     recipes.map((recipe, index) => (
       <RecipeCard
-        key={index}
+        key={recipe.id}
         recipe={recipe}
+        numberOfRecipes={recipes.length}
+        index={index}
+        fetchMore={fetchMore}
       />
     ))
   ) : (
-    <h3 className="text-4xl font-body font-bold text-center mt-10">No recipes</h3>
+    <h3 className="text-4xl font-body font-bold text-center mt-10">
+      No recipes
+    </h3>
   );
- 
+
   return (
     <MainLayout
       title="Home"
       description="Share your own recipes"
       url={MainPaths.INDEX}
     >
-      <RecipesList title="New Recipes">
-        {recipesRendered}
-      </RecipesList>
+      <RecipesList title="New Recipes">{recipesRendered}</RecipesList>
     </MainLayout>
-  )
-}
+  );
+};
 
-export const getServerSideProps = async ctx => {
+export const getServerSideProps = async (ctx) => {
   const props = { lostAuth: false };
   const isSSR = isRequestSSR(ctx.req.url);
 
@@ -52,7 +59,7 @@ export const getServerSideProps = async ctx => {
       const apolloClient = createApolloClient();
 
       const authProps = await loadAuthProps(ctx.res, jwt, apolloClient);
-      
+
       if (authProps) props.authProps = authProps;
     } else if (!decode(jwt)) props.lostAuth = true;
   }

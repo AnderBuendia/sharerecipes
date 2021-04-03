@@ -63,11 +63,7 @@ export const createApolloClient = (jwt = null) => {
                 return incoming;
               },
             },
-            getRecipes: {
-              merge(existing, incoming) {
-                return incoming;
-              },
-            },
+            getRecipes: offsetLimitPagination(),
           },
         },
       },

@@ -5,52 +5,49 @@ import ResolutionReducer from './resolutionReducer';
 import { SWITCH_RESOLUTION } from '../../types/index';
 
 const ResolutionState = ({ children }) => {
-    const initialState = {
-        width: null,
-    };
+  const initialState = {
+    width: null,
+  };
 
-    const [state, dispatch] = useReducer(
-        ResolutionReducer, 
-        initialState,
-    );
+  const [state, dispatch] = useReducer(ResolutionReducer, initialState);
 
-    const setWidth = payload => {
-        dispatch({
-            type: SWITCH_RESOLUTION,
-            payload,
-        })
-    }
+  const setWidth = (payload) => {
+    dispatch({
+      type: SWITCH_RESOLUTION,
+      payload,
+    });
+  };
 
-    return (
-        <ResolutionContext.Provider 
-            value={{ 
-                width: state.width,
-                setWidth,
-            }}
-        >
-            {children}
-        </ResolutionContext.Provider>
-    );
+  return (
+    <ResolutionContext.Provider
+      value={{
+        width: state.width,
+        setWidth,
+      }}
+    >
+      {children}
+    </ResolutionContext.Provider>
+  );
 };
 
 export const useBrowserPreferences = () => {
-    const { width, setWidth } = useContext(ResolutionContext);
-   
-    const initialWidth = window.innerWidth;
+  const { width, setWidth } = useContext(ResolutionContext);
 
-    const handleWindowResize = () => {
-        setWidth(window.innerWidth);
-    };
+  const initialWidth = window.innerWidth;
 
-    useEffect(() => {
-        if (!width) setWidth(initialWidth);
-        else {
-            window.addEventListener("resize", handleWindowResize);
-            return () => window.removeEventListener("resize", handleWindowResize);
-        }
-    }, [width]);
+  const handleWindowResize = () => {
+    setWidth(window.innerWidth);
+  };
 
-    return { width };
-}
+  useEffect(() => {
+    if (!width) setWidth(initialWidth);
+    else {
+      window.addEventListener('resize', handleWindowResize);
+      return () => window.removeEventListener('resize', handleWindowResize);
+    }
+  }, [width]);
+
+  return { width };
+};
 
 export default ResolutionState;

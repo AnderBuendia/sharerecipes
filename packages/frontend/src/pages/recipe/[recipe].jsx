@@ -1,16 +1,11 @@
-import React, { useContext } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
 import Swal from 'sweetalert2';
-import Rating from '@material-ui/lab/Rating';
 import { useToasts } from 'react-toast-notifications';
-import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon } from 'react-share';
 import { decode } from 'jsonwebtoken';
 import { getJwtFromCookie } from '../../lib/utils/jwt-cookie.utils';
 import { isRequestSSR, loadAuthProps } from '../../lib/utils/ssr.utils';
 import { createApolloClient } from '../../lib/apollo/apollo-client';
-import AuthContext from '../../lib/context/auth/authContext';
 import MainLayout from '../../components/layouts/MainLayout';
 import Discussion from '../../components/recipes/recipe/Discussion';
 import Spinner from '../../components/generic/Spinner';
@@ -22,165 +17,172 @@ import { MainPaths } from '../../enums/paths/main-paths';
 import RecipeData from '../../components/recipes/recipe/RecipeData';
 
 const Recipe = () => {
-    /* Get current url name - Routing */
-    const router = useRouter();
-    const { query: { recipe: url }} = router;
+  /* Get current url name - Routing */
+  const router = useRouter();
+  const {
+    query: { recipe: url },
+  } = router;
 
-    /* Set Toast Notification */
-    const { addToast } = useToasts();
+  /* Set Toast Notification */
+  const { addToast } = useToasts();
 
-    /* Apollo mutation */
-    const [ deleteRecipe ] = useMutation(DELETE_RECIPE, {
-        update(cache) {
-            const { getRecipes } = cache.readQuery({ query: GET_RECIPES });
+  /* Apollo mutation */
+  const [deleteRecipe] = useMutation(DELETE_RECIPE, {
+    update(cache) {
+      const { getRecipes } = cache.readQuery({ query: GET_RECIPES });
 
-            cache.writeQuery({
-                query: GET_RECIPES,
-                data: {
-                    getRecipes: getRecipes.filter(
-                        currentRecipe => currentRecipe.id !== recipe.id),
-                }
-            })
-        }
-    });
+      cache.writeQuery({
+        query: GET_RECIPES,
+        data: {
+          getRecipes: getRecipes.filter(
+            (currentRecipe) => currentRecipe.id !== recipe.id
+          ),
+        },
+      });
+    },
+  });
 
-    const [ updateVoteRecipe ] = useMutation(UPDATE_VOTE_RECIPE, {
-        update(cache, { data: { updateVoteRecipe: { average_vote } } }) { 
-            const { getRecipe } = cache.readQuery({ query: GET_RECIPE,
-                variables: {
-                    recipeUrl: url,
-                    offset: 0,
-                    limit: 10
-                }
-            });
-
-            cache.writeQuery({
-                query: GET_RECIPE,
-                variables: {
-                    recipeUrl: url,
-                    offset: 0,
-                    limit: 10
-                },
-                data: {
-                    getRecipe: {...getRecipe.average_vote, average_vote},
-                }
-            });
-        }
-    });
-
-    /* Update votes */
-    const voteRecipe = async votes => {
-        try {
-            const { data } = await updateVoteRecipe({
-                variables: {
-                    recipeUrl: url,
-                    input: {
-                        votes, 
-                    }
-                }
-            });
-        } catch (error) {
-            addToast(error.message.replace('GraphQL error: ', ''), { appearance: 'error' });
-        }
-    }
-
-    const confirmDeleteRecipe = recipeUrl => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, cancel!'
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    /* Delete recipe by recipe url */
-                    const { data } = await deleteRecipe({
-                        variables: {
-                            recipeUrl
-                        }
-                    });
-                    
-                    Swal.fire(
-                        'Deleted!',
-                        'Recipe has been deleted',
-                        'success'
-                    )
-
-                    /* Redirect to Home Page */
-                    router.push('/');
-                } catch (error) {
-                    console.log(error);
-                }
-            }
-        })
-    }
-
-    /* Apollo queries */
-    const { data, loading, fetchMore } = useQuery(GET_RECIPE, {
+  const [updateVoteRecipe] = useMutation(UPDATE_VOTE_RECIPE, {
+    update(
+      cache,
+      {
+        data: {
+          updateVoteRecipe: { average_vote },
+        },
+      }
+    ) {
+      const { getRecipe } = cache.readQuery({
+        query: GET_RECIPE,
         variables: {
-            recipeUrl: url,
-            offset: 0,
-            limit: 10
+          recipeUrl: url,
+          offset: 0,
+          limit: 10,
         },
+      });
+
+      cache.writeQuery({
+        query: GET_RECIPE,
+        variables: {
+          recipeUrl: url,
+          offset: 0,
+          limit: 10,
+        },
+        data: {
+          getRecipe: { ...getRecipe.average_vote, average_vote },
+        },
+      });
+    },
+  });
+
+  /* Update votes */
+  const voteRecipe = async (votes) => {
+    try {
+      const { data } = await updateVoteRecipe({
+        variables: {
+          recipeUrl: url,
+          input: {
+            votes,
+          },
+        },
+      });
+    } catch (error) {
+      addToast(error.message.replace('GraphQL error: ', ''), {
+        appearance: 'error',
+      });
+    }
+  };
+
+  const confirmDeleteRecipe = (recipeUrl) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          /* Delete recipe by recipe url */
+          const { data } = await deleteRecipe({
+            variables: {
+              recipeUrl,
+            },
+          });
+
+          Swal.fire('Deleted!', 'Recipe has been deleted', 'success');
+
+          /* Redirect to Home Page */
+          router.push('/');
+        } catch (error) {
+          console.log(error);
+        }
+      }
     });
+  };
 
-    /* Apollo query data */
-    const recipe = data ? data.getRecipe : null;
+  /* Apollo queries */
+  const { data, loading, fetchMore } = useQuery(GET_RECIPE, {
+    variables: {
+      recipeUrl: url,
+      offset: 0,
+      limit: 10,
+    },
+  });
 
-    return loading ? ( <Spinner /> ) : (  
-        <MainLayout
-            title={recipe.name}
-            description={`Recipe ${recipe.name}`}
-            url={MainPaths.RECIPE}
-        >
-           <RecipeData 
-                recipe={recipe}
-                url={url}
-                confirmDeleteRecipe={confirmDeleteRecipe}
-                voteRecipe={voteRecipe}
-           />
+  /* Apollo query data */
+  const recipe = data ? data.getRecipe : null;
 
-            <Discussion 
-                recipe={recipe}
-                query={GET_RECIPE} 
-                fetchMore={fetchMore}
-            />
-        </MainLayout>
-    );
-}
+  return loading ? (
+    <Spinner />
+  ) : (
+    <MainLayout
+      title={recipe.name}
+      description={`Recipe ${recipe.name}`}
+      url={MainPaths.RECIPE}
+    >
+      <RecipeData
+        recipe={recipe}
+        url={url}
+        confirmDeleteRecipe={confirmDeleteRecipe}
+        voteRecipe={voteRecipe}
+      />
 
-export const getServerSideProps = async ctx => {
-	const props = { lostAuth: false };
-	const isSSR = isRequestSSR(ctx.req.url);
+      <Discussion recipe={recipe} query={GET_RECIPE} fetchMore={fetchMore} />
+    </MainLayout>
+  );
+};
 
-	const jwt = getJwtFromCookie(ctx.req.headers.cookie);
+export const getServerSideProps = async (ctx) => {
+  const props = { lostAuth: false };
+  const isSSR = isRequestSSR(ctx.req.url);
 
-	const apolloClient = createApolloClient();
+  const jwt = getJwtFromCookie(ctx.req.headers.cookie);
 
-	if (jwt) {
-		if (isSSR) {
-			const authProps = await loadAuthProps(ctx.res, jwt, apolloClient);
+  const apolloClient = createApolloClient();
 
-			if (authProps) props.authProps = authProps;
-		} else if (!decode(jwt)) props.lostAuth = true;
-	}
+  if (jwt) {
+    if (isSSR) {
+      const authProps = await loadAuthProps(ctx.res, jwt, apolloClient);
 
-	await apolloClient.query({
-		query: GET_RECIPE,
-        variables: { 
-            recipeUrl: ctx.params?.recipe, 
-            offset: 0,
-            limit: 10
-        },
-	});
+      if (authProps) props.authProps = authProps;
+    } else if (!decode(jwt)) props.lostAuth = true;
+  }
 
-	props.apolloCache = apolloClient.cache.extract();
+  await apolloClient.query({
+    query: GET_RECIPE,
+    variables: {
+      recipeUrl: ctx.params?.recipe,
+      offset: 0,
+      limit: 10,
+    },
+  });
 
-	return { props };
+  props.apolloCache = apolloClient.cache.extract();
+
+  return { props };
 };
 
 export default Recipe;
