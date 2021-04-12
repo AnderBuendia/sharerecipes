@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import onClickOutside from 'react-onclickoutside';
 import Image from 'next/image';
 import { useToasts } from 'react-toast-notifications';
 import { MainPaths } from '../../../enums/paths/main-paths';
@@ -18,8 +17,6 @@ const DropdownMenu = ({user, setAuth}) => {
 
     /* Dropdown user menu*/
     const [open, setOpen] = useState(false);
-
-    DropdownMenu.handleClickOutside = () => setOpen(false);
 
     const onClickSignOut = async (router, setAuth) => {
         try {
@@ -97,8 +94,4 @@ const DropdownMenu = ({user, setAuth}) => {
     );
 };
 
-const clickOutsideConfig = {
-    handleClickOutside: () => DropdownMenu.handleClickOutside
-};
-
-export default onClickOutside(DropdownMenu, clickOutsideConfig);
+export default DropdownMenu;

@@ -4,31 +4,33 @@ import AuthContext from '../context/auth/authContext';
 import { generateQueryParams } from '../utils/url.utils';
 import { RedirectConditions } from '../../enums/redirect-conditions';
 
-export const withCSRRedirect = (Component, redirect) => {
-    const { href, asPath, condition, query } = redirect;
+const withCSRRedirect = (Component, redirect) => {
+  const { href, asPath, condition, query } = redirect;
 
-    return (props) => {
-        const router = useRouter();
-        const { authState } = useContext(AuthContext);
-        const [shouldRender, setShouldRender] = useState(!!props.shouldRender);
-        
-        useEffect(() => {
-            if (
-                (authState.jwt &&
-					condition === RedirectConditions.REDIRECT_WHEN_USER_EXISTS) ||
-				(!authState.jwt &&
-					condition === RedirectConditions.REDIRECT_WHEN_USER_NOT_EXISTS)
-            ) {
-                let queryString;
+  return (props) => {
+    const router = useRouter();
+    const { authState } = useContext(AuthContext);
+    const [shouldRender, setShouldRender] = useState(!!props.shouldRender);
 
-                if (query) queryString = generateQueryParams(query);
-                
-                const url = queryString ? `${href}?${queryString}` : href;
+    useEffect(() => {
+      if (
+        (authState.jwt &&
+          condition === RedirectConditions.REDIRECT_WHEN_USER_EXISTS) ||
+        (!authState.jwt &&
+          condition === RedirectConditions.REDIRECT_WHEN_USER_NOT_EXISTS)
+      ) {
+        let queryString;
 
-                router.replace(url, asPath);
-            } else setShouldRender(true);
-        }, []);
+        if (query) return (queryString = generateQueryParams(query));
 
-        return shouldRender ? <Component {...props}></Component> : <></>;
-    }
+        const url = queryString ? `${href}?${queryString}` : href;
+
+        router.replace(url, asPath);
+      } else setShouldRender(true);
+    }, []);
+
+    return shouldRender ? <Component {...props}></Component> : <></>;
+  };
 };
+
+export default withCSRRedirect;
