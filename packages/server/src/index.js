@@ -6,11 +6,25 @@ const cors = require('cors');
 require('./db/database');
 const jwt = require('jsonwebtoken');
 require('dotenv').config({ path: 'src/variables.env' });
+const Env = require('./enums/env.enums');
 const typeDefs = require('./graphql/mainTypeDefs');
 const resolvers = require('./graphql/mainResolvers');
 
+/**
+ * Checks if all environment variables are available in proccess.env before boot
+ */
+function checkEnv() {
+  Object.keys(Env).forEach((keyEnv) => {
+    if (!process.env[keyEnv])
+      throw new Error(
+        `${keyEnv} missing, check the .env.example file and verify that the .env file contains the same variables`
+      );
+  });
+}
+
 /* Create server */
 const app = express();
+checkEnv();
 
 /* Apollo server */
 const apolloServer = new ApolloServer({

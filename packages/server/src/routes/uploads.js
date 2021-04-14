@@ -10,7 +10,7 @@ const uploadImage = require('../middleware/uploadImage');
 router.post('/user', uploadImage, async (req, res) => {
   if (req.file) {
     const { filename } = req.file;
-    const image_url = `${process.env.HOST_FRONT}/images/${filename}`;
+    const image_url = `${process.env.BACKEND_URL}/images/${filename}`;
     const authorization = req.headers['authorization'];
 
     if (authorization) {
