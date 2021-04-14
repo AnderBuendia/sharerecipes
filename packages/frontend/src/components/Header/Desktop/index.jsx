@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import SearchBar from '../SearchBar';
+import SearchBarDesktop from './searchBarDesktop';
 import DropdownMenu from './dropdownMenu';
 import { MainPaths } from '../../../enums/paths/main-paths';
 import RamenIcon from '../../icons/ramenicon';
@@ -14,7 +14,7 @@ const HeaderDesktop = ({ user, setAuth }) => {
         </a>
       </Link>
 
-      <SearchBar />
+      <SearchBarDesktop />
 
       <div className="flex text-black items-center cursor-pointer">
         {user ? (

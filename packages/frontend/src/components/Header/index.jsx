@@ -10,7 +10,6 @@ const Header = () => {
   const { authState, setAuth } = useContext(AuthContext);
   const width = useResolution();
 
-  console.log(width);
   return (
     <>
       {width > ResolutionBreakPoints.SM ? (

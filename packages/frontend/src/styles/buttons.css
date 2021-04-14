@@ -1,38 +1,49 @@
 .btn-primary {
-    background-color: black;
-    color: white;
-    width: 100%;
-    padding: 1rem;
-    margin-top: 1rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    border-radius: 500px;
+  background-color: black;
+  color: white;
+  width: 100%;
+  padding: 1rem;
+  margin-top: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 500px;
 }
 
 .btn-primary:hover {
-    box-shadow: inset 0 0 0 2px #000;
-    background-color: rgb(78, 76, 76);
-    transition-duration: .3s;
-    cursor: pointer;
+  box-shadow: inset 0 0 0 2px #000;
+  background-color: rgb(78, 76, 76);
+  transition-duration: 0.3s;
+  cursor: pointer;
 }
 
 .btn-default {
-    background-color: #FFA28C;
-    color: white;
-    width: 100%;
-    display: block;
-    padding: 1rem;
-    margin-top: 20px;
-    font-weight: bold;
-    text-transform: uppercase;
-    border-radius: 500px;
-    text-align: center;
-    align-items: center;
+  background-color: #ffa28c;
+  color: white;
+  width: 100%;
+  display: block;
+  padding: 1rem;
+  margin-top: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 500px;
+  text-align: center;
+  align-items: center;
 }
 
 .btn-default:hover {
-    box-shadow: inset 0 0 0 2px #ad6f61;
-    background-color: #c55a41;
-    transition-duration: .3s;
-    cursor: pointer; 
+  box-shadow: inset 0 0 0 2px #ad6f61;
+  background-color: #c55a41;
+  transition-duration: 0.3s;
+  cursor: pointer;
+}
+
+.search-button-desktop {
+  @apply absolute;
+  @apply right-0;
+  @apply p-3;
+  @apply bg-black;
+  @apply transition;
+  @apply ease-in;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
 }

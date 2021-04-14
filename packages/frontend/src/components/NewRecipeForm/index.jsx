@@ -22,8 +22,6 @@ const NewRecipeForm = ({ onSubmit }) => {
     mode: 'onChange',
   });
 
-  console.log(selectedFoodStyle);
-
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
