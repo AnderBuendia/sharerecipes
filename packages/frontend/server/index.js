@@ -6,7 +6,6 @@ const { pipeline } = require('stream');
 const { parse } = require('url');
 
 const dev = process.env.NODE_ENV !== 'production';
-console.log('node', process.env.NODE_ENV);
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
