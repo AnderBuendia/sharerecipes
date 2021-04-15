@@ -1,7 +1,7 @@
 module.exports = {
   purge: {
-    layers: ["pages"],
-    content: ["./src/**/*.{js,jsx}"],
+    enabled: true,
+    content: ['./src/**/*.{js,jsx}'],
   },
   theme: {
     screens: {
@@ -18,26 +18,22 @@ module.exports = {
     fontFamily: {
       roboto: ['Roboto'],
       body: ['Open Sans'],
-      work: ['Work Sans']
+      work: ['Work Sans'],
     },
     inset: {
-      '0': 0,
+      0: 0,
       auto: 'auto',
-      '50': '50%',
-      '40': '40%',
-      '30': '30%',
-      '20': '20%'
+      50: '50%',
+      40: '40%',
+      30: '30%',
+      20: '20%',
     },
     extend: {},
   },
   variants: {
     extend: {
-      fontWeight: ['hover', 'focus']
-    }
+      fontWeight: ['hover', 'focus'],
+    },
   },
   plugins: [],
-  future: {
-    removeDeprecatedGapUtilities: true,
-    purgeLayersByDefault: true,
-  },
-}
+};
