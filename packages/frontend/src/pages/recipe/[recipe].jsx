@@ -106,7 +106,7 @@ const Recipe = () => {
       if (result.isConfirmed) {
         try {
           /* Delete recipe by recipe url */
-          const { data } = await deleteRecipe({
+          await deleteRecipe({
             variables: {
               recipeUrl,
             },

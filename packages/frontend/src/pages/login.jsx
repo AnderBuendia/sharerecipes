@@ -81,7 +81,7 @@ const Login = () => {
       <div>
         <div className="w-full text-right mt-4">
           <Link href={MainPaths.FORGOT_PASS}>
-            <a className="text-md font-roboto underline font-medium text-gray-500 mt-8 text-center">
+            <a className="font-roboto underline font-medium text-gray-500 mt-8 text-center">
               Forgot Password?
             </a>
           </Link>

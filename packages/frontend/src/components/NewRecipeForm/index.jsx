@@ -68,7 +68,7 @@ const NewRecipeForm = ({ onSubmit }) => {
         />
 
         <div className="border w-full bg-white mt-6 mb-4 rounded-lg shadow appearance-none">
-          <label className="block text-black text-md font-body font-bold mx-3 my-2">
+          <label className="block text-black font-body font-bold mx-3 my-2">
             Ingredients
           </label>
           {indexes.map((index) => {
@@ -115,7 +115,7 @@ const NewRecipeForm = ({ onSubmit }) => {
           </button>
         </div>
 
-        <label className="block text-black text-md font-body font-bold mb-2">
+        <label className="block text-black font-body font-bold mb-2">
           Recipe Difficulty
         </label>
         <Controller
@@ -133,7 +133,7 @@ const NewRecipeForm = ({ onSubmit }) => {
           control={control}
         />
 
-        <label className="block text-black text-md font-body font-bold mb-2">
+        <label className="block text-black font-body font-bold mb-2">
           Food Style
         </label>
         <Controller
@@ -164,7 +164,7 @@ const NewRecipeForm = ({ onSubmit }) => {
           />
         )}
 
-        <label className="block text-black text-md font-body font-bold mb-2">
+        <label className="block text-black font-body font-bold mb-2">
           Description of your Recipe
         </label>
         <textarea

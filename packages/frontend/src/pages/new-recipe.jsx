@@ -104,7 +104,7 @@ const NewRecipe = () => {
             <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center my-4">
               Create New Recipe
             </h2>
-            <label className="block text-black text-md font-body font-bold mb-4">
+            <label className="block text-black font-body font-bold mb-4">
               Recipe Image
             </label>
             <div className="flex w-128 h-56 overflow-hidden mx-auto my-4 rounded-md">

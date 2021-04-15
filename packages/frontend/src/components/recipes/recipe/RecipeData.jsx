@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import Image from 'next/image';
 import Rating from '@material-ui/lab/Rating';
 import {
@@ -10,22 +10,34 @@ import {
 import AuthContext from '../../../lib/context/auth/authContext';
 
 const RecipeData = ({ recipe, url, confirmDeleteRecipe, voteRecipe }) => {
+  const {
+    name,
+    image_url,
+    image_name,
+    prep_time,
+    serves,
+    difficulty,
+    style,
+    ingredients,
+    average_vote,
+    voted,
+    author,
+    description,
+  } = recipe;
   const { authState } = useContext(AuthContext);
 
   return (
     <div className="mx-auto w-11/12 bg-white rounded-lg shadow-md p-5 mb-4">
-      <h1 className="break-all text-2xl font-body font-bold mb-2">
-        {recipe.name}
-      </h1>
+      <h1 className="break-all text-2xl font-body font-bold mb-2">{name}</h1>
       <div className="w-full flex flex-col lgxl:flex-row lgxl:justify-between">
         <div className="lgxl:w-2/4 text-center ">
           <Image
-            className="rounded-sm mb-3"
-            key={recipe.image_url}
-            src={recipe.image_url}
-            alt={recipe.image_name}
-            width={250}
-            height={250}
+            className="rounded-md mb-3"
+            key={image_url}
+            src={image_url}
+            alt={image_name}
+            width={380}
+            height={300}
           />
         </div>
 
@@ -35,13 +47,13 @@ const RecipeData = ({ recipe, url, confirmDeleteRecipe, voteRecipe }) => {
               <p className="font-light text-gray-500 text-xs uppercase">
                 Preparation time
               </p>
-              <span className="font-bold text-md">{recipe.prep_time} mins</span>
+              <span className="font-bold ">{prep_time} mins</span>
             </div>
             <div className="w-full text-center border-l border-gray-400 lgxl:border-l-0 lg:p-2 lgxl:border-t lgxl:py-3">
               <p className="font-light text-gray-500 text-xs uppercase">
                 Serves
               </p>
-              <span className="font-bold text-md">{recipe.serves}</span>
+              <span className="font-bold ">{serves}</span>
             </div>
           </div>
 
@@ -50,15 +62,13 @@ const RecipeData = ({ recipe, url, confirmDeleteRecipe, voteRecipe }) => {
               <p className="font-light text-gray-500 text-xs uppercase">
                 Difficulty
               </p>
-              <span className="font-bold text-md">{recipe.difficulty}</span>
+              <span className="font-bold ">{difficulty}</span>
             </div>
             <div className="w-full text-center border-l border-gray-400 lgxl:border-l-0 lgxl:p-3 lgxl:border-t lgxl:py-3">
               <p className="font-light text-gray-500 text-xs uppercase">
                 Style
               </p>
-              <span className="font-bold text-md uppercase">
-                {recipe.style}
-              </span>
+              <span className="font-bold  uppercase">{style}</span>
             </div>
           </div>
 
@@ -85,12 +95,12 @@ const RecipeData = ({ recipe, url, confirmDeleteRecipe, voteRecipe }) => {
                 size="large"
                 defaultValue={0}
                 disabled={!authState ? true : false}
-                value={recipe.average_vote}
+                value={average_vote}
                 precision={0.5}
                 onChange={(event, newValue) => voteRecipe(newValue)}
               />
               <p className="ml-1 text-lg text-gray-500">
-                ({recipe.average_vote} from {recipe.voted.length} votes)
+                ({average_vote} from {voted.length} votes)
               </p>
             </div>
           </div>
@@ -100,22 +110,28 @@ const RecipeData = ({ recipe, url, confirmDeleteRecipe, voteRecipe }) => {
       <div className="w-full mt-2 flex flex-wrap lgxl:flex-nowrap lgxl:justify-between">
         <div className="w-full lgxl:w-2/5 lgxl:border-r-2 lgxl:border-gray-800">
           <h1 className="text-lg font-body font-bold">Ingredients</h1>
-          {recipe.ingredients.map((ingredient) => (
-            <p key={ingredient} className="text-md px-2 py-1 font-body">
-              - {ingredient}
-            </p>
-          ))}
+          {ingredients ? (
+            <ul>
+              {ingredients.map((ingredient) => (
+                <li key={ingredient} className="px-2 py-1 font-body">
+                  - {ingredient}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="px-2 py-1 font-body">- There are no ingredients</p>
+          )}
         </div>
         <div className="w-full mt-2 lgxl:w-3/5 lgxl:ml-2 lgxl:mt-0">
           <h2 className="text-lg font-body font-bold">Steps</h2>
-          {recipe.description.split('\n').map((i) => (
-            <p key={i} className="text-md px-2 py-1 font-body">
+          {description.split('\n').map((i) => (
+            <p key={i} className="px-2 py-1 font-body">
               {i}
             </p>
           ))}
         </div>
       </div>
-      {authState.user && recipe.author.email === authState.user.email ? (
+      {authState.user && author.email === authState.user.email ? (
         <div className="flex w-full mt-6">
           <button
             type="button"

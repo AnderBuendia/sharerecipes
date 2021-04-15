@@ -36,7 +36,7 @@ const RecipeCard = ({ recipe, numberOfRecipes, index, fetchMore }) => {
               backgroundImage: `linear-gradient(180deg,transparent 0,rgba(0,0,0,.9) 150%), url(${image_url})`,
             }}
           >
-            <div className="grid absolute bottom-0 mb-2 ">
+            <div className="grid absolute bottom-0 mb-2">
               <div className="font-bold text-xl text-white">{name}</div>
               <div className="flex items-center mr-auto px-2 bg-white rounded-full">
                 <ChatIcon className="w-4 h-4 mr-0.5" />{' '}

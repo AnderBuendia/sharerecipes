@@ -99,19 +99,19 @@ const AdminUsers = () => {
           <table className="table-auto w-full">
             <thead>
               <tr className="w-full">
-                <th className="uppercase text-center text-md border-b border-gray-300 w-2/6 py-2">
+                <th className="uppercase text-center  border-b border-gray-300 w-2/6 py-2">
                   Name
                 </th>
-                <th className="uppercase text-center text-md border-b border-gray-300 w-2/6 py-2">
+                <th className="uppercase text-center  border-b border-gray-300 w-2/6 py-2">
                   Email
                 </th>
-                <th className="uppercase text-center text-md border-b border-gray-300 w-1/6 py-2">
+                <th className="uppercase text-center  border-b border-gray-300 w-1/6 py-2">
                   Role
                 </th>
-                <th className="uppercase text-center text-md border-b border-gray-300 w-1/6 py-2">
+                <th className="uppercase text-center  border-b border-gray-300 w-1/6 py-2">
                   Active
                 </th>
-                <th className="uppercase text-center text-md border-b border-gray-300 w-1/6 py-2">
+                <th className="uppercase text-center  border-b border-gray-300 w-1/6 py-2">
                   Actions
                 </th>
               </tr>

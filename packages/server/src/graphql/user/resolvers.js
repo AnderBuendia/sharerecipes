@@ -294,7 +294,7 @@ const resolvers = {
           text: 'Change your Password',
         };
 
-        await sendEmails(user, mailContent);
+        await sendEmails(email, mailContent);
 
         return true;
       } catch (error) {

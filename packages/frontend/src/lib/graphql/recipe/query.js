@@ -20,8 +20,8 @@ export const GET_RECIPES = gql`
 `;
 
 export const GET_BEST_RECIPES = gql`
-  query getBestRecipes {
-    getBestRecipes {
+  query getBestRecipes($offset: Int, $limit: Int) {
+    getBestRecipes(offset: $offset, limit: $limit) {
       id
       name
       serves
@@ -49,6 +49,7 @@ export const GET_RECIPE = gql`
       difficulty
       style
       image_url
+      image_name
       author {
         name
         email

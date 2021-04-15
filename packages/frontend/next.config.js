@@ -1,6 +1,6 @@
 module.exports = {
   images: {
-    domains: ['anderb.me', 'localhost'],
+    domains: ['sharerecipes.anderb.me', 'localhost'],
   },
   future: {
     webpack5: true,

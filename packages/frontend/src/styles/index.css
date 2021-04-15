@@ -1,6 +1,6 @@
-@import "tailwindcss/base";
+@import 'tailwindcss/base';
 
-@import "tailwindcss/components";
+@import 'tailwindcss/components';
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Roboto:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@100;400;700&display=swap');
 @import './buttons.css';
@@ -12,4 +12,8 @@
 @import '~@uppy/drag-drop/dist/style.css';
 @import '~@uppy/image-editor/dist/style.css';
 
-@import "tailwindcss/utilities";
+.background-card-image {
+  background: linear-gradient(180deg, transparent 0, rgba(0, 0, 0, 0.9) 150%);
+}
+
+@import 'tailwindcss/utilities';

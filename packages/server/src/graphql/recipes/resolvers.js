@@ -55,15 +55,21 @@ const resolvers = {
           .skip(offset)
           .limit(limit)
           .exec();
+
         return recipes;
       } catch (error) {
         console.log(error);
       }
     },
 
-    getBestRecipes: async () => {
+    getBestRecipes: async (_, { offset = 0, limit = 20 }) => {
       try {
-        const recipes = await Recipe.find({}).sort({ average_vote: -1 });
+        const recipes = await Recipe.find({})
+          .sort({ average_vote: -1 })
+          .skip(offset)
+          .limit(limit)
+          .exec();
+
         return recipes;
       } catch (error) {
         console.log(error);

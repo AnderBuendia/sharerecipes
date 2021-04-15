@@ -12,20 +12,22 @@ import Spinner from '../components/generic/Spinner';
 import { MainPaths } from '../enums/paths/main-paths';
 
 const Popular = () => {
-  const { data, loading } = useQuery(GET_BEST_RECIPES);
+  const { data, loading } = useQuery(GET_BEST_RECIPES, {
+    variables: {
+      offset: 0,
+      limit: 20,
+    },
+  });
 
-  if (loading) return <Spinner />
+  if (loading) return <Spinner />;
   const recipes = data ? data.getBestRecipes : null;
 
   const recipesRendered = recipes ? (
-    recipes.map((recipe, index) => (
-      <RecipeCard
-        key={index}
-        recipe={recipe}
-      />
-    ))
+    recipes.map((recipe) => <RecipeCard key={recipe.id} recipe={recipe} />)
   ) : (
-    <h3 className="text-4xl font-body font-bold text-center mt-10">No recipes</h3>
+    <h3 className="text-4xl font-body font-bold text-center mt-10">
+      No recipes
+    </h3>
   );
 
   return (
@@ -34,14 +36,12 @@ const Popular = () => {
       description="Search in ShareYourRecipes"
       url={MainPaths.POPULAR}
     >
-       <RecipesList title="Popular Recipes">
-        {recipesRendered}
-      </RecipesList>
+      <RecipesList title="Popular Recipes">{recipesRendered}</RecipesList>
     </MainLayout>
-  )
-}
+  );
+};
 
-export const getServerSideProps = async ctx => {
+export const getServerSideProps = async (ctx) => {
   const props = { lostAuth: false };
   const isSSR = isRequestSSR(ctx.req.url);
 
@@ -51,7 +51,7 @@ export const getServerSideProps = async ctx => {
     if (isSSR) {
       const apolloClient = createApolloClient();
       const authProps = await loadAuthProps(ctx.res, jwt, apolloClient);
-      
+
       if (authProps) props.authProps = authProps;
     } else if (!decode(jwt)) props.lostAuth = true;
   }

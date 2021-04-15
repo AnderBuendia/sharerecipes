@@ -62,7 +62,7 @@ const typeDefs = gql`
   # Query
   extend type Query {
     getRecipes(offset: Int, limit: Int): [Recipe]
-    getBestRecipes: [Recipe]
+    getBestRecipes(offset: Int, limit: Int): [Recipe]
     getUserRecipes: [Recipe]
     getRecipe(recipeUrl: String!, offset: Int, limit: Int): Recipe
 
