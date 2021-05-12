@@ -4,16 +4,18 @@ phases:
   install:
     commands:
       #installs dependencies into the node_modules/ directory
+      - cd frontend
+      - cp example.env .env.production
       - npm install
   build:
     commands:
       - echo Build started on `date`
       - echo Compiling
-      - cd frontend
-      - cp example.env .env.production
       - npm run build
   post_build:
     commands:
+      - rm -rf node_modules
+      - rm package-lock.json
       - echo Build completed on `date`
 artifacts:
   files:
