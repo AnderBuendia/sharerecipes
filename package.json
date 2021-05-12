@@ -1,21 +1,32 @@
 {
   "name": "sharerecipes",
+  "private": true,
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "workspaces": [
+    "frontend",
+    "server"
+  ],
   "scripts": {
-    "test": "lerna run test",
-    "new-version": "lerna version --conventional-commits --yes",
-    "diff": "lerna diff",
-    "initialize": "lerna bootstrap"
+    "lint": "npm run lint"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "eslint": "7.22.0",
+    "jest": "^26.6.3",
+    "standard": "16.0.3"
   },
-  "dependencies": {
-    "mongoose": "^5.11.18"
+  "eslintConfig": {
+    "extends": "./node_modules/standard/eslintrc.json",
+    "rules": {
+      "semi": 0,
+      "trailingComma": "none"
+    },
+    "env": {
+      "jest": true
+    }
   }
 }

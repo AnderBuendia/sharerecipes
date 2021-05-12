@@ -1,3 +1,4 @@
+// @ts-nocheck
 const User = require('../models/User');
 
 const express = require('express');

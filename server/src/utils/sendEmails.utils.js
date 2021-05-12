@@ -1,24 +1,24 @@
 const nodemailer = require('nodemailer');
 
 const sendEmails = async (email, mailContent) => {
-    const transporter = nodemailer.createTransport({
-        host: 'mail.anderb.me',
-        port: 587,
-        secure: false,
-        auth: {
-            user: process.env.EMAILU,
-            pass: process.env.EMAILP,
-        },
-        tls: {
-            rejectUnauthorized: false,
-        }
-    });
-  
-    const mailOptions = {
-        from: "no-reply@anderb.me",
-        to: email,
-        subject: `${mailContent.text}`,
-        html: `<div style="width:100%; text-align:left">
+  const transporter = nodemailer.createTransport({
+    host: 'smtp-relay.sendinblue.com',
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.EMAILU,
+      pass: process.env.EMAILP,
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
+
+  const mailOptions = {
+    from: 'no-reply@anderb.me',
+    to: email,
+    subject: `${mailContent.text}`,
+    html: `<div style="width:100%; text-align:left">
                     <div>
                         <h2>${mailContent.text}</h2>
                         <a 
@@ -35,16 +35,16 @@ const sendEmails = async (email, mailContent) => {
                         <p>${mailContent.url}</p>
                     </div>
                 </div>`,
-    }
+  };
 
-    await transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log('Error occurred', error.message);
-        } else {
-            console.log('Email sent', info.messageId);
-            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-        }
-    });
+  await transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error occurred', error.message);
+    } else {
+      console.log('Email sent', info.messageId);
+      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    }
+  });
 };
 
 module.exports = { sendEmails };

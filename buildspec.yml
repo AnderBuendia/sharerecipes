@@ -7,10 +7,9 @@ phases:
       - npm install
   build:
     commands:
-      - npm run initialize
       - echo Build started on `date`
       - echo Compiling
-      - cd packages/frontend
+      - cd frontend
       - cp example.env .env.production
       - npm run build
   post_build:
