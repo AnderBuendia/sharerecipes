@@ -1,13 +1,14 @@
 import React from 'react';
 import Link from 'next/link';
 import SearchBarDesktop from './searchBarDesktop';
+import DarkModeButton from '../../generic/DarkModeButton';
 import DropdownMenu from './dropdownMenu';
-import { MainPaths } from '../../../enums/paths/main-paths';
 import RamenIcon from '../../icons/ramenicon';
+import { MainPaths } from '../../../enums/paths/main-paths';
 
 const HeaderDesktop = ({ user, setAuth }) => {
   return (
-    <div className="xssm:hidden w-full py-2 px-4 flex flex-row items-center justify-between text-black bg-gray-400">
+    <div className="xssm:hidden w-full py-2 px-4 flex flex-row items-center justify-between text-black bg-gray-400 dark:bg-gray-800">
       <Link href={MainPaths.INDEX}>
         <a>
           <RamenIcon className="w-14 h-14" />
@@ -17,6 +18,8 @@ const HeaderDesktop = ({ user, setAuth }) => {
       <SearchBarDesktop />
 
       <div className="flex text-black items-center cursor-pointer">
+        <DarkModeButton />
+
         {user ? (
           <>
             <Link href={MainPaths.NEW_RECIPE}>
@@ -33,12 +36,12 @@ const HeaderDesktop = ({ user, setAuth }) => {
         ) : (
           <>
             <Link href={MainPaths.LOGIN}>
-              <a className="bg-red-500 px-4 py-2 rounded-lg text-white font-bold border-b-2 border-r-2 border-red-700 uppercase mr-2 hover:bg-red-600">
+              <a className="bg-red-500 border-red-700 text-white dark:bg-gray-500 dark:border-gray-700 px-4 py-2 rounded-lg font-bold border-b-2 border-r-2 uppercase mr-2">
                 Login
               </a>
             </Link>
             <Link href={MainPaths.SIGNUP}>
-              <a className="bg-black px-4 py-2 rounded-lg text-white font-bold uppercase border-b-2 border-r-2 border-gray-600 hover:bg-gray-800">
+              <a className="bg-black border-gray-600 hover:bg-gray-800 dark:bg-gray-500 dark:border-gray-700 px-4 py-2 rounded-lg text-white font-bold uppercase border-b-2 border-r-2">
                 Sign Up
               </a>
             </Link>

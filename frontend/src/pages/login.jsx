@@ -53,7 +53,8 @@ const Login = () => {
           childRef={register({
             required: FormMessages.EMAIL_REQUIRED,
             pattern: {
-              value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+              value:
+                /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
               message: FormMessages.EMAIL_FORMAT_INVALID,
             },
           })}
@@ -81,18 +82,18 @@ const Login = () => {
       <div>
         <div className="w-full text-right mt-4">
           <Link href={MainPaths.FORGOT_PASS}>
-            <a className="font-roboto underline font-medium text-gray-500 mt-8 text-center">
+            <a className="font-roboto underline font-medium text-gray-400 mt-8 text-center">
               Forgot Password?
             </a>
           </Link>
         </div>
         <div className="border-gray border-t-2 block mt-8 text-center"></div>
         <div className="w-full">
-          <p className="text-lg font-roboto font-bold text-gray-800 mt-8 text-center">
+          <p className="text-lg font-roboto font-bold mt-8 text-center">
             You don't have an account?
           </p>
           <Link href={MainPaths.SIGNUP}>
-            <a className="btn-default">Create New Account</a>
+            <a className="btn-default dark:bg-gray-500">Create New Account</a>
           </Link>
         </div>
       </div>

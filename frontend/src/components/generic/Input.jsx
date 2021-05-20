@@ -1,25 +1,18 @@
 import React from 'react';
 
 const Input = (props) => {
-  const {
-    label,
-    name,
-    type,
-    placeholder,
-    error,
-    childRef,
-    initialValue,
-  } = props;
+  const { label, name, type, placeholder, error, childRef, initialValue } =
+    props;
 
   const className = ['mb-4'];
 
   return (
     <div className={className.join(' ')}>
-      <label className="block text-black font-body font-bold mb-2">
+      <label className="block font-body font-bold mb-2">
         <span>{label}</span>
       </label>
       <input
-        className="font-body shadow appearance-none border rounded w-full py-2 px-3 
+        className="bg-white font-body shadow appearance-none border rounded w-full py-2 px-3 
                 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
         name={name}
         type={type}

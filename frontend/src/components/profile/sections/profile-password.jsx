@@ -10,92 +10,91 @@ import { AlertMessages, FormMessages } from '../../../enums/config/messages';
 import Input from '../../generic/Input';
 
 const ProfilePassword = () => {
-    const { authState } = useContext(AuthContext)
-    const { addToast } = useToasts();
-    
-    const router = useRouter();
+  const { authState } = useContext(AuthContext);
+  const { addToast } = useToasts();
 
-    /* Apollo mutation to update password */
-    const [ updateUserPassword ] = useMutation(UPDATE_USER_PASSWORD);
-    
-     /* React hook form */
-     const { register, handleSubmit, getValues, errors } = useForm({
-        mode: "onChange"
-    });
+  const router = useRouter();
 
-    const onSubmit = async data => {
-        const { confirmpassword, password } = data;
-        try { 
-            const { data } = await updateUserPassword({
-                variables: {
-                    input: {
-                        email: authState.user.email,
-                        password,
-                        confirmpassword,
-                    }
-                }
-            });
+  /* Apollo mutation to update password */
+  const [updateUserPassword] = useMutation(UPDATE_USER_PASSWORD);
 
-            addToast(AlertMessages.PASSWORD_UPDATED, { appearance: 'success' });
-            router.push(ProfilePaths.MAIN);
-        } catch (error) {
-            addToast(error.message.replace('GraphQL error: ', ''), { appearance: 'error' });
-        }
+  /* React hook form */
+  const { register, handleSubmit, getValues, errors } = useForm({
+    mode: 'onChange',
+  });
+
+  const onSubmit = async (data) => {
+    const { confirmpassword, password } = data;
+    try {
+      const { data } = await updateUserPassword({
+        variables: {
+          input: {
+            email: authState.user.email,
+            password,
+            confirmpassword,
+          },
+        },
+      });
+
+      addToast(AlertMessages.PASSWORD_UPDATED, { appearance: 'success' });
+      router.push(ProfilePaths.MAIN);
+    } catch (error) {
+      addToast(error.message.replace('GraphQL error: ', ''), {
+        appearance: 'error',
+      });
     }
+  };
 
-    return (  
-        <div className="mdxl:w-11/12 bg-white rounded-lg shadow-md mt-3 p-5">
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <Input
-                    label="Password"
-                    name="password"
-                    type="password"
-                    placeholder="Introduce your Password"
-                    childRef={register({ required: FormMessages.CURRENT_PASSWORD_REQUIRED })}
-                    error={errors.password}
-                />
+  return (
+    <div className="mdxl:w-11/12 bg-white dark:bg-gray-700 rounded-lg shadow-md mt-3 p-5">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Input
+          label="Password"
+          name="password"
+          type="password"
+          placeholder="Introduce your Password"
+          childRef={register({
+            required: FormMessages.CURRENT_PASSWORD_REQUIRED,
+          })}
+          error={errors.password}
+        />
 
-                <Input
-                    label="New Password"
-                    name="newpassword"
-                    type="password"
-                    placeholder="Introduce a New Password"
-                    childRef={register({ 
-                        required: FormMessages.NEW_PASSWORD_REQUIRED,
-                        minLength: {
-                            value: 7,
-                            message: FormMessages.MIN_LENGTH,
-                        },
-                    })}
-                    error={errors.newpassword}
-                />
+        <Input
+          label="New Password"
+          name="newpassword"
+          type="password"
+          placeholder="Introduce a New Password"
+          childRef={register({
+            required: FormMessages.NEW_PASSWORD_REQUIRED,
+            minLength: {
+              value: 7,
+              message: FormMessages.MIN_LENGTH,
+            },
+          })}
+          error={errors.newpassword}
+        />
 
-                <Input
-                    label="Confirm Password"
-                    name="confirmpassword"
-                    type="password"
-                    placeholder="Confirm New Password"
-                    childRef={register({ 
-                        required:  FormMessages.CONFIRM_NEW_PASSWORD,
-                        validate: {
-                            matchesPreviousPassword: value => {
-                                const { newpassword } = getValues();
-                                return newpassword === value || FormMessages.MATCH_PASSWORDS;
-                            }
-                        }
-                    })}
-                    error={errors.confirmpassword}
-                />
+        <Input
+          label="Confirm Password"
+          name="confirmpassword"
+          type="password"
+          placeholder="Confirm New Password"
+          childRef={register({
+            required: FormMessages.CONFIRM_NEW_PASSWORD,
+            validate: {
+              matchesPreviousPassword: (value) => {
+                const { newpassword } = getValues();
+                return newpassword === value || FormMessages.MATCH_PASSWORDS;
+              },
+            },
+          })}
+          error={errors.confirmpassword}
+        />
 
-                <input 
-                    className="btn-primary"
-                    type="submit"
-                    value="Change Password"
-                />
-                
-            </form>  
-        </div>
-    );
-}
- 
+        <input className="btn-primary" type="submit" value="Change Password" />
+      </form>
+    </div>
+  );
+};
+
 export default ProfilePassword;

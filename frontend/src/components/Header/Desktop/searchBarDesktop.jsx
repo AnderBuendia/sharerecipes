@@ -13,7 +13,7 @@ const SearchBarDesktop = () => {
           type="search"
           placeholder="Search..."
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full p-3 bg-white placeholder-gray-600 rounded-md text-sm focus:outline-none"
+          className="w-full p-3 rounded-md text-sm focus:outline-none bg-white placeholder-gray-700 dark:bg-gray-200"
         />
         <button
           type="submit"

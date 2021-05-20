@@ -67,8 +67,8 @@ const NewRecipeForm = ({ onSubmit }) => {
           error={errors.serves}
         />
 
-        <div className="border w-full bg-white mt-6 mb-4 rounded-lg shadow appearance-none">
-          <label className="block text-black font-body font-bold mx-3 my-2">
+        <div className="border w-full bg-white dark:bg-gray-700 mt-6 mb-4 rounded-lg shadow appearance-none">
+          <label className="block font-body font-bold mx-3 my-2">
             Ingredients
           </label>
           {indexes.map((index) => {
@@ -76,7 +76,7 @@ const NewRecipeForm = ({ onSubmit }) => {
             return (
               <div className="mx-3 my-3" key={fieldName}>
                 <input
-                  className="font-body shadow appearance-none border rounded w-11/12 py-2 px-3 
+                  className="bg-white font-body shadow appearance-none border rounded w-11/12 py-2 px-3 
               text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
                   name={fieldName}
                   type="text"
@@ -122,7 +122,7 @@ const NewRecipeForm = ({ onSubmit }) => {
           as={
             <ReactSelect
               instanceId="selected-difficulty"
-              className="mt-2 mb-4 font-body shadow appearance-none"
+              className="text-gray-800 mt-2 mb-4 font-body shadow appearance-none"
               placeholder="Select a recipe difficulty..."
               options={difficulty}
             />
@@ -140,7 +140,7 @@ const NewRecipeForm = ({ onSubmit }) => {
           render={({ onChange }) => (
             <ReactSelect
               instanceId="selected-food-style"
-              className="mt-2 mb-4 font-body shadow appearance-none"
+              className="text-gray-800 mt-2 mb-4 font-body shadow appearance-none"
               placeholder="Select a food style..."
               options={foodStyle}
               onChange={(foodValue) => {
@@ -168,7 +168,7 @@ const NewRecipeForm = ({ onSubmit }) => {
           Description of your Recipe
         </label>
         <textarea
-          className="font-body shadow appearance-none border rounded w-full h-32 mb-3 py-2 px-3 
+          className="bg-white font-body shadow appearance-none border rounded w-full h-32 mb-3 py-2 px-3 
                   text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
           name="description"
           placeholder="Introduce your recipe..."

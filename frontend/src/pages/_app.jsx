@@ -1,12 +1,10 @@
 // @ts-nocheck
-import React from 'react';
-import { ApolloProvider } from '@apollo/client';
-import { ToastProvider } from 'react-toast-notifications';
 import '../styles/index.css';
-
-/* Contexts */
-import AuthContext from '../lib/context/auth/authContext';
+import { ApolloProvider } from '@apollo/client';
+import { ThemeProvider } from 'next-themes';
+import { ToastProvider } from 'react-toast-notifications';
 import { useAuthAndApollo } from '../lib/hooks/useAuthAndApollo';
+import AuthContext from '../lib/context/auth/authContext';
 
 const MyApp = ({ Component, pageProps }) => {
   const { authProps, lostAuth, componentProps, apolloCache } = pageProps;
@@ -18,7 +16,7 @@ const MyApp = ({ Component, pageProps }) => {
   );
 
   return (
-    <>
+    <ThemeProvider attribute="class">
       <AuthContext.Provider value={{ setAuth, authState }}>
         <ApolloProvider client={apolloClient}>
           <ToastProvider
@@ -30,7 +28,7 @@ const MyApp = ({ Component, pageProps }) => {
           </ToastProvider>
         </ApolloProvider>
       </AuthContext.Provider>
-    </>
+    </ThemeProvider>
   );
 };
 

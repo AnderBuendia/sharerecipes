@@ -75,7 +75,8 @@ const ForgotPass = () => {
           childRef={register({
             required: FormMessages.EMAIL_REQUIRED,
             pattern: {
-              value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+              value:
+                /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
               message: FormMessages.EMAIL_FORMAT_INVALID,
             },
           })}
@@ -92,7 +93,7 @@ const ForgotPass = () => {
         <div className="border-gray border-t-2 block mt-8 text-center"></div>
         <div className="w-full">
           <Link href={MainPaths.LOGIN}>
-            <a className="btn-default">Return to Login</a>
+            <a className="btn-default dark:bg-gray-500">Return to Login</a>
           </Link>
         </div>
       </div>
