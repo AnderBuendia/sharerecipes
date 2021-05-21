@@ -16,8 +16,8 @@ const MyApp = ({ Component, pageProps }) => {
   );
 
   return (
-    <AuthContext.Provider value={{ setAuth, authState }}>
-      <ThemeProvider attribute="class">
+    <ThemeProvider attribute="class">
+      <AuthContext.Provider value={{ setAuth, authState }}>
         <ApolloProvider client={apolloClient}>
           <ToastProvider
             autoDismiss
@@ -27,8 +27,8 @@ const MyApp = ({ Component, pageProps }) => {
             <Component {...componentProps} />
           </ToastProvider>
         </ApolloProvider>
-      </ThemeProvider>
-    </AuthContext.Provider>
+      </AuthContext.Provider>
+    </ThemeProvider>
   );
 };
 
