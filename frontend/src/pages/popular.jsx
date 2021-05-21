@@ -36,7 +36,10 @@ const Popular = () => {
       description="Search in ShareYourRecipes"
       url={MainPaths.POPULAR}
     >
-      <RecipesList title="Popular Recipes">{recipesRendered}</RecipesList>
+      <div className="container mx-auto w-11/12">
+        <h1 className="font-bold text-lg">Popular Recipes</h1>
+        <RecipesList>{recipesRendered}</RecipesList>
+      </div>
     </MainLayout>
   );
 };

@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "node server/index.js",
     "build:css": "postcss assets/tailwind.css -o assets/main.css",
-    "test": "echo testing frontend with version: $npm_package_version"
+    "test": "jest --watch"
   },
   "dependencies": {
     "@apollo/client": "^3.2.8",
@@ -33,7 +33,12 @@
     "sweetalert2": "^10.3.6"
   },
   "devDependencies": {
+    "@testing-library/dom": "^7.31.0",
+    "@testing-library/jest-dom": "^5.12.0",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^13.1.9",
     "autoprefixer": "^10.0.2",
+    "babel-jest": "^26.6.3",
     "elliptic": "^6.5.4",
     "postcss": "^8.1.8",
     "postcss-cli": "^8.3.0",

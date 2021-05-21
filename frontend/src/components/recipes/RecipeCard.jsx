@@ -40,7 +40,9 @@ const RecipeCard = ({ recipe, numberOfRecipes, index, fetchMore }) => {
               <div className="font-bold text-xl text-white">{name}</div>
               <div className="bg-white dark:bg-gray-700 flex items-center mr-auto px-2 rounded-full">
                 <ChatIcon className="w-4 h-4 mr-0.5" />{' '}
-                <span className="text-sm mr-1">{comments.length}</span>
+                <span className="text-sm mr-1">
+                  {comments ? comments.length : 0}
+                </span>
                 <StarIcon className="w-4 h-4 text-yellow-400 mr-0.5" />{' '}
                 <span className="text-sm">{average_vote}</span>
               </div>
