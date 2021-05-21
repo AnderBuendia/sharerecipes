@@ -92,7 +92,8 @@ const SignUp = () => {
           childRef={register({
             required: 'Email is required',
             pattern: {
-              value: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+              value:
+                /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
               message: FormMessages.EMAIL_FORMAT_INVALID,
             },
           })}
@@ -116,7 +117,7 @@ const SignUp = () => {
 
         <input className="btn-primary" type="submit" value="Create Account" />
       </form>
-      <p className="text-lg font-roboto font-bold text-gray-800 mt-8 text-center">
+      <p className="text-lg font-roboto font-bold mt-8 text-center">
         Have an account?{' '}
         <Link href="/login">
           <a className="underline text-blue-400">Log in</a>

@@ -48,8 +48,8 @@ const ProfileLayout = ({ path }) => {
       </div>
       <div className="w-3/4">
         <h1
-          className="w-11/12 text-2xl font-roboto pb-2 text-gray-800 text-left
-                        border-b border-gray-400"
+          className="w-11/12 text-2xl font-roboto pb-2 text-left
+              border-b border-gray-400"
         >
           {title}
         </h1>

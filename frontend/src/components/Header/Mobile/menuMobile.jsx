@@ -53,7 +53,7 @@ const MenuMobile = ({ user, setAuth }) => {
         className={`${
           open ? 'translate-x-0' : 'translate-x-full'
         } transform top-0 right-0 w-64
-        bg-white fixed h-full shadow-lg overflow-auto ease-in-out transition-all duration-300 z-30`}
+        bg-white dark:bg-gray-700 fixed h-full shadow-lg overflow-auto ease-in-out transition-all duration-300 z-30`}
       >
         {open && (
           <aside>
@@ -76,8 +76,8 @@ const MenuMobile = ({ user, setAuth }) => {
                   <p className="mb-4 font-roboto">{user?.name}</p>
                   <Link href={MainPaths.PROFILE}>
                     <a
-                      className="w-8/12 text-center py-1 px-3 rounded-full border border-black 
-                  cursor-pointer bg-gray-700 text-white hover:bg-blue-100 hover:text-black"
+                      className="w-8/12 text-center py-1 px-3 rounded-full cursor-pointer border border-black 
+                      text-white bg-gray-400 hover:bg-gray-200 hover:text-black"
                     >
                       My Account
                     </a>
@@ -105,16 +105,16 @@ const MenuMobile = ({ user, setAuth }) => {
                   {/* Add principal logo */}
                   <Link href={MainPaths.LOGIN}>
                     <a
-                      className="w-1/2 p-1 mb-3 rounded-full border border-black text-center
-                    cursor-pointer bg-gray-700 text-white hover:bg-blue-200 hover:text-black"
+                      className="w-1/2 p-1 mb-3 rounded-full cursor-pointer border border-black 
+                      text-white bg-gray-400 hover:bg-gray-200 hover:text-black"
                     >
                       Login
                     </a>
                   </Link>
                   <Link href={MainPaths.SIGNUP}>
                     <a
-                      className="w-1/2 p-1 rounded-full border border-black text-center
-                    cursor-pointer bg-gray-700 text-white  hover:bg-blue-200 hover:text-black"
+                      className="w-1/2 p-1 rounded-full border border-black 
+                      text-white bg-gray-400 hover:bg-gray-200 hover:text-black"
                     >
                       Sign Up
                     </a>
@@ -138,8 +138,8 @@ const MenuMobile = ({ user, setAuth }) => {
               {user && (
                 <Link href={MainPaths.PROFILE}>
                   <button
-                    className="w-8/12 text-center py-1 px-3 rounded-full border border-black 
-                  cursor-pointer bg-gray-700 text-white hover:bg-blue-100 hover:text-black"
+                    className="w-8/12 text-center py-1 px-3 rounded-full cursor-pointer border border-black 
+                  text-white bg-gray-400 hover:bg-gray-200 hover:text-black"
                     onClick={() => onClickSignOut(router, setAuth, setOpen)}
                   >
                     Sign Out

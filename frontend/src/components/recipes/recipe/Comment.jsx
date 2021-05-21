@@ -138,7 +138,7 @@ const Comment = ({ comment, query, recipe, i, fetchMore }) => {
           width={28}
           height={28}
         />
-        <p className="ml-2 font-roboto text-black text-sm font-bold">
+        <p className="ml-2 font-roboto text-sm font-bold">
           {author.name}
           {author.email === recipe.author.email && (
             <span className="ml-1 px-2 rounded-full bg-green-100 text-green-900 font-light text-xs uppercase">
@@ -146,7 +146,7 @@ const Comment = ({ comment, query, recipe, i, fetchMore }) => {
             </span>
           )}
         </p>
-        <p className="text-sm text-gray-500 mx-2">
+        <p className="text-sm text-gray-400 mx-2">
           {timeago}
           <span>{edited && ' - edited'}</span>
         </p>
@@ -160,7 +160,7 @@ const Comment = ({ comment, query, recipe, i, fetchMore }) => {
             onChange={(e) => setEditComment(e.target.value)}
           />
         ) : (
-          <p className="break-all font-roboto text-gray-800 text-sm font-medium">
+          <p className="break-all font-roboto text-gray-900 text-sm font-medium">
             {message}
           </p>
         )}

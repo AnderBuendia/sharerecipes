@@ -13,65 +13,67 @@ import RecipesList from '../components/recipes/RecipesList';
 import { MainPaths } from '../enums/paths/main-paths';
 
 const Search = () => {
-    const router = useRouter();
-    const { query: { q } } = router;
-    const search = q.toLowerCase();
+  const router = useRouter();
+  const {
+    query: { q },
+  } = router;
+  const search = q.toLowerCase();
 
-    const { data, loading } = useQuery(GET_RECIPES);
+  const { data, loading } = useQuery(GET_RECIPES);
 
-    if (loading) return <Spinner />;
-    
-    const recipes = data ? data.getRecipes : null;
- 
-    /* Filter recipes to search */
-    const filterRecipes = recipes.filter(recipe => {
-        return (
-            recipe.name.toLowerCase().includes(search) ||
-            recipe.description.toLowerCase().includes(search) ||
-            recipe.style.toLowerCase().includes(search)
-        )
-    });
+  if (loading) return <Spinner />;
 
-    const recipesRendered = filterRecipes ? (
-        filterRecipes.map((recipe, index) => (
-          <RecipeCard
-            key={index}
-            recipe={recipe}
-          />
-        ))
-      ) : (
-        <h3 className="text-4xl font-body font-bold text-center mt-10">No recipes</h3>
-      );
-   
-    return ( 
-        <MainLayout
-          title="Search"
-          description="Search in ShareYourRecipes"
-          url={MainPaths.SEARCH}
-        >
-          <RecipesList title={`Results by ${q}`}>
-            {recipesRendered}
-          </RecipesList>
-        </MainLayout>
+  const recipes = data ? data.getRecipes : null;
+
+  /* Filter recipes to search */
+  const filterRecipes = recipes.filter((recipe) => {
+    return (
+      recipe.name.toLowerCase().includes(search) ||
+      recipe.description.toLowerCase().includes(search) ||
+      recipe.style.toLowerCase().includes(search)
     );
-}
+  });
 
-export const getServerSideProps = async ctx => {
-    const props = { lostAuth: false };
-    const isSSR = isRequestSSR(ctx.req.url);
-  
-    const jwt = getJwtFromCookie(ctx.req.headers.cookie);
-  
-    if (jwt) {
-      if (isSSR) {
-        const apolloClient = createApolloClient();
-        const authProps = await loadAuthProps(ctx.res, jwt, apolloClient);
-        
-        if (authProps) props.authProps = authProps;
-      } else if (!decode(jwt)) props.lostAuth = true;
-    }
-  
-    return { props: props || null };
+  const recipesRendered = filterRecipes ? (
+    filterRecipes.map((recipe, index) => (
+      <RecipeCard key={index} recipe={recipe} />
+    ))
+  ) : (
+    <h3 className="text-4xl font-body font-bold text-center mt-10">
+      No recipes
+    </h3>
+  );
+
+  return (
+    <MainLayout
+      title="Search"
+      description="Search in ShareYourRecipes"
+      url={MainPaths.SEARCH}
+    >
+      <div className="container mx-auto w-11/12">
+        <h1 className="font-bold text-lg">Results by ${q}</h1>
+        <RecipesList>{recipesRendered}</RecipesList>
+      </div>
+    </MainLayout>
+  );
 };
- 
+
+export const getServerSideProps = async (ctx) => {
+  const props = { lostAuth: false };
+  const isSSR = isRequestSSR(ctx.req.url);
+
+  const jwt = getJwtFromCookie(ctx.req.headers.cookie);
+
+  if (jwt) {
+    if (isSSR) {
+      const apolloClient = createApolloClient();
+      const authProps = await loadAuthProps(ctx.res, jwt, apolloClient);
+
+      if (authProps) props.authProps = authProps;
+    } else if (!decode(jwt)) props.lostAuth = true;
+  }
+
+  return { props: props || null };
+};
+
 export default Search;

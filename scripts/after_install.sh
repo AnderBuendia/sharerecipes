@@ -18,4 +18,4 @@ npm install
 npm install pm2 -g
 
 # DB connection
-echo DB_URL=$(aws ssm get-parameters --output text --region eu-west-3 --names DB_URL --with-decryption --query Parameters[0].Value) > ~/sharerecipes/packages/server/src/variables.env
+echo DB_URL=$(aws ssm get-parameters --output text --region eu-west-3 --names DB_URL --with-decryption --query Parameters[0].Value) > ~/sharerecipes/server/src/variables.env

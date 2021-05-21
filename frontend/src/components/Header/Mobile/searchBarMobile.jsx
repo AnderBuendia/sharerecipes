@@ -17,7 +17,7 @@ const SearchBarMobile = () => {
       </div>
 
       {openSearchBar && (
-        <div className="mdxl:hidden bg-white w-full absolute top-0 left-0 center">
+        <div className="mdxl:hidden bg-white dark:bg-gray-800 w-full absolute top-0 left-0 center">
           <form
             onSubmit={(e) => searchRecipes(e, search)}
             className="w-full flex flex-row items-center"

@@ -27,7 +27,7 @@ const RecipeData = ({ recipe, url, confirmDeleteRecipe, voteRecipe }) => {
   const { authState } = useContext(AuthContext);
 
   return (
-    <div className="mx-auto w-11/12 bg-white rounded-lg shadow-md p-5 mb-4">
+    <div className="bg-white dark:bg-gray-700 mx-auto w-11/12 rounded-lg shadow-md p-5 mb-4">
       <h1 className="break-all text-2xl font-body font-bold mb-2">{name}</h1>
       <div className="w-full flex flex-col lgxl:flex-row lgxl:justify-between">
         <div className="lgxl:w-2/4 text-center ">
@@ -44,31 +44,23 @@ const RecipeData = ({ recipe, url, confirmDeleteRecipe, voteRecipe }) => {
         <div className="w-full lgxl:flex-col lgxl:ml-3 lgxl:mt-1 lgxl:w-2/4">
           <div className="w-full flex flex-row border-gray-400 border-t p-3 lgxl:p-0 lgxl:flex-col">
             <div className="w-full text-center lgxl:w-full lgxl:my-3">
-              <p className="font-light text-gray-500 text-xs uppercase">
-                Preparation time
-              </p>
-              <span className="font-bold ">{prep_time} mins</span>
+              <p className="font-light text-xs uppercase">Preparation time</p>
+              <span className="font-bold">{prep_time} mins</span>
             </div>
             <div className="w-full text-center border-l border-gray-400 lgxl:border-l-0 lg:p-2 lgxl:border-t lgxl:py-3">
-              <p className="font-light text-gray-500 text-xs uppercase">
-                Serves
-              </p>
-              <span className="font-bold ">{serves}</span>
+              <p className="font-light text-xs uppercase">Serves</p>
+              <span className="font-bold">{serves}</span>
             </div>
           </div>
 
           <div className="w-full flex flex-row border-gray-400 border-t border-b p-3 lgxl:p-0 lgxl:flex-col">
             <div className="w-full text-center lgxl:w-full lgxl:my-3">
-              <p className="font-light text-gray-500 text-xs uppercase">
-                Difficulty
-              </p>
+              <p className="font-light text-xs uppercase">Difficulty</p>
               <span className="font-bold ">{difficulty}</span>
             </div>
             <div className="w-full text-center border-l border-gray-400 lgxl:border-l-0 lgxl:p-3 lgxl:border-t lgxl:py-3">
-              <p className="font-light text-gray-500 text-xs uppercase">
-                Style
-              </p>
-              <span className="font-bold  uppercase">{style}</span>
+              <p className="font-light text-xs uppercase">Style</p>
+              <span className="font-bold uppercase">{style}</span>
             </div>
           </div>
 
@@ -99,7 +91,7 @@ const RecipeData = ({ recipe, url, confirmDeleteRecipe, voteRecipe }) => {
                 precision={0.5}
                 onChange={(event, newValue) => voteRecipe(newValue)}
               />
-              <p className="ml-1 text-lg text-gray-500">
+              <p className="ml-1 text-lg">
                 ({average_vote} from {voted.length} votes)
               </p>
             </div>

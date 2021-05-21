@@ -36,6 +36,8 @@ const DropdownMenu = ({ user, setAuth }) => {
     }
   };
 
+  if (!user) return null;
+
   return (
     <div ref={componentRef} className="relative inline-block text-left mr-4">
       <div
@@ -46,8 +48,8 @@ const DropdownMenu = ({ user, setAuth }) => {
       >
         <Image
           className="rounded-full"
-          key={user?.image_url ? user.image_url : '/usericon.jpeg'}
-          src={user?.image_url ? user.image_url : '/usericon.jpeg'}
+          key={user.image_url ? user.image_url : '/usericon.jpeg'}
+          src={user.image_url ? user.image_url : '/usericon.jpeg'}
           alt={'UserIcon Image'}
           width={46}
           height={46}
@@ -57,24 +59,24 @@ const DropdownMenu = ({ user, setAuth }) => {
       {open && (
         <div className="origin-top-right absolute z-20 right-0 mt-2 w-56 rounded-md shadow-lg font-roboto">
           <div
-            className="rounded-md bg-white shadow-xs"
+            className="rounded-md bg-white dark:bg-gray-700 shadow-xs"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="options-menu"
           >
-            <div className="py-1">
+            <div className="py-1 dark:text-white">
               <p
-                className="block px-4 py-2 text-sm font-bold leading-5 text-gray-700"
+                className="block px-4 py-2 text-sm font-bold leading-5"
                 role="menuitem"
               >
-                Hi, {user?.name}
+                Hi, {user.name}
               </p>
               <div className="border-t border-gray-200"></div>
-              {user?.role?.includes(UserRoles.ADMIN) && (
+              {user.role.includes(UserRoles.ADMIN) && (
                 <Link href={MainPaths.ADMIN}>
                   <a
-                    className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-200 
-                                        hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+                    className="block px-4 py-2 text-sm leading-5 hover:bg-gray-200 
+                    hover:text-gray-900 focus:outline-none"
                     role="menuitem"
                   >
                     Admin Menu
@@ -83,8 +85,8 @@ const DropdownMenu = ({ user, setAuth }) => {
               )}
               <Link href="/profile">
                 <a
-                  className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-200 hover:text-gray-900 
-                        focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+                  className="block px-4 py-2 text-sm leading-5 hover:bg-gray-200 hover:text-gray-900 
+                        focus:outline-none"
                   role="menuitem"
                 >
                   Profile
@@ -92,11 +94,11 @@ const DropdownMenu = ({ user, setAuth }) => {
               </Link>
             </div>
             <div className="border-t border-gray-200"></div>
-            <div className="py-1">
+            <div className="py-1 dark:text-white">
               <button
                 onClick={() => onClickSignOut(router, setAuth)}
-                className="w-full text-left block px-4 py-2 text-sm leading-5 text-gray-700 font-bold 
-                    hover:bg-gray-200 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+                className="w-full text-left block px-4 py-2 text-sm leading-5 font-bold 
+                    hover:bg-gray-200 hover:text-gray-900 focus:outline-none"
                 role="menuitem"
               >
                 Sign Out
