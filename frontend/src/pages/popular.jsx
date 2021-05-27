@@ -23,7 +23,7 @@ const Popular = () => {
   const recipes = data ? data.getBestRecipes : null;
 
   const recipesRendered = recipes ? (
-    recipes.map((recipe) => <RecipeCard key={recipe.id} recipe={recipe} />)
+    recipes.map((recipe) => <RecipeCard key={recipe._id} recipe={recipe} />)
   ) : (
     <h3 className="text-4xl font-body font-bold text-center mt-10">
       No recipes

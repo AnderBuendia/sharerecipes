@@ -123,7 +123,7 @@ const RecipeData = ({ recipe, url, confirmDeleteRecipe, voteRecipe }) => {
           ))}
         </div>
       </div>
-      {authState.user && author.email === authState.user.email ? (
+      {authState.user && author?.email === authState.user.email ? (
         <div className="flex w-full mt-6">
           <button
             type="button"

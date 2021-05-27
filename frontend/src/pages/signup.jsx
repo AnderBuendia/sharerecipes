@@ -43,7 +43,7 @@ const SignUp = () => {
     const { name, email, password } = data;
 
     try {
-      const { data } = await newUser({
+      await newUser({
         variables: {
           input: {
             name,

@@ -12,7 +12,7 @@ import { SEND_COMMENTS_RECIPE } from '../../../lib/graphql/comments/mutation';
 export const COMMENTS_FRAGMENT = gql`
   fragment CommentsFragment on Recipe {
     comments(offset: $offset, limit: $limit) {
-      id
+      _id
       message
       edited
       createdAt
@@ -84,7 +84,7 @@ const Discussion = ({ recipe, query, fetchMore }) => {
 
     if (authState.user) {
       try {
-        const { data } = await sendCommentsRecipe({
+        await sendCommentsRecipe({
           variables: {
             recipeUrl: recipe.url,
             input: {
@@ -149,7 +149,7 @@ const Discussion = ({ recipe, query, fetchMore }) => {
         <div className="border-t border-gray-400 mb-4">
           {recipe.comments.map((comment, i) => (
             <Comment
-              key={comment.id}
+              key={comment._id}
               comment={comment}
               i={i}
               query={query}

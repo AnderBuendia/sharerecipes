@@ -4,7 +4,7 @@ import Discussion from '../../../components/recipes/recipe/Discussion';
 export const GET_RECIPES = gql`
   query getRecipes($offset: Int, $limit: Int) {
     getRecipes(offset: $offset, limit: $limit) {
-      id
+      _id
       name
       serves
       ingredients
@@ -22,7 +22,7 @@ export const GET_RECIPES = gql`
 export const GET_BEST_RECIPES = gql`
   query getBestRecipes($offset: Int, $limit: Int) {
     getBestRecipes(offset: $offset, limit: $limit) {
-      id
+      _id
       name
       serves
       ingredients
@@ -40,7 +40,7 @@ export const GET_BEST_RECIPES = gql`
 export const GET_RECIPE = gql`
   query getRecipe($recipeUrl: String!, $offset: Int!, $limit: Int!) {
     getRecipe(recipeUrl: $recipeUrl) {
-      id
+      _id
       name
       prep_time
       serves

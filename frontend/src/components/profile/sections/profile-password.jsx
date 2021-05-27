@@ -24,14 +24,14 @@ const ProfilePassword = () => {
   });
 
   const onSubmit = async (data) => {
-    const { confirmpassword, password } = data;
+    const { confirmPassword, password } = data;
     try {
-      const { data } = await updateUserPassword({
+      await updateUserPassword({
         variables: {
           input: {
             email: authState.user.email,
             password,
-            confirmpassword,
+            confirmPassword,
           },
         },
       });
@@ -61,7 +61,7 @@ const ProfilePassword = () => {
 
         <Input
           label="New Password"
-          name="newpassword"
+          name="newPassword"
           type="password"
           placeholder="Introduce a New Password"
           childRef={register({
@@ -71,12 +71,12 @@ const ProfilePassword = () => {
               message: FormMessages.MIN_LENGTH,
             },
           })}
-          error={errors.newpassword}
+          error={errors.newPassword}
         />
 
         <Input
           label="Confirm Password"
-          name="confirmpassword"
+          name="confirmPassword"
           type="password"
           placeholder="Confirm New Password"
           childRef={register({
@@ -88,7 +88,7 @@ const ProfilePassword = () => {
               },
             },
           })}
-          error={errors.confirmpassword}
+          error={errors.confirmPassword}
         />
 
         <input className="btn-primary" type="submit" value="Change Password" />

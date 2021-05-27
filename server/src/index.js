@@ -37,11 +37,10 @@ const apolloServer = new ApolloServer({
     req.url = url;
 
     if (authorization) {
-      try {
-        const token = authorization.split(' ')[1];
-        const payload = jwt.verify(token, process.env.SECRET_JWT_ACCESS);
-        req.user = payload;
-      } catch (err) {}
+      const token = authorization.split(' ')[1];
+      const payload = jwt.verify(token, process.env.SECRET_JWT_ACCESS);
+
+      req['user'] = payload;
 
       return { req, res };
     }

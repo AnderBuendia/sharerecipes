@@ -3,7 +3,7 @@ const { gql } = require('apollo-server-express');
 const typeDefs = gql`
   # Types
   type Recipe {
-    id: ID
+    _id: ID
     name: String
     serves: Int
     ingredients: [String]
@@ -23,7 +23,7 @@ const typeDefs = gql`
   }
 
   type CommentsRecipe {
-    id: ID
+    _id: ID
     message: String
     edited: Boolean
     author: User
@@ -82,8 +82,8 @@ const typeDefs = gql`
       recipeUrl: String!
       input: CommentsRecipeInput
     ): CommentsRecipe
-    voteCommentsRecipe(id: ID!, input: CommentsRecipeInput): CommentsRecipe
-    editCommentsRecipe(id: ID!, input: CommentsRecipeInput): CommentsRecipe
+    voteCommentsRecipe(_id: ID!, input: CommentsRecipeInput): CommentsRecipe
+    editCommentsRecipe(_id: ID!, input: CommentsRecipeInput): CommentsRecipe
   }
 `;
 

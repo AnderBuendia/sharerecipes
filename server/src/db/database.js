@@ -5,6 +5,7 @@ const { DB_URL, DB_URL_TEST, NODE_ENV } = process.env;
 const connectionString =
   NODE_ENV === 'test' || NODE_ENV === 'dev' ? DB_URL_TEST : DB_URL;
 const topologyString = NODE_ENV !== 'test';
+
 mongoose
   .connect(connectionString, {
     useNewUrlParser: true,

@@ -35,7 +35,7 @@ const Recipe = () => {
         query: GET_RECIPES,
         data: {
           getRecipes: getRecipes.filter(
-            (currentRecipe) => currentRecipe.id !== recipe.id
+            (currentRecipe) => currentRecipe._id !== recipe._id
           ),
         },
       });

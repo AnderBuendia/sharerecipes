@@ -19,7 +19,7 @@ router.post('/user', uploadImage, async (req, res) => {
         const token = authorization.split(' ')[1];
         const payload = jwt.verify(token, process.env.SECRET_JWT_ACCESS);
 
-        let user = await User.findById(payload.id);
+        let user = await User.findById(payload._id);
 
         if (user.image_name) {
           const pathName = path.join(__dirname, `../images/${user.image_name}`);
@@ -27,7 +27,7 @@ router.post('/user', uploadImage, async (req, res) => {
         }
 
         user = await User.findOneAndUpdate(
-          { _id: user.id },
+          { _id: user._id },
           {
             image_url,
             image_name: filename,

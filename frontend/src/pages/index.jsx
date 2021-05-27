@@ -25,7 +25,7 @@ const Index = () => {
   const recipesRendered = recipes ? (
     recipes.map((recipe, index) => (
       <RecipeCard
-        key={recipe.id}
+        key={recipe._id}
         recipe={recipe}
         numberOfRecipes={recipes.length}
         index={index}
