@@ -27,57 +27,14 @@ const Recipe = () => {
   const { addToast } = useToasts();
 
   /* Apollo mutation */
-  const [deleteRecipe] = useMutation(DELETE_RECIPE, {
-    update(cache) {
-      const { getRecipes } = cache.readQuery({ query: GET_RECIPES });
+  const [deleteRecipe] = useMutation(DELETE_RECIPE);
 
-      cache.writeQuery({
-        query: GET_RECIPES,
-        data: {
-          getRecipes: getRecipes.filter(
-            (currentRecipe) => currentRecipe._id !== recipe._id
-          ),
-        },
-      });
-    },
-  });
-
-  const [updateVoteRecipe] = useMutation(UPDATE_VOTE_RECIPE, {
-    update(
-      cache,
-      {
-        data: {
-          updateVoteRecipe: { average_vote },
-        },
-      }
-    ) {
-      const { getRecipe } = cache.readQuery({
-        query: GET_RECIPE,
-        variables: {
-          recipeUrl: url,
-          offset: 0,
-          limit: 10,
-        },
-      });
-
-      cache.writeQuery({
-        query: GET_RECIPE,
-        variables: {
-          recipeUrl: url,
-          offset: 0,
-          limit: 10,
-        },
-        data: {
-          getRecipe: { ...getRecipe.average_vote, average_vote },
-        },
-      });
-    },
-  });
+  const [updateVoteRecipe] = useMutation(UPDATE_VOTE_RECIPE);
 
   /* Update votes */
   const voteRecipe = async (votes) => {
     try {
-      const { data } = await updateVoteRecipe({
+      await updateVoteRecipe({
         variables: {
           recipeUrl: url,
           input: {

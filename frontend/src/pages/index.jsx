@@ -22,21 +22,22 @@ const Index = () => {
   if (loading) return <Spinner />;
   const recipes = data ? data.getRecipes : null;
 
-  const recipesRendered = recipes ? (
-    recipes.map((recipe, index) => (
-      <RecipeCard
-        key={recipe._id}
-        recipe={recipe}
-        numberOfRecipes={recipes.length}
-        index={index}
-        fetchMore={fetchMore}
-      />
-    ))
-  ) : (
-    <h3 className="text-4xl font-body font-bold text-center mt-10">
-      No recipes
-    </h3>
-  );
+  const recipesRendered =
+    recipes && recipes.length > 0 ? (
+      recipes.map((recipe, index) => (
+        <RecipeCard
+          key={recipe._id}
+          recipe={recipe}
+          numberOfRecipes={recipes.length}
+          index={index}
+          fetchMore={fetchMore}
+        />
+      ))
+    ) : (
+      <h3 className="text-4xl font-body font-bold text-center mt-10">
+        No recipes
+      </h3>
+    );
 
   return (
     <MainLayout
