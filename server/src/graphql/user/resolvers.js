@@ -18,13 +18,6 @@ require('dotenv').config({ path: 'src/variables.env' });
 /* User Resolvers */
 const resolvers = {
   Query: {
-    // hello: (_, { input }) => {
-    //   return `Hello ${input.name}, ${input.alias}`;
-    // },
-    hello: (_, { offset, limit }) => {
-      return `Hello ${offset} ${limit}`;
-    },
-
     getUser: async (_, {}, ctx) => {
       if (!ctx.req.user) {
         return null;
@@ -81,8 +74,7 @@ const resolvers = {
         }
 
         user = new User({
-          name,
-          email,
+          ...input,
           password: bcrypt.hashSync(password, 10),
         });
 
@@ -170,17 +162,8 @@ const resolvers = {
         }
 
         /* Save data in DB */
-        user = await User.findOneAndUpdate(
-          {
-            email,
-          },
-          {
-            name,
-          },
-          {
-            new: true,
-          }
-        );
+        user.name = name;
+        await user.save();
 
         return user;
       } catch (error) {
@@ -213,13 +196,8 @@ const resolvers = {
         }
 
         /* Save data in DB */
-        user = await User.findOneAndUpdate(
-          { email },
-          { password: bcrypt.hashSync(confirmPassword, 10) },
-          {
-            new: true,
-          }
-        );
+        user.password = bcrypt.hashSync(confirmPassword, 10);
+        await user.save();
 
         return true;
       } catch (error) {

@@ -8,6 +8,7 @@ const fs = require('fs');
 const path = require('path');
 const RecipeErrors = require('../../enums/recipe.errors');
 const HttpStatusCode = require('../../enums/http-status-code');
+const { findOneAndUpdate } = require('../../models/User');
 
 const resolvers = {
   /* Types to relation DBs */
@@ -16,8 +17,8 @@ const resolvers = {
       const user = await User.findById(author);
       return user;
     },
-    comments: async ({ comments }, { offset, limit }) => {
-      const recipeComments = await Comment.find({ _id: { $in: comments } })
+    comments: async (recipe, { offset, limit }) => {
+      const recipeComments = await Comment.find({ recipe: recipe._id })
         .sort({ createdAt: -1 })
         .skip(offset)
         .limit(limit)
@@ -48,7 +49,7 @@ const resolvers = {
       return recipe;
     },
 
-    getRecipes: async (_, { offset = 0, limit = 10 }) => {
+    getRecipes: async (_, { offset = 0, limit = 20 }) => {
       try {
         const recipes = await Recipe.find({})
           .sort({ createdAt: -1 })
@@ -75,27 +76,6 @@ const resolvers = {
         console.log(error);
       }
     },
-
-    /* Recipe comments */
-    getNumberOfComments: async (_, { recipeUrl }) => {
-      try {
-        /* Check recipe */
-        const recipe = await Recipe.findOne({ url: recipeUrl });
-
-        if (!recipe) {
-          throw new ApolloError(
-            RecipeErrors.RECIPE_NOT_FOUND,
-            HttpStatusCode.NOT_FOUND
-          );
-        }
-
-        /* Get comments from this recipe */
-        const comments = await Comment.find({ _id: { $in: recipe.comments } });
-        return comments;
-      } catch (error) {
-        console.log(error);
-      }
-    },
   },
 
   Mutation: {
@@ -113,20 +93,28 @@ const resolvers = {
           input.url = urlName;
         }
 
-        const newRecipe = new Recipe({ ...input, author: ctx.req.user_id });
+        const newInput = {
+          ...input,
+          author: ctx.req.user._id,
+        };
+        const newRecipe = new Recipe({
+          ...input,
+          author: ctx.req.user._id,
+        });
 
         /* Save data in DB */
-        const res = await newRecipe.save();
-        return res;
+        await newRecipe.save();
+
+        return newRecipe;
       } catch (error) {
         console.log(error);
       }
     },
 
-    deleteRecipe: async (_, { recipeUrl }, ctx) => {
+    deleteRecipe: async (_, { _id }, ctx) => {
       try {
         /* Check if recipe exists // Author is the one who deletes the order */
-        const recipe = await Recipe.findOne({ url: recipeUrl });
+        const recipe = await Recipe.findById(_id);
 
         if (!recipe) {
           throw new ApolloError(
@@ -148,8 +136,8 @@ const resolvers = {
         fs.unlinkSync(pathName);
 
         /* Delete data from DB */
-        await Comment.deleteMany({ recipe: recipe._id });
-        await Recipe.findOneAndDelete({ _id: recipe._id });
+        await Comment.deleteMany({ recipe: _id });
+        await Recipe.findOneAndDelete({ _id });
 
         return true;
       } catch (error) {
@@ -162,7 +150,7 @@ const resolvers = {
 
       try {
         /* Check if recipe exists */
-        const checkRecipe = await Recipe.findOne({ url: recipeUrl });
+        let checkRecipe = await Recipe.findOne({ url: recipeUrl });
 
         if (!checkRecipe) {
           throw new ApolloError(
@@ -184,19 +172,23 @@ const resolvers = {
           );
         }
 
-        /* Calculate total votes and save data in DB */
-        checkRecipe.votes += votes;
+        checkRecipe.votes = !votes
+          ? checkRecipe.average_vote * 2
+          : checkRecipe.votes + votes;
+
         checkRecipe.voted = [...checkRecipe.voted, ctx.req.user._id];
 
+        /* Calculate total votes and save data in DB */
         const averageVotes = checkRecipe.votes / checkRecipe.voted.length;
         const adjustMean =
           (Math.ceil(averageVotes) + Math.floor(averageVotes)) / 2;
 
         checkRecipe.average_vote =
           averageVotes < adjustMean ? averageVotes : adjustMean;
-        const res = await checkRecipe.save();
 
-        return res;
+        await checkRecipe.save();
+
+        return checkRecipe;
       } catch (error) {
         throw error;
       }
@@ -222,14 +214,15 @@ const resolvers = {
           );
         }
 
-        const newComment = new Comment({ ...input, author: ctx.req.user._id });
-        recipe.comments = [...recipe.comments, newComment._id];
+        const newComment = new Comment({
+          ...input,
+          author: ctx.req.user._id,
+          recipe: recipe._id,
+        });
 
-        await recipe.save();
+        await newComment.save();
 
-        /* Save Data in DB */
-        const res = await newComment.save();
-        return res;
+        return newComment;
       } catch (error) {
         throw error;
       }
@@ -260,7 +253,8 @@ const resolvers = {
 
     voteCommentsRecipe: async (_, { _id, input }, ctx) => {
       try {
-        const checkComment = await Comment.findById(_id);
+        let checkComment = await Comment.findById(_id);
+
         /* Check if comment exists */
         if (!checkComment) {
           throw new ApolloError(
@@ -282,14 +276,12 @@ const resolvers = {
         }
 
         /* Add user who voted and sum votes */
-        checkComment = {
-          ...checkComment,
-        };
         checkComment.voted = [...checkComment.voted, ctx.req.user._id];
         checkComment.votes += input.votes;
-        const res = await checkComment.save();
 
-        return res;
+        await checkComment.save();
+
+        return checkComment;
       } catch (error) {
         throw error;
       }

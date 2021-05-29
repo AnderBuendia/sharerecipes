@@ -65,16 +65,13 @@ const typeDefs = gql`
     getBestRecipes(offset: Int, limit: Int): [Recipe]
     getUserRecipes: [Recipe]
     getRecipe(recipeUrl: String!, offset: Int, limit: Int): Recipe
-
-    # RecipeComments
-    getNumberOfComments(recipeUrl: String!): [CommentsRecipe]
   }
 
   # Mutation
   extend type Mutation {
     newRecipe(input: RecipeInput): Recipe
     updateRecipe(recipeUrl: String!, input: RecipeInput): Recipe
-    deleteRecipe(recipeUrl: String!): Boolean
+    deleteRecipe(_id: ID!): Boolean
     updateVoteRecipe(recipeUrl: String!, input: RecipeInput): Recipe
 
     # RecipeComments
