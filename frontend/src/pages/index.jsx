@@ -15,7 +15,7 @@ const Index = () => {
   const { data, loading, fetchMore } = useQuery(GET_RECIPES, {
     variables: {
       offset: 0,
-      limit: 10,
+      limit: 20,
     },
   });
 

@@ -1,5 +1,6 @@
 import { Modal, Backdrop, Fade } from '@material-ui/core';
 import { useRouter } from 'next/router';
+import RamenIcon from '../../icons/ramenicon';
 
 const ModalSignup = ({ open, handleOpen }) => {
   const router = useRouter();
@@ -24,13 +25,9 @@ const ModalSignup = ({ open, handleOpen }) => {
       >
         <Fade in={open}>
           <div className="border-2 border-gray-600 text-center rounded-md shadow-lg p-6 bg-white m-auto inset-0">
-            <img
-              src="/Muffin.svg"
-              alt="Muffin image"
-              className="w-16 content-center inline-block mb-4"
-            />
+            <RamenIcon className="w-16 h-16 mx-auto" />
             <h2
-              className="text-2xl font-bold font-roboto mb-2"
+              className="text-2xl font-bold font-roboto my-2"
               id="transition-modal-title"
             >
               Sign Up to comment

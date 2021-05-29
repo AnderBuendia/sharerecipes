@@ -11,6 +11,7 @@ import AuthContext from '../../../lib/context/auth/authContext';
 
 const RecipeData = ({ recipe, url, confirmDeleteRecipe, voteRecipe }) => {
   const {
+    _id,
     name,
     image_url,
     image_name,
@@ -129,7 +130,7 @@ const RecipeData = ({ recipe, url, confirmDeleteRecipe, voteRecipe }) => {
             type="button"
             className="flex-1 mr-2 justify-center items-center bg-red-800 py-2 px-4 w-full
                   text-white rounded text-xs uppercase font-roboto font-bold hover:bg-red-600"
-            onClick={() => confirmDeleteRecipe(url)}
+            onClick={() => confirmDeleteRecipe(_id)}
           >
             Delete Recipe
           </button>

@@ -6,15 +6,19 @@ export const GET_RECIPES = gql`
     getRecipes(offset: $offset, limit: $limit) {
       _id
       name
+      prep_time
       serves
       ingredients
-      prep_time
       difficulty
-      image_url
       style
+      image_url
+      image_name
       description
       average_vote
       url
+      comments {
+        _id
+      }
     }
   }
 `;
@@ -51,6 +55,7 @@ export const GET_RECIPE = gql`
       image_url
       image_name
       author {
+        _id
         name
         email
       }

@@ -28,36 +28,7 @@ const Comment = ({ comment, query, recipe, i, fetchMore }) => {
   const [editComment, setEditComment] = useState(message);
 
   /* Apollo Mutations */
-  const [editCommentsRecipe] = useMutation(EDIT_COMMENTS_RECIPE, {
-    update(cache, { data: editCommentsRecipe }) {
-      const { getRecipe } = cache.readQuery({
-        query,
-        variables: {
-          recipeUrl: recipe.url,
-          offset: 0,
-          limit: 10,
-        },
-      });
-
-      getRecipe.comments.map((comment) => {
-        if (comment._id === editCommentsRecipe._id) {
-          return { ...comment, editCommentsRecipe };
-        }
-      });
-
-      cache.writeQuery({
-        query,
-        variables: {
-          recipeUrl: recipe.url,
-          offset: 0,
-          limit: 10,
-        },
-        data: {
-          getRecipe: { ...getRecipe },
-        },
-      });
-    },
-  });
+  const [editCommentsRecipe] = useMutation(EDIT_COMMENTS_RECIPE);
 
   const handleEdit = async (editComment) => {
     try {
@@ -79,36 +50,7 @@ const Comment = ({ comment, query, recipe, i, fetchMore }) => {
     }
   };
 
-  const [voteCommentsRecipe] = useMutation(VOTE_COMMENTS_RECIPE, {
-    update(cache, { data: voteCommentsRecipe }) {
-      const { getRecipe } = cache.readQuery({
-        query,
-        variables: {
-          recipeUrl: recipe.url,
-          offset: 0,
-          limit: 10,
-        },
-      });
-
-      getRecipe.comments.map((comment) => {
-        if (comment._id === voteCommentsRecipe._id) {
-          return { ...comment, voteCommentsRecipe };
-        }
-      });
-
-      cache.writeQuery({
-        query,
-        variables: {
-          recipeUrl: recipe.url,
-          offset: 0,
-          limit: 10,
-        },
-        data: {
-          getRecipe: { ...getRecipe },
-        },
-      });
-    },
-  });
+  const [voteCommentsRecipe] = useMutation(VOTE_COMMENTS_RECIPE);
 
   const voteComments = async (_id) => {
     try {

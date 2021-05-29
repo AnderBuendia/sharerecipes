@@ -27,7 +27,31 @@ const Recipe = () => {
   const { addToast } = useToasts();
 
   /* Apollo mutation */
-  const [deleteRecipe] = useMutation(DELETE_RECIPE);
+  const [deleteRecipe] = useMutation(DELETE_RECIPE, {
+    update(cache) {
+      const data = cache.readQuery({
+        query: GET_RECIPES,
+        variables: {
+          offset: 0,
+          limit: 20,
+        },
+      });
+
+      cache.writeQuery({
+        query: GET_RECIPES,
+        variables: {
+          offset: 0,
+          limit: 20,
+        },
+        data: {
+          ...data,
+          getRecipes: data.getRecipes.filter(
+            (currentRecipe) => currentRecipe._id !== recipe._id
+          ),
+        },
+      });
+    },
+  });
 
   const [updateVoteRecipe] = useMutation(UPDATE_VOTE_RECIPE);
 
@@ -49,7 +73,7 @@ const Recipe = () => {
     }
   };
 
-  const confirmDeleteRecipe = (recipeUrl) => {
+  const confirmDeleteRecipe = (_id) => {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -65,7 +89,7 @@ const Recipe = () => {
           /* Delete recipe by recipe url */
           await deleteRecipe({
             variables: {
-              recipeUrl,
+              _id,
             },
           });
 

@@ -10,9 +10,10 @@ export const NEW_RECIPE = gql`
       ingredients
       difficulty
       style
-      description
       image_url
       image_name
+      description
+      url
     }
   }
 `;
@@ -29,9 +30,7 @@ export const UPDATE_VOTE_RECIPE = gql`
 `;
 
 export const DELETE_RECIPE = gql`
-  mutation deleteRecipe($recipeUrl: String!) {
-    deleteRecipe(recipeUrl: $recipeUrl) {
-      _id
-    }
+  mutation deleteRecipe($_id: ID!) {
+    deleteRecipe(_id: $_id)
   }
 `;

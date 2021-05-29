@@ -47,8 +47,12 @@ export const createApolloClient = (jwt = null) => {
       typePolicies: {
         Recipe: {
           fields: {
-            comments: offsetLimitPagination(),
-            keyArgs: false,
+            comments: {
+              keyArgs: false,
+              merge(existing = [], incoming) {
+                return [...incoming];
+              },
+            },
             voted: {
               merge(existing, incoming) {
                 return incoming;
@@ -63,7 +67,11 @@ export const createApolloClient = (jwt = null) => {
                 return incoming;
               },
             },
-            getRecipes: offsetLimitPagination(),
+            getRecipes: {
+              merge(existing = [], incoming) {
+                return [...incoming];
+              },
+            },
             getBestRecipes: offsetLimitPagination(),
           },
         },

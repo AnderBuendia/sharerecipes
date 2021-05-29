@@ -37,12 +37,23 @@ const NewRecipe = () => {
   /* Apollo mutation */
   const [newRecipe] = useMutation(NEW_RECIPE, {
     update(cache, { data: { newRecipe } }) {
-      const { getRecipes } = cache.readQuery({ query: GET_RECIPES });
+      const data = cache.readQuery({
+        query: GET_RECIPES,
+        variables: {
+          offset: 0,
+          limit: 20,
+        },
+      });
 
       cache.writeQuery({
         query: GET_RECIPES,
+        variables: {
+          offset: 0,
+          limit: 20,
+        },
         data: {
-          getRecipes: [...getRecipes, newRecipe],
+          ...data,
+          getRecipes: [...data.getRecipes, newRecipe],
         },
       });
     },
