@@ -13,7 +13,6 @@ export const NEW_RECIPE = gql`
       image_url
       image_name
       description
-      url
     }
   }
 `;

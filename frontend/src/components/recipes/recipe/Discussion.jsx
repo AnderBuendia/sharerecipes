@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useForm, Controller } from 'react-hook-form';
 import TextField from '@material-ui/core/TextField';
 import Image from 'next/image';
@@ -9,29 +9,10 @@ import { useToasts } from 'react-toast-notifications';
 import AuthContext from '../../../lib/context/auth/authContext';
 import { SEND_COMMENTS_RECIPE } from '../../../lib/graphql/comments/mutation';
 
-export const COMMENTS_FRAGMENT = gql`
-  fragment CommentsFragment on Recipe {
-    comments(offset: $offset, limit: $limit) {
-      _id
-      message
-      edited
-      createdAt
-      votes
-      author {
-        _id
-        name
-        email
-        image_url
-        image_name
-      }
-    }
-  }
-`;
-
 const Discussion = ({ recipe, query, fetchMore }) => {
   const defaultMessage = '';
 
-  /* useState Modal */
+  /* Handle Modal state */
   const [open, setOpen] = useState(false);
 
   /* auth state */
@@ -164,10 +145,6 @@ const Discussion = ({ recipe, query, fetchMore }) => {
       </div>
     </div>
   );
-};
-
-Discussion.fragments = {
-  comments: COMMENTS_FRAGMENT,
 };
 
 export default Discussion;

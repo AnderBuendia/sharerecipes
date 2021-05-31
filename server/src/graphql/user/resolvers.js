@@ -149,7 +149,7 @@ const resolvers = {
             UserErrors.USER_NOT_FOUND,
             HTTPStatusCodes.NOT_FOUND
           );
-        } else if (ctx.req.user && ctx.req.user._id !== user._id) {
+        } else if (!ctx.req.user && ctx.req.user._id !== user._id) {
           throw new ApolloError(
             UserErrors.INVALID_CREDENTIALS,
             HTTPStatusCodes.NOT_AUTHORIZED
@@ -183,7 +183,7 @@ const resolvers = {
             UserErrors.USER_NOT_FOUND,
             HTTPStatusCodes.NOT_FOUND
           );
-        } else if (ctx.req.user && ctx.req.user._id !== user._id) {
+        } else if (!ctx.req.user && ctx.req.user._id !== user._id) {
           throw new ApolloError(
             UserErrors.INVALID_CREDENTIALS,
             HTTPStatusCodes.NOT_AUTHORIZED

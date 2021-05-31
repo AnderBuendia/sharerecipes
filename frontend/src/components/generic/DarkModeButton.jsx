@@ -4,7 +4,7 @@ import MoonIcon from '../icons/moonicon';
 
 const DarkModeButton = () => {
   const { theme, setTheme } = useTheme();
-
+  console.log(theme);
   return (
     <button
       aria-label="Toggle Dark Mode"

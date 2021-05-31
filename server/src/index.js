@@ -1,5 +1,5 @@
 const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
+const { ApolloServer, ApolloError } = require('apollo-server-express');
 const { existsSync, mkdirSync } = require('fs');
 const path = require('path');
 const cors = require('cors');
@@ -9,6 +9,8 @@ require('dotenv').config({ path: 'src/variables.env' });
 const Env = require('./enums/env.enums');
 const typeDefs = require('./graphql/mainTypeDefs');
 const resolvers = require('./graphql/mainResolvers');
+const UserErrors = require('./enums/user.errors');
+const HTTPStatusCodes = require('./enums/http-status-code');
 
 /**
  * Checks if all environment variables are available in proccess.env before boot
@@ -38,7 +40,20 @@ const apolloServer = new ApolloServer({
 
     if (authorization) {
       const token = authorization.split(' ')[1];
-      const payload = jwt.verify(token, process.env.SECRET_JWT_ACCESS);
+      const payload = jwt.verify(
+        token,
+        process.env.SECRET_JWT_ACCESS,
+        function (err, decoded) {
+          if (err) {
+            return new ApolloError(
+              UserErrors.LINK_EXPIRED,
+              HTTPStatusCodes.NOT_AUTHORIZED
+            );
+          }
+
+          return decoded;
+        }
+      );
 
       req['user'] = payload;
 

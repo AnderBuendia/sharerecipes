@@ -1,6 +1,25 @@
 import { gql } from '@apollo/client';
 import Discussion from '../../../components/recipes/recipe/Discussion';
 
+export const COMMENTS_FRAGMENT = gql`
+  fragment CommentsFragment on Recipe {
+    comments(offset: $offset, limit: $limit) {
+      _id
+      message
+      edited
+      createdAt
+      votes
+      author {
+        _id
+        name
+        email
+        image_url
+        image_name
+      }
+    }
+  }
+`;
+
 export const GET_RECIPES = gql`
   query getRecipes($offset: Int, $limit: Int) {
     getRecipes(offset: $offset, limit: $limit) {
@@ -66,5 +85,6 @@ export const GET_RECIPE = gql`
       url
     }
   }
-  ${Discussion.fragments.comments}
+
+  ${COMMENTS_FRAGMENT}
 `;

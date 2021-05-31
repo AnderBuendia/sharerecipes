@@ -7,8 +7,8 @@ const { ApolloError } = require('apollo-server-express');
 const fs = require('fs');
 const path = require('path');
 const RecipeErrors = require('../../enums/recipe.errors');
+const UserErrors = require('../../enums/user.errors');
 const HttpStatusCode = require('../../enums/http-status-code');
-const { findOneAndUpdate } = require('../../models/User');
 
 const resolvers = {
   /* Types to relation DBs */
@@ -93,10 +93,6 @@ const resolvers = {
           input.url = urlName;
         }
 
-        const newInput = {
-          ...input,
-          author: ctx.req.user._id,
-        };
         const newRecipe = new Recipe({
           ...input,
           author: ctx.req.user._id,
@@ -205,9 +201,12 @@ const resolvers = {
             RecipeErrors.RECIPE_NOT_FOUND,
             HttpStatusCode.NOT_FOUND
           );
-        }
-
-        if (!input.message) {
+        } else if (!ctx.req.user._id) {
+          throw new ApolloError(
+            UserErrors.INVALID_CREDENTIALS,
+            HttpStatusCode.NOT_AUTHORIZED
+          );
+        } else if (!input.message) {
           throw new ApolloError(
             RecipeErrors.NO_MESSAGE,
             HttpStatusCode.NO_CONTENT

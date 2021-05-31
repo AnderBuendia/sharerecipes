@@ -15,18 +15,18 @@ import { AlertMessages } from '../../../enums/config/messages';
 import { UserRoles } from '../../../enums/user/user-roles';
 
 const MenuMobile = ({ user, setAuth }) => {
+  const [open, setOpen] = useState(false);
+  const componentRef = useRef();
+
   const router = useRouter();
   const { addToast } = useToasts();
-
-  const componentRef = useRef();
-  const [open, setOpen] = useState(false);
 
   useClickOutside(componentRef, setOpen);
 
   const onClickSignOut = async (router, setAuth, setOpen) => {
-    try {
-      setOpen(false);
+    setOpen(false);
 
+    try {
       await fetch(RestEndPoints.LOGOUT, {
         method: 'POST',
       });
