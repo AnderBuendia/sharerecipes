@@ -10,8 +10,7 @@
   ],
   "scripts": {
     "lint": "npm run lint",
-    "server:test": "cd server && npm run test",
-    "prepare": "husky install"
+    "server:test": "cd server && npm run test"
   },
   "keywords": [],
   "author": "",
