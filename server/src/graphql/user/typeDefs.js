@@ -3,7 +3,7 @@ const { gql } = require('apollo-server-express');
 const typeDefs = gql`
   # Types
   type User {
-    id: ID
+    _id: ID
     name: String
     email: String
     role: String
@@ -11,7 +11,7 @@ const typeDefs = gql`
     image_name: String
     createdAt: String
     confirmed: Boolean
-    confirmpassword: String
+    confirmPassword: String
   }
 
   type UserLogin {
@@ -49,7 +49,7 @@ const typeDefs = gql`
   input UserPasswordInput {
     email: String
     password: String
-    confirmpassword: String
+    confirmPassword: String
     token: String
   }
 
@@ -58,16 +58,8 @@ const typeDefs = gql`
     password: String!
   }
 
-  input TestInput {
-    name: String
-    alias: String
-  }
-
   # Queries
   extend type Query {
-    # Test
-    hello(input: TestInput): String
-
     # Users
     getUser: User
     getUsers(offset: Int, limit: Int): Users
@@ -76,7 +68,7 @@ const typeDefs = gql`
   # Mutations
   extend type Mutation {
     # Users
-    newUser(input: UserInput): Boolean
+    newUser(input: UserInput): String
     authenticateUser(input: AuthenticateInput): UserLogin
     updateUser(input: UserInput): User
     updateUserPassword(input: UserPasswordInput): Boolean
@@ -86,7 +78,7 @@ const typeDefs = gql`
     confirmUser(input: TokenInput): Boolean
 
     # Recovery Password
-    forgotPassword(input: EmailInput): Boolean
+    forgotPassword(input: EmailInput): String
     resetPassword(input: UserPasswordInput): Boolean
   }
 `;

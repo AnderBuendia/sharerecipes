@@ -1,20 +1,43 @@
 import { gql } from '@apollo/client';
 import Discussion from '../../../components/recipes/recipe/Discussion';
 
+export const COMMENTS_FRAGMENT = gql`
+  fragment CommentsFragment on Recipe {
+    comments(offset: $offset, limit: $limit) {
+      _id
+      message
+      edited
+      createdAt
+      votes
+      author {
+        _id
+        name
+        email
+        image_url
+        image_name
+      }
+    }
+  }
+`;
+
 export const GET_RECIPES = gql`
   query getRecipes($offset: Int, $limit: Int) {
     getRecipes(offset: $offset, limit: $limit) {
-      id
+      _id
       name
+      prep_time
       serves
       ingredients
-      prep_time
       difficulty
-      image_url
       style
+      image_url
+      image_name
       description
       average_vote
       url
+      comments {
+        _id
+      }
     }
   }
 `;
@@ -22,7 +45,7 @@ export const GET_RECIPES = gql`
 export const GET_BEST_RECIPES = gql`
   query getBestRecipes($offset: Int, $limit: Int) {
     getBestRecipes(offset: $offset, limit: $limit) {
-      id
+      _id
       name
       serves
       ingredients
@@ -40,7 +63,7 @@ export const GET_BEST_RECIPES = gql`
 export const GET_RECIPE = gql`
   query getRecipe($recipeUrl: String!, $offset: Int!, $limit: Int!) {
     getRecipe(recipeUrl: $recipeUrl) {
-      id
+      _id
       name
       prep_time
       serves
@@ -51,6 +74,7 @@ export const GET_RECIPE = gql`
       image_url
       image_name
       author {
+        _id
         name
         email
       }
@@ -61,5 +85,6 @@ export const GET_RECIPE = gql`
       url
     }
   }
-  ${Discussion.fragments.comments}
+
+  ${COMMENTS_FRAGMENT}
 `;

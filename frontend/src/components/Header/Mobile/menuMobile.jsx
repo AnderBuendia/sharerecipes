@@ -15,18 +15,18 @@ import { AlertMessages } from '../../../enums/config/messages';
 import { UserRoles } from '../../../enums/user/user-roles';
 
 const MenuMobile = ({ user, setAuth }) => {
+  const [open, setOpen] = useState(false);
+  const componentRef = useRef();
+
   const router = useRouter();
   const { addToast } = useToasts();
-
-  const componentRef = useRef();
-  const [open, setOpen] = useState(false);
 
   useClickOutside(componentRef, setOpen);
 
   const onClickSignOut = async (router, setAuth, setOpen) => {
-    try {
-      setOpen(false);
+    setOpen(false);
 
+    try {
       await fetch(RestEndPoints.LOGOUT, {
         method: 'POST',
       });
@@ -105,7 +105,7 @@ const MenuMobile = ({ user, setAuth }) => {
                   {/* Add principal logo */}
                   <Link href={MainPaths.LOGIN}>
                     <a
-                      className="w-1/2 p-1 mb-3 rounded-full cursor-pointer border border-black 
+                      className="w-1/2 p-1 mb-3 rounded-full text-center cursor-pointer border border-black 
                       text-white bg-gray-400 hover:bg-gray-200 hover:text-black"
                     >
                       Login
@@ -113,7 +113,7 @@ const MenuMobile = ({ user, setAuth }) => {
                   </Link>
                   <Link href={MainPaths.SIGNUP}>
                     <a
-                      className="w-1/2 p-1 rounded-full border border-black 
+                      className="w-1/2 p-1 rounded-full text-center border border-black
                       text-white bg-gray-400 hover:bg-gray-200 hover:text-black"
                     >
                       Sign Up

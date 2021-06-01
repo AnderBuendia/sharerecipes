@@ -1,6 +1,4 @@
-import { useQuery } from '@apollo/client';
 import Link from 'next/link';
-import { GET_NUMBER_OF_COMMENTS } from '../../lib/graphql/comments/query';
 import ChatIcon from '../icons/chaticon';
 import StarIcon from '../icons/staricon';
 import { Waypoint } from 'react-waypoint';
@@ -15,16 +13,8 @@ const RecipeCard = ({ recipe, numberOfRecipes, index, fetchMore }) => {
     image_url,
     average_vote,
     url,
+    comments,
   } = recipe;
-
-  const { data, loading } = useQuery(GET_NUMBER_OF_COMMENTS, {
-    variables: {
-      recipeUrl: url,
-    },
-  });
-
-  if (loading) return null;
-  const comments = data ? data.getNumberOfComments : null;
 
   return (
     <>
@@ -68,13 +58,13 @@ const RecipeCard = ({ recipe, numberOfRecipes, index, fetchMore }) => {
           </div>
         </div>
       </Link>
-      {index === numberOfRecipes - 1 && (
+      {index < 12 && index === numberOfRecipes - 1 && (
         <Waypoint
           onEnter={() => {
             fetchMore({
               variables: {
                 offset: 0,
-                limit: index + 11,
+                limit: index + 20,
               },
             });
           }}

@@ -24,7 +24,8 @@ const usernameValidation = (value) => {
  */
 const emailValidation = (value) => {
   const email = value.trim();
-  const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const regex =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   if (email.length < 6) return false;
   if (!email.match(regex)) return false;
@@ -42,7 +43,7 @@ const emailValidation = (value) => {
  */
 const passwordValidation = (value) => {
   const pass = value.trim();
-  const regex = /^[\x21-\x7E]+$/;
+  const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*_]).{8,}$/;
 
   if (pass.length < 7) return false;
   if (!pass.match(regex)) return false;

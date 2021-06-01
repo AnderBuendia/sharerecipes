@@ -7,21 +7,20 @@
     "dev": "node server/index.js",
     "build": "next build",
     "start": "node server/index.js",
-    "build:css": "postcss assets/tailwind.css -o assets/main.css",
-    "test": "jest --watch"
+    "build:css": "postcss assets/tailwind.css -o assets/main.css"
   },
   "dependencies": {
     "@apollo/client": "^3.2.8",
     "@material-ui/core": "^4.11.0",
     "@material-ui/lab": "^4.0.0-alpha.56",
-    "@uppy/core": "^1.15.0",
-    "@uppy/image-editor": "^0.2.0",
-    "@uppy/react": "^1.11.0",
-    "@uppy/xhr-upload": "^1.6.8",
+    "@uppy/core": "1.19.1",
+    "@uppy/image-editor": "^0.2.6",
+    "@uppy/react": "^1.11.10",
+    "@uppy/xhr-upload": "^1.7.4",
     "cookie": "^0.4.1",
     "graphql": "^15.4.0",
     "jsonwebtoken": "^8.5.1",
-    "next": "10.2.0",
+    "next": "10.2.2",
     "next-themes": "^0.0.14",
     "react": "17.0.2",
     "react-dom": "17.0.2",
@@ -33,15 +32,10 @@
     "sweetalert2": "^10.3.6"
   },
   "devDependencies": {
-    "@testing-library/dom": "^7.31.0",
-    "@testing-library/jest-dom": "^5.12.0",
-    "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^13.1.9",
-    "autoprefixer": "^10.0.2",
-    "babel-jest": "^26.6.3",
+    "autoprefixer": "10.2.5",
     "elliptic": "^6.5.4",
-    "postcss": "^8.1.8",
-    "postcss-cli": "^8.3.0",
-    "tailwindcss": "^2.0.4"
+    "postcss": "8.3.0",
+    "postcss-cli": "8.3.1",
+    "tailwindcss": "2.1.2"
   }
 }

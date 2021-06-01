@@ -1,11 +1,8 @@
 import { createContext } from 'react';
 
 const AuthContext = createContext({
-    authState: {
-        user: null,
-        jwt: null,
-    },
-    setAuth: () => {}
+  authState: null,
+  setAuth: null,
 });
 
 export default AuthContext;

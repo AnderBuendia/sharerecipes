@@ -9,8 +9,9 @@ import {
 } from 'react-share';
 import AuthContext from '../../../lib/context/auth/authContext';
 
-const RecipeData = ({ recipe, url, confirmDeleteRecipe, voteRecipe }) => {
+const RecipeData = ({ recipe, url, confirmDeleteRecipe, handleVoteRecipe }) => {
   const {
+    _id,
     name,
     image_url,
     image_name,
@@ -89,7 +90,7 @@ const RecipeData = ({ recipe, url, confirmDeleteRecipe, voteRecipe }) => {
                 disabled={!authState ? true : false}
                 value={average_vote}
                 precision={0.5}
-                onChange={(event, newValue) => voteRecipe(newValue)}
+                onChange={(event, newValue) => handleVoteRecipe(newValue)}
               />
               <p className="ml-1 text-lg">
                 ({average_vote} from {voted.length} votes)
@@ -123,13 +124,13 @@ const RecipeData = ({ recipe, url, confirmDeleteRecipe, voteRecipe }) => {
           ))}
         </div>
       </div>
-      {authState.user && author.email === authState.user.email ? (
+      {authState.user && author?.email === authState.user.email ? (
         <div className="flex w-full mt-6">
           <button
             type="button"
             className="flex-1 mr-2 justify-center items-center bg-red-800 py-2 px-4 w-full
                   text-white rounded text-xs uppercase font-roboto font-bold hover:bg-red-600"
-            onClick={() => confirmDeleteRecipe(url)}
+            onClick={() => confirmDeleteRecipe(_id)}
           >
             Delete Recipe
           </button>

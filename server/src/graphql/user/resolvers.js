@@ -11,23 +11,20 @@ const HTTPStatusCodes = require('../../enums/http-status-code');
 const {
   usernameValidation,
   emailValidation,
+  passwordValidation,
 } = require('../../utils/formValidation.utils');
 require('dotenv').config({ path: 'src/variables.env' });
 
 /* User Resolvers */
 const resolvers = {
   Query: {
-    hello: (_, { input }) => {
-      return `Hello ${input.name}, ${input.alias}`;
-    },
-
     getUser: async (_, {}, ctx) => {
       if (!ctx.req.user) {
         return null;
       }
 
       try {
-        return await User.findById(ctx.req.user.id);
+        return await User.findById(ctx.req.user._id);
       } catch (error) {
         console.log(error);
       }
@@ -64,6 +61,11 @@ const resolvers = {
             UserErrors.EMAIL_FORMAT,
             HTTPStatusCodes.NOT_ACCEPTABLE
           );
+        } else if (!passwordValidation(password)) {
+          throw new ApolloError(
+            UserErrors.PASSWORD,
+            HTTPStatusCodes.NOT_ACCEPTABLE
+          );
         } else if (user) {
           throw new ApolloError(
             UserErrors.REGISTERED,
@@ -72,26 +74,25 @@ const resolvers = {
         }
 
         user = new User({
-          name,
-          email,
+          ...input,
           password: bcrypt.hashSync(password, 10),
         });
 
         await user.save();
 
         /* Send an activation mail */
-        const emailToken = jwt.sign({ id: user.id }, process.env.SECRET_EMAIL, {
+        const token = jwt.sign({ _id: user._id }, process.env.SECRET_EMAIL, {
           expiresIn: '1h',
         });
 
         const mailContent = {
-          url: `${process.env.HOST_FRONT}/confirmation/${emailToken}`,
+          url: `${process.env.HOST_FRONT}/confirmation/${token}`,
           text: 'Activate your Account',
         };
 
-        await sendEmails(user.email, mailContent);
+        // await sendEmails(user.email, mailContent);
 
-        return true;
+        return token;
       } catch (error) {
         throw error;
       }
@@ -102,7 +103,7 @@ const resolvers = {
 
       try {
         /* Check if user exists and if password is correct */
-        const user = await User.findOne({ email });
+        let user = await User.findOne({ email });
 
         if (!emailValidation(email)) {
           throw new ApolloError(
@@ -114,20 +115,18 @@ const resolvers = {
             UserErrors.USER_NOT_FOUND,
             HTTPStatusCodes.NOT_FOUND
           );
-        } else if (user && !user.confirmed) {
-          throw new ApolloError(
-            UserErrors.NOT_ACTIVATED,
-            HTTPStatusCodes.NOT_AUTHORIZED
-          );
         } else if (!bcrypt.compareSync(password, user.password)) {
           throw new ApolloError(
             UserErrors.PASSWORD,
             HTTPStatusCodes.NOT_AUTHORIZED
           );
+        } else if (user && !user.confirmed) {
+          throw new ApolloError(
+            UserErrors.NOT_ACTIVATED,
+            HTTPStatusCodes.NOT_AUTHORIZED
+          );
         }
-
         const token = createAccessToken(user);
-        await user.save();
 
         return {
           token,
@@ -150,7 +149,7 @@ const resolvers = {
             UserErrors.USER_NOT_FOUND,
             HTTPStatusCodes.NOT_FOUND
           );
-        } else if (user.id !== ctx.req.user.id) {
+        } else if (!ctx.req.user && ctx.req.user._id !== user._id) {
           throw new ApolloError(
             UserErrors.INVALID_CREDENTIALS,
             HTTPStatusCodes.NOT_AUTHORIZED
@@ -163,17 +162,8 @@ const resolvers = {
         }
 
         /* Save data in DB */
-        user = await User.findOneAndUpdate(
-          {
-            email,
-          },
-          {
-            name,
-          },
-          {
-            new: true,
-          }
-        );
+        user.name = name;
+        await user.save();
 
         return user;
       } catch (error) {
@@ -182,7 +172,7 @@ const resolvers = {
     },
 
     updateUserPassword: async (_, { input }, ctx) => {
-      const { email, password, confirmpassword } = input;
+      const { email, password, confirmPassword } = input;
 
       try {
         /* Check if user exists // user is the editor // password is correct */
@@ -193,7 +183,7 @@ const resolvers = {
             UserErrors.USER_NOT_FOUND,
             HTTPStatusCodes.NOT_FOUND
           );
-        } else if (user.id !== ctx.req.user.id) {
+        } else if (!ctx.req.user && ctx.req.user._id !== user._id) {
           throw new ApolloError(
             UserErrors.INVALID_CREDENTIALS,
             HTTPStatusCodes.NOT_AUTHORIZED
@@ -206,13 +196,8 @@ const resolvers = {
         }
 
         /* Save data in DB */
-        user = await User.findOneAndUpdate(
-          { email },
-          { password: bcrypt.hashSync(confirmpassword, 10) },
-          {
-            new: true,
-          }
-        );
+        user.password = bcrypt.hashSync(confirmPassword, 10);
+        await user.save();
 
         return true;
       } catch (error) {
@@ -233,7 +218,7 @@ const resolvers = {
         }
 
         /* Check if the admin is the one who deletes the user */
-        const adminUser = await User.findById(ctx.req.user.id);
+        const adminUser = await User.findById(ctx.req.user._id);
 
         if (adminUser.role !== 'ADMIN') {
           return new ApolloError(
@@ -257,7 +242,7 @@ const resolvers = {
 
       try {
         const user = jwt.verify(token, process.env.SECRET_EMAIL);
-        await User.findByIdAndUpdate({ _id: user.id }, { confirmed: true });
+        await User.findByIdAndUpdate({ _id: user._id }, { confirmed: true });
 
         return true;
       } catch (error) {}
@@ -279,9 +264,9 @@ const resolvers = {
         }
 
         /* Send an activation mail */
-        const forgotToken = jwt.sign(
+        const token = jwt.sign(
           {
-            id: user.id,
+            _id: user._id,
           },
           process.env.SECRET_FORGOT,
           {
@@ -290,13 +275,13 @@ const resolvers = {
         );
 
         const mailContent = {
-          url: `${process.env.HOST_FRONT}/forgot-pass/${forgotToken}`,
+          url: `${process.env.HOST_FRONT}/forgot-pass/${token}`,
           text: 'Change your Password',
         };
 
-        await sendEmails(email, mailContent);
+        // await sendEmails(email, mailContent);
 
-        return true;
+        return token;
       } catch (error) {
         console.log(error);
       }
@@ -304,8 +289,9 @@ const resolvers = {
 
     resetPassword: async (_, { input }) => {
       const { token, password } = input;
+
       try {
-        const user = jwt.verify(
+        let user = jwt.verify(
           token,
           process.env.SECRET_FORGOT,
           function (err, user) {
@@ -323,7 +309,7 @@ const resolvers = {
         /* Save data in DB */
         await User.findOneAndUpdate(
           {
-            _id: user.id,
+            _id: user._id,
           },
           {
             password: bcrypt.hashSync(password, 10),

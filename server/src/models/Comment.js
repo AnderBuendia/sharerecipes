@@ -18,6 +18,11 @@ const commentSchema = new Schema(
       ref: 'User',
       default: null,
     },
+    recipe: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Recipe',
+      default: null,
+    },
     edited: {
       type: Boolean,
       default: false,

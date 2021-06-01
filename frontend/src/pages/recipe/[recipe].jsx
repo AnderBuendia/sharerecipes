@@ -10,7 +10,7 @@ import MainLayout from '../../components/layouts/MainLayout';
 import Discussion from '../../components/recipes/recipe/Discussion';
 import Spinner from '../../components/generic/Spinner';
 import { GET_RECIPES } from '../../lib/graphql/recipe/query';
-import { UPDATE_VOTE_RECIPE } from '../../lib/graphql/recipe/mutation';
+import { VOTE_RECIPE } from '../../lib/graphql/recipe/mutation';
 import { DELETE_RECIPE } from '../../lib/graphql/recipe/mutation';
 import { GET_RECIPE } from '../../lib/graphql/recipe/query';
 import { MainPaths } from '../../enums/paths/main-paths';
@@ -29,55 +29,36 @@ const Recipe = () => {
   /* Apollo mutation */
   const [deleteRecipe] = useMutation(DELETE_RECIPE, {
     update(cache) {
-      const { getRecipes } = cache.readQuery({ query: GET_RECIPES });
+      const data = cache.readQuery({
+        query: GET_RECIPES,
+        variables: {
+          offset: 0,
+          limit: 20,
+        },
+      });
 
       cache.writeQuery({
         query: GET_RECIPES,
+        variables: {
+          offset: 0,
+          limit: 20,
+        },
         data: {
-          getRecipes: getRecipes.filter(
-            (currentRecipe) => currentRecipe.id !== recipe.id
+          ...data,
+          getRecipes: data.getRecipes.filter(
+            (currentRecipe) => currentRecipe._id !== recipe._id
           ),
         },
       });
     },
   });
 
-  const [updateVoteRecipe] = useMutation(UPDATE_VOTE_RECIPE, {
-    update(
-      cache,
-      {
-        data: {
-          updateVoteRecipe: { average_vote },
-        },
-      }
-    ) {
-      const { getRecipe } = cache.readQuery({
-        query: GET_RECIPE,
-        variables: {
-          recipeUrl: url,
-          offset: 0,
-          limit: 10,
-        },
-      });
-
-      cache.writeQuery({
-        query: GET_RECIPE,
-        variables: {
-          recipeUrl: url,
-          offset: 0,
-          limit: 10,
-        },
-        data: {
-          getRecipe: { ...getRecipe.average_vote, average_vote },
-        },
-      });
-    },
-  });
+  const [voteRecipe] = useMutation(VOTE_RECIPE);
 
   /* Update votes */
-  const voteRecipe = async (votes) => {
+  const handleVoteRecipe = async (votes) => {
     try {
-      const { data } = await updateVoteRecipe({
+      await voteRecipe({
         variables: {
           recipeUrl: url,
           input: {
@@ -92,7 +73,7 @@ const Recipe = () => {
     }
   };
 
-  const confirmDeleteRecipe = (recipeUrl) => {
+  const confirmDeleteRecipe = (_id) => {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -108,7 +89,7 @@ const Recipe = () => {
           /* Delete recipe by recipe url */
           await deleteRecipe({
             variables: {
-              recipeUrl,
+              _id,
             },
           });
 
@@ -147,7 +128,7 @@ const Recipe = () => {
         recipe={recipe}
         url={url}
         confirmDeleteRecipe={confirmDeleteRecipe}
-        voteRecipe={voteRecipe}
+        handleVoteRecipe={handleVoteRecipe}
       />
 
       <Discussion recipe={recipe} query={GET_RECIPE} fetchMore={fetchMore} />

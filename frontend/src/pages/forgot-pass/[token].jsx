@@ -35,7 +35,7 @@ function ResetPasswordToken({ token }) {
   const onSubmit = async (data) => {
     const { password } = data;
     try {
-      const { data } = await resetPassword({
+      await resetPassword({
         variables: {
           input: {
             token,
@@ -83,7 +83,7 @@ function ResetPasswordToken({ token }) {
 
         <Input
           label="Confirm Password"
-          name="confirmpassword"
+          name="confirmPassword"
           type="password"
           placeholder="Confirm New Password"
           childRef={register({
@@ -95,7 +95,7 @@ function ResetPasswordToken({ token }) {
               },
             },
           })}
-          error={errors.confirmpassword}
+          error={errors.confirmPassword}
         />
 
         <input className="btn-primary" type="submit" value="Reset Password" />

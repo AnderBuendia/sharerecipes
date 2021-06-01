@@ -22,13 +22,14 @@ const Popular = () => {
   if (loading) return <Spinner />;
   const recipes = data ? data.getBestRecipes : null;
 
-  const recipesRendered = recipes ? (
-    recipes.map((recipe) => <RecipeCard key={recipe.id} recipe={recipe} />)
-  ) : (
-    <h3 className="text-4xl font-body font-bold text-center mt-10">
-      No recipes
-    </h3>
-  );
+  const recipesRendered =
+    recipes && recipes.length > 0 ? (
+      recipes.map((recipe) => <RecipeCard key={recipe._id} recipe={recipe} />)
+    ) : (
+      <h3 className="text-4xl font-body font-bold text-center mt-10">
+        No recipes
+      </h3>
+    );
 
   return (
     <MainLayout

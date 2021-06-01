@@ -12,7 +12,7 @@ import {
 } from '../../../lib/graphql/comments/mutation';
 
 const Comment = ({ comment, query, recipe, i, fetchMore }) => {
-  const { id, message, votes, author, createdAt, edited } = comment;
+  const { _id, message, votes, author, createdAt, edited } = comment;
 
   /* TimeAgo Hook */
   const timeago = useTimeAgo(createdAt);
@@ -28,42 +28,13 @@ const Comment = ({ comment, query, recipe, i, fetchMore }) => {
   const [editComment, setEditComment] = useState(message);
 
   /* Apollo Mutations */
-  const [editCommentsRecipe] = useMutation(EDIT_COMMENTS_RECIPE, {
-    update(cache, { data: editCommentsRecipe }) {
-      const { getRecipe } = cache.readQuery({
-        query,
-        variables: {
-          recipeUrl: recipe.url,
-          offset: 0,
-          limit: 10,
-        },
-      });
-
-      getRecipe.comments.map((comment) => {
-        if (comment.id === editCommentsRecipe.id) {
-          return { ...comment, editCommentsRecipe };
-        }
-      });
-
-      cache.writeQuery({
-        query,
-        variables: {
-          recipeUrl: recipe.url,
-          offset: 0,
-          limit: 10,
-        },
-        data: {
-          getRecipe: { ...getRecipe },
-        },
-      });
-    },
-  });
+  const [editCommentsRecipe] = useMutation(EDIT_COMMENTS_RECIPE);
 
   const handleEdit = async (editComment) => {
     try {
-      const { data } = await editCommentsRecipe({
+      await editCommentsRecipe({
         variables: {
-          id,
+          _id,
           input: {
             message: editComment,
             edited: true,
@@ -79,42 +50,13 @@ const Comment = ({ comment, query, recipe, i, fetchMore }) => {
     }
   };
 
-  const [voteCommentsRecipe] = useMutation(VOTE_COMMENTS_RECIPE, {
-    update(cache, { data: voteCommentsRecipe }) {
-      const { getRecipe } = cache.readQuery({
-        query,
-        variables: {
-          recipeUrl: recipe.url,
-          offset: 0,
-          limit: 10,
-        },
-      });
+  const [voteCommentsRecipe] = useMutation(VOTE_COMMENTS_RECIPE);
 
-      getRecipe.comments.map((comment) => {
-        if (comment.id === voteCommentsRecipe.id) {
-          return { ...comment, voteCommentsRecipe };
-        }
-      });
-
-      cache.writeQuery({
-        query,
-        variables: {
-          recipeUrl: recipe.url,
-          offset: 0,
-          limit: 10,
-        },
-        data: {
-          getRecipe: { ...getRecipe },
-        },
-      });
-    },
-  });
-
-  const voteComments = async (id) => {
+  const voteComments = async (_id) => {
     try {
-      const { data } = await voteCommentsRecipe({
+      await voteCommentsRecipe({
         variables: {
-          id,
+          _id,
           input: {
             votes: 1,
           },
@@ -140,7 +82,7 @@ const Comment = ({ comment, query, recipe, i, fetchMore }) => {
         />
         <p className="ml-2 font-roboto text-sm font-bold">
           {author.name}
-          {author.email === recipe.author.email && (
+          {author.email === recipe.author?.email && (
             <span className="ml-1 px-2 rounded-full bg-green-100 text-green-900 font-light text-xs uppercase">
               Chef
             </span>
@@ -160,15 +102,13 @@ const Comment = ({ comment, query, recipe, i, fetchMore }) => {
             onChange={(e) => setEditComment(e.target.value)}
           />
         ) : (
-          <p className="break-all font-roboto text-gray-900 text-sm font-medium">
-            {message}
-          </p>
+          <p className="break-all font-roboto text-sm font-medium">{message}</p>
         )}
 
         <div className="flex mt-1 items-center">
           <button
             className="flex font-bold items-center content-center text-xs text-gray-400"
-            onClick={() => voteComments(id)}
+            onClick={() => voteComments(_id)}
           >
             <ChevronUp className="w-5 h-5" />
             <span>Upvote {votes > 0 && `(${votes})`}</span>
@@ -192,7 +132,7 @@ const Comment = ({ comment, query, recipe, i, fetchMore }) => {
           onEnter={() =>
             fetchMore({
               variables: {
-                id: recipe.id,
+                _id: recipe._id,
                 offset: 0,
                 limit: i + 11,
               },

@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useForm, Controller } from 'react-hook-form';
 import TextField from '@material-ui/core/TextField';
 import Image from 'next/image';
@@ -9,28 +9,11 @@ import { useToasts } from 'react-toast-notifications';
 import AuthContext from '../../../lib/context/auth/authContext';
 import { SEND_COMMENTS_RECIPE } from '../../../lib/graphql/comments/mutation';
 
-export const COMMENTS_FRAGMENT = gql`
-  fragment CommentsFragment on Recipe {
-    comments(offset: $offset, limit: $limit) {
-      id
-      message
-      edited
-      createdAt
-      votes
-      author {
-        name
-        email
-        image_url
-        image_name
-      }
-    }
-  }
-`;
-
 const Discussion = ({ recipe, query, fetchMore }) => {
-  /* useState Modal */
+  const defaultMessage = '';
+
+  /* Handle Modal state */
   const [open, setOpen] = useState(false);
-  const [defaultMessage, setDefaultMessage] = useState('');
 
   /* auth state */
   const { authState } = useContext(AuthContext);
@@ -47,7 +30,7 @@ const Discussion = ({ recipe, query, fetchMore }) => {
   /* Apollo mutation to update recipe comments */
   const [sendCommentsRecipe] = useMutation(SEND_COMMENTS_RECIPE, {
     update(cache, { data: { sendCommentsRecipe } }) {
-      const { getRecipe } = cache.readQuery({
+      const data = cache.readQuery({
         query,
         variables: {
           recipeUrl: recipe.url,
@@ -64,8 +47,9 @@ const Discussion = ({ recipe, query, fetchMore }) => {
           limit: 10,
         },
         data: {
+          ...data,
           getRecipe: {
-            comments: [...getRecipe.comments, sendCommentsRecipe],
+            comments: [...data.getRecipe.comments, sendCommentsRecipe],
           },
         },
       });
@@ -75,7 +59,7 @@ const Discussion = ({ recipe, query, fetchMore }) => {
   /* React hook form */
   const { handleSubmit, control, reset } = useForm({
     mode: 'onChange',
-    defaultValues: defaultMessage,
+    defaultValues: { defaultMessage: '' },
   });
 
   /* Comments react hook form */
@@ -84,7 +68,7 @@ const Discussion = ({ recipe, query, fetchMore }) => {
 
     if (authState.user) {
       try {
-        const { data } = await sendCommentsRecipe({
+        await sendCommentsRecipe({
           variables: {
             recipeUrl: recipe.url,
             input: {
@@ -93,7 +77,7 @@ const Discussion = ({ recipe, query, fetchMore }) => {
           },
         });
 
-        reset(setDefaultMessage(''));
+        reset({ defaultMessage: '' });
       } catch (error) {
         addToast(error.message.replace('GraphQL error: ', ''), {
           appearance: 'error',
@@ -149,7 +133,7 @@ const Discussion = ({ recipe, query, fetchMore }) => {
         <div className="border-t border-gray-400 mb-4">
           {recipe.comments.map((comment, i) => (
             <Comment
-              key={comment.id}
+              key={comment._id}
               comment={comment}
               i={i}
               query={query}
@@ -161,10 +145,6 @@ const Discussion = ({ recipe, query, fetchMore }) => {
       </div>
     </div>
   );
-};
-
-Discussion.fragments = {
-  comments: COMMENTS_FRAGMENT,
 };
 
 export default Discussion;

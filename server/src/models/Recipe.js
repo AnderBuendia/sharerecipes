@@ -55,13 +55,13 @@ const recipeSchema = new Schema(
       ref: 'User',
       default: null,
     },
-    comments: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Comment',
-        default: null,
-      },
-    ],
+    // comments: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Comment',
+    //     default: null,
+    //   },
+    // ],
   },
   {
     timestamps: true,
