@@ -7,7 +7,6 @@ const { ApolloError } = require('apollo-server-express');
 const fs = require('fs');
 const path = require('path');
 const RecipeErrors = require('../../enums/recipe.errors');
-const UserErrors = require('../../enums/user.errors');
 const HttpStatusCode = require('../../enums/http-status-code');
 
 const resolvers = {
@@ -141,7 +140,7 @@ const resolvers = {
       }
     },
 
-    updateVoteRecipe: async (_, { recipeUrl, input }, ctx) => {
+    voteRecipe: async (_, { recipeUrl, input }, ctx) => {
       const { votes } = input;
 
       try {
@@ -203,7 +202,7 @@ const resolvers = {
           );
         } else if (!ctx.req.user._id) {
           throw new ApolloError(
-            UserErrors.INVALID_CREDENTIALS,
+            RecipeErrors.NOT_LOGGED_IN,
             HttpStatusCode.NOT_AUTHORIZED
           );
         } else if (!input.message) {
@@ -227,7 +226,7 @@ const resolvers = {
       }
     },
 
-    editCommentsRecipe: async (_, { _id, input }) => {
+    editCommentsRecipe: async (_, { _id, input }, ctx) => {
       try {
         /* Check if comment exists */
         let checkComment = await Comment.findById(_id);
@@ -236,6 +235,11 @@ const resolvers = {
           throw new ApolloError(
             RecipeErrors.COMMENT_NOT_FOUND,
             HttpStatusCode.NOT_FOUND
+          );
+        } else if (!ctx.req.user._id) {
+          throw new ApolloError(
+            RecipeErrors.NOT_LOGGED_IN,
+            HttpStatusCode.NOT_AUTHORIZED
           );
         }
 
@@ -260,9 +264,7 @@ const resolvers = {
             RecipeErrors.COMMENT_NOT_FOUND,
             HttpStatusCode.NOT_FOUND
           );
-        }
-
-        if (!ctx.req.user) {
+        } else if (!ctx.req.user._id) {
           throw new ApolloError(
             RecipeErrors.NOT_LOGGED_IN,
             HttpStatusCode.NOT_AUTHORIZED

@@ -1,5 +1,4 @@
 const RecipeErrors = require('../enums/recipe.errors');
-const UserErrors = require('../enums/user.errors');
 const { api, mongoose, server, Recipe, Comment } = require('./index');
 
 let token;
@@ -89,7 +88,7 @@ describe('Recipe Tests', () => {
       })
       .expect(200)
       .expect(({ body }) => {
-        expect(body.errors[0].message).toBe(UserErrors.INVALID_CREDENTIALS);
+        expect(body.errors[0].message).toBe(RecipeErrors.NOT_LOGGED_IN);
       });
   });
 
@@ -142,9 +141,28 @@ describe('Recipe Tests', () => {
         expect(body.data.editCommentsRecipe.message).not.toEqual(null);
       });
   });
-});
 
-afterAll(() => {
-  mongoose.connection.close();
-  server.close();
+  test('Vote a comment in the recipe', async () => {
+    await api
+      .post('/graphql')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        query: `
+      mutation {
+        voteCommentsRecipe(
+          _id: "${messageId}", 
+          input: {
+            votes: 1
+          }
+        ) {
+          votes
+        }
+      }
+    `,
+      })
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body.data.voteCommentsRecipe.votes).toBe(1);
+      });
+  });
 });

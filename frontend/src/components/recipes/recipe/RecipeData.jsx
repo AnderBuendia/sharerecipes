@@ -9,7 +9,7 @@ import {
 } from 'react-share';
 import AuthContext from '../../../lib/context/auth/authContext';
 
-const RecipeData = ({ recipe, url, confirmDeleteRecipe, voteRecipe }) => {
+const RecipeData = ({ recipe, url, confirmDeleteRecipe, handleVoteRecipe }) => {
   const {
     _id,
     name,
@@ -90,7 +90,7 @@ const RecipeData = ({ recipe, url, confirmDeleteRecipe, voteRecipe }) => {
                 disabled={!authState ? true : false}
                 value={average_vote}
                 precision={0.5}
-                onChange={(event, newValue) => voteRecipe(newValue)}
+                onChange={(event, newValue) => handleVoteRecipe(newValue)}
               />
               <p className="ml-1 text-lg">
                 ({average_vote} from {voted.length} votes)

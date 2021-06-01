@@ -72,7 +72,7 @@ const typeDefs = gql`
     newRecipe(input: RecipeInput): Recipe
     updateRecipe(recipeUrl: String!, input: RecipeInput): Recipe
     deleteRecipe(_id: ID!): Boolean
-    updateVoteRecipe(recipeUrl: String!, input: RecipeInput): Recipe
+    voteRecipe(recipeUrl: String!, input: RecipeInput): Recipe
 
     # RecipeComments
     sendCommentsRecipe(

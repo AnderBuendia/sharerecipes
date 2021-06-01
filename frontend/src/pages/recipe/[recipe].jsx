@@ -10,7 +10,7 @@ import MainLayout from '../../components/layouts/MainLayout';
 import Discussion from '../../components/recipes/recipe/Discussion';
 import Spinner from '../../components/generic/Spinner';
 import { GET_RECIPES } from '../../lib/graphql/recipe/query';
-import { UPDATE_VOTE_RECIPE } from '../../lib/graphql/recipe/mutation';
+import { VOTE_RECIPE } from '../../lib/graphql/recipe/mutation';
 import { DELETE_RECIPE } from '../../lib/graphql/recipe/mutation';
 import { GET_RECIPE } from '../../lib/graphql/recipe/query';
 import { MainPaths } from '../../enums/paths/main-paths';
@@ -53,12 +53,12 @@ const Recipe = () => {
     },
   });
 
-  const [updateVoteRecipe] = useMutation(UPDATE_VOTE_RECIPE);
+  const [voteRecipe] = useMutation(VOTE_RECIPE);
 
   /* Update votes */
-  const voteRecipe = async (votes) => {
+  const handleVoteRecipe = async (votes) => {
     try {
-      await updateVoteRecipe({
+      await voteRecipe({
         variables: {
           recipeUrl: url,
           input: {
@@ -128,7 +128,7 @@ const Recipe = () => {
         recipe={recipe}
         url={url}
         confirmDeleteRecipe={confirmDeleteRecipe}
-        voteRecipe={voteRecipe}
+        handleVoteRecipe={handleVoteRecipe}
       />
 
       <Discussion recipe={recipe} query={GET_RECIPE} fetchMore={fetchMore} />

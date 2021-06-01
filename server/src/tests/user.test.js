@@ -3,7 +3,7 @@ const { api, mongoose, server, User } = require('./index');
 
 let token;
 
-xdescribe('User Tests', () => {
+describe('User Tests', () => {
   beforeAll(async () => {
     await User.deleteMany({
       email: { $in: ['test2@email.com'] },
@@ -335,30 +335,6 @@ xdescribe('User Tests', () => {
         expect(body.data.updateUserPassword).toBe(true);
       });
   });
-
-  // test('GET USERS QUERY TEST', async () => {
-  //   await api
-  //     .post('/graphql')
-  //     .send({
-  //       query: `
-  //           {
-  //            getUsers(offset: 0, limit: 1) {
-  //              users {
-  //                _id
-  //                name
-  //              }
-  //            }
-  //           }
-  //       `,
-  //     })
-  //     .then((response) => {
-  //       // console.log(response);
-  //       expect(response.body.data).toBe('Hello Ander, Hola');
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // });
 });
 
 afterAll(async () => {

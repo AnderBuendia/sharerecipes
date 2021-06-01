@@ -17,9 +17,9 @@ export const NEW_RECIPE = gql`
   }
 `;
 
-export const UPDATE_VOTE_RECIPE = gql`
-  mutation updateVoteRecipe($recipeUrl: String!, $input: RecipeInput) {
-    updateVoteRecipe(recipeUrl: $recipeUrl, input: $input) {
+export const VOTE_RECIPE = gql`
+  mutation voteRecipe($recipeUrl: String!, $input: RecipeInput) {
+    voteRecipe(recipeUrl: $recipeUrl, input: $input) {
       _id
       voted
       votes
