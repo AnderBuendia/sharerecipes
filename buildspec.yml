@@ -13,7 +13,7 @@ phases:
       - echo Compiling
       - npm run build
       - cd ../server
-      - npm install -D
+      - npm install -D jest standard supertest
       - npm run test
   post_build:
     commands:
