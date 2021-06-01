@@ -12,14 +12,8 @@ phases:
       - echo Build started on `date`
       - echo Compiling
       - npm run build
-      - cd ../server
-      - npm install -D jest standard supertest
-      - npm run test
   post_build:
     commands:
-      - rm -rf node_modules
-      - rm package-lock.json
-      - cd ../frontend
       - rm -rf node_modules
       - rm package-lock.json
       - echo Build completed on `date`
