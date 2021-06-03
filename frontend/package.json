@@ -10,7 +10,7 @@
     "build:css": "postcss assets/tailwind.css -o assets/main.css"
   },
   "dependencies": {
-    "@apollo/client": "^3.2.8",
+    "@apollo/client": "3.3.18",
     "@material-ui/core": "^4.11.0",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@uppy/core": "1.19.1",

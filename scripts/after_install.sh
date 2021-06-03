@@ -3,7 +3,7 @@
 # Give permission for everything in the sharerecipes directory *
 sudo chmod -R 777 ~/sharerecipes
 
-# Add npm and node to path // Install pm2
+# Add npm and node to path
 
 cd ~/sharerecipes
 export NVM_DIR="$HOME/.nvm"	
@@ -15,7 +15,6 @@ nvm use 15.13.0
 nvm alias default 15.13.0
 
 npm install
-npm install pm2 -g
 
 # DB connection
 echo DB_URL=$(aws ssm get-parameters --output text --region eu-west-3 --names DB_URL --with-decryption --query Parameters[0].Value) > ~/sharerecipes/server/src/variables.env
