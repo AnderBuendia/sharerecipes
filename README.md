@@ -20,12 +20,11 @@ You need to clone the following repository:
 https://github.com/AnderBuendia/sharerecipes.git
 ```
 
-Go to the root project folder and initialize projects with Lerna:
+Go to the root project folder and initialize projects:
 
 ```
 cd sharerecipes
 npm install
-npm run initialize
 ```
 
 Configure .env files:
