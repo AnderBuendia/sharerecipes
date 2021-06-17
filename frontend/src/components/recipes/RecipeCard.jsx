@@ -2,6 +2,7 @@ import Link from 'next/link';
 import ChatIcon from '../icons/chaticon';
 import StarIcon from '../icons/staricon';
 import { Waypoint } from 'react-waypoint';
+import Image from 'next/image';
 
 const RecipeCard = ({ recipe, numberOfRecipes, index, fetchMore }) => {
   const {
@@ -23,17 +24,18 @@ const RecipeCard = ({ recipe, numberOfRecipes, index, fetchMore }) => {
           <div
             className="px-3 py-3 bg-auto bg-center h-56 relative"
             style={{
-              backgroundImage: `linear-gradient(180deg,transparent 0,rgba(0,0,0,.9) 150%), url(${image_url})`,
+              backgroundImage: `linear-gradient(180deg,transparent 0,rgba(0,0,0,.9) 150%)`,
             }}
           >
+            <Image src={image_url} alt={name} layout="fill" objectFit="cover" />
             <div className="grid absolute bottom-0 mb-2">
               <div className="font-bold text-xl text-white">{name}</div>
               <div className="bg-white dark:bg-gray-700 flex items-center mr-auto px-2 rounded-full">
-                <ChatIcon className="w-4 h-4 mr-0.5" />{' '}
+                <ChatIcon className="w-4 h-4 mr-0.5" />
                 <span className="text-sm mr-1">
                   {comments ? comments.length : 0}
                 </span>
-                <StarIcon className="w-4 h-4 text-yellow-400 mr-0.5" />{' '}
+                <StarIcon className="w-4 h-4 text-yellow-400 mr-0.5" />
                 <span className="text-sm">{average_vote}</span>
               </div>
             </div>
@@ -58,7 +60,7 @@ const RecipeCard = ({ recipe, numberOfRecipes, index, fetchMore }) => {
           </div>
         </div>
       </Link>
-      {index < 12 && index === numberOfRecipes - 1 && (
+      {index > 12 && index === numberOfRecipes - 1 && (
         <Waypoint
           onEnter={() => {
             fetchMore({
