@@ -89,7 +89,7 @@ const Discussion = ({ recipe, query, fetchMore }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-700 mx-auto w-11/12 rounded-lg shadow-md px-5 py-4">
+    <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md px-5 py-4">
       {open && <ModalSignup open={open} handleOpen={setOpen} />}
       <h1 className="text-lg font-body font-bold mb-4">Discussion</h1>
       <div className="flex w-full">

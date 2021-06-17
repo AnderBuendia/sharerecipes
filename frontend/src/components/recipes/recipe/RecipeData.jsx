@@ -28,16 +28,16 @@ const RecipeData = ({ recipe, url, confirmDeleteRecipe, handleVoteRecipe }) => {
   const { authState } = useContext(AuthContext);
 
   return (
-    <div className="bg-white dark:bg-gray-700 mx-auto w-11/12 rounded-lg shadow-md p-5 mb-4">
+    <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md p-5 mb-4">
       <h1 className="break-all text-2xl font-body font-bold mb-2">{name}</h1>
       <div className="w-full flex flex-col lgxl:flex-row lgxl:justify-between">
         <div className="lgxl:w-2/4 text-center ">
           <Image
             className="rounded-md mb-3"
-            key={image_url}
             src={image_url}
             alt={image_name}
-            width={380}
+            layout="fixed"
+            width={300}
             height={300}
           />
         </div>
