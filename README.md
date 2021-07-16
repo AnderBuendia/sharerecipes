@@ -12,6 +12,8 @@ If you like to cook and you want to share your dishes with other people, You can
 
 Before use this repository, you need to install [NodeJS](https://nodejs.org/en/download/) with `npm` that is multiplatform (is valid for Windows, MacOS and Linux).
 
+It is a requisite to install npm in his 7.x.x version because you will need to use [npm workspaces](https://docs.npmjs.com/cli/v7/using-npm/workspaces) to set up the dependencies of the project.
+
 ## To Install
 
 You need to clone the following repository:
