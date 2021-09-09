@@ -2,5 +2,5 @@ node_modules
 src/variables.env
 /src/tests/initialTest.test.js
 /src/utils/forTesting.js
-images
+/src/images
 .DS_Store
