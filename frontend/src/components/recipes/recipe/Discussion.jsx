@@ -112,7 +112,7 @@ const Discussion = ({ recipe, query, fetchMore }) => {
                   className="dark:bg-gray-200 w-10/12 sm:w-11/12 border border-black rounded shadow-sm"
                   id="outlined-multiline-flexible"
                   multiline
-                  rowsMax={3}
+                  maxRows={3}
                   placeholder="Introduce your message..."
                   variant="outlined"
                 />

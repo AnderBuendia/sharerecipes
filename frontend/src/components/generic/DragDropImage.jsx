@@ -11,7 +11,7 @@ const DragDropImage = ({ name, ratio, onChange, url, current, rounded }) => {
 
   const uppy = useMemo(() => {
     /* Do all the configuration here */
-    return Uppy({
+    return new Uppy({
       allowMultipleUploads: false,
       restrictions: {
         allowedFileTypes: ['image/*'],
@@ -25,13 +25,8 @@ const DragDropImage = ({ name, ratio, onChange, url, current, rounded }) => {
       },
     })
       .use(ImageEditor, {
+        id: 'ImageEditor',
         quality: 0.8,
-        cropperOptions: { initialAspectRatio: ratio, aspectRatio: ratio },
-        actions: {
-          cropSquare: false,
-          cropWidescreen: false,
-          cropWidescreenVertical: false,
-        },
       })
       .use(XHRUpload, {
         endpoint: url,
@@ -53,6 +48,7 @@ const DragDropImage = ({ name, ratio, onChange, url, current, rounded }) => {
     uppy.on('upload-success', (_file, response) => {
       uppy.reset();
       setModal(false);
+      console.log('RESPONSE', response);
       onChange && onChange(response.body);
     });
     return () => uppy.close();
