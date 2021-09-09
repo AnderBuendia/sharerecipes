@@ -9,6 +9,8 @@
     "server"
   ],
   "scripts": {
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:server": "npm run dev --workspace=server",
     "lint": "npm run lint",
     "server:test": "cd server && npm run test"
   },
@@ -17,7 +19,7 @@
   "license": "ISC",
   "devDependencies": {
     "eslint": "7.27.0",
-    "husky": "^6.0.0",
+    "husky": "7.0.2",
     "jest": "^26.6.3",
     "standard": "16.0.3"
   },

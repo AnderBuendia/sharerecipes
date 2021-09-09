@@ -10,32 +10,32 @@
     "build:css": "postcss assets/tailwind.css -o assets/main.css"
   },
   "dependencies": {
-    "@apollo/client": "3.3.18",
-    "@material-ui/core": "^4.11.0",
-    "@material-ui/lab": "^4.0.0-alpha.56",
-    "@uppy/core": "1.19.1",
-    "@uppy/image-editor": "^0.2.6",
-    "@uppy/react": "^1.11.10",
-    "@uppy/xhr-upload": "^1.7.4",
+    "@apollo/client": "3.4.5",
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/lab": "*",
+    "@uppy/core": "2.0.2",
+    "@uppy/image-editor": "1.0.1",
+    "@uppy/react": "2.0.2",
+    "@uppy/xhr-upload": "2.0.2",
     "cookie": "^0.4.1",
     "graphql": "^15.4.0",
     "jsonwebtoken": "^8.5.1",
-    "next": "11.0.0",
-    "next-themes": "^0.0.14",
+    "next": "11.1.2",
+    "next-themes": "^0.0.15",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-hook-form": "^6.15.5",
     "react-select": "^4.3.0",
     "react-share": "^4.3.1",
-    "react-toast-notifications": "2.4.4",
+    "react-toast-notifications": "2.5.1",
     "react-waypoint": "10.1.0",
-    "sweetalert2": "^10.3.6"
+    "sweetalert2": "11.1.5"
   },
   "devDependencies": {
-    "autoprefixer": "10.2.6",
+    "autoprefixer": "10.3.4",
     "elliptic": "^6.5.4",
     "postcss": "8.3.5",
     "postcss-cli": "8.3.1",
-    "tailwindcss": "2.2.0"
+    "tailwindcss": "2.2.11"
   }
 }

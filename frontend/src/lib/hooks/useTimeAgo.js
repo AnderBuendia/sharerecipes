@@ -1,15 +1,15 @@
-const DATE_UNITS = [
-  ['days', 86400],
-  ['hour', 3600],
-  ['minute', 60],
-  ['second', 1],
-];
+const DATE_UNITS = {
+  days: 86400,
+  hour: 3600,
+  minute: 60,
+  second: 1,
+};
 
 const getDateDiffs = (timestamp) => {
   const now = Date.now();
   const elapsed = (timestamp - now) / 1000;
 
-  for (const [unit, secondsInUnit] of DATE_UNITS) {
+  for (const [unit, secondsInUnit] of Object.entries(DATE_UNITS)) {
     if (Math.abs(elapsed) > secondsInUnit || unit === 'second') {
       const value = Math.floor(elapsed / Number(secondsInUnit));
       return { value, unit };
