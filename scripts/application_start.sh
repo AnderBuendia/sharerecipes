@@ -2,8 +2,8 @@
 
 # Run server *
 cd ~/sharerecipes
-pm2 start "npm run start:server" --name "back"
-pm2 start "npm run start:frontend" --name "front"
+/usr/bin/pm2 start "npm run start:server" --name "back"
+/usr/bin/pm2 start "npm run start:frontend" --name "front"
 
 # cd ~/sharerecipes/server
 # /usr/bin/pm2 start /usr/bin/npm --name "back" -- start
