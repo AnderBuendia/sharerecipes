@@ -20,4 +20,3 @@ phases:
 artifacts:
   files:
     - '**/*'
-  base-directory: '.next'
