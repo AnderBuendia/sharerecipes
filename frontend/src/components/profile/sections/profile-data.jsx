@@ -12,7 +12,6 @@ const ProfileData = () => {
   const { addToast } = useToasts();
   const { authState, setAuth } = useContext(AuthContext);
 
-  /* Change image user */
   const setImageUser = (url, setAuth) => {
     const { filename, image_url } = url;
 
@@ -26,7 +25,6 @@ const ProfileData = () => {
     });
   };
 
-  /* Apollo mutation to update data user */
   const getUpdateUser = (setAuth) => {
     const [updateUser] = useMutation(UPDATE_USER, {
       onCompleted: ({ updateUser: response }) => {
@@ -45,16 +43,22 @@ const ProfileData = () => {
 
   const { updateUser } = getUpdateUser(setAuth);
 
-  /* React hook form */
-  const { register, handleSubmit, errors } = useForm({
-    mode: 'onChange',
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      name: authState.user.name,
+      password: '',
+    },
   });
 
   const onSubmit = async (data) => {
     const { name, password } = data;
 
     try {
-      const { data } = await updateUser({
+      await updateUser({
         variables: {
           input: {
             name,
@@ -72,11 +76,6 @@ const ProfileData = () => {
     }
   };
 
-  const initialValues = {
-    name: authState.user.name,
-    email: authState.user.email,
-  };
-
   return (
     <div className="mdxl:w-11/12 bg-white dark:bg-gray-700 rounded-lg shadow-md mt-3 p-5">
       <div className="w-full text-center">
@@ -86,7 +85,6 @@ const ProfileData = () => {
             url={`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/user`}
             current={authState.user?.image_url}
             name="photo"
-            ratio={1}
             rounded
             onChange={(url) => setImageUser(url, setAuth)}
           />
@@ -99,10 +97,11 @@ const ProfileData = () => {
             name="name"
             type="text"
             placeholder="Introduce your Name"
-            initialValue={initialValues.name}
-            childRef={register({
-              required: FormMessages.USER_REQUIRED,
-            })}
+            register={{
+              ...register('name', {
+                required: FormMessages.USER_REQUIRED,
+              }),
+            }}
             error={errors.name}
           />
 
@@ -111,13 +110,15 @@ const ProfileData = () => {
             name="password"
             type="password"
             placeholder="Password"
-            childRef={register({
-              required: FormMessages.CURRENT_PASSWORD_REQUIRED,
-              minLength: {
-                value: 7,
-                message: FormMessages.MIN_LENGTH,
-              },
-            })}
+            register={{
+              ...register('password', {
+                required: FormMessages.CURRENT_PASSWORD_REQUIRED,
+                minLength: {
+                  value: 7,
+                  message: FormMessages.MIN_LENGTH,
+                },
+              }),
+            }}
             error={errors.password}
           />
 

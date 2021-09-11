@@ -20,9 +20,9 @@ import { UserRoles } from '../../enums/user/user-roles';
 
 /* components */
 import MainLayout from '../../components/layouts/MainLayout';
-import User from '../../components/adminpanel/User';
+import User from '../../components/Admin/User';
 import UsersGroup from '../../components/icons/usersgroup';
-import Pagination from '../../components/adminpanel/Pagination';
+import Pagination from '../../components/Admin/Pagination';
 import Spinner from '../../components/generic/Spinner';
 
 const AdminUsers = () => {

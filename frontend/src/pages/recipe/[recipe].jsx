@@ -7,26 +7,23 @@ import { getJwtFromCookie } from '../../lib/utils/jwt-cookie.utils';
 import { isRequestSSR, loadAuthProps } from '../../lib/utils/ssr.utils';
 import { createApolloClient } from '../../lib/apollo/apollo-client';
 import MainLayout from '../../components/layouts/MainLayout';
-import Discussion from '../../components/recipes/recipe/Discussion';
+import Discussion from '../../components/SingleRecipe/Discussion';
 import Spinner from '../../components/generic/Spinner';
 import { GET_RECIPES } from '../../lib/graphql/recipe/query';
 import { VOTE_RECIPE } from '../../lib/graphql/recipe/mutation';
 import { DELETE_RECIPE } from '../../lib/graphql/recipe/mutation';
 import { GET_RECIPE } from '../../lib/graphql/recipe/query';
 import { MainPaths } from '../../enums/paths/main-paths';
-import RecipeData from '../../components/recipes/recipe/RecipeData';
+import RecipeData from '../../components/SingleRecipe/RecipeData';
 
 const Recipe = () => {
-  /* Get current url name - Routing */
   const router = useRouter();
   const {
     query: { recipe: url },
   } = router;
 
-  /* Set Toast Notification */
   const { addToast } = useToasts();
 
-  /* Apollo mutation */
   const [deleteRecipe] = useMutation(DELETE_RECIPE, {
     update(cache) {
       const data = cache.readQuery({
@@ -55,7 +52,6 @@ const Recipe = () => {
 
   const [voteRecipe] = useMutation(VOTE_RECIPE);
 
-  /* Update votes */
   const handleVoteRecipe = async (votes) => {
     try {
       await voteRecipe({

@@ -15,7 +15,7 @@ const ACTIONS_REDUCERS = {
   }),
   [ACTIONS.SELECTED_DIFFICULTY]: (state, action) => ({
     ...state,
-    difficulty: action.payload,
+    selectedDifficulty: action.payload,
   }),
   [ACTIONS.ADD_INGREDIENTS]: (state, action) => ({
     ...state,

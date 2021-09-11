@@ -1,26 +1,20 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import Image from 'next/image';
 import { Waypoint } from 'react-waypoint';
-import useTimeAgo from '../../../lib/hooks/useTimeAgo';
+import useTimeAgo from '@Lib/hooks/useTimeAgo';
 import { useToasts } from 'react-toast-notifications';
-import AuthContext from '../../../lib/context/auth/authContext';
-import ChevronUp from '../../icons/chevronUp';
+import ChevronUp from '@Components/icons/chevronUp';
 import {
   EDIT_COMMENTS_RECIPE,
   VOTE_COMMENTS_RECIPE,
-} from '../../../lib/graphql/comments/mutation';
+} from '@Lib/graphql/comments/mutation';
+import useUser from '@Lib/hooks/useUser';
 
-const Comment = ({ comment, query, recipe, i, fetchMore }) => {
+const Comment = ({ comment, recipe, i, fetchMore }) => {
   const { _id, message, votes, author, createdAt, edited } = comment;
-
-  /* TimeAgo Hook */
   const timeago = useTimeAgo(createdAt);
-
-  /* auth state */
-  const { authState } = useContext(AuthContext);
-
-  /* Set Toast Notification */
+  const { authState } = useUser();
   const { addToast } = useToasts();
 
   /* useState Edit comments */
@@ -52,7 +46,7 @@ const Comment = ({ comment, query, recipe, i, fetchMore }) => {
 
   const [voteCommentsRecipe] = useMutation(VOTE_COMMENTS_RECIPE);
 
-  const voteComments = async (_id) => {
+  const handleVoteComments = async (_id) => {
     try {
       await voteCommentsRecipe({
         variables: {
@@ -108,7 +102,7 @@ const Comment = ({ comment, query, recipe, i, fetchMore }) => {
         <div className="flex mt-1 items-center">
           <button
             className="flex font-bold items-center content-center text-xs text-gray-400"
-            onClick={() => voteComments(_id)}
+            onClick={() => handleVoteComments(_id)}
           >
             <ChevronUp className="w-5 h-5" />
             <span>Upvote {votes > 0 && `(${votes})`}</span>

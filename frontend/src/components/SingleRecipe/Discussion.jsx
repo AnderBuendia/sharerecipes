@@ -1,22 +1,24 @@
-import { useState, useContext } from 'react';
+import { useState, useRef } from 'react';
+import { useRouter } from 'next/router';
 import { useMutation } from '@apollo/client';
-import { useForm, Controller } from 'react-hook-form';
-import TextField from '@material-ui/core/TextField';
-import Image from 'next/image';
-import ModalSignup from './ModalSignup';
-import Comment from './Comment';
+import { useForm } from 'react-hook-form';
 import { useToasts } from 'react-toast-notifications';
-import AuthContext from '../../../lib/context/auth/authContext';
-import { SEND_COMMENTS_RECIPE } from '../../../lib/graphql/comments/mutation';
+import useUser from '@Lib/hooks/useUser';
+import useClickOutside from '@Lib/hooks/useClickOutside';
+import Image from 'next/image';
+import ModalSignUp from '@Components/SingleRecipe/ModalSignUp';
+import Comment from '@Components/SingleRecipe/Comment';
+import { SEND_COMMENTS_RECIPE } from '@Lib/graphql/comments/mutation';
+import { MainPaths } from '@Enums/paths/main-paths';
 
 const Discussion = ({ recipe, query, fetchMore }) => {
-  const defaultMessage = '';
+  const [showModal, setShowModal] = useState(false);
+  const router = useRouter();
+  const { addToast } = useToasts();
+  const { authState } = useUser();
+  const componentRef = useRef();
+  useClickOutside(componentRef, setShowModal);
 
-  /* Handle Modal state */
-  const [open, setOpen] = useState(false);
-
-  /* auth state */
-  const { authState } = useContext(AuthContext);
   const image_user = authState.user?.image_url
     ? authState.user.image_url
     : '/usericon.jpeg';
@@ -24,10 +26,10 @@ const Discussion = ({ recipe, query, fetchMore }) => {
     ? authState.user.image_name
     : 'UserIcon Image';
 
-  /* Set Toast Notification */
-  const { addToast } = useToasts();
+  const handleSignUp = () => {
+    router.push(MainPaths.SIGNUP);
+  };
 
-  /* Apollo mutation to update recipe comments */
   const [sendCommentsRecipe] = useMutation(SEND_COMMENTS_RECIPE, {
     update(cache, { data: { sendCommentsRecipe } }) {
       const data = cache.readQuery({
@@ -56,41 +58,40 @@ const Discussion = ({ recipe, query, fetchMore }) => {
     },
   });
 
-  /* React hook form */
-  const { handleSubmit, control, reset } = useForm({
-    mode: 'onChange',
-    defaultValues: { defaultMessage: '' },
+  const { handleSubmit, register, reset } = useForm({
+    defaultValues: { description: '' },
   });
 
-  /* Comments react hook form */
   const onSubmit = async (data) => {
     const { message } = data;
 
-    if (authState.user) {
-      try {
-        await sendCommentsRecipe({
-          variables: {
-            recipeUrl: recipe.url,
-            input: {
-              message,
-            },
-          },
-        });
+    if (!authState.user) return setShowModal(true);
 
-        reset({ defaultMessage: '' });
-      } catch (error) {
-        addToast(error.message.replace('GraphQL error: ', ''), {
-          appearance: 'error',
-        });
-      }
-    } else {
-      setOpen(true);
+    try {
+      await sendCommentsRecipe({
+        variables: {
+          recipeUrl: recipe.url,
+          input: {
+            message,
+          },
+        },
+      });
+
+      reset();
+    } catch (error) {
+      addToast(error.message.replace('GraphQL error: ', ''), {
+        appearance: 'error',
+      });
     }
   };
 
   return (
     <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md px-5 py-4">
-      {open && <ModalSignup open={open} handleOpen={setOpen} />}
+      {showModal && (
+        <div ref={componentRef}>
+          <ModalSignUp onSignUp={handleSignUp} />
+        </div>
+      )}
       <h1 className="text-lg font-body font-bold mb-4">Discussion</h1>
       <div className="flex w-full">
         <div className="w-10 mr-2">
@@ -103,22 +104,15 @@ const Discussion = ({ recipe, query, fetchMore }) => {
             height={256}
           />
         </div>
-        <div className="w-5/6 relative">
+
+        <div className="w-8/12 relative">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Controller
-              name="message"
-              as={
-                <TextField
-                  className="dark:bg-gray-200 w-10/12 sm:w-11/12 border border-black rounded shadow-sm"
-                  id="outlined-multiline-flexible"
-                  multiline
-                  maxRows={3}
-                  placeholder="Introduce your message..."
-                  variant="outlined"
-                />
-              }
-              defaultValue={defaultMessage}
-              control={control}
+            <textarea
+              className="bg-white font-body shadow appearance-none border rounded w-full h-32 mb-3 py-2 px-3 
+                  text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+              name="description"
+              placeholder="Write your comment here..."
+              {...register('description')}
             />
 
             <input
@@ -136,7 +130,6 @@ const Discussion = ({ recipe, query, fetchMore }) => {
               key={comment._id}
               comment={comment}
               i={i}
-              query={query}
               fetchMore={fetchMore}
               recipe={recipe}
             />

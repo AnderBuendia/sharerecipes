@@ -1,4 +1,3 @@
-import React from 'react';
 import { useRouter } from 'next/router';
 import { useQuery } from '@apollo/client';
 import { decode } from 'jsonwebtoken';
@@ -8,8 +7,8 @@ import { createApolloClient } from '../lib/apollo/apollo-client';
 import { GET_RECIPES } from '../lib/graphql/recipe/query';
 import Spinner from '../components/generic/Spinner';
 import MainLayout from '../components/layouts/MainLayout';
-import RecipeCard from '../components/recipes/RecipeCard';
-import RecipesList from '../components/recipes/RecipesList';
+import RecipeCard from '../components/Recipes/RecipeCard';
+import RecipesList from '../components/Recipes/RecipesList';
 import { MainPaths } from '../enums/paths/main-paths';
 
 const Search = () => {
@@ -17,7 +16,7 @@ const Search = () => {
   const {
     query: { q },
   } = router;
-  const search = q.toLowerCase();
+  const search = `${q}`.toLowerCase();
 
   const { data, loading } = useQuery(GET_RECIPES);
 

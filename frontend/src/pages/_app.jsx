@@ -1,4 +1,3 @@
-// @ts-nocheck
 import '../styles/index.css';
 import { ApolloProvider } from '@apollo/client';
 import { ThemeProvider } from 'next-themes';

@@ -1,9 +1,9 @@
-import { useForm, Controller } from 'react-hook-form';
-import ReactSelect from 'react-select';
-import useNewRecipeForm from './hook';
-import Input from '../generic/Input';
-import { FormMessages } from '../../enums/config/messages';
-import { foodStyle, difficulty } from '../../enums/select-form-options';
+import { useForm } from 'react-hook-form';
+import useNewRecipeForm from '@Components/NewRecipeForm/hook';
+import Input from '@Components/generic/Input';
+import ReactSelect from '@Components/generic/ReactSelect';
+import { FormMessages } from '@Enums/config/messages';
+import { foodStyle, difficulty } from '@Enums/select-form-options';
 
 const NewRecipeForm = ({ onSubmit }) => {
   const {
@@ -17,10 +17,19 @@ const NewRecipeForm = ({ onSubmit }) => {
     removeIngredients,
   } = useNewRecipeForm();
 
-  /* React hook form */
-  const { register, handleSubmit, errors, control } = useForm({
-    mode: 'onChange',
-  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const handleChangeDifficulty = (difficultyValue) => {
+    setSelectedDifficulty(difficultyValue);
+  };
+
+  const handleChangeFoodStyle = (foodValue) => {
+    setSelectedFoodStyle(foodValue);
+  };
 
   return (
     <>
@@ -30,43 +39,46 @@ const NewRecipeForm = ({ onSubmit }) => {
           name="name"
           type="text"
           placeholder="Recipe Name"
-          childRef={register({
-            required: {
-              value: true,
-              message: FormMessages.USER_REQUIRED,
-            },
-          })}
+          register={{
+            ...register('name', {
+              required: {
+                value: true,
+                message: FormMessages.USER_REQUIRED,
+              },
+            }),
+          }}
           error={errors.name}
         />
-
         <Input
           label="Preparation Time"
           name="prep_time"
           type="number"
           placeholder="Preparation Time"
-          childRef={register({
-            required: {
-              value: true,
-              message: FormMessages.PREP_TIME_REQUIRED,
-            },
-          })}
+          childRef={{
+            ...register('prep_time', {
+              required: {
+                value: true,
+                message: FormMessages.PREP_TIME_REQUIRED,
+              },
+            }),
+          }}
           error={errors.prep_time}
         />
-
         <Input
           label="Serves"
           name="serves"
           type="number"
           placeholder="Number of Serves"
-          childRef={register({
-            required: {
-              value: true,
-              message: FormMessages.SERVES_REQUIRED,
-            },
-          })}
+          childRef={{
+            ...register('serves', {
+              required: {
+                value: true,
+                message: FormMessages.SERVES_REQUIRED,
+              },
+            }),
+          }}
           error={errors.serves}
         />
-
         <div className="border w-full bg-white dark:bg-gray-700 mt-6 mb-4 rounded-lg shadow appearance-none">
           <label className="block font-body font-bold mx-3 my-2">
             Ingredients
@@ -81,7 +93,7 @@ const NewRecipeForm = ({ onSubmit }) => {
                   name={fieldName}
                   type="text"
                   placeholder="Introduce your ingredients"
-                  ref={register({
+                  {...register(`${fieldName}`, {
                     required: {
                       value: true,
                       message: 'Ingredients are required',
@@ -115,43 +127,21 @@ const NewRecipeForm = ({ onSubmit }) => {
           </button>
         </div>
 
-        <label className="block text-black font-body font-bold mb-2">
-          Recipe Difficulty
-        </label>
-        <Controller
-          as={
-            <ReactSelect
-              instanceId="selected-difficulty"
-              className="text-gray-800 mt-2 mb-4 font-body shadow appearance-none"
-              placeholder="Select a recipe difficulty..."
-              options={difficulty}
-            />
-          }
-          defaultValue={selectedDifficulty}
-          name="difficulty"
-          onChange={setSelectedDifficulty}
-          control={control}
+        <ReactSelect
+          instance="selected-difficulty"
+          label="Recipe Difficulty"
+          placeholder="Select a recipe difficulty..."
+          options={difficulty}
+          handleChange={handleChangeDifficulty}
+          value={selectedDifficulty}
         />
 
-        <label className="block text-black font-body font-bold mb-2">
-          Food Style
-        </label>
-        <Controller
-          render={({ onChange }) => (
-            <ReactSelect
-              instanceId="selected-food-style"
-              className="text-gray-800 mt-2 mb-4 font-body shadow appearance-none"
-              placeholder="Select a food style..."
-              options={foodStyle}
-              onChange={(foodValue) => {
-                setSelectedFoodStyle(foodValue);
-                onChange(foodValue);
-              }}
-            />
-          )}
-          name="style"
-          defaultValue={selectedFoodStyle}
-          control={control}
+        <ReactSelect
+          instance="selected-food-style"
+          label="Food Style"
+          placeholder="Select a food style..."
+          options={foodStyle}
+          handleChange={handleChangeFoodStyle}
           value={selectedFoodStyle}
         />
 
@@ -163,7 +153,6 @@ const NewRecipeForm = ({ onSubmit }) => {
             childRef={register}
           />
         )}
-
         <label className="block text-black font-body font-bold mb-2">
           Description of your Recipe
         </label>
@@ -172,14 +161,13 @@ const NewRecipeForm = ({ onSubmit }) => {
                   text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
           name="description"
           placeholder="Introduce your recipe..."
-          ref={register({
+          {...register('description', {
             required: {
               value: true,
               message: FormMessages.DESCRIPTION_REQUIRED,
             },
           })}
         />
-
         <input
           className="btn-primary"
           type="submit"

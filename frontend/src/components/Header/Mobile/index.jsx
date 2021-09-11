@@ -5,7 +5,7 @@ import MenuMobile from './menuMobile';
 import RamenIcon from '../../icons/ramenicon';
 import { MainPaths } from '../../../enums/paths/main-paths';
 
-const HeaderMobile = ({ user, setAuth }) => {
+const HeaderMobile = () => {
   return (
     <div className="mdxl:hidden w-full py-2 px-4 flex flex-row items-center justify-between bg-gray-400 dark:bg-gray-800">
       <Link href={MainPaths.INDEX}>
@@ -17,7 +17,7 @@ const HeaderMobile = ({ user, setAuth }) => {
       <div className="flex items-center cursor-pointer">
         <DarkModeButton />
         <SearchBarMobile />
-        <MenuMobile user={user} setAuth={setAuth} />
+        <MenuMobile />
       </div>
     </div>
   );

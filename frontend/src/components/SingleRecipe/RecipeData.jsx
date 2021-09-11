@@ -1,15 +1,15 @@
-import { useContext } from 'react';
 import Image from 'next/image';
-import Rating from '@material-ui/lab/Rating';
+import { Rating } from 'react-simple-star-rating';
 import {
   FacebookShareButton,
   FacebookIcon,
   TwitterShareButton,
   TwitterIcon,
 } from 'react-share';
-import AuthContext from '../../../lib/context/auth/authContext';
+import useUser from '@Lib/hooks/useUser';
 
 const RecipeData = ({ recipe, url, confirmDeleteRecipe, handleVoteRecipe }) => {
+  const { authState } = useUser();
   const {
     _id,
     name,
@@ -25,7 +25,6 @@ const RecipeData = ({ recipe, url, confirmDeleteRecipe, handleVoteRecipe }) => {
     author,
     description,
   } = recipe;
-  const { authState } = useContext(AuthContext);
 
   return (
     <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md p-5 mb-4">
@@ -84,13 +83,8 @@ const RecipeData = ({ recipe, url, confirmDeleteRecipe, handleVoteRecipe }) => {
             </div>
             <div className="flex flex-col float-right items-end mt-4 ">
               <Rating
-                name="half-rating"
-                size="large"
-                defaultValue={0}
-                disabled={!authState ? true : false}
-                value={average_vote}
-                precision={0.5}
-                onChange={(event, newValue) => handleVoteRecipe(newValue)}
+                ratingValue={Math.round(average_vote)}
+                onClick={(_, rate) => handleVoteRecipe(rate)}
               />
               <p className="ml-1 text-lg">
                 ({average_vote} from {voted.length} votes)

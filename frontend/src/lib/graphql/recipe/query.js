@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-import Discussion from '../../../components/recipes/recipe/Discussion';
 
 export const COMMENTS_FRAGMENT = gql`
   fragment CommentsFragment on Recipe {

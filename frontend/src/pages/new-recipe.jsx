@@ -4,37 +4,32 @@ import { useMutation } from '@apollo/client';
 import Swal from 'sweetalert2';
 import { useToasts } from 'react-toast-notifications';
 import { decode } from 'jsonwebtoken';
-import withCSRRedirect from '../lib/hoc/with-csr-redirect.hoc';
-import { createApolloClient } from '../lib/apollo/apollo-client';
-import { getJwtFromCookie } from '../lib/utils/jwt-cookie.utils';
+import withCSRRedirect from '@Lib/hoc/with-csr-redirect.hoc';
+import { createApolloClient } from '@Lib/apollo/apollo-client';
+import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
 import {
   isRequestSSR,
   loadAuthProps,
   serverRedirect,
-} from '../lib/utils/ssr.utils';
-import { NEW_RECIPE } from '../lib/graphql/recipe/mutation';
-import { GET_RECIPES } from '../lib/graphql/recipe/query';
+} from '@Lib/utils/ssr.utils';
+import { NEW_RECIPE } from '@Lib/graphql/recipe/mutation';
+import { GET_RECIPES } from '@Lib/graphql/recipe/query';
 
 /* enum conditions */
-import { MainPaths } from '../enums/paths/main-paths';
-import { RedirectConditions } from '../enums/redirect-conditions';
-import { AlertMessages } from '../enums/config/messages';
+import { MainPaths } from '@Enums/paths/main-paths';
+import { RedirectConditions } from '@Enums/redirect-conditions';
+import { AlertMessages } from '@Enums/config/messages';
 
 /* components */
-import MainLayout from '../components/layouts/MainLayout';
+import MainLayout from '@Components/layouts/MainLayout';
 import NewRecipeForm from '../components/NewRecipeForm';
 import DragDropImage from '../components/generic/DragDropImage';
 
 const NewRecipe = () => {
-  /* Routing */
   const router = useRouter();
-  /* Set new recipe image */
   const [recipeImage, setRecipeImage] = useState(null);
-
-  /* Set Toast Notification */
   const { addToast } = useToasts();
 
-  /* Apollo mutation */
   const [newRecipe] = useMutation(NEW_RECIPE, {
     update(cache, { data: { newRecipe } }) {
       const data = cache.readQuery({
@@ -60,6 +55,7 @@ const NewRecipe = () => {
   });
 
   const onSubmit = async (data) => {
+    console.log('NEW RECIPE', data);
     const {
       name,
       prep_time,
@@ -88,13 +84,10 @@ const NewRecipe = () => {
         },
       });
 
-      /* Recipe Image State */
       setRecipeImage('');
 
-      /* Redirect to Home Page*/
       router.push(MainPaths.INDEX);
 
-      /* Show alerts */
       Swal.fire('Correct', AlertMessages.RECIPE_CREATED, 'success');
     } catch (error) {
       addToast(error.message.replace('GraphQL error: ', ''), {
@@ -124,7 +117,6 @@ const NewRecipe = () => {
                 current={recipeImage?.image_url}
                 name="photo"
                 rounded={null}
-                ratio={1}
                 onChange={(url) => setRecipeImage(url)}
               />
             </div>

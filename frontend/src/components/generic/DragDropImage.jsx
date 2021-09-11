@@ -1,16 +1,15 @@
-import React, { useState, useEffect, useContext, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Uppy from '@uppy/core';
 import XHRUpload from '@uppy/xhr-upload';
 import { DragDrop, DashboardModal } from '@uppy/react';
 import ImageEditor from '@uppy/image-editor';
-import AuthContext from '../../lib/context/auth/authContext';
+import useUser from '@Lib/hooks/useUser';
 
-const DragDropImage = ({ name, ratio, onChange, url, current, rounded }) => {
+const DragDropImage = ({ name, onChange, url, current, rounded }) => {
   const [modal, setModal] = useState(false);
-  const { authState } = useContext(AuthContext);
+  const { authState } = useUser();
 
   const uppy = useMemo(() => {
-    /* Do all the configuration here */
     return new Uppy({
       allowMultipleUploads: false,
       restrictions: {

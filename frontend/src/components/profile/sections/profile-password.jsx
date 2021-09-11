@@ -12,16 +12,16 @@ import Input from '../../generic/Input';
 const ProfilePassword = () => {
   const { authState } = useContext(AuthContext);
   const { addToast } = useToasts();
-
   const router = useRouter();
 
-  /* Apollo mutation to update password */
   const [updateUserPassword] = useMutation(UPDATE_USER_PASSWORD);
 
-  /* React hook form */
-  const { register, handleSubmit, getValues, errors } = useForm({
-    mode: 'onChange',
-  });
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm({ mode: 'onChange' });
 
   const onSubmit = async (data) => {
     const { confirmPassword, password } = data;
@@ -53,9 +53,11 @@ const ProfilePassword = () => {
           name="password"
           type="password"
           placeholder="Introduce your Password"
-          childRef={register({
-            required: FormMessages.CURRENT_PASSWORD_REQUIRED,
-          })}
+          register={{
+            ...register('password', {
+              required: FormMessages.CURRENT_PASSWORD_REQUIRED,
+            }),
+          }}
           error={errors.password}
         />
 
@@ -64,13 +66,15 @@ const ProfilePassword = () => {
           name="newPassword"
           type="password"
           placeholder="Introduce a New Password"
-          childRef={register({
-            required: FormMessages.NEW_PASSWORD_REQUIRED,
-            minLength: {
-              value: 7,
-              message: FormMessages.MIN_LENGTH,
-            },
-          })}
+          register={{
+            ...register('newPassword', {
+              required: FormMessages.NEW_PASSWORD_REQUIRED,
+              minLength: {
+                value: 7,
+                message: FormMessages.MIN_LENGTH,
+              },
+            }),
+          }}
           error={errors.newPassword}
         />
 
@@ -79,15 +83,18 @@ const ProfilePassword = () => {
           name="confirmPassword"
           type="password"
           placeholder="Confirm New Password"
-          childRef={register({
-            required: FormMessages.CONFIRM_NEW_PASSWORD,
-            validate: {
-              matchesPreviousPassword: (value) => {
-                const { newpassword } = getValues();
-                return newpassword === value || FormMessages.MATCH_PASSWORDS;
+          register={{
+            ...register('confirmPassword', {
+              required: FormMessages.CONFIRM_NEW_PASSWORD,
+              validate: {
+                matchesPreviousPassword: (value) => {
+                  const { newPassword } = getValues();
+                  console.log(newPassword);
+                  return newPassword === value || FormMessages.MATCH_PASSWORDS;
+                },
               },
-            },
-          })}
+            }),
+          }}
           error={errors.confirmPassword}
         />
 

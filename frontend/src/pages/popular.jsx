@@ -6,8 +6,8 @@ import { isRequestSSR, loadAuthProps } from '../lib/utils/ssr.utils';
 import { createApolloClient } from '../lib/apollo/apollo-client';
 import { GET_BEST_RECIPES } from '../lib/graphql/recipe/query';
 import MainLayout from '../components/layouts/MainLayout';
-import RecipeCard from '../components/recipes/RecipeCard';
-import RecipesList from '../components/recipes/RecipesList';
+import RecipeCard from '../components/Recipes/RecipeCard';
+import RecipesList from '../components/Recipes/RecipesList';
 import Spinner from '../components/generic/Spinner';
 import { MainPaths } from '../enums/paths/main-paths';
 

@@ -1,8 +1,8 @@
 import { useState, useRef } from 'react';
-import { searchRecipes } from '../../../lib/utils/header.utils';
-import SearchIcon from '../../icons/searchicon';
-import CloseIcon from '../../icons/closeicon';
-import useClickOutside from '../../../lib/hooks/useClickOutside';
+import { searchRecipes } from '@Lib/utils/header.utils';
+import SearchIcon from '@Components/icons/searchicon';
+import CloseIcon from '@Components/icons/closeicon';
+import useClickOutside from '@Lib/hooks/useClickOutside';
 
 const SearchBarMobile = () => {
   const componentRef = useRef();

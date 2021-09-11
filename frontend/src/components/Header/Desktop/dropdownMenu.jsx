@@ -1,38 +1,23 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useToasts } from 'react-toast-notifications';
-import useClickOutside from '../../../lib/hooks/useClickOutside';
-import { MainPaths } from '../../../enums/paths/main-paths';
-import { RestEndPoints } from '../../../enums/paths/rest-endpoints';
-import { UserRoles } from '../../../enums/user/user-roles';
-import { AlertMessages } from '../../../enums/config/messages';
+import useClickOutside from '@Lib/hooks/useClickOutside';
+import { MainPaths } from '@Enums/paths/main-paths';
+import { UserRoles } from '@Enums/user/user-roles';
 
-const DropdownMenu = ({ user, setAuth }) => {
+const DropdownMenu = ({ user, signOut, open, setOpen }) => {
   const router = useRouter();
-  const { addToast } = useToasts();
-
-  const [open, setOpen] = useState(false);
   const componentRef = useRef();
+
   useClickOutside(componentRef, setOpen);
 
-  const onClickSignOut = async (router, setAuth) => {
+  const onClickSignOut = async () => {
     try {
-      await fetch(RestEndPoints.LOGOUT, {
-        method: 'POST',
-      });
-
-      await router.push(MainPaths.INDEX);
-
-      setAuth({
-        user: null,
-        jwt: null,
-      });
-
-      addToast(AlertMessages.LOGOUT, { appearance: 'info' });
+      await signOut();
+      router.push(MainPaths.INDEX);
     } catch (error) {
-      addToast(error, { appearance: 'error' });
+      console.log(error.message);
     }
   };
 
@@ -96,7 +81,7 @@ const DropdownMenu = ({ user, setAuth }) => {
             <div className="border-t border-gray-200"></div>
             <div className="py-1 dark:text-white">
               <button
-                onClick={() => onClickSignOut(router, setAuth)}
+                onClick={() => onClickSignOut()}
                 className="w-full text-left block px-4 py-2 text-sm leading-5 font-bold 
                     hover:bg-gray-200 hover:text-gray-900 focus:outline-none"
                 role="menuitem"

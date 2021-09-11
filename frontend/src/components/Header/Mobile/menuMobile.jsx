@@ -1,46 +1,34 @@
-// @ts-nocheck
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useToasts } from 'react-toast-notifications';
-import useClickOutside from '../../../lib/hooks/useClickOutside';
-import CloseIcon from '../../icons/closeicon';
-import DocumentIcon from '../../icons/documenticon';
-import AdminIcon from '../../icons/adminicon';
-import MenuMobileIcon from '../../icons/menuMobileicon';
-import { MainPaths } from '../../../enums/paths/main-paths';
-import { RestEndPoints } from '../../../enums/paths/rest-endpoints';
-import { AlertMessages } from '../../../enums/config/messages';
-import { UserRoles } from '../../../enums/user/user-roles';
+import useClickOutside from '@Lib/hooks/useClickOutside';
+import CloseIcon from '@Components/icons/closeicon';
+import DocumentIcon from '@Components/icons/documenticon';
+import AdminIcon from '@Components/icons/adminicon';
+import MenuMobileIcon from '@Components/icons/menuMobileicon';
+import { MainPaths } from '@Enums/paths/main-paths';
+import { UserRoles } from '@Enums/user/user-roles';
+import useUser from '@Lib/hooks/useUser';
 
-const MenuMobile = ({ user, setAuth }) => {
-  const [open, setOpen] = useState(false);
+const MenuMobile = () => {
+  const {
+    authState: { user },
+    open,
+    setOpen,
+    signOut,
+  } = useUser();
   const componentRef = useRef();
-
   const router = useRouter();
-  const { addToast } = useToasts();
 
   useClickOutside(componentRef, setOpen);
 
-  const onClickSignOut = async (router, setAuth, setOpen) => {
-    setOpen(false);
-
+  const onClickSignOut = async () => {
     try {
-      await fetch(RestEndPoints.LOGOUT, {
-        method: 'POST',
-      });
-
-      await router.push(MainPaths.INDEX);
-
-      setAuth({
-        user: null,
-        jwt: null,
-      });
-
-      addToast(AlertMessages.LOGOUT, { appearance: 'info' });
+      await signOut();
+      router.push(MainPaths.INDEX);
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
 
@@ -140,7 +128,7 @@ const MenuMobile = ({ user, setAuth }) => {
                   <button
                     className="w-8/12 text-center py-1 px-3 rounded-full cursor-pointer border border-black 
                   text-white bg-gray-400 hover:bg-gray-200 hover:text-black"
-                    onClick={() => onClickSignOut(router, setAuth, setOpen)}
+                    onClick={() => onClickSignOut()}
                   >
                     Sign Out
                   </button>

@@ -1,12 +1,15 @@
 import React from 'react';
 import Link from 'next/link';
 import SearchBarDesktop from './searchBarDesktop';
-import DarkModeButton from '../../generic/DarkModeButton';
+import DarkModeButton from '@Components/generic/DarkModeButton';
 import DropdownMenu from './dropdownMenu';
-import RamenIcon from '../../icons/ramenicon';
-import { MainPaths } from '../../../enums/paths/main-paths';
+import RamenIcon from '@Components/icons/ramenicon';
+import { MainPaths } from '@Enums/paths/main-paths';
+import useUser from '@Lib/hooks/useUser';
 
-const HeaderDesktop = ({ user, setAuth }) => {
+const HeaderDesktop = () => {
+  const { authState, signOut, open, setOpen } = useUser();
+
   return (
     <div className="xssm:hidden w-full py-2 px-4 flex flex-row items-center justify-between text-black bg-gray-400 dark:bg-gray-800">
       <Link href={MainPaths.INDEX}>
@@ -20,7 +23,7 @@ const HeaderDesktop = ({ user, setAuth }) => {
       <div className="flex text-black items-center cursor-pointer">
         <DarkModeButton />
 
-        {user ? (
+        {authState.user ? (
           <>
             <Link href={MainPaths.NEW_RECIPE}>
               <a
@@ -31,7 +34,12 @@ const HeaderDesktop = ({ user, setAuth }) => {
               </a>
             </Link>
 
-            <DropdownMenu user={user} setAuth={setAuth} />
+            <DropdownMenu
+              user={authState.user}
+              signOut={signOut}
+              open={open}
+              setOpen={setOpen}
+            />
           </>
         ) : (
           <>
