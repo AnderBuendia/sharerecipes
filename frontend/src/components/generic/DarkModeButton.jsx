@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
-import SunIcon from '../icons/sunicon';
-import MoonIcon from '../icons/moonicon';
+import SunIcon from '@Components/Icons/sunicon';
+import MoonIcon from '@Components/Icons/moonicon';
 
 const DARK_THEME = 'dark';
 const LIGHT_THEME = 'light';

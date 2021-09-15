@@ -190,7 +190,7 @@ const resolvers = {
     },
 
     /* Comments Recipe */
-    sendCommentsRecipe: async (_, { recipeUrl, input }, ctx) => {
+    sendCommentRecipe: async (_, { recipeUrl, input }, ctx) => {
       try {
         /* Check errors */
         let recipe = await Recipe.findOne({ url: recipeUrl });
@@ -226,7 +226,7 @@ const resolvers = {
       }
     },
 
-    editCommentsRecipe: async (_, { _id, input }, ctx) => {
+    editCommentRecipe: async (_, { _id, input }, ctx) => {
       try {
         /* Check if comment exists */
         let checkComment = await Comment.findById(_id);
@@ -254,7 +254,7 @@ const resolvers = {
       }
     },
 
-    voteCommentsRecipe: async (_, { _id, input }, ctx) => {
+    voteCommentRecipe: async (_, { _id, input }, ctx) => {
       try {
         let checkComment = await Comment.findById(_id);
 

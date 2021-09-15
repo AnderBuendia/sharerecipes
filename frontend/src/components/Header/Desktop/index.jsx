@@ -1,11 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
-import SearchBarDesktop from './searchBarDesktop';
+import useUser from '@Lib/hooks/user/useUser';
+import SearchBarDesktop from '@Components/Header/Desktop/searchBarDesktop';
 import DarkModeButton from '@Components/generic/DarkModeButton';
 import DropdownMenu from './dropdownMenu';
-import RamenIcon from '@Components/icons/ramenicon';
+import RamenIcon from '@Components/Icons/ramenicon';
 import { MainPaths } from '@Enums/paths/main-paths';
-import useUser from '@Lib/hooks/useUser';
 
 const HeaderDesktop = () => {
   const { authState, signOut, open, setOpen } = useUser();

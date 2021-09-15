@@ -6,7 +6,7 @@ import {
   TwitterShareButton,
   TwitterIcon,
 } from 'react-share';
-import useUser from '@Lib/hooks/useUser';
+import useUser from '@Lib/hooks/user/useUser';
 
 const RecipeData = ({ recipe, url, confirmDeleteRecipe, handleVoteRecipe }) => {
   const { authState } = useUser();
@@ -84,7 +84,7 @@ const RecipeData = ({ recipe, url, confirmDeleteRecipe, handleVoteRecipe }) => {
             <div className="flex flex-col float-right items-end mt-4 ">
               <Rating
                 ratingValue={Math.round(average_vote)}
-                onClick={(_, rate) => handleVoteRecipe(rate)}
+                onClick={handleVoteRecipe}
               />
               <p className="ml-1 text-lg">
                 ({average_vote} from {voted.length} votes)
@@ -118,7 +118,7 @@ const RecipeData = ({ recipe, url, confirmDeleteRecipe, handleVoteRecipe }) => {
           ))}
         </div>
       </div>
-      {authState.user && author?.email === authState.user.email ? (
+      {authState.user && author?.email === authState.user.email && (
         <div className="flex w-full mt-6">
           <button
             type="button"
@@ -129,8 +129,6 @@ const RecipeData = ({ recipe, url, confirmDeleteRecipe, handleVoteRecipe }) => {
             Delete Recipe
           </button>
         </div>
-      ) : (
-        ''
       )}
     </div>
   );

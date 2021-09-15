@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import Head from '../generic/Head';
-import { MainPaths } from '../../enums/paths/main-paths';
-import RamenIcon from '../icons/ramenicon';
+import Head from '@Components/generic/Head';
+import RamenIcon from '@Components/Icons/ramenicon';
+import { MainPaths } from '@Enums/paths/main-paths';
 
 const FormLayout = ({ title, description, url, children }) => (
   <>

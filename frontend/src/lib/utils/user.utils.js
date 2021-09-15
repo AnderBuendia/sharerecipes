@@ -1,6 +1,6 @@
-import { createApolloClient } from '../apollo/apollo-client';
-import { GET_USER } from '../graphql/user/query';
-import { CONFIRM_USER } from '../../lib/graphql/user/mutation';
+import { createApolloClient } from '@Lib/apollo/apollo-client';
+import { GET_USER } from '@Lib/graphql/user/query';
+import { CONFIRM_USER } from '@Lib/graphql/user/mutation';
 
 export const loadCurrentUserSSR = async (jwt, apolloClient) => {
   const response = await apolloClient.query({

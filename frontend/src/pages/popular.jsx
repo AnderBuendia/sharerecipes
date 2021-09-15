@@ -1,22 +1,19 @@
-import React from 'react';
-import { useQuery } from '@apollo/client';
 import { decode } from 'jsonwebtoken';
-import { getJwtFromCookie } from '../lib/utils/jwt-cookie.utils';
-import { isRequestSSR, loadAuthProps } from '../lib/utils/ssr.utils';
-import { createApolloClient } from '../lib/apollo/apollo-client';
-import { GET_BEST_RECIPES } from '../lib/graphql/recipe/query';
-import MainLayout from '../components/layouts/MainLayout';
-import RecipeCard from '../components/Recipes/RecipeCard';
-import RecipesList from '../components/Recipes/RecipesList';
-import Spinner from '../components/generic/Spinner';
-import { MainPaths } from '../enums/paths/main-paths';
+import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
+import { isRequestSSR, loadAuthProps } from '@Lib/utils/ssr.utils';
+import { createApolloClient } from '@Lib/apollo/apollo-client';
+import useRecipes from '@Lib/hooks/recipe/useRecipes';
+import MainLayout from '@Components/Layouts/MainLayout';
+import RecipeCard from '@Components/Recipes/RecipeCard';
+import RecipesList from '@Components/Recipes/RecipesList';
+import Spinner from '@Components/generic/Spinner';
+import { MainPaths } from '@Enums/paths/main-paths';
 
 const Popular = () => {
-  const { data, loading } = useQuery(GET_BEST_RECIPES, {
-    variables: {
-      offset: 0,
-      limit: 20,
-    },
+  const { getBestRecipes } = useRecipes();
+  const { data, loading, fetchMore } = getBestRecipes({
+    offset: 0,
+    limit: 20,
   });
 
   if (loading) return <Spinner />;
@@ -24,7 +21,15 @@ const Popular = () => {
 
   const recipesRendered =
     recipes && recipes.length > 0 ? (
-      recipes.map((recipe) => <RecipeCard key={recipe._id} recipe={recipe} />)
+      recipes.map((recipe, index) => (
+        <RecipeCard
+          key={recipe._id}
+          recipe={recipe}
+          index={index}
+          numberOfRecipes={recipes.length}
+          fetchMore={fetchMore}
+        />
+      ))
     ) : (
       <h3 className="text-4xl font-body font-bold text-center mt-10">
         No recipes

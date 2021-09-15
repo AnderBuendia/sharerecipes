@@ -1,9 +1,11 @@
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import useNewRecipeForm from '@Components/NewRecipeForm/hook';
 import Input from '@Components/generic/Input';
 import ReactSelect from '@Components/generic/ReactSelect';
 import { FormMessages } from '@Enums/config/messages';
-import { foodStyle, difficulty } from '@Enums/select-form-options';
+import { foodStyle, difficulty } from '@Enums/select-options/new-recipe';
+import PureReactSelect from 'react-select';
 
 const NewRecipeForm = ({ onSubmit }) => {
   const {
@@ -20,16 +22,24 @@ const NewRecipeForm = ({ onSubmit }) => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
 
-  const handleChangeDifficulty = (difficultyValue) => {
-    setSelectedDifficulty(difficultyValue);
+  const handleChangeDifficulty = (difficultyOption) => {
+    setValue('difficulty', difficultyOption);
+    setSelectedDifficulty({ difficulty: difficultyOption });
   };
 
-  const handleChangeFoodStyle = (foodValue) => {
-    setSelectedFoodStyle(foodValue);
+  const handleChangeFoodStyle = (foodStyleOption) => {
+    setValue('style', foodStyleOption);
+    setSelectedFoodStyle({ foodStyle: foodStyleOption });
   };
+
+  useEffect(() => {
+    register('difficulty');
+    register('style');
+  }, []);
 
   return (
     <>
@@ -41,10 +51,7 @@ const NewRecipeForm = ({ onSubmit }) => {
           placeholder="Recipe Name"
           register={{
             ...register('name', {
-              required: {
-                value: true,
-                message: FormMessages.USER_REQUIRED,
-              },
+              required: FormMessages.USER_REQUIRED,
             }),
           }}
           error={errors.name}
@@ -54,12 +61,9 @@ const NewRecipeForm = ({ onSubmit }) => {
           name="prep_time"
           type="number"
           placeholder="Preparation Time"
-          childRef={{
+          register={{
             ...register('prep_time', {
-              required: {
-                value: true,
-                message: FormMessages.PREP_TIME_REQUIRED,
-              },
+              required: FormMessages.PREP_TIME_REQUIRED,
             }),
           }}
           error={errors.prep_time}
@@ -69,12 +73,9 @@ const NewRecipeForm = ({ onSubmit }) => {
           name="serves"
           type="number"
           placeholder="Number of Serves"
-          childRef={{
+          register={{
             ...register('serves', {
-              required: {
-                value: true,
-                message: FormMessages.SERVES_REQUIRED,
-              },
+              required: FormMessages.SERVES_REQUIRED,
             }),
           }}
           error={errors.serves}
@@ -94,10 +95,7 @@ const NewRecipeForm = ({ onSubmit }) => {
                   type="text"
                   placeholder="Introduce your ingredients"
                   {...register(`${fieldName}`, {
-                    required: {
-                      value: true,
-                      message: 'Ingredients are required',
-                    },
+                    required: FormMessages.INGREDIENTS_REQUIRED,
                   })}
                 />
 
@@ -130,19 +128,23 @@ const NewRecipeForm = ({ onSubmit }) => {
         <ReactSelect
           instance="selected-difficulty"
           label="Recipe Difficulty"
+          style="text-gray-800 mt-2 mb-4 font-body shadow appearance-none"
           placeholder="Select a recipe difficulty..."
           options={difficulty}
           handleChange={handleChangeDifficulty}
           value={selectedDifficulty}
+          name="difficulty"
         />
 
         <ReactSelect
           instance="selected-food-style"
           label="Food Style"
+          style="text-gray-800 mt-2 mb-4 font-body shadow appearance-none"
           placeholder="Select a food style..."
           options={foodStyle}
           handleChange={handleChangeFoodStyle}
           value={selectedFoodStyle}
+          name="style"
         />
 
         {selectedFoodStyle?.value === 'other' && (
@@ -150,7 +152,11 @@ const NewRecipeForm = ({ onSubmit }) => {
             name="other_style"
             type="text"
             placeholder="Introduce that style"
-            childRef={register}
+            register={{
+              ...register('other_style', {
+                required: FormMessages.STYLE_REQUIRED,
+              }),
+            }}
           />
         )}
         <label className="block text-black font-body font-bold mb-2">
@@ -162,10 +168,7 @@ const NewRecipeForm = ({ onSubmit }) => {
           name="description"
           placeholder="Introduce your recipe..."
           {...register('description', {
-            required: {
-              value: true,
-              message: FormMessages.DESCRIPTION_REQUIRED,
-            },
+            required: FormMessages.DESCRIPTION_REQUIRED,
           })}
         />
         <input

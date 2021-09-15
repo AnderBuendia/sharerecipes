@@ -1,32 +1,13 @@
-import React from 'react';
-import { useMutation } from '@apollo/client';
 import Swal from 'sweetalert2';
-import { DELETE_USER } from '../../lib/graphql/user/mutation';
-import { UserRoles } from '../../enums/user/user-roles';
-import { GET_USERS } from '../../lib/graphql/user/query';
+import useDeleteUser from '@Lib/hooks/user/useDeleteUser';
+import { UserRoles } from '@Enums/user/user-roles';
 
 const User = ({ user, page }) => {
   const { name, email, role, confirmed } = user;
-
-  const [deleteUser] = useMutation(DELETE_USER, {
-    update(cache) {
-      const { getUsers } = cache.readQuery({
-        query: GET_USERS,
-        variables: {
-          offset: page * 9,
-          limit: 9,
-        },
-      });
-
-      cache.writeQuery({
-        query: GET_USERS,
-        data: {
-          getUsers: getUsers.users.filter(
-            (currentUser) => currentUser.email !== email
-          ),
-        },
-      });
-    },
+  const { setDeleteUser } = useDeleteUser({
+    offset: page * 9,
+    limit: 9,
+    email,
   });
 
   const confirmDeleteUser = async (email) => {
@@ -39,19 +20,12 @@ const User = ({ user, page }) => {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'No, cancel!',
-    }).then(async (result) => {
+    }).then((result) => {
       if (result.isConfirmed) {
-        try {
-          await deleteUser({
-            variables: {
-              email,
-            },
-          });
+        const response = setDeleteUser({ email });
 
-          /* Show alerts */
+        if (response) {
           Swal.fire('Correct', 'User has been deleted', 'success');
-        } catch (error) {
-          console.log(error);
         }
       }
     });

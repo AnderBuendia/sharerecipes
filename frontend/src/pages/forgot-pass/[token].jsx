@@ -1,62 +1,34 @@
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useMutation } from '@apollo/client';
-import { useToasts } from 'react-toast-notifications';
-import withCSRRedirect from '../../lib/hoc/with-csr-redirect.hoc';
-import { removeJwtCookie } from '../../lib/utils/jwt-cookie.utils';
-import { serverRedirect } from '../../lib/utils/ssr.utils';
-import { RESET_PASSWORD } from '../../lib/graphql/user/query';
-
-/* enums */
-import { MainPaths } from '../../enums/paths/main-paths';
-import { RedirectConditions } from '../../enums/redirect-conditions';
-import { AlertMessages, FormMessages } from '../../enums/config/messages';
-
-/* Components */
-import FormLayout from '../../components/layouts/FormLayout';
-import Input from '../../components/generic/Input';
+import withCSRRedirect from '@Lib/hoc/with-csr-redirect.hoc';
+import { removeJwtCookie } from '@Lib/utils/jwt-cookie.utils';
+import { serverRedirect } from '@Lib/utils/ssr.utils';
+import useUser from '@Lib/hooks/user/useUser';
+import FormLayout from '@Components/Layouts/FormLayout';
+import Input from '@Components/generic/Input';
+import { MainPaths } from '@Enums/paths/main-paths';
+import { RedirectConditions } from '@Enums/redirect-conditions';
+import { FormMessages } from '@Enums/config/messages';
 
 function ResetPasswordToken({ token }) {
-  /* Routing */
   const router = useRouter();
+  const { setResetPassword } = useUser();
 
-  /* Set Toast Notification */
-  const { addToast } = useToasts();
+  const {
+    register,
+    getValues,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  /* Apollo mutation */
-  const [resetPassword] = useMutation(RESET_PASSWORD);
+  const onSubmit = async (submitData) => {
+    const response = setResetPassword({ submitData, token });
 
-  /* React hook form */
-  const { register, getValues, handleSubmit, errors } = useForm({
-    mode: 'onChange',
-  });
-  const onSubmit = async (data) => {
-    const { password } = data;
-    try {
-      await resetPassword({
-        variables: {
-          input: {
-            token,
-            password,
-          },
-        },
-      });
-      addToast(AlertMessages.PASSWORD_UPDATED_LOGIN, { appearance: 'success' });
-
-      setTimeout(() => {
-        router.push(MainPaths.LOGIN);
-      }, 3000);
-    } catch (error) {
-      addToast(error.message.replace('GraphQL error: ', ''), {
-        appearance: 'error',
-      });
-
-      setTimeout(() => {
-        router.push(MainPaths.FORGOT_PASS);
-      }, 3000);
-    }
+    setTimeout(() => {
+      if (response) return router.push(MainPaths.LOGIN);
+      else return router.push(MainPaths.FORGOT_PASS);
+    }, 3000);
   };
 
   return (
@@ -71,13 +43,15 @@ function ResetPasswordToken({ token }) {
           name="password"
           type="password"
           placeholder="Introduce a New Password"
-          childRef={register({
-            required: FormMessages.PASSWORD_REQUIRED,
-            minLength: {
-              value: 7,
-              message: 'Minimum 7 characters',
-            },
-          })}
+          register={{
+            ...register('password', {
+              required: FormMessages.PASSWORD_REQUIRED,
+              minLength: {
+                value: 7,
+                message: 'Minimum 7 characters',
+              },
+            }),
+          }}
           error={errors.password}
         />
 
@@ -86,15 +60,17 @@ function ResetPasswordToken({ token }) {
           name="confirmPassword"
           type="password"
           placeholder="Confirm New Password"
-          childRef={register({
-            required: FormMessages.CONFIRM_NEW_PASSWORD,
-            validate: {
-              matchesPreviousPassword: (value) => {
-                const { password } = getValues();
-                return password === value || FormMessages.MATCH_PASSWORDS;
+          register={{
+            ...register('confirmPassword', {
+              required: FormMessages.CONFIRM_NEW_PASSWORD,
+              validate: {
+                matchesPreviousPassword: (value) => {
+                  const { password } = getValues();
+                  return password === value || FormMessages.MATCH_PASSWORDS;
+                },
               },
-            },
-          })}
+            }),
+          }}
           error={errors.confirmPassword}
         />
 

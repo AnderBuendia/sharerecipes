@@ -75,12 +75,12 @@ const typeDefs = gql`
     voteRecipe(recipeUrl: String!, input: RecipeInput): Recipe
 
     # RecipeComments
-    sendCommentsRecipe(
+    sendCommentRecipe(
       recipeUrl: String!
       input: CommentsRecipeInput
     ): CommentsRecipe
-    voteCommentsRecipe(_id: ID!, input: CommentsRecipeInput): CommentsRecipe
-    editCommentsRecipe(_id: ID!, input: CommentsRecipeInput): CommentsRecipe
+    voteCommentRecipe(_id: ID!, input: CommentsRecipeInput): CommentsRecipe
+    editCommentRecipe(_id: ID!, input: CommentsRecipeInput): CommentsRecipe
   }
 `;
 

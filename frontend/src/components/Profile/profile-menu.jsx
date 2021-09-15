@@ -1,7 +1,6 @@
-import React from 'react';
 import { useRouter } from 'next/router';
-import MenuLiLink from '../generic/MenuLiLink';
-import { ProfilePaths } from '../../enums/paths/profile-paths';
+import MenuLiLink from '@Components/generic/MenuLiLink';
+import { ProfilePaths } from '@Enums/paths/profile-paths';
 
 const ProfileMenu = () => {
   const router = useRouter();

@@ -1,11 +1,12 @@
 import Link from 'next/link';
-import ChatIcon from '../icons/chaticon';
-import StarIcon from '../icons/staricon';
-import { Waypoint } from 'react-waypoint';
 import Image from 'next/image';
+import { Waypoint } from 'react-waypoint';
+import ChatIcon from '@Components/Icons/chaticon';
+import StarIcon from '@Components/Icons/staricon';
 
 const RecipeCard = ({ recipe, numberOfRecipes, index, fetchMore }) => {
   const {
+    _id,
     name,
     prep_time,
     serves,
@@ -19,7 +20,12 @@ const RecipeCard = ({ recipe, numberOfRecipes, index, fetchMore }) => {
 
   return (
     <>
-      <Link href={`recipe/${url}`}>
+      <Link
+        href={{
+          pathname: `recipe/${url}`,
+          query: { _id },
+        }}
+      >
         <div className="w-full rounded overflow-hidden shadow-2xl transition duration-500 ease-in-out transform hover:scale-105 hover:shadow-md">
           <div
             className="px-3 py-3 bg-auto bg-center h-56 relative"

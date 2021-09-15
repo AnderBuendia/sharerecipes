@@ -1,15 +1,15 @@
-import useResolution from '../../lib/hooks/useResolution';
+import useResolution from '@Lib/hooks/useResolution';
 
 /* components */
-import ProfileMenu from '../profile/profile-menu';
-import ProfileMobileMenu from '../profile/profile-mobile-menu';
-import ProfileData from '../profile/sections/profile-data';
-import ProfilePassword from '../profile/sections/profile-password';
-import ProfileRecipes from '../profile/sections/profile-recipes';
+import ProfileMenu from '@Components/Profile/profile-menu';
+import ProfileMobileMenu from '@Components/Profile/profile-mobile-menu';
+import ProfileData from '@Components/Profile/sections/profile-data';
+import ProfilePassword from '@Components/Profile/sections/profile-password';
+import ProfileRecipes from '@Components/Profile/sections/profile-recipes';
 
 /* enums */
-import { ProfilePaths } from '../../enums/paths/profile-paths';
-import { ResolutionBreakPoints } from '../../enums/config/resolution-breakpoints';
+import { ProfilePaths } from '@Enums/paths/profile-paths';
+import { ResolutionBreakPoints } from '@Enums/config/resolution-breakpoints';
 
 const ProfileLayout = ({ path }) => {
   const width = useResolution();

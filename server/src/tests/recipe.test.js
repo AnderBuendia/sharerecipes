@@ -1,11 +1,20 @@
 const RecipeErrors = require('../enums/recipe.errors');
-const { api, mongoose, server, Recipe, Comment } = require('./index');
+const { api, Recipe, Comment } = require('./index');
 
 let token;
 let messageId;
 
 describe('Recipe Tests', () => {
   beforeAll(async () => {
+    await Recipe.deleteMany({
+      name: { $in: ['CarrotCake'] },
+    });
+    await Comment.deleteMany({
+      message: { $in: ['Nice carrot cake!'] },
+    });
+  });
+
+  afterAll(async () => {
     await Recipe.deleteMany({
       name: { $in: ['CarrotCake'] },
     });
@@ -75,7 +84,7 @@ describe('Recipe Tests', () => {
       .send({
         query: `
       mutation {
-        sendCommentsRecipe(
+        sendCommentRecipe(
           recipeUrl: "carrotcake",
           input: {
             message: "Nice bad token!"
@@ -99,7 +108,7 @@ describe('Recipe Tests', () => {
       .send({
         query: `
       mutation {
-        sendCommentsRecipe(
+        sendCommentRecipe(
           recipeUrl: "carrotcake", 
           input: {
             message: "Nice carrot cake!"
@@ -113,8 +122,8 @@ describe('Recipe Tests', () => {
       })
       .expect(200)
       .expect(({ body }) => {
-        messageId = body.data.sendCommentsRecipe._id;
-        expect(body.data.sendCommentsRecipe.message).not.toEqual(null);
+        messageId = body.data.sendCommentRecipe._id;
+        expect(body.data.sendCommentRecipe.message).not.toEqual(null);
       });
   });
 
@@ -125,7 +134,7 @@ describe('Recipe Tests', () => {
       .send({
         query: `
       mutation {
-        editCommentsRecipe(
+        editCommentRecipe(
           _id: "${messageId}", 
           input: {
             message: "Nice carrot cake Edit!"
@@ -138,7 +147,7 @@ describe('Recipe Tests', () => {
       })
       .expect(200)
       .expect(({ body }) => {
-        expect(body.data.editCommentsRecipe.message).not.toEqual(null);
+        expect(body.data.editCommentRecipe.message).not.toEqual(null);
       });
   });
 
@@ -149,7 +158,7 @@ describe('Recipe Tests', () => {
       .send({
         query: `
       mutation {
-        voteCommentsRecipe(
+        voteCommentRecipe(
           _id: "${messageId}", 
           input: {
             votes: 1
@@ -162,7 +171,7 @@ describe('Recipe Tests', () => {
       })
       .expect(200)
       .expect(({ body }) => {
-        expect(body.data.voteCommentsRecipe.votes).toBe(1);
+        expect(body.data.voteCommentRecipe.votes).toBe(1);
       });
   });
 });

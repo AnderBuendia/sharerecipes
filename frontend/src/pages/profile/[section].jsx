@@ -1,20 +1,17 @@
-import React from 'react';
-import ProfileLayout from '../../components/layouts/ProfileLayout';
-import withCSRRedirect from '../../lib/hoc/with-csr-redirect.hoc';
-import withCSRAllowPaths from '../../lib/hoc/with-csr-allow-paths.hoc';
+import withCSRRedirect from '@Lib/hoc/with-csr-redirect.hoc';
+import withCSRAllowPaths from '@Lib/hoc/with-csr-allow-paths.hoc';
 import {
   isRequestSSR,
   loadAuthProps,
   serverRedirect,
-} from '../../lib/utils/ssr.utils';
-import { createApolloClient } from '../../lib/apollo/apollo-client';
-import { getJwtFromCookie } from '../../lib/utils/jwt-cookie.utils';
-import MainLayout from '../../components/layouts/MainLayout';
-
-/* enum conditions */
-import { ProfilePaths } from '../../enums/paths/profile-paths';
-import { MainPaths } from '../../enums/paths/main-paths';
-import { RedirectConditions } from '../../enums/redirect-conditions';
+} from '@Lib/utils/ssr.utils';
+import { createApolloClient } from '@Lib/apollo/apollo-client';
+import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
+import ProfileLayout from '@Components/Layouts/ProfileLayout';
+import MainLayout from '@Components/Layouts/MainLayout';
+import { ProfilePaths } from '@Enums/paths/profile-paths';
+import { MainPaths } from '@Enums/paths/main-paths';
+import { RedirectConditions } from '@Enums/redirect-conditions';
 
 const ProfileSection = ({ path }) => (
   <MainLayout
@@ -38,7 +35,7 @@ export const getServerSideProps = async (ctx) => {
   const props = { lostAuth: false };
   const isSSR = isRequestSSR(ctx.req.url);
 
-  const path = `/profile/${ctx.params?.section}`;
+  const path = `${MainPaths.PROFILE}/${ctx.params?.section}`;
   const isAllowed = allowedPaths.includes(path);
 
   redirect.query = { returnTo: path };

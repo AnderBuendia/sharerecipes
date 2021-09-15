@@ -90,7 +90,7 @@ const resolvers = {
           text: 'Activate your Account',
         };
 
-        // await sendEmails(user.email, mailContent);
+        await sendEmails(user.email, mailContent);
 
         return token;
       } catch (error) {
@@ -279,7 +279,7 @@ const resolvers = {
           text: 'Change your Password',
         };
 
-        // await sendEmails(email, mailContent);
+        await sendEmails(email, mailContent);
 
         return token;
       } catch (error) {

@@ -1,15 +1,15 @@
-import React, { useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import AuthContext from '../context/auth/authContext';
-import { generateQueryParams } from '../utils/url.utils';
-import { RedirectConditions } from '../../enums/redirect-conditions';
+import useUser from '@Lib/hooks/user/useUser';
+import { generateQueryParams } from '@Lib/utils/url.utils';
+import { RedirectConditions } from '@Enums/redirect-conditions';
 
 const withCSRRedirect = (Component, redirect) => {
   const { href, asPath, condition, query } = redirect;
 
   return (props) => {
     const router = useRouter();
-    const { authState } = useContext(AuthContext);
+    const { authState } = useUser();
     const [shouldRender, setShouldRender] = useState(!!props.shouldRender);
 
     useEffect(() => {

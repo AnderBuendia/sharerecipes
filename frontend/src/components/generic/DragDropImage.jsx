@@ -3,7 +3,7 @@ import Uppy from '@uppy/core';
 import XHRUpload from '@uppy/xhr-upload';
 import { DragDrop, DashboardModal } from '@uppy/react';
 import ImageEditor from '@uppy/image-editor';
-import useUser from '@Lib/hooks/useUser';
+import useUser from '@Lib/hooks/user/useUser';
 
 const DragDropImage = ({ name, onChange, url, current, rounded }) => {
   const [modal, setModal] = useState(false);
@@ -47,7 +47,6 @@ const DragDropImage = ({ name, onChange, url, current, rounded }) => {
     uppy.on('upload-success', (_file, response) => {
       uppy.reset();
       setModal(false);
-      console.log('RESPONSE', response);
       onChange && onChange(response.body);
     });
     return () => uppy.close();

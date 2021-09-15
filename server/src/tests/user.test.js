@@ -10,6 +10,12 @@ describe('User Tests', () => {
     });
   });
 
+  afterAll(async () => {
+    await User.deleteMany({
+      email: { $in: ['test2@email.com'] },
+    });
+  });
+
   test('Register new user - Bad email', async () => {
     try {
       await api

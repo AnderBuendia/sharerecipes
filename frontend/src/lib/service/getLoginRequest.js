@@ -1,14 +1,11 @@
-import { useContext } from 'react';
 import { useToasts } from 'react-toast-notifications';
-import AuthContext from '@Lib/context/auth/authContext';
+import useUser from '@Lib/hooks/user/useUser';
 import { AlertMessages } from '@Enums/config/messages';
 import { RestEndPoints } from '@Enums/paths/rest-endpoints';
 import { MainPaths } from '@Enums/paths/main-paths';
 
 export const getLoginRequest = (router) => {
-  const { setAuth } = useContext(AuthContext);
-
-  /* Set Toast Notification */
+  const { setAuth } = useUser();
   const { addToast } = useToasts();
 
   const loginRequest = async (data) => {
@@ -32,7 +29,6 @@ export const getLoginRequest = (router) => {
         const jwt = resJson.token;
         const user = resJson.user;
 
-        // @ts-ignore
         setAuth({ user, jwt });
 
         addToast(AlertMessages.LOGIN, { appearance: 'success' });

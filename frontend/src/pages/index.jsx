@@ -1,22 +1,20 @@
 import Link from 'next/link';
-import { useQuery } from '@apollo/client';
 import { decode } from 'jsonwebtoken';
-import { getJwtFromCookie } from '../lib/utils/jwt-cookie.utils';
-import { isRequestSSR, loadAuthProps } from '../lib/utils/ssr.utils';
-import { createApolloClient } from '../lib/apollo/apollo-client';
-import MainLayout from '../components/layouts/MainLayout';
-import RecipesList from '../components/Recipes/RecipesList';
-import RecipeCard from '../components/Recipes/RecipeCard';
-import Spinner from '../components/generic/Spinner';
-import { GET_RECIPES } from '../lib/graphql/recipe/query';
-import { MainPaths } from '../enums/paths/main-paths';
+import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
+import { isRequestSSR, loadAuthProps } from '@Lib/utils/ssr.utils';
+import { createApolloClient } from '@Lib/apollo/apollo-client';
+import MainLayout from '@Components/Layouts/MainLayout';
+import RecipesList from '@Components/Recipes/RecipesList';
+import RecipeCard from '@Components/Recipes/RecipeCard';
+import Spinner from '@Components/generic/Spinner';
+import { MainPaths } from '@Enums/paths/main-paths';
+import useRecipes from '@Lib/hooks/recipe/useRecipes';
 
 const Index = () => {
-  const { data, loading, fetchMore } = useQuery(GET_RECIPES, {
-    variables: {
-      offset: 0,
-      limit: 20,
-    },
+  const { getRecipes } = useRecipes();
+  const { data, loading, fetchMore } = getRecipes({
+    offset: 0,
+    limit: 20,
   });
 
   if (loading) return <Spinner />;

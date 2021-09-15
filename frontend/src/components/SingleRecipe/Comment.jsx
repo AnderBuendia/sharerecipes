@@ -1,66 +1,33 @@
 import { useState } from 'react';
-import { useMutation } from '@apollo/client';
 import Image from 'next/image';
 import { Waypoint } from 'react-waypoint';
+import useUser from '@Lib/hooks/user/useUser';
 import useTimeAgo from '@Lib/hooks/useTimeAgo';
-import { useToasts } from 'react-toast-notifications';
-import ChevronUp from '@Components/icons/chevronUp';
-import {
-  EDIT_COMMENTS_RECIPE,
-  VOTE_COMMENTS_RECIPE,
-} from '@Lib/graphql/comments/mutation';
-import useUser from '@Lib/hooks/useUser';
+import ChevronUp from '@Components/Icons/chevronUp';
 
-const Comment = ({ comment, recipe, i, fetchMore }) => {
+const Comment = ({
+  comment,
+  recipe,
+  i,
+  fetchMore,
+  setEditCommentRecipe,
+  setVoteCommentRecipe,
+}) => {
   const { _id, message, votes, author, createdAt, edited } = comment;
-  const timeago = useTimeAgo(createdAt);
-  const { authState } = useUser();
-  const { addToast } = useToasts();
-
-  /* useState Edit comments */
   const [isEditing, setIsEditing] = useState(false);
   const [editComment, setEditComment] = useState(message);
 
-  /* Apollo Mutations */
-  const [editCommentsRecipe] = useMutation(EDIT_COMMENTS_RECIPE);
+  const timeago = useTimeAgo(createdAt);
+  const { authState } = useUser();
 
-  const handleEdit = async (editComment) => {
-    try {
-      await editCommentsRecipe({
-        variables: {
-          _id,
-          input: {
-            message: editComment,
-            edited: true,
-          },
-        },
-      });
+  const handleEdit = (editComment) => {
+    setEditCommentRecipe({ _id, editComment });
 
-      setIsEditing(false);
-    } catch (error) {
-      addToast(error.message.replace('GraphQL error: ', ''), {
-        appearance: 'error',
-      });
-    }
+    setIsEditing(false);
   };
 
-  const [voteCommentsRecipe] = useMutation(VOTE_COMMENTS_RECIPE);
-
-  const handleVoteComments = async (_id) => {
-    try {
-      await voteCommentsRecipe({
-        variables: {
-          _id,
-          input: {
-            votes: 1,
-          },
-        },
-      });
-    } catch (error) {
-      addToast(error.message.replace('GraphQL error: ', ''), {
-        appearance: 'error',
-      });
-    }
+  const handleVoteComment = () => {
+    setVoteCommentRecipe({ _id });
   };
 
   return (
@@ -102,7 +69,7 @@ const Comment = ({ comment, recipe, i, fetchMore }) => {
         <div className="flex mt-1 items-center">
           <button
             className="flex font-bold items-center content-center text-xs text-gray-400"
-            onClick={() => handleVoteComments(_id)}
+            onClick={handleVoteComment}
           >
             <ChevronUp className="w-5 h-5" />
             <span>Upvote {votes > 0 && `(${votes})`}</span>

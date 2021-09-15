@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import SearchBarMobile from './searchBarMobile';
-import DarkModeButton from '../../generic/DarkModeButton';
-import MenuMobile from './menuMobile';
-import RamenIcon from '../../icons/ramenicon';
-import { MainPaths } from '../../../enums/paths/main-paths';
+import SearchBarMobile from '@Components/Header/Mobile/searchBarMobile';
+import DarkModeButton from '@Components/generic/DarkModeButton';
+import MenuMobile from '@Components/Header/Mobile/menuMobile';
+import RamenIcon from '@Components/Icons/ramenicon';
+import { MainPaths } from '@Enums/paths/main-paths';
 
 const HeaderMobile = () => {
   return (

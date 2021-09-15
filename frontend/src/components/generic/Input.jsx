@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Input = (props) => {
   const { label, name, type, placeholder, error, initialValue, register } =
     props;

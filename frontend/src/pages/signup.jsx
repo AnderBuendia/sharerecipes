@@ -1,15 +1,15 @@
 import { decode } from 'jsonwebtoken';
-import { createApolloClient } from '../lib/apollo/apollo-client';
-import withCSRRedirect from '../lib/hoc/with-csr-redirect.hoc';
-import { getJwtFromCookie } from '../lib/utils/jwt-cookie.utils';
+import { createApolloClient } from '@Lib/apollo/apollo-client';
+import withCSRRedirect from '@Lib/hoc/with-csr-redirect.hoc';
+import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
 import {
   isRequestSSR,
   loadAuthProps,
   serverRedirect,
-} from '../lib/utils/ssr.utils';
+} from '@Lib/utils/ssr.utils';
 import SignUpForm from '@Components/forms/SignUpForm';
-import { MainPaths } from '../enums/paths/main-paths';
-import { RedirectConditions } from '../enums/redirect-conditions';
+import { MainPaths } from '@Enums/paths/main-paths';
+import { RedirectConditions } from '@Enums/redirect-conditions';
 
 const SignUpPage = () => <SignUpForm />;
 

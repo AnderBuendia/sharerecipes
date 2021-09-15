@@ -37,14 +37,26 @@ export const UPDATE_USER = gql`
   }
 `;
 
+export const DELETE_USER = gql`
+  mutation deleteUser($email: String!) {
+    deleteUser(email: $email)
+  }
+`;
+
 export const UPDATE_USER_PASSWORD = gql`
   mutation updateUserPassword($input: UserPasswordInput) {
     updateUserPassword(input: $input)
   }
 `;
 
-export const DELETE_USER = gql`
-  mutation deleteUser($email: String!) {
-    deleteUser(email: $email)
+export const FORGOT_PASSWORD = gql`
+  mutation forgotPassword($input: EmailInput) {
+    forgotPassword(input: $input)
+  }
+`;
+
+export const RESET_PASSWORD = gql`
+  mutation resetPassword($input: UserPasswordInput) {
+    resetPassword(input: $input)
   }
 `;
