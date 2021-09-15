@@ -32,30 +32,25 @@ npm install
 Configure .env files:
 
 ```
-cd packages/server
+cd server
 cp example.env variables.env
 ```
 
 Then go to frontend folder and configure the .env file:
 
 ```
-cd packages/frontend
+cd frontend
 cp example.env .env.local
 ```
 
-Once the .env files are configured, you need to run the backend server:
+Once the .env files are configured, you need to run the backend and frontend server from the root folder:
 
 ```
-cd packages/server
-npm run dev
+npm run dev:server
+
+npm run dev:frontend
 ```
 
-Finally, go to frontend folder and run the server:
-
-```
-cd packages/frontend
-npm run dev
-```
 
 ## Notes
 
