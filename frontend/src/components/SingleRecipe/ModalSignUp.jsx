@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom';
-import RamenIcon from '@Components/icons/ramenicon';
+import RamenIcon from '@Components/Icons/ramenicon';
 
 const ModalPortal = ({ onSignUp }) => {
   return createPortal(

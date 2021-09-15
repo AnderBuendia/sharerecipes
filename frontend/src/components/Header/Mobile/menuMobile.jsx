@@ -3,13 +3,13 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
 import useClickOutside from '@Lib/hooks/useClickOutside';
-import CloseIcon from '@Components/icons/closeicon';
-import DocumentIcon from '@Components/icons/documenticon';
-import AdminIcon from '@Components/icons/adminicon';
-import MenuMobileIcon from '@Components/icons/menuMobileicon';
+import CloseIcon from '@Components/Icons/closeicon';
+import DocumentIcon from '@Components/Icons/documenticon';
+import AdminIcon from '@Components/Icons/adminicon';
+import MenuMobileIcon from '@Components/Icons/menuMobileicon';
 import { MainPaths } from '@Enums/paths/main-paths';
 import { UserRoles } from '@Enums/user/user-roles';
-import useUser from '@Lib/hooks/useUser';
+import useUser from '@Lib/hooks/user/useUser';
 
 const MenuMobile = () => {
   const {

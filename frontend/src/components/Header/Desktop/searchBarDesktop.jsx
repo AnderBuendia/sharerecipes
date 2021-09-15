@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { searchRecipes } from '../../../lib/utils/header.utils';
-
-import SearchIcon from '../../icons/searchicon';
+import { searchRecipes } from '@Lib/utils/header.utils';
+import SearchIcon from '@Components/Icons/searchicon';
 
 const SearchBarDesktop = () => {
   const [search, setSearch] = useState('');

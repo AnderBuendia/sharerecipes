@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { searchRecipes } from '@Lib/utils/header.utils';
-import SearchIcon from '@Components/icons/searchicon';
-import CloseIcon from '@Components/icons/closeicon';
+import SearchIcon from '@Components/Icons/searchicon';
+import CloseIcon from '@Components/Icons/closeicon';
 import useClickOutside from '@Lib/hooks/useClickOutside';
 
 const SearchBarMobile = () => {

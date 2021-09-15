@@ -1,9 +1,9 @@
 import { ApolloError } from '@apollo/client';
-import { createApolloClient } from '../../lib/apollo/apollo-client';
-import { setJwtCookie } from '../../lib/utils/jwt-cookie.utils';
-import { HTTPStatusCodes } from '../../enums/config/http-status-codes';
-import { AlertMessages, FormMessages } from '../../enums/config/messages';
-import { AUTH_USER } from '../../lib/graphql/user/mutation';
+import { createApolloClient } from '@Lib/apollo/apollo-client';
+import { setJwtCookie } from '@Lib/utils/jwt-cookie.utils';
+import { HTTPStatusCodes } from '@Enums/config/http-status-codes';
+import { AlertMessages, FormMessages } from '@Enums/config/messages';
+import { AUTH_USER } from '@Lib/graphql/user/mutation';
 
 const login = async (req, res) => {
   if (req.method !== 'POST') {

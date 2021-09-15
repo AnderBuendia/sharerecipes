@@ -1,62 +1,42 @@
-import React from 'react';
 import { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
 import Link from 'next/link';
-import { useMutation } from '@apollo/client';
-import { useToasts } from 'react-toast-notifications';
+import { useForm } from 'react-hook-form';
 import { decode } from 'jsonwebtoken';
-import { createApolloClient } from '../lib/apollo/apollo-client';
-import withCSRRedirect from '../lib/hoc/with-csr-redirect.hoc';
-import { getJwtFromCookie } from '../lib/utils/jwt-cookie.utils';
+import { createApolloClient } from '@Lib/apollo/apollo-client';
+import withCSRRedirect from '@Lib/hoc/with-csr-redirect.hoc';
+import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
 import {
   isRequestSSR,
   loadAuthProps,
   serverRedirect,
-} from '../lib/utils/ssr.utils';
-import { FORGOT_PASSWORD } from '../lib/graphql/user/query';
+} from '@Lib/utils/ssr.utils';
+import useUser from '@Lib/hooks/user/useUser';
 
 /* enum conditions */
-import { MainPaths } from '../enums/paths/main-paths';
-import { RedirectConditions } from '../enums/redirect-conditions';
-import { AlertMessages, FormMessages } from '../enums/config/messages';
+import { MainPaths } from '@Enums/paths/main-paths';
+import { RedirectConditions } from '@Enums/redirect-conditions';
+import { FormMessages } from '@Enums/config/messages';
 
 /* Components */
-import FormLayout from '../components/layouts/FormLayout';
-import Input from '../components/generic/Input';
+import FormLayout from '@Components/Layouts/FormLayout';
+import Input from '@Components/generic/Input';
 
 const ForgotPass = () => {
   const router = useRouter();
+  const { setForgotPassword } = useUser();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  /* Set Toast Notification */
-  const { addToast } = useToasts();
+  const onSubmit = async (submitData) => {
+    const response = await setForgotPassword({ submitData });
 
-  /* Apollo mutation */
-  const [forgotPassword] = useMutation(FORGOT_PASSWORD);
-
-  /* React hook form */
-  const { register, handleSubmit, errors } = useForm({
-    mode: 'onChange',
-  });
-  const onSubmit = async (data) => {
-    const { email } = data;
-
-    try {
-      const { data } = await forgotPassword({
-        variables: {
-          input: {
-            email,
-          },
-        },
-      });
-      addToast(AlertMessages.CHECK_ACTIVATION_MAIL, { appearance: 'success' });
-
+    if (response) {
       setTimeout(() => {
         router.push(MainPaths.INDEX);
       }, 3000);
-    } catch (error) {
-      addToast(error.message.replace('GraphQL error: ', ''), {
-        appearance: 'error',
-      });
     }
   };
 
@@ -72,14 +52,16 @@ const ForgotPass = () => {
           name="email"
           type="text"
           placeholder="example@example.com"
-          childRef={register({
-            required: FormMessages.EMAIL_REQUIRED,
-            pattern: {
-              value:
-                /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-              message: FormMessages.EMAIL_FORMAT_INVALID,
-            },
-          })}
+          register={{
+            ...register('email', {
+              required: FormMessages.EMAIL_REQUIRED,
+              pattern: {
+                value:
+                  /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                message: FormMessages.EMAIL_FORMAT_INVALID,
+              },
+            }),
+          }}
           error={errors.email}
         />
 

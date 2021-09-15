@@ -1,25 +1,35 @@
+import { useEffect } from 'react';
 import Select from 'react-select';
 
 const ReactSelect = ({
   instance,
-  label,
-  placeholder,
+  label = null,
+  style,
+  placeholder = null,
   options,
   handleChange,
   value,
+  name = null,
 }) => {
+  // useEffect(() => {
+  //   if (register && name) register({ name });
+  // }, []);
+
   return (
     <>
-      <label
-        htmlFor={value}
-        className="block text-black font-body font-bold mb-2"
-      >
-        {label}
-      </label>
+      {label && (
+        <label
+          htmlFor={value}
+          className="block text-black font-body font-bold mb-2"
+        >
+          {label}
+        </label>
+      )}
 
       <Select
         instanceId={instance}
-        className="text-gray-800 mt-2 mb-4 font-body shadow appearance-none"
+        className={style}
+        name={name}
         placeholder={placeholder}
         options={options}
         onChange={handleChange}

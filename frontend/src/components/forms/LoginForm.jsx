@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
 import Link from 'next/link';
-import { getLoginRequest } from '../../lib/service/getLoginRequest';
-import { FormMessages } from '../../enums/config/messages';
-import FormLayout from '../../components/layouts/FormLayout';
-import Input from '../../components/generic/Input';
-import { MainPaths } from '../../enums/paths/main-paths';
+import { useForm } from 'react-hook-form';
+import { getLoginRequest } from '@Lib/service/getLoginRequest';
+import FormLayout from '@Components/Layouts/FormLayout';
+import Input from '@Components/generic/Input';
+import { MainPaths } from '@Enums/paths/main-paths';
+import { FormMessages } from '@Enums/config/messages';
 
 const LoginForm = () => {
   const router = useRouter();

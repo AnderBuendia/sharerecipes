@@ -1,47 +1,11 @@
-import React, { useContext } from 'react';
-import { useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
-import { useToasts } from 'react-toast-notifications';
-import AuthContext from '../../../lib/context/auth/authContext';
-import { UPDATE_USER } from '../../../lib/graphql/user/mutation';
-import { AlertMessages, FormMessages } from '../../../enums/config/messages';
-import DragDropImage from '../../generic/DragDropImage';
-import Input from '../../generic/Input';
+import useUser from '@Lib/hooks/user/useUser';
+import { FormMessages } from '@Enums/config/messages';
+import DragDropImage from '@Components/generic/DragDropImage';
+import Input from '@Components/generic/Input';
 
 const ProfileData = () => {
-  const { addToast } = useToasts();
-  const { authState, setAuth } = useContext(AuthContext);
-
-  const setImageUser = (url, setAuth) => {
-    const { filename, image_url } = url;
-
-    setAuth({
-      ...authState,
-      user: {
-        ...authState.user,
-        image_url,
-        image_name: filename,
-      },
-    });
-  };
-
-  const getUpdateUser = (setAuth) => {
-    const [updateUser] = useMutation(UPDATE_USER, {
-      onCompleted: ({ updateUser: response }) => {
-        setAuth({
-          ...authState,
-          user: {
-            ...authState.user,
-            name: response.name,
-          },
-        });
-      },
-    });
-
-    return { updateUser };
-  };
-
-  const { updateUser } = getUpdateUser(setAuth);
+  const { authState, setImageUser, setUpdateUser } = useUser();
 
   const {
     register,
@@ -49,31 +13,17 @@ const ProfileData = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: authState.user.name,
+      name: authState.user ? authState.user.name : '',
       password: '',
     },
   });
 
-  const onSubmit = async (data) => {
-    const { name, password } = data;
+  const handleImageUser = (url) => {
+    setImageUser({ url });
+  };
 
-    try {
-      await updateUser({
-        variables: {
-          input: {
-            name,
-            email: authState.user.email,
-            password,
-          },
-        },
-      });
-
-      addToast(AlertMessages.PROFILE_UPDATED, { appearance: 'success' });
-    } catch (error) {
-      addToast(error.message.replace('GraphQL error: ', ''), {
-        appearance: 'error',
-      });
-    }
+  const onSubmit = async (submitData) => {
+    setUpdateUser({ submitData });
   };
 
   return (
@@ -86,7 +36,7 @@ const ProfileData = () => {
             current={authState.user?.image_url}
             name="photo"
             rounded
-            onChange={(url) => setImageUser(url, setAuth)}
+            onChange={(url) => handleImageUser(url)}
           />
         </div>
       </div>

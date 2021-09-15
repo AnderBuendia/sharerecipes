@@ -1,18 +1,15 @@
 import Link from 'next/link';
-import { useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { useToasts } from 'react-toast-notifications';
-import FormLayout from '@Components/layouts/FormLayout';
+import useUser from '@Lib/hooks/user/useUser';
+import FormLayout from '@Components/Layouts/FormLayout';
 import Input from '@Components/generic/Input';
-import { CREATE_USER } from '@Lib/graphql/user/mutation';
-import { AlertMessages, FormMessages } from '@Enums/config/messages';
+import { FormMessages } from '@Enums/config/messages';
 import { MainPaths } from '@Enums/paths/main-paths';
 
 const SignUpForm = () => {
   const router = useRouter();
-  const { addToast } = useToasts();
-  const [newUser] = useMutation(CREATE_USER);
+  const { setNewUser } = useUser();
 
   const {
     register,
@@ -21,28 +18,12 @@ const SignUpForm = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const { name, email, password } = data;
+    const response = setNewUser({ submitData: data });
 
-    try {
-      await newUser({
-        variables: {
-          input: {
-            name,
-            email,
-            password,
-          },
-        },
-      });
-
-      addToast(AlertMessages.USER_CREATED, { appearance: 'success' });
-
+    if (response) {
       setTimeout(() => {
         router.push(MainPaths.INDEX);
       }, 3000);
-    } catch (error) {
-      addToast(error.message.replace('GraphQL error: ', ''), {
-        appearance: 'error',
-      });
     }
   };
 

@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
-import Custom404 from '../../pages/404';
-import AuthContext from '../context/auth/authContext';
-import Spinner from '../../components/generic/Spinner';
+import { useState, useEffect } from 'react';
+import useUser from '@Lib/hooks/user/useUser';
+import Custom404 from '@Pages/404';
+import Spinner from '@Components/generic/Spinner';
 
 const withCSRRoles = (Component, allowedRoles) => (props) => {
-  const { authState } = useContext(AuthContext);
+  const { authState } = useUser();
   const [component, setComponent] = useState(<Spinner />);
 
   useEffect(() => {

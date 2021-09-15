@@ -1,5 +1,4 @@
-import React from 'react';
-import { LeftArrowIcon, RightArrowIcon } from '../icons/arrowicons';
+import { LeftArrowIcon, RightArrowIcon } from '@Components/Icons/arrowicons';
 
 const Pagination = ({ current, totalPages, onPageChange }) => {
   return (

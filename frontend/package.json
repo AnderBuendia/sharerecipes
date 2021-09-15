@@ -10,7 +10,7 @@
     "build:css": "postcss assets/tailwind.css -o assets/main.css"
   },
   "dependencies": {
-    "@apollo/client": "3.4.5",
+    "@apollo/client": "3.3.21",
     "@uppy/core": "2.0.2",
     "@uppy/image-editor": "1.0.1",
     "@uppy/react": "2.0.2",

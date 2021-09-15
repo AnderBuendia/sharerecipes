@@ -1,21 +1,21 @@
 import { decode } from 'jsonwebtoken';
-import withCSRRedirect from '../lib/hoc/with-csr-redirect.hoc';
-import { createApolloClient } from '../lib/apollo/apollo-client';
-import { getJwtFromCookie } from '../lib/utils/jwt-cookie.utils';
+import withCSRRedirect from '@Lib/hoc/with-csr-redirect.hoc';
+import { createApolloClient } from '@Lib/apollo/apollo-client';
+import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
 import {
   isRequestSSR,
   loadAuthProps,
   serverRedirect,
-} from '../lib/utils/ssr.utils';
-
-/* enum conditions */
-import { MainPaths } from '../enums/paths/main-paths';
-import { ProfilePaths } from '../enums/paths/profile-paths';
-import { RedirectConditions } from '../enums/redirect-conditions';
+} from '@Lib/utils/ssr.utils';
 
 /* components */
-import MainLayout from '../components/layouts/MainLayout';
-import ProfileLayout from '../components/layouts/ProfileLayout';
+import MainLayout from '@Components/Layouts/MainLayout';
+import ProfileLayout from '@Components/Layouts/ProfileLayout';
+
+/* enum conditions */
+import { MainPaths } from '@Enums/paths/main-paths';
+import { ProfilePaths } from '@Enums/paths/profile-paths';
+import { RedirectConditions } from '@Enums/redirect-conditions';
 
 const Profile = () => (
   <MainLayout

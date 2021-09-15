@@ -1,20 +1,13 @@
-import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@apollo/client';
-import { useToasts } from 'react-toast-notifications';
-import AuthContext from '../../../lib/context/auth/authContext';
-import { UPDATE_USER_PASSWORD } from '../../../lib/graphql/user/mutation';
-import { ProfilePaths } from '../../../enums/paths/profile-paths';
-import { AlertMessages, FormMessages } from '../../../enums/config/messages';
-import Input from '../../generic/Input';
+import useUser from '@Lib/hooks/user/useUser';
+import { ProfilePaths } from '@Enums/paths/profile-paths';
+import { FormMessages } from '@Enums/config/messages';
+import Input from '@Components/generic/Input';
 
 const ProfilePassword = () => {
-  const { authState } = useContext(AuthContext);
-  const { addToast } = useToasts();
+  const { setUpdateUserPassword } = useUser();
   const router = useRouter();
-
-  const [updateUserPassword] = useMutation(UPDATE_USER_PASSWORD);
 
   const {
     register,
@@ -23,26 +16,10 @@ const ProfilePassword = () => {
     formState: { errors },
   } = useForm({ mode: 'onChange' });
 
-  const onSubmit = async (data) => {
-    const { confirmPassword, password } = data;
-    try {
-      await updateUserPassword({
-        variables: {
-          input: {
-            email: authState.user.email,
-            password,
-            confirmPassword,
-          },
-        },
-      });
+  const onSubmit = async (submitData) => {
+    const response = setUpdateUserPassword({ submitData });
 
-      addToast(AlertMessages.PASSWORD_UPDATED, { appearance: 'success' });
-      router.push(ProfilePaths.MAIN);
-    } catch (error) {
-      addToast(error.message.replace('GraphQL error: ', ''), {
-        appearance: 'error',
-      });
-    }
+    if (response) router.push(ProfilePaths.MAIN);
   };
 
   return (

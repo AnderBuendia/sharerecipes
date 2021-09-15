@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useMutation } from '@apollo/client';
 import Swal from 'sweetalert2';
-import { useToasts } from 'react-toast-notifications';
 import { decode } from 'jsonwebtoken';
 import withCSRRedirect from '@Lib/hoc/with-csr-redirect.hoc';
 import { createApolloClient } from '@Lib/apollo/apollo-client';
@@ -12,87 +10,34 @@ import {
   loadAuthProps,
   serverRedirect,
 } from '@Lib/utils/ssr.utils';
-import { NEW_RECIPE } from '@Lib/graphql/recipe/mutation';
-import { GET_RECIPES } from '@Lib/graphql/recipe/query';
+import useRecipes from '@Lib/hooks/recipe/useRecipes';
+
+/* components */
+import MainLayout from '@Components/Layouts/MainLayout';
+import NewRecipeForm from '@Components/NewRecipeForm';
+import DragDropImage from '@Components/generic/DragDropImage';
 
 /* enum conditions */
 import { MainPaths } from '@Enums/paths/main-paths';
 import { RedirectConditions } from '@Enums/redirect-conditions';
 import { AlertMessages } from '@Enums/config/messages';
 
-/* components */
-import MainLayout from '@Components/layouts/MainLayout';
-import NewRecipeForm from '../components/NewRecipeForm';
-import DragDropImage from '../components/generic/DragDropImage';
-
 const NewRecipe = () => {
-  const router = useRouter();
   const [recipeImage, setRecipeImage] = useState(null);
-  const { addToast } = useToasts();
+  const { setNewRecipe } = useRecipes();
+  const router = useRouter();
 
-  const [newRecipe] = useMutation(NEW_RECIPE, {
-    update(cache, { data: { newRecipe } }) {
-      const data = cache.readQuery({
-        query: GET_RECIPES,
-        variables: {
-          offset: 0,
-          limit: 20,
-        },
-      });
+  const onSubmit = async (submitData) => {
+    console.log('ON SUBMIT', submitData);
+    const response = setNewRecipe({ submitData, recipeImage });
 
-      cache.writeQuery({
-        query: GET_RECIPES,
-        variables: {
-          offset: 0,
-          limit: 20,
-        },
-        data: {
-          ...data,
-          getRecipes: [...data.getRecipes, newRecipe],
-        },
-      });
-    },
-  });
-
-  const onSubmit = async (data) => {
-    console.log('NEW RECIPE', data);
-    const {
-      name,
-      prep_time,
-      serves,
-      ingredients,
-      description,
-      difficulty,
-      style,
-      other_style,
-    } = data;
-
-    try {
-      await newRecipe({
-        variables: {
-          input: {
-            name,
-            prep_time: parseInt(prep_time),
-            serves: parseInt(serves),
-            ingredients,
-            difficulty: difficulty.value,
-            style: other_style ? other_style : style.value,
-            image_url: recipeImage.image_url,
-            image_name: recipeImage.filename,
-            description,
-          },
-        },
-      });
-
+    console.log('RESPONSE NEW RECIPE', response);
+    if (response) {
       setRecipeImage('');
 
       router.push(MainPaths.INDEX);
 
       Swal.fire('Correct', AlertMessages.RECIPE_CREATED, 'success');
-    } catch (error) {
-      addToast(error.message.replace('GraphQL error: ', ''), {
-        appearance: 'error',
-      });
     }
   };
 

@@ -1,5 +1,5 @@
 import Router from 'next/router';
-import { MainPaths } from '../../enums/paths/main-paths';
+import { MainPaths } from '@Enums/paths/main-paths';
 
 export const searchRecipes = (e, search) => {
   e.preventDefault();

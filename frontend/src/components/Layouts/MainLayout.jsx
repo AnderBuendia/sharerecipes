@@ -1,5 +1,5 @@
-import Head from '../generic/Head';
-import Header from '../Header';
+import Head from '@Components/generic/Head';
+import Header from '@Components/Header';
 
 const MainLayout = ({ title, description, url, children }) => (
   <>

@@ -8,6 +8,13 @@ const ACTIONS = {
   REMOVE_INGREDIENTS: 'REMOVE_INGREDIENTS',
 };
 
+const initialState = {
+  selectedFoodStyle: null,
+  selectedDifficulty: null,
+  indexes: [],
+  counter: 0,
+};
+
 const ACTIONS_REDUCERS = {
   [ACTIONS.SELECTED_FOOD_STYLE]: (state, action) => ({
     ...state,
@@ -35,13 +42,6 @@ const reducer = (state, action) => {
 };
 
 export default function useNewRecipeForm() {
-  const initialState = {
-    selectedFoodStyle: null,
-    selectedDifficulty: null,
-    indexes: [],
-    counter: 0,
-  };
-
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return {
@@ -49,9 +49,9 @@ export default function useNewRecipeForm() {
     selectedDifficulty: state.selectedDifficulty,
     indexes: state.indexes,
     counter: state.counter,
-    setSelectedFoodStyle: (foodStyle) =>
+    setSelectedFoodStyle: ({ foodStyle }) =>
       dispatch({ type: ACTIONS.SELECTED_FOOD_STYLE, payload: foodStyle }),
-    setSelectedDifficulty: (difficulty) =>
+    setSelectedDifficulty: ({ difficulty }) =>
       dispatch({ type: ACTIONS.SELECTED_DIFFICULTY, payload: difficulty }),
     addIngredients: (indexes, counter) =>
       dispatch({

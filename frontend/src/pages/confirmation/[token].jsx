@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { removeJwtCookie } from '../../lib/utils/jwt-cookie.utils';
-import { checkActivationToken } from '../../lib/utils/user.utils';
-import { HTTPStatusCodes } from '../../enums/config/http-status-codes';
-import { MainPaths } from '../../enums/paths/main-paths';
-import { AlertMessages } from '../../enums/config/messages';
-import MainLayout from '../../components/layouts/MainLayout';
+import { removeJwtCookie } from '@Lib/utils/jwt-cookie.utils';
+import { checkActivationToken } from '@Lib/utils/user.utils';
+import MainLayout from '@Components/Layouts/MainLayout';
+import { HTTPStatusCodes } from '@Enums/config/http-status-codes';
+import { MainPaths } from '@Enums/paths/main-paths';
+import { AlertMessages } from '@Enums/config/messages';
 
 const ConfirmationToken = () => {
   const router = useRouter();
