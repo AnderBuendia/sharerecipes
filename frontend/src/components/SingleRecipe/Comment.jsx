@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Waypoint } from 'react-waypoint';
 import useUser from '@Lib/hooks/user/useUser';
 import useTimeAgo from '@Lib/hooks/useTimeAgo';
+import UserIcon from '@Components/Icons/usericon';
 import ChevronUp from '@Components/Icons/chevronUp';
 
 const Comment = ({
@@ -33,13 +34,11 @@ const Comment = ({
   return (
     <div>
       <div className="flex w-full items-center mt-4">
-        <Image
-          className="block rounded-full"
-          key={author.image_url ? author.image_url : '/usericon.jpeg'}
-          src={author.image_url ? author.image_url : '/usericon.jpeg'}
-          alt={author.image_name ? author.image_name : 'UserIcon Image'}
-          width={28}
-          height={28}
+        <UserIcon
+          imageUrl={author.image_url}
+          imageName={author.image_name}
+          w={28}
+          h={28}
         />
         <p className="ml-2 font-roboto text-sm font-bold">
           {author.name}

@@ -10,9 +10,9 @@ const ModalPortal = ({ onSignUp }) => {
 
 const ModalSignUp = ({ onSignUp }) => {
   return (
-    <div className="flex h-screen fixed backdrop-filter backdrop-blur inset-0 z-10">
+    <div className="flex fixed inset-0 bg-white bg-opacity-60">
       <div className="relative p-6 m-auto border-2 border-gray-600 text-center rounded-md shadow-lg bg-white">
-        <RamenIcon className="w-16 h-16 mx-auto" />
+        <RamenIcon w={60} h={60} />
         <h2
           className="text-2xl font-bold font-roboto my-2"
           id="transition-modal-title"

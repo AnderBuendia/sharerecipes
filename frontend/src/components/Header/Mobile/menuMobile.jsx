@@ -1,15 +1,15 @@
 import { useRef } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import Image from 'next/image';
 import useClickOutside from '@Lib/hooks/useClickOutside';
+import useUser from '@Lib/hooks/user/useUser';
 import CloseIcon from '@Components/Icons/closeicon';
 import DocumentIcon from '@Components/Icons/documenticon';
 import AdminIcon from '@Components/Icons/adminicon';
 import MenuMobileIcon from '@Components/Icons/menuMobileicon';
+import UserIcon from '@Components/Icons/usericon';
 import { MainPaths } from '@Enums/paths/main-paths';
 import { UserRoles } from '@Enums/user/user-roles';
-import useUser from '@Lib/hooks/user/useUser';
 
 const MenuMobile = () => {
   const {
@@ -52,14 +52,13 @@ const MenuMobile = () => {
             <div className="flex flex-col items-center w-full px-6">
               {user ? (
                 <>
-                  <Image
-                    className="rounded-full"
-                    key={user?.image_url ? user.image_url : '/usericon.jpeg'}
-                    src={user?.image_url ? user.image_url : '/usericon.jpeg'}
-                    alt={'UserIcon Image'}
-                    width={80}
-                    height={80}
+                  <UserIcon
+                    imageUrl={user.image_url}
+                    imageName={user.image_name}
+                    w={80}
+                    h={80}
                   />
+
                   <p className="mt-1 font-bold font-roboto">{user?.email}</p>
                   <p className="mb-4 font-roboto">{user?.name}</p>
                   <Link href={MainPaths.PROFILE}>

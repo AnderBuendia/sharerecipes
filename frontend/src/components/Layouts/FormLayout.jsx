@@ -10,7 +10,7 @@ const FormLayout = ({ title, description, url, children }) => (
       <div className="w-11/12 container mx-auto flex flex-col items-center justify-center min-h-screen">
         <Link href={MainPaths.INDEX}>
           <a className="flex justify-center">
-            <RamenIcon className="w-16 h-16" />
+            <RamenIcon w={70} h={70} />
           </a>
         </Link>
         <h2 className="text-3xl font-roboto font-bold text-center my-4">

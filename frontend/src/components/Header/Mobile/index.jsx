@@ -10,7 +10,7 @@ const HeaderMobile = () => {
     <div className="mdxl:hidden w-full py-2 px-4 flex flex-row items-center justify-between bg-gray-400 dark:bg-gray-800">
       <Link href={MainPaths.INDEX}>
         <a>
-          <RamenIcon className="w-10 h-10" />
+          <RamenIcon w={33} h={33} />
         </a>
       </Link>
 
