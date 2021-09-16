@@ -1,12 +1,13 @@
 import { useRef } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import Image from 'next/image';
 import useClickOutside from '@Lib/hooks/useClickOutside';
 import { MainPaths } from '@Enums/paths/main-paths';
 import { UserRoles } from '@Enums/user/user-roles';
+import UserIcon from '@Components/Icons/usericon';
 
 const DropdownMenu = ({ user, signOut, open, setOpen }) => {
+  const { name, image_url, image_name, role } = user;
   const router = useRouter();
   const componentRef = useRef();
 
@@ -31,14 +32,7 @@ const DropdownMenu = ({ user, signOut, open, setOpen }) => {
         aria-expanded="true"
         onClick={() => setOpen(!open)}
       >
-        <Image
-          className="rounded-full"
-          key={user.image_url ? user.image_url : '/usericon.jpeg'}
-          src={user.image_url ? user.image_url : '/usericon.jpeg'}
-          alt={'UserIcon Image'}
-          width={46}
-          height={46}
-        />
+        <UserIcon imageUrl={image_url} imageName={image_name} w={46} h={46} />
       </div>
 
       {open && (
@@ -54,10 +48,10 @@ const DropdownMenu = ({ user, signOut, open, setOpen }) => {
                 className="block px-4 py-2 text-sm font-bold leading-5"
                 role="menuitem"
               >
-                Hi, {user.name}
+                Hi, {name}
               </p>
               <div className="border-t border-gray-200"></div>
-              {user.role.includes(UserRoles.ADMIN) && (
+              {role.includes(UserRoles.ADMIN) && (
                 <Link href={MainPaths.ADMIN}>
                   <a
                     className="block px-4 py-2 text-sm leading-5 hover:bg-gray-200 
@@ -68,7 +62,7 @@ const DropdownMenu = ({ user, signOut, open, setOpen }) => {
                   </a>
                 </Link>
               )}
-              <Link href="/profile">
+              <Link href={MainPaths.PROFILE}>
                 <a
                   className="block px-4 py-2 text-sm leading-5 hover:bg-gray-200 hover:text-gray-900 
                         focus:outline-none"

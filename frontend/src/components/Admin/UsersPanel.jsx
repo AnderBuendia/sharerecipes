@@ -1,6 +1,6 @@
 import User from '@Components/Admin/User';
-import UsersGroup from '@Components/Icons/usersgroup';
 import Pagination from '@Components/Admin/Pagination';
+import UsersGroupIcon from '@Components/Icons/usersgroupicon';
 
 const UsersPanel = ({
   q,
@@ -18,13 +18,11 @@ const UsersPanel = ({
         All Users
       </h2>
       <div className="flex flex-row justify-between w-full">
-        <div className="mx-auto flex w-2/6 lg:w-1/5 bg-white rounded-lg shadow-md p-2">
-          <UsersGroup className="w-2/4" />
-          <div className="flex-col">
-            <p className="flex-1 flex-col mb-2 ml-2 font-bold">Users</p>
-            <p className="flex-1 flex-col font-bold text-center">
-              {totalUsers}
-            </p>
+        <div className="mx-auto flex justify-between items-center w-2/6 lg:w-1/5 bg-white rounded-lg shadow-md py-2 px-6">
+          <UsersGroupIcon w={70} h={70} />
+          <div className="flex flex-col">
+            <p className="mb-2 ml-2 font-bold">Users</p>
+            <p className="font-bold text-center">{totalUsers}</p>
           </div>
         </div>
         <div className="flex mx-auto w-3/5 lg:w-2/6 bg-white rounded-lg shadow-md p-4">

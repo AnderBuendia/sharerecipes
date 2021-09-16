@@ -14,7 +14,7 @@ const HeaderDesktop = () => {
     <div className="xssm:hidden w-full py-2 px-4 flex flex-row items-center justify-between text-black bg-gray-400 dark:bg-gray-800">
       <Link href={MainPaths.INDEX}>
         <a>
-          <RamenIcon className="w-14 h-14" />
+          <RamenIcon w={44} h={44} />
         </a>
       </Link>
 

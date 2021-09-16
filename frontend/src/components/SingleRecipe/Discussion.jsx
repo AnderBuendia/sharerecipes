@@ -1,30 +1,25 @@
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import useUser from '@Lib/hooks/user/useUser';
 import useClickOutside from '@Lib/hooks/useClickOutside';
 import useCommentRecipe from '@Lib/hooks/recipe/useCommentRecipe';
 import ModalSignUp from '@Components/SingleRecipe/ModalSignUp';
 import Comment from '@Components/SingleRecipe/Comment';
+import UserIcon from '@Components/Icons/usericon';
 import { MainPaths } from '@Enums/paths/main-paths';
 
 const Discussion = ({ recipe, fetchMore }) => {
   const [showModal, setShowModal] = useState(false);
   const componentRef = useRef();
   const router = useRouter();
-  const { authState } = useUser();
+  const {
+    authState: { user },
+  } = useUser();
   const { setEditCommentRecipe, setVoteCommentRecipe, setSendCommentRecipe } =
     useCommentRecipe({ url: recipe.url });
 
   useClickOutside(componentRef, setShowModal);
-
-  const image_user = authState.user?.image_url
-    ? authState.user.image_url
-    : '/usericon.jpeg';
-  const image_name = authState.user?.image_name
-    ? authState.user.image_name
-    : 'UserIcon Image';
 
   const handleSignUp = () => {
     router.push(MainPaths.SIGNUP);
@@ -35,7 +30,7 @@ const Discussion = ({ recipe, fetchMore }) => {
   });
 
   const onSubmit = async (submitData) => {
-    if (!authState.user) return setShowModal(true);
+    if (!user) return setShowModal(true);
 
     const response = setSendCommentRecipe({ submitData, url: recipe.url });
 
@@ -52,13 +47,11 @@ const Discussion = ({ recipe, fetchMore }) => {
       <h1 className="text-lg font-body font-bold mb-4">Discussion</h1>
       <div className="flex w-full">
         <div className="w-10 mr-2">
-          <Image
-            className="block rounded-full"
-            key={image_user}
-            src={image_user}
-            alt={image_name}
-            width={256}
-            height={256}
+          <UserIcon
+            imageUrl={user?.image_user}
+            imageName={user?.image_name}
+            w={256}
+            h={256}
           />
         </div>
 
