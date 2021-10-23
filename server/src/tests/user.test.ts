@@ -1,13 +1,17 @@
-const UserErrors = require('../enums/user.errors');
-const { api, mongoose, server, User } = require('./index');
+import { UserErrors } from '@Enums/user-errors.enum';
+import { api, mongoose, User } from './index';
 
-let token;
+let token: string;
 
 describe('User Tests', () => {
   beforeAll(async () => {
-    await User.deleteMany({
-      email: { $in: ['test2@email.com'] },
-    });
+    try {
+      await User.deleteMany({
+        email: { $in: ['test2@email.com'] },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   afterAll(async () => {
@@ -345,5 +349,4 @@ describe('User Tests', () => {
 
 afterAll(async () => {
   await mongoose.connection.close();
-  await server.close();
 });

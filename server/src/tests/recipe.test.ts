@@ -1,17 +1,21 @@
-const RecipeErrors = require('../enums/recipe.errors');
-const { api, Recipe, Comment } = require('./index');
+import { RecipeErrors } from '@Enums/recipe-errors.enum';
+import { api, Recipe, Comment } from './index';
 
-let token;
-let messageId;
+let token: string;
+let messageId: string;
 
 describe('Recipe Tests', () => {
   beforeAll(async () => {
-    await Recipe.deleteMany({
-      name: { $in: ['CarrotCake'] },
-    });
-    await Comment.deleteMany({
-      message: { $in: ['Nice carrot cake!'] },
-    });
+    try {
+      await Recipe.deleteMany({
+        name: { $in: ['CarrotCake'] },
+      });
+      await Comment.deleteMany({
+        message: { $in: ['Nice carrot cake!'] },
+      });
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   afterAll(async () => {

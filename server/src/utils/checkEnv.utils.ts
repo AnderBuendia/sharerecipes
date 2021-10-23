@@ -1,9 +1,9 @@
-const Env = require('../enums/env.enums');
+import { Env } from '@Enums/env.enum';
 
 /**
  * Checks if all environment variables are available in proccess.env before boot
  */
-function checkEnv() {
+export function checkEnv() {
   Object.keys(Env).forEach((keyEnv) => {
     if (!process.env[keyEnv])
       throw new Error(
@@ -11,5 +11,3 @@ function checkEnv() {
       );
   });
 }
-
-module.exports = { checkEnv };

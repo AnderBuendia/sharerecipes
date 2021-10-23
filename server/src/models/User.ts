@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import { model, Schema, Model } from 'mongoose';
+import { IUser } from '@Interfaces/models/user.interface';
 
-const userSchema = new Schema(
+const userSchema: Schema = new Schema(
   {
     name: {
       type: String,
@@ -47,4 +47,4 @@ userSchema.set('toJSON', {
   },
 });
 
-module.exports = mongoose.model('User', userSchema);
+export const User: Model<IUser> = model('User', userSchema);

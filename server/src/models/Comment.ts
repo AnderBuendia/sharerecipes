@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import { model, Schema, Model } from 'mongoose';
+import { IComment } from '@Interfaces/models/comment.interface';
 
-const commentSchema = new Schema(
+const commentSchema: Schema = new Schema(
   {
     message: {
       type: String,
@@ -14,12 +14,12 @@ const commentSchema = new Schema(
       type: Array,
     },
     author: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User',
       default: null,
     },
     recipe: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Recipe',
       default: null,
     },
@@ -33,4 +33,4 @@ const commentSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model('Comment', commentSchema);
+export const Comment: Model<IComment> = model('Comment', commentSchema);

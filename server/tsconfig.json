@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "rootDir": "./",
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@Routes/*": ["src/routes/*"],
+      "@DB/*": ["src/db/*"],
+      "@Models/*": ["src/models/*"],
+      "@Middleware/*": ["src/middleware/*"],
+      "@Graphql/*": ["src/graphql/*"],
+      "@Interfaces/*": ["src/interfaces/*"],
+      "@Enums/*": ["src/enums/*"],
+      "@Utils/*": ["src/utils/*"]
+    }
+  }
+}

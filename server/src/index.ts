@@ -1,22 +1,23 @@
-const express = require('express');
-const { ApolloServer, ApolloError } = require('apollo-server-express');
-const { existsSync, mkdirSync } = require('fs');
-const path = require('path');
-const cors = require('cors');
-require('./db/database');
-const jwt = require('jsonwebtoken');
+import express from 'express';
+import { ApolloServer, ApolloError } from 'apollo-server-express';
+import { existsSync, mkdirSync } from 'fs';
+import path from 'path';
+import cors from 'cors';
+import jwt from 'jsonwebtoken';
+import { connectDB } from '@DB/database';
+import routes from '@Routes/index';
+import typeDefs from '@Graphql/mainTypeDefs';
+import resolvers from '@Graphql/mainResolvers';
+import { UserErrors } from '@Enums/user-errors.enum';
+import { HTTPStatusCodes } from '@Enums/http-status-code.enum';
+import { checkEnv } from '@Utils/checkEnv.utils';
 require('dotenv').config({ path: 'src/variables.env' });
-const typeDefs = require('./graphql/mainTypeDefs');
-const resolvers = require('./graphql/mainResolvers');
-const UserErrors = require('./enums/user.errors');
-const HTTPStatusCodes = require('./enums/http-status-code');
-const { checkEnv } = require('./utils/checkEnv.utils');
 
 const port = parseInt(process.env.BACK_PORT) || 4000;
-const pathImages = path.join(__dirname, '/images');
+const pathImages = path.join(process.cwd(), '/images');
 
 /* Create server */
-const app = express();
+export const app = express();
 checkEnv();
 
 /* App use cors */
@@ -31,7 +32,8 @@ app.use(
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-/* Db Setup */
+/* Connect DB */
+connectDB();
 console.log('Initializing Server...');
 
 /* Apollo server */
@@ -40,8 +42,8 @@ const apolloServer = new ApolloServer({
   resolvers,
   context: ({ req, res }) => {
     const authorization = req.headers['authorization'];
+    const url = `${req.protocol}://${req.get('host')}${req.originalUrl}`;
 
-    const url = req.protocol + '://' + req.get('host') + req.originalUrl;
     req.url = url;
 
     if (authorization) {
@@ -74,14 +76,14 @@ const apolloServer = new ApolloServer({
 existsSync(pathImages) || mkdirSync(pathImages);
 app.use('/images', express.static(pathImages));
 
-/* Route to upload images with multer */
-app.use('/upload', require('./routes/uploads'));
+/* Routes */
+app.use(routes);
 
 apolloServer.applyMiddleware({ app, cors: false });
 
 /* App setup */
-const server = app.listen(port, () => {
-  console.log(`Server is running on port ${port}${apolloServer.graphqlPath}`);
-});
-
-module.exports = { app, server };
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}${apolloServer.graphqlPath}`);
+  });
+}

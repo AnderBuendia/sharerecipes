@@ -16,7 +16,7 @@
     "@uppy/react": "2.0.2",
     "@uppy/xhr-upload": "2.0.2",
     "cookie": "^0.4.1",
-    "graphql": "^15.4.0",
+    "graphql": "15.5.3",
     "jsonwebtoken": "^8.5.1",
     "next": "11.1.2",
     "next-themes": "^0.0.15",

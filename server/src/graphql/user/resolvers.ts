@@ -1,22 +1,20 @@
-// @ts-nocheck
-const User = require('../../models/User');
-
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { createAccessToken } = require('../../utils/auth.utils');
-const { ApolloError } = require('apollo-server-express');
-const { sendEmails } = require('../../utils/sendEmails.utils');
-const UserErrors = require('../../enums/user.errors');
-const HTTPStatusCodes = require('../../enums/http-status-code');
-const {
+import { User } from '@Models/User';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { ApolloError } from 'apollo-server-express';
+import { signToken, verifyToken } from '@Utils/auth.utils';
+import { sendEmails } from '@Utils/sendEmails.utils';
+import {
   usernameValidation,
   emailValidation,
   passwordValidation,
-} = require('../../utils/formValidation.utils');
+} from '@Utils/formValidation.utils';
+import { UserErrors } from '@Enums/user-errors.enum';
+import { HTTPStatusCodes } from '@Enums/http-status-code.enum';
 require('dotenv').config({ path: 'src/variables.env' });
 
 /* User Resolvers */
-const resolvers = {
+const userResolvers = {
   Query: {
     getUser: async (_, {}, ctx) => {
       if (!ctx.req.user) {
@@ -81,8 +79,9 @@ const resolvers = {
         await user.save();
 
         /* Send an activation mail */
-        const token = jwt.sign({ _id: user._id }, process.env.SECRET_EMAIL, {
-          expiresIn: '1h',
+        const token = signToken({
+          _id: user._id,
+          code: process.env.SECRET_EMAIL,
         });
 
         const mailContent = {
@@ -90,7 +89,7 @@ const resolvers = {
           text: 'Activate your Account',
         };
 
-        await sendEmails(user.email, mailContent);
+        // await sendEmails({ email: user.email, mailContent });
 
         return token;
       } catch (error) {
@@ -126,7 +125,12 @@ const resolvers = {
             HTTPStatusCodes.NOT_AUTHORIZED
           );
         }
-        const token = createAccessToken(user);
+
+        const token = signToken({
+          _id: user._id,
+          code: process.env.SECRET_JWT_ACCESS,
+          time: '12h',
+        });
 
         return {
           token,
@@ -241,11 +245,14 @@ const resolvers = {
       const { token } = input;
 
       try {
-        const user = jwt.verify(token, process.env.SECRET_EMAIL);
-        await User.findByIdAndUpdate({ _id: user._id }, { confirmed: true });
+        const userId = verifyToken({ token, code: process.env.SECRET_EMAIL });
+
+        await User.findByIdAndUpdate({ _id: userId }, { confirmed: true });
 
         return true;
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /* Recovery Password */
@@ -264,22 +271,17 @@ const resolvers = {
         }
 
         /* Send an activation mail */
-        const token = jwt.sign(
-          {
-            _id: user._id,
-          },
-          process.env.SECRET_FORGOT,
-          {
-            expiresIn: '1h',
-          }
-        );
+        const token = signToken({
+          _id: user._id,
+          code: process.env.SECRET_FORGOT,
+        });
 
         const mailContent = {
           url: `${process.env.HOST_FRONT}/forgot-pass/${token}`,
           text: 'Change your Password',
         };
 
-        await sendEmails(email, mailContent);
+        // await sendEmails({ email, mailContent });
 
         return token;
       } catch (error) {
@@ -287,29 +289,16 @@ const resolvers = {
       }
     },
 
-    resetPassword: async (_, { input }) => {
+    resetPassword: async (_, { input }, ctx) => {
       const { token, password } = input;
 
       try {
-        let user = jwt.verify(
-          token,
-          process.env.SECRET_FORGOT,
-          function (err, user) {
-            if (err) {
-              return new ApolloError(
-                UserErrors.LINK_EXPIRED,
-                HTTPStatusCodes.NOT_AUTHORIZED
-              );
-            }
-
-            return user;
-          }
-        );
+        let userId = verifyToken({ token, code: process.env.SECRET_FORGOT });
 
         /* Save data in DB */
         await User.findOneAndUpdate(
           {
-            _id: user._id,
+            _id: userId,
           },
           {
             password: bcrypt.hashSync(password, 10),
@@ -322,7 +311,13 @@ const resolvers = {
         return true;
       } catch (error) {
         if (error instanceof jwt.TokenExpiredError) {
-          return attemptRenewal();
+          return ctx.res.json({
+            status: 'Failure',
+            msg: 'TOKEN_EXPIRED',
+            details: {
+              error: 'Sign in token expired',
+            },
+          });
         }
 
         return new ApolloError(error, HTTPStatusCodes.NOT_AUTHORIZED);
@@ -331,4 +326,4 @@ const resolvers = {
   },
 };
 
-module.exports = resolvers;
+export default userResolvers;

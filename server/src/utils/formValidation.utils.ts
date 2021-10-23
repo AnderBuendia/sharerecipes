@@ -8,7 +8,7 @@
  * @param value Value to validate
  * @returns Is valid
  */
-const usernameValidation = (value) => {
+export const usernameValidation = (value: string) => {
   const userName = value.trim();
   const regex = /^(?=[a-zA-Z0-9._]{3,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/;
 
@@ -22,7 +22,7 @@ const usernameValidation = (value) => {
  * @param value Value to validate
  * @returns Is valid
  */
-const emailValidation = (value) => {
+export const emailValidation = (value: string) => {
   const email = value.trim();
   const regex =
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -41,7 +41,7 @@ const emailValidation = (value) => {
  * @param value Value to validate
  * @returns Is valid
  */
-const passwordValidation = (value) => {
+export const passwordValidation = (value: string) => {
   const pass = value.trim();
   const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*_]).{8,}$/;
 
@@ -49,10 +49,4 @@ const passwordValidation = (value) => {
   if (!pass.match(regex)) return false;
 
   return true;
-};
-
-module.exports = {
-  usernameValidation,
-  emailValidation,
-  passwordValidation,
 };

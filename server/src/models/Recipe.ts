@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import { model, Schema, Model } from 'mongoose';
+import { IRecipe } from '@Interfaces/models/recipe.interface';
 
-const recipeSchema = new Schema(
+const recipeSchema: Schema = new Schema(
   {
     name: {
       type: String,
@@ -51,21 +51,14 @@ const recipeSchema = new Schema(
       type: String,
     },
     author: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User',
       default: null,
     },
-    // comments: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Comment',
-    //     default: null,
-    //   },
-    // ],
   },
   {
     timestamps: true,
   }
 );
 
-module.exports = mongoose.model('Recipe', recipeSchema);
+export const Recipe: Model<IRecipe> = model('Recipe', recipeSchema);

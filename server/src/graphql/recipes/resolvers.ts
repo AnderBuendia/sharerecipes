@@ -1,19 +1,18 @@
-// @ts-nocheck
-const User = require('../../models/User');
-const Recipe = require('../../models/Recipe');
-const Comment = require('../../models/Comment');
+import { User } from '@Models/User';
+import { Recipe } from '@Models/Recipe';
+import { Comment } from '@Models/Comment';
+import { ApolloError } from 'apollo-server-express';
+import fs from 'fs';
+import path from 'path';
+import { RecipeErrors } from '@Enums/recipe-errors.enum';
+import { HTTPStatusCodes } from '@Enums/http-status-code.enum';
 
-const { ApolloError } = require('apollo-server-express');
-const fs = require('fs');
-const path = require('path');
-const RecipeErrors = require('../../enums/recipe.errors');
-const HttpStatusCode = require('../../enums/http-status-code');
-
-const resolvers = {
+const recipeResolvers = {
   /* Types to relation DBs */
   Recipe: {
     author: async ({ author }) => {
       const user = await User.findById(author);
+
       return user;
     },
     comments: async (recipe, { offset, limit }) => {
@@ -41,7 +40,7 @@ const resolvers = {
       if (!recipe) {
         throw new ApolloError(
           RecipeErrors.RECIPE_NOT_FOUND,
-          HttpStatusCode.NOT_FOUND
+          HTTPStatusCodes.NOT_FOUND
         );
       }
 
@@ -114,20 +113,21 @@ const resolvers = {
         if (!recipe) {
           throw new ApolloError(
             RecipeErrors.RECIPE_NOT_FOUND,
-            HttpStatusCode.NOT_FOUND
+            HTTPStatusCodes.NOT_FOUND
           );
         } else if (recipe.author.toString() !== ctx.req.user._id) {
           throw new ApolloError(
             RecipeErrors.INVALID_CREDENTIALS,
-            HttpStatusCode.NOT_AUTHORIZED
+            HTTPStatusCodes.NOT_AUTHORIZED
           );
         }
 
         /* Delete recipe image from server */
         const pathName = path.join(
-          __dirname,
-          `../../images/${recipe.image_name}`
+          process.cwd(),
+          `/images/${recipe.image_name}`
         );
+
         fs.unlinkSync(pathName);
 
         /* Delete data from DB */
@@ -150,7 +150,7 @@ const resolvers = {
         if (!checkRecipe) {
           throw new ApolloError(
             RecipeErrors.RECIPE_NOT_FOUND,
-            HttpStatusCode.NOT_FOUND
+            HTTPStatusCodes.NOT_FOUND
           );
         }
 
@@ -158,12 +158,12 @@ const resolvers = {
         if (!ctx.req.user) {
           throw new ApolloError(
             RecipeErrors.NOT_LOGGED_IN,
-            HttpStatusCode.NOT_AUTHORIZED
+            HTTPStatusCodes.NOT_AUTHORIZED
           );
         } else if (checkRecipe.voted.includes(ctx.req.user._id)) {
           throw new ApolloError(
             RecipeErrors.RECIPE_VOTED,
-            HttpStatusCode.NOT_ACCEPTABLE
+            HTTPStatusCodes.NOT_ACCEPTABLE
           );
         }
 
@@ -198,17 +198,17 @@ const resolvers = {
         if (!recipe) {
           throw new ApolloError(
             RecipeErrors.RECIPE_NOT_FOUND,
-            HttpStatusCode.NOT_FOUND
+            HTTPStatusCodes.NOT_FOUND
           );
         } else if (!ctx.req.user._id) {
           throw new ApolloError(
             RecipeErrors.NOT_LOGGED_IN,
-            HttpStatusCode.NOT_AUTHORIZED
+            HTTPStatusCodes.NOT_AUTHORIZED
           );
         } else if (!input.message) {
           throw new ApolloError(
             RecipeErrors.NO_MESSAGE,
-            HttpStatusCode.NO_CONTENT
+            HTTPStatusCodes.NO_CONTENT
           );
         }
 
@@ -234,12 +234,12 @@ const resolvers = {
         if (!checkComment) {
           throw new ApolloError(
             RecipeErrors.COMMENT_NOT_FOUND,
-            HttpStatusCode.NOT_FOUND
+            HTTPStatusCodes.NOT_FOUND
           );
         } else if (!ctx.req.user._id) {
           throw new ApolloError(
             RecipeErrors.NOT_LOGGED_IN,
-            HttpStatusCode.NOT_AUTHORIZED
+            HTTPStatusCodes.NOT_AUTHORIZED
           );
         }
 
@@ -262,17 +262,17 @@ const resolvers = {
         if (!checkComment) {
           throw new ApolloError(
             RecipeErrors.COMMENT_NOT_FOUND,
-            HttpStatusCode.NOT_FOUND
+            HTTPStatusCodes.NOT_FOUND
           );
         } else if (!ctx.req.user._id) {
           throw new ApolloError(
             RecipeErrors.NOT_LOGGED_IN,
-            HttpStatusCode.NOT_AUTHORIZED
+            HTTPStatusCodes.NOT_AUTHORIZED
           );
         } else if (checkComment.voted.includes(ctx.req.user._id)) {
           throw new ApolloError(
             RecipeErrors.COMMENT_VOTED,
-            HttpStatusCode.NOT_ACCEPTABLE
+            HTTPStatusCodes.NOT_ACCEPTABLE
           );
         }
 
@@ -290,4 +290,4 @@ const resolvers = {
   },
 };
 
-module.exports = resolvers;
+export default recipeResolvers;

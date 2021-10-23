@@ -1,6 +1,7 @@
-const nodemailer = require('nodemailer');
+import nodemailer from 'nodemailer';
+import { SendEmails } from '@Interfaces/send-emails.interface';
 
-const sendEmails = async (email, mailContent) => {
+export const sendEmails = async ({ email, mailContent }: SendEmails) => {
   const transporter = nodemailer.createTransport({
     host: 'smtp-relay.sendinblue.com',
     port: 587,
@@ -47,5 +48,3 @@ const sendEmails = async (email, mailContent) => {
     }
   });
 };
-
-module.exports = { sendEmails };

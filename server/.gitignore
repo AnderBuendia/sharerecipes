@@ -3,4 +3,6 @@ src/variables.env
 /src/tests/initialTest.test.js
 /src/utils/forTesting.js
 /src/images
+/images
 .DS_Store
+/dist*
