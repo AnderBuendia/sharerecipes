@@ -4,6 +4,7 @@ import { Comment } from '@Models/Comment';
 import { ApolloError } from 'apollo-server-express';
 import fs from 'fs';
 import path from 'path';
+import { setUrlName } from '@Utils/recipe-resolvers.utils';
 import { RecipeErrors } from '@Enums/recipe-errors.enum';
 import { HTTPStatusCodes } from '@Enums/http-status-code.enum';
 
@@ -78,26 +79,17 @@ const recipeResolvers = {
 
   Mutation: {
     newRecipe: async (_, { input }, ctx) => {
-      const urlName = input.name.replace(' ', '-').toLowerCase();
-
       try {
-        const recipes = await Recipe.countDocuments({
+        const sameRecipes = await Recipe.countDocuments({
           name: input.name,
         }).collation({ locale: 'en', strength: 2 });
 
-        if (recipes > 0) {
-          input.url = `${urlName}-${recipes}`;
-        } else {
-          input.url = urlName;
-        }
-
-        const newRecipe = new Recipe({
+        const urlName = setUrlName({ url: input.name, sameRecipes });
+        const newRecipe = await Recipe.create({
           ...input,
+          url: urlName,
           author: ctx.req.user._id,
         });
-
-        /* Save data in DB */
-        await newRecipe.save();
 
         return newRecipe;
       } catch (error) {
@@ -145,9 +137,9 @@ const recipeResolvers = {
 
       try {
         /* Check if recipe exists */
-        let checkRecipe = await Recipe.findOne({ url: recipeUrl });
+        let recipe = await Recipe.findOne({ url: recipeUrl });
 
-        if (!checkRecipe) {
+        if (!recipe) {
           throw new ApolloError(
             RecipeErrors.RECIPE_NOT_FOUND,
             HTTPStatusCodes.NOT_FOUND
@@ -160,30 +152,26 @@ const recipeResolvers = {
             RecipeErrors.NOT_LOGGED_IN,
             HTTPStatusCodes.NOT_AUTHORIZED
           );
-        } else if (checkRecipe.voted.includes(ctx.req.user._id)) {
+        } else if (recipe.voted.includes(ctx.req.user._id)) {
           throw new ApolloError(
             RecipeErrors.RECIPE_VOTED,
             HTTPStatusCodes.NOT_ACCEPTABLE
           );
         }
 
-        checkRecipe.votes = !votes
-          ? checkRecipe.average_vote * 2
-          : checkRecipe.votes + votes;
-
-        checkRecipe.voted = [...checkRecipe.voted, ctx.req.user._id];
+        recipe.votes += votes;
+        recipe.voted = [...recipe.voted, ctx.req.user._id];
 
         /* Calculate total votes and save data in DB */
-        const averageVotes = checkRecipe.votes / checkRecipe.voted.length;
+        const averageVotes = recipe.votes / recipe.voted.length;
         const adjustMean =
           (Math.ceil(averageVotes) + Math.floor(averageVotes)) / 2;
 
-        checkRecipe.average_vote =
-          averageVotes < adjustMean ? averageVotes : adjustMean;
+        recipe.average_vote = adjustMean;
 
-        await checkRecipe.save();
+        await recipe.save();
 
-        return checkRecipe;
+        return recipe;
       } catch (error) {
         throw error;
       }
@@ -212,13 +200,11 @@ const recipeResolvers = {
           );
         }
 
-        const newComment = new Comment({
+        const newComment = await Comment.create({
           ...input,
           author: ctx.req.user._id,
           recipe: recipe._id,
         });
-
-        await newComment.save();
 
         return newComment;
       } catch (error) {
@@ -229,9 +215,9 @@ const recipeResolvers = {
     editCommentRecipe: async (_, { _id, input }, ctx) => {
       try {
         /* Check if comment exists */
-        let checkComment = await Comment.findById(_id);
+        let comment = await Comment.findById(_id);
 
-        if (!checkComment) {
+        if (!comment) {
           throw new ApolloError(
             RecipeErrors.COMMENT_NOT_FOUND,
             HTTPStatusCodes.NOT_FOUND
@@ -244,11 +230,11 @@ const recipeResolvers = {
         }
 
         /* Edit the comment text and save data in DB */
-        checkComment = await Comment.findOneAndUpdate({ _id }, input, {
+        comment = await Comment.findOneAndUpdate({ _id }, input, {
           new: true,
         });
 
-        return checkComment;
+        return comment;
       } catch (error) {
         throw error;
       }
@@ -256,10 +242,10 @@ const recipeResolvers = {
 
     voteCommentRecipe: async (_, { _id, input }, ctx) => {
       try {
-        let checkComment = await Comment.findById(_id);
+        let comment = await Comment.findById(_id);
 
         /* Check if comment exists */
-        if (!checkComment) {
+        if (!comment) {
           throw new ApolloError(
             RecipeErrors.COMMENT_NOT_FOUND,
             HTTPStatusCodes.NOT_FOUND
@@ -269,7 +255,7 @@ const recipeResolvers = {
             RecipeErrors.NOT_LOGGED_IN,
             HTTPStatusCodes.NOT_AUTHORIZED
           );
-        } else if (checkComment.voted.includes(ctx.req.user._id)) {
+        } else if (comment.voted.includes(ctx.req.user._id)) {
           throw new ApolloError(
             RecipeErrors.COMMENT_VOTED,
             HTTPStatusCodes.NOT_ACCEPTABLE
@@ -277,12 +263,12 @@ const recipeResolvers = {
         }
 
         /* Add user who voted and sum votes */
-        checkComment.voted = [...checkComment.voted, ctx.req.user._id];
-        checkComment.votes += input.votes;
+        comment.voted = [...comment.voted, ctx.req.user._id];
+        comment.votes += input.votes;
 
-        await checkComment.save();
+        await comment.save();
 
-        return checkComment;
+        return comment;
       } catch (error) {
         throw error;
       }
