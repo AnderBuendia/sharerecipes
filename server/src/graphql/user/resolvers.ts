@@ -1,6 +1,6 @@
 import { User } from '@Models/User';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import { compareSync, hashSync } from 'bcrypt';
+import { TokenExpiredError } from 'jsonwebtoken';
 import { ApolloError } from 'apollo-server-express';
 import { signToken, verifyToken } from '@Utils/auth.utils';
 import { sendEmails } from '@Utils/sendEmails.utils';
@@ -11,6 +11,7 @@ import {
 } from '@Utils/formValidation.utils';
 import { UserErrors } from '@Enums/user-errors.enum';
 import { HTTPStatusCodes } from '@Enums/http-status-code.enum';
+import { MailContent } from '@Enums/mail-content.enum';
 require('dotenv').config({ path: 'src/variables.env' });
 
 /* User Resolvers */
@@ -71,12 +72,10 @@ const userResolvers = {
           );
         }
 
-        user = new User({
+        user = await User.create({
           ...input,
-          password: bcrypt.hashSync(password, 10),
+          password: hashSync(password, 10),
         });
-
-        await user.save();
 
         /* Send an activation mail */
         const token = signToken({
@@ -86,10 +85,12 @@ const userResolvers = {
 
         const mailContent = {
           url: `${process.env.HOST_FRONT}/confirmation/${token}`,
-          text: 'Activate your Account',
+          text: MailContent.ACTIVATE_ACCOUNT,
         };
 
-        // await sendEmails({ email: user.email, mailContent });
+        if (process.env.NODE_ENV !== 'test') {
+          await sendEmails({ email: user.email, mailContent });
+        }
 
         return token;
       } catch (error) {
@@ -101,27 +102,32 @@ const userResolvers = {
       const { email, password } = input;
 
       try {
-        /* Check if user exists and if password is correct */
-        let user = await User.findOne({ email });
-
         if (!emailValidation(email)) {
           throw new ApolloError(
             UserErrors.EMAIL_FORMAT,
             HTTPStatusCodes.NOT_ACCEPTABLE
           );
-        } else if (!user) {
+        }
+
+        let user = await User.findOne({ email });
+
+        if (!user) {
           throw new ApolloError(
             UserErrors.USER_NOT_FOUND,
             HTTPStatusCodes.NOT_FOUND
           );
-        } else if (!bcrypt.compareSync(password, user.password)) {
-          throw new ApolloError(
-            UserErrors.PASSWORD,
-            HTTPStatusCodes.NOT_AUTHORIZED
-          );
         } else if (user && !user.confirmed) {
           throw new ApolloError(
             UserErrors.NOT_ACTIVATED,
+            HTTPStatusCodes.NOT_AUTHORIZED
+          );
+        }
+
+        const validPassword = compareSync(password, user.password);
+
+        if (!validPassword) {
+          throw new ApolloError(
+            UserErrors.PASSWORD,
             HTTPStatusCodes.NOT_AUTHORIZED
           );
         }
@@ -158,7 +164,11 @@ const userResolvers = {
             UserErrors.INVALID_CREDENTIALS,
             HTTPStatusCodes.NOT_AUTHORIZED
           );
-        } else if (!bcrypt.compareSync(password, user.password)) {
+        }
+
+        const validPassword = compareSync(password, user.password);
+
+        if (!validPassword) {
           throw new ApolloError(
             UserErrors.CURRENT_PASSWORD,
             HTTPStatusCodes.NOT_AUTHORIZED
@@ -166,8 +176,11 @@ const userResolvers = {
         }
 
         /* Save data in DB */
-        user.name = name;
-        await user.save();
+        user = await User.findByIdAndUpdate(
+          { _id: user._id },
+          { name },
+          { new: true }
+        );
 
         return user;
       } catch (error) {
@@ -192,7 +205,11 @@ const userResolvers = {
             UserErrors.INVALID_CREDENTIALS,
             HTTPStatusCodes.NOT_AUTHORIZED
           );
-        } else if (!bcrypt.compareSync(password, user.password)) {
+        }
+
+        const validPassword = compareSync(password, user.password);
+
+        if (!validPassword) {
           throw new ApolloError(
             UserErrors.CURRENT_PASSWORD,
             HTTPStatusCodes.NOT_AUTHORIZED
@@ -200,8 +217,10 @@ const userResolvers = {
         }
 
         /* Save data in DB */
-        user.password = bcrypt.hashSync(confirmPassword, 10);
-        await user.save();
+        await User.findByIdAndUpdate(
+          { _id: user._id },
+          { password: hashSync(confirmPassword, 10) }
+        );
 
         return true;
       } catch (error) {
@@ -278,10 +297,12 @@ const userResolvers = {
 
         const mailContent = {
           url: `${process.env.HOST_FRONT}/forgot-pass/${token}`,
-          text: 'Change your Password',
+          text: MailContent.CHANGE_PASSWORD,
         };
 
-        // await sendEmails({ email, mailContent });
+        if (process.env.NODE_ENV !== 'test') {
+          await sendEmails({ email, mailContent });
+        }
 
         return token;
       } catch (error) {
@@ -296,21 +317,14 @@ const userResolvers = {
         let userId = verifyToken({ token, code: process.env.SECRET_FORGOT });
 
         /* Save data in DB */
-        await User.findOneAndUpdate(
-          {
-            _id: userId,
-          },
-          {
-            password: bcrypt.hashSync(password, 10),
-          },
-          {
-            new: true,
-          }
+        await User.findByIdAndUpdate(
+          { _id: userId },
+          { password: hashSync(password, 10) }
         );
 
         return true;
       } catch (error) {
-        if (error instanceof jwt.TokenExpiredError) {
+        if (error instanceof TokenExpiredError) {
           return ctx.res.json({
             status: 'Failure',
             msg: 'TOKEN_EXPIRED',
