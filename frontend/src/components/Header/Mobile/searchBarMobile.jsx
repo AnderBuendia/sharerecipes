@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { useRouter } from 'next/router';
 import { searchRecipes } from '@Lib/utils/header.utils';
 import SearchIcon from '@Components/Icons/searchicon';
 import CloseIcon from '@Components/Icons/closeicon';
@@ -6,6 +7,7 @@ import useClickOutside from '@Lib/hooks/useClickOutside';
 
 const SearchBarMobile = () => {
   const componentRef = useRef();
+  const router = useRouter();
   const [search, setSearch] = useState('');
   const [openSearchBar, setOpenSearchBar] = useState(false);
   useClickOutside(componentRef, setOpenSearchBar);
@@ -19,7 +21,7 @@ const SearchBarMobile = () => {
       {openSearchBar && (
         <div className="mdxl:hidden bg-white dark:bg-gray-800 w-full absolute top-0 left-0 center">
           <form
-            onSubmit={(e) => searchRecipes(e, search)}
+            onSubmit={(e) => searchRecipes(e, search, router)}
             className="w-full flex flex-row items-center"
           >
             <button

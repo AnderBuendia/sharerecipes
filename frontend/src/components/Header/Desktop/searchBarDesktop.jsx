@@ -1,13 +1,15 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { searchRecipes } from '@Lib/utils/header.utils';
 import SearchIcon from '@Components/Icons/searchicon';
 
 const SearchBarDesktop = () => {
   const [search, setSearch] = useState('');
+  const router = useRouter();
 
   return (
     <div className="xssm:hidden w-2/6 relative text-black">
-      <form onSubmit={(e) => searchRecipes(e, search)}>
+      <form onSubmit={(e) => searchRecipes(e, search, router)}>
         <input
           type="search"
           placeholder="Search..."

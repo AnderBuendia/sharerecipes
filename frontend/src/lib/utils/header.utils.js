@@ -1,13 +1,12 @@
-import Router from 'next/router';
 import { MainPaths } from '@Enums/paths/main-paths';
 
-export const searchRecipes = (e, search) => {
+export const searchRecipes = (e, search, router) => {
   e.preventDefault();
 
   if (search.trim() === '') return;
 
   /* Redirect to the search page */
-  Router.push({
+  router.push({
     pathname: MainPaths.SEARCH,
     query: { q: search },
   });
