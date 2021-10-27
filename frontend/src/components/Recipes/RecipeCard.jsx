@@ -33,7 +33,13 @@ const RecipeCard = ({ recipe, numberOfRecipes, index, fetchMore }) => {
               backgroundImage: `linear-gradient(180deg,transparent 0,rgba(0,0,0,.9) 150%)`,
             }}
           >
-            <Image src={image_url} alt={name} layout="fill" objectFit="cover" />
+            <Image
+              src={image_url}
+              alt={name}
+              layout="fill"
+              objectFit="cover"
+              priority
+            />
             <div className="grid absolute bottom-0 mb-2">
               <div className="font-bold text-xl text-white">{name}</div>
               <div className="bg-white dark:bg-gray-700 flex items-center mr-auto px-2 rounded-full">
