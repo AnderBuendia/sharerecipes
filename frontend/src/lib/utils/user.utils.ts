@@ -36,7 +36,7 @@ export const loadCurrentUserSSR = async (
   return authProps;
 };
 
-export const checkActivationToken = async (token: string) => {
+export const checkActivationToken = async (token: string | string[]) => {
   const apolloClient = createApolloClient();
 
   try {
