@@ -46,7 +46,7 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
       setJwtCookie(res, token);
       res.status(HTTPStatusCodes.OK).json({ token, user });
     }
-  } catch (error) {
+  } catch (error: any) {
     if (error instanceof ApolloError && error?.graphQLErrors[0]) {
       res
         .status(error.graphQLErrors[0].extensions?.code)
