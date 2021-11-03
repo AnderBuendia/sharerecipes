@@ -36,17 +36,17 @@ export const emailValidation = (value: string) => {
 /**
  * Password validation
  *
- * - Minimum length 6 characters
+ * - Minimum length 7 characters
  * - Character range (ASCII) x21 to x7E
  * @param value Value to validate
  * @returns Is valid
  */
 export const passwordValidation = (value: string) => {
-  const pass = value.trim();
+  const password = value.trim();
   const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*_]).{8,}$/;
 
-  if (pass.length < 7) return false;
-  if (!pass.match(regex)) return false;
+  if (password.length < 7) return false;
+  if (!password.match(regex)) return false;
 
   return true;
 };

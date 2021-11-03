@@ -110,8 +110,14 @@ const userResolvers = {
         }
 
         let user = await User.findOne({ email });
+        const validPassword = compareSync(password, user.password);
 
-        if (!user) {
+        if (!validPassword) {
+          throw new ApolloError(
+            UserErrors.PASSWORD,
+            HTTPStatusCodes.NOT_AUTHORIZED
+          );
+        } else if (!user) {
           throw new ApolloError(
             UserErrors.USER_NOT_FOUND,
             HTTPStatusCodes.NOT_FOUND
@@ -119,15 +125,6 @@ const userResolvers = {
         } else if (user && !user.confirmed) {
           throw new ApolloError(
             UserErrors.NOT_ACTIVATED,
-            HTTPStatusCodes.NOT_AUTHORIZED
-          );
-        }
-
-        const validPassword = compareSync(password, user.password);
-
-        if (!validPassword) {
-          throw new ApolloError(
-            UserErrors.PASSWORD,
             HTTPStatusCodes.NOT_AUTHORIZED
           );
         }
@@ -296,7 +293,7 @@ const userResolvers = {
         });
 
         const mailContent = {
-          url: `${process.env.HOST_FRONT}/forgot-pass/${token}`,
+          url: `${process.env.HOST_FRONT}/forgot-password/${token}`,
           text: MailContent.CHANGE_PASSWORD,
         };
 

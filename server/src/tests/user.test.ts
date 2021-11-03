@@ -4,16 +4,6 @@ import { api, mongoose, User } from './index';
 let token: string;
 
 describe('User Tests', () => {
-  beforeAll(async () => {
-    try {
-      await User.deleteMany({
-        email: { $in: ['test2@email.com'] },
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  });
-
   afterAll(async () => {
     await User.deleteMany({
       email: { $in: ['test2@email.com'] },
@@ -44,30 +34,6 @@ describe('User Tests', () => {
     }
   });
 
-  test('Register new user - Email already registered', async () => {
-    try {
-      await api
-        .post('/graphql')
-        .send({
-          query: `
-          mutation {
-            newUser(input: {
-              name: "prueba201",
-              email: "prueba201@email.com",
-              password: "Ander_123"
-            })
-          }
-        `,
-        })
-        .expect(200)
-        .expect(({ body }) => {
-          expect(body.errors[0].message).toBe(UserErrors.REGISTERED);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  });
-
   test('Register new user - Bad password', async () => {
     try {
       await api
@@ -76,8 +42,8 @@ describe('User Tests', () => {
           query: `
         mutation {
           newUser(input: {
-            name: "Dolan",
-            email: "test@email.com",
+            name: "Dolan1",
+            email: "test1@email.com",
             password: "Ander12"
           })
         }
@@ -111,6 +77,30 @@ describe('User Tests', () => {
         .expect(({ body }) => {
           token = body.data.newUser;
           expect(body.data.newUser).not.toEqual(null);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  test('Register new user - Email already registered', async () => {
+    try {
+      await api
+        .post('/graphql')
+        .send({
+          query: `
+          mutation {
+            newUser(input: {
+              name: "prueba201",
+              email: "test2@email.com",
+              password: "Ander_123"
+            })
+          }
+        `,
+        })
+        .expect(200)
+        .expect(({ body }) => {
+          expect(body.errors[0].message).toBe(UserErrors.REGISTERED);
         });
     } catch (error) {
       console.log(error);
@@ -239,7 +229,7 @@ describe('User Tests', () => {
         query: `
         mutation {
           authenticateUser(input: {
-            email: "prueba201@email.com",
+            email: "test2@email.com",
             password: "Test_12"
           }) {
             user {
