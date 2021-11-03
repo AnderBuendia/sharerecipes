@@ -7,6 +7,7 @@ phases:
       - cd frontend
       - cp example.env .env.production
       - npm install
+      - npm install -D typescript
   build:
     commands:
       - echo Build started on `date`
