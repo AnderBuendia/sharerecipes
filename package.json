@@ -24,6 +24,7 @@
     "jsonwebtoken": "8.5.1"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "8.5.5",
     "@types/jest": "27.0.2",
     "@types/node": "16.11.4",
     "eslint": "7.27.0",

@@ -8,7 +8,7 @@ phases:
       - cp example.env .env.production
       - npm install
       - npm install jsonwebtoken graphql
-      - npm install -D typescript
+      - npm install -D typescript @types/jsonwebtoken
   build:
     commands:
       - echo Build started on `date`
