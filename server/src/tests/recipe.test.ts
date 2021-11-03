@@ -1,21 +1,18 @@
 import { RecipeErrors } from '@Enums/recipe-errors.enum';
-import { api, Recipe, Comment } from './index';
+import { api, User, Recipe, Comment } from './index';
+import { hashSync } from 'bcrypt';
 
 let token: string;
 let messageId: string;
 
 describe('Recipe Tests', () => {
   beforeAll(async () => {
-    try {
-      await Recipe.deleteMany({
-        name: { $in: ['CarrotCake'] },
-      });
-      await Comment.deleteMany({
-        message: { $in: ['Nice carrot cake!'] },
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    await User.create({
+      name: 'Prueba2',
+      email: 'prueba2@email.com',
+      password: hashSync('Ander_123', 10),
+      confirmed: true,
+    });
   });
 
   afterAll(async () => {
@@ -23,7 +20,11 @@ describe('Recipe Tests', () => {
       name: { $in: ['CarrotCake'] },
     });
     await Comment.deleteMany({
-      message: { $in: ['Nice carrot cake!'] },
+      message: { $in: ['Nice carrot cake Edit!'] },
+    });
+
+    await User.deleteMany({
+      email: { $in: ['prueba2@email.com'] },
     });
   });
 
@@ -34,7 +35,7 @@ describe('Recipe Tests', () => {
         query: `
           mutation {
             authenticateUser(input: {
-              email: "prueba201@email.com",
+              email: "prueba2@email.com",
               password: "Ander_123"
             }) {
               user {

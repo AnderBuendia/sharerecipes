@@ -3,13 +3,13 @@
   "private": true,
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "workspaces": [
     "frontend",
     "server"
   ],
   "scripts": {
     "dev:frontend": "npm run dev --workspace=frontend",
+    "build-dev:frontend": "npm run build:dev --workspace=frontend",
     "dev:server": "npm run dev --workspace=server",
     "start:frontend": "npm run start --workspace=frontend",
     "start:server": "npm run start --workspace=server",
@@ -19,6 +19,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "graphql": "15.7.0",
+    "jsonwebtoken": "8.5.1"
+  },
   "devDependencies": {
     "@types/jest": "27.0.2",
     "@types/node": "16.11.4",
@@ -27,7 +31,8 @@
     "jest": "27.3.1",
     "ts-node": "10.3.0",
     "ts-jest": "27.0.7",
-    "standard": "16.0.3"
+    "standard": "16.0.3",
+    "typescript": "4.4.4"
   },
   "eslintConfig": {
     "extends": "./node_modules/standard/eslintrc.json",

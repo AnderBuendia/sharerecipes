@@ -1,0 +1,15 @@
+export const MainPaths = {
+  INDEX: '/',
+  LOGIN: '/login',
+  SIGNUP: '/signup',
+  POPULAR: '/popular',
+  NEW_RECIPE: '/new-recipe',
+  RECIPE: '/recipe/[recipe]',
+  SEARCH: '/search',
+  PROFILE: '/profile',
+  FORGOT_PASSWORD: '/forgot-password',
+  FORGOT_PASSWORD_CONFIRM: '/forgot-password/[token]',
+  CONFIRMATION: '/confirmation/[token]',
+  NOT_FOUND: '/404',
+  ADMIN: '/admin/users',
+};
