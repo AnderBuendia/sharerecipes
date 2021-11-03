@@ -48,9 +48,9 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   } catch (error: any) {
     if (error instanceof ApolloError && error?.graphQLErrors[0]) {
-      res
-        .status(error.graphQLErrors[0].extensions?.code)
-        .send({ error: error.message });
+      const graphQLError: number = error.graphQLErrors[0].extensions?.code;
+
+      res.status(graphQLError).send({ error: error.message });
     } else {
       res
         .status(HTTPStatusCodes.INTERNAL_SERVER_ERROR)
