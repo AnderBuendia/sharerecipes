@@ -12,7 +12,6 @@ const getDateDiffs = (timestamp: number) => {
   let unit: string | undefined;
 
   for (const [unitDate, secondsInUnit] of Object.entries(DATE_UNITS)) {
-    console.log(Math.abs(elapsed) > secondsInUnit);
     if (Math.abs(elapsed) > secondsInUnit || unitDate === 'second') {
       return {
         value: Math.floor(elapsed / Number(secondsInUnit)),
