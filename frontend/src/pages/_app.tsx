@@ -5,7 +5,7 @@ import { ApolloProvider } from '@apollo/client';
 import { ThemeProvider } from 'next-themes';
 import { ToastProvider } from 'react-toast-notifications';
 import { useAuthAndApollo } from '@Lib/hooks/useAuthAndApollo';
-import AuthContext from '@Lib/context/AuthContext';
+import AuthStoreContext from '@Lib/context/auth-store.context';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
 
 interface CustomAppProps extends AppProps {
@@ -15,7 +15,7 @@ interface CustomAppProps extends AppProps {
 const MyApp: NextPage<CustomAppProps> = ({ Component, pageProps }) => {
   const { authProps, lostAuth, componentProps, apolloCache } = pageProps;
 
-  const { apolloClient, authState, setAuth } = useAuthAndApollo(
+  const { authState, setAuth, apolloClient } = useAuthAndApollo(
     authProps,
     lostAuth,
     apolloCache
@@ -23,7 +23,7 @@ const MyApp: NextPage<CustomAppProps> = ({ Component, pageProps }) => {
 
   return (
     <ThemeProvider attribute="class">
-      <AuthContext.Provider value={{ authState, setAuth }}>
+      <AuthStoreContext.Provider value={{ authState, setAuth }}>
         <ApolloProvider client={apolloClient}>
           <ToastProvider
             autoDismiss
@@ -33,7 +33,7 @@ const MyApp: NextPage<CustomAppProps> = ({ Component, pageProps }) => {
             <Component {...componentProps} />
           </ToastProvider>
         </ApolloProvider>
-      </AuthContext.Provider>
+      </AuthStoreContext.Provider>
     </ThemeProvider>
   );
 };

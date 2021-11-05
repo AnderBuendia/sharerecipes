@@ -10,53 +10,53 @@ import { MenuMobileIcon } from '@Components/Icons/menu-mobile.icon';
 import { UserIcon } from '@Components/Icons/user.icon';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { UserRoles } from '@Enums/user/user-roles.enum';
+import { useAuthentication } from '@Lib/service/authAdapter';
 
 const MenuMobile: FC = () => {
-  const {
-    authState: { user },
-    open,
-    setOpen,
-    signOut,
-  } = useUser();
+  const { authState } = useUser();
+
+  const { openDropdown, setOpenDropdown, signOut } = useAuthentication();
   const componentRef = useRef() as MutableRefObject<HTMLDivElement>;
   const router = useRouter();
 
-  useClickOutside(componentRef, setOpen);
+  useClickOutside(componentRef, setOpenDropdown);
 
-  const onClickSignOut = async () => {
+  const handleSignOut = async () => {
     const response = await signOut();
     if (response) router.push(MainPaths.INDEX);
   };
 
   return (
     <div ref={componentRef}>
-      <div onClick={() => setOpen(!open)}>
+      <div onClick={() => setOpenDropdown(!openDropdown)}>
         <MenuMobileIcon className="w-10 h-10 mr-2" />
       </div>
       <div
         className={`${
-          open ? 'translate-x-0' : 'translate-x-full'
+          openDropdown ? 'translate-x-0' : 'translate-x-full'
         } transform top-0 right-0 w-64
         bg-white dark:bg-gray-700 fixed h-full shadow-lg overflow-auto ease-in-out transition-all duration-300 z-30`}
       >
-        {open && (
+        {openDropdown && (
           <aside>
             <CloseIcon
               className="ml-1 mt-1 p-2 w-10 left-0 cursor-pointer hover:bg-gray-100"
-              onClick={() => setOpen(false)}
+              onClick={() => setOpenDropdown(false)}
             />
             <div className="flex flex-col items-center w-full px-6">
-              {user ? (
+              {authState?.user ? (
                 <>
                   <UserIcon
-                    imageUrl={user.image_url}
-                    imageName={user.image_name}
+                    imageUrl={authState.user.image_url}
+                    imageName={authState.user.image_name}
                     w={80}
                     h={80}
                   />
 
-                  <p className="mt-1 font-bold font-roboto">{user?.email}</p>
-                  <p className="mb-4 font-roboto">{user?.name}</p>
+                  <p className="mt-1 font-bold font-roboto">
+                    {authState.user.email}
+                  </p>
+                  <p className="mb-4 font-roboto">{authState.user.name}</p>
                   <Link href={MainPaths.PROFILE}>
                     <a
                       className="w-8/12 text-center py-1 px-3 rounded-full cursor-pointer border border-black 
@@ -74,7 +74,7 @@ const MenuMobile: FC = () => {
                       <span>New Recipe</span>
                     </a>
                   </Link>
-                  {user?.role?.includes(UserRoles.ADMIN) && (
+                  {authState?.user?.role.includes(UserRoles.ADMIN) && (
                     <Link href={MainPaths.ADMIN}>
                       <a className="flex flex-row self-start mt-3">
                         <AdminIcon className="w-5 mr-1" />{' '}
@@ -117,12 +117,12 @@ const MenuMobile: FC = () => {
                 </Link>
               </div>
 
-              {user && (
+              {authState?.user && (
                 <Link href={MainPaths.PROFILE}>
                   <button
                     className="w-8/12 text-center py-1 px-3 rounded-full cursor-pointer border border-black 
                   text-white bg-gray-400 hover:bg-gray-200 hover:text-black"
-                    onClick={() => onClickSignOut()}
+                    onClick={handleSignOut}
                   >
                     Sign Out
                   </button>

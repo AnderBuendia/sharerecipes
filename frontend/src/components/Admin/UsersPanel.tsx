@@ -2,7 +2,7 @@ import { FC, ChangeEvent } from 'react';
 import User from '@Components/Admin/User';
 import Pagination from '@Components/Admin/Pagination';
 import { UsersGroupIcon } from '@Components/Icons/users-group.icon';
-import { UserProfile } from '@Interfaces/auth/user.interface';
+import { UserProfile } from '@Interfaces/domain/user.interface';
 
 export type UsersPanelProps = {
   q: string;

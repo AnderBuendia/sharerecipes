@@ -19,7 +19,7 @@ const ProfileData: FC = () => {
     formState: { errors },
   } = useForm<FormValuesProfileData>({
     defaultValues: {
-      name: authState.user ? authState.user.name : '',
+      name: authState?.user ? authState.user.name : '',
       password: '',
     },
   });
@@ -40,7 +40,7 @@ const ProfileData: FC = () => {
         <div className="flex w-32 h-32 overflow-hidden mx-auto rounded-full my-4">
           <DragDropImage
             url={`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/user`}
-            current={authState.user?.image_url}
+            current={authState?.user?.image_url}
             name="photo"
             rounded
             handleChange={handleImageUser}

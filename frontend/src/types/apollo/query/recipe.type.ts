@@ -1,4 +1,4 @@
-import { IRecipe } from '@Interfaces/recipe/recipe.interface';
+import { IRecipe } from '@Interfaces/domain/recipe.interface';
 
 export type QueryDataGetRecipes = {
   getRecipes: IRecipe[];

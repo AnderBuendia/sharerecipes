@@ -3,7 +3,7 @@ import Uppy from '@uppy/core';
 import XHRUpload from '@uppy/xhr-upload';
 import { DragDrop, DashboardModal } from '@uppy/react';
 import ImageEditor from '@uppy/image-editor';
-import useUser from '@Lib/hooks/user/useUser';
+import { useUserStorage } from '@Lib/service/storageAdapter';
 
 export type DragDropImageProps = {
   name: string;
@@ -21,7 +21,7 @@ const DragDropImage: FC<DragDropImageProps> = ({
   rounded,
 }) => {
   const [modal, setModal] = useState(false);
-  const { authState } = useUser();
+  const { authState } = useUserStorage();
 
   const uppy = useMemo(() => {
     return new Uppy({
@@ -47,7 +47,7 @@ const DragDropImage: FC<DragDropImageProps> = ({
         fieldName: name,
         method: 'POST',
         headers: {
-          authorization: `bearer ${authState.jwt}`,
+          authorization: `bearer ${authState?.jwt}`,
         },
       });
   }, []);

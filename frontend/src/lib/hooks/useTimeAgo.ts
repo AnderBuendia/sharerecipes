@@ -23,7 +23,7 @@ const getDateDiffs = (timestamp: number) => {
   return { value, unit };
 };
 
-export default function useTimeAgo(timestamp: number) {
+export function useTimeAgo(timestamp: number) {
   const { value, unit } = getDateDiffs(timestamp);
   const rtf = new Intl.RelativeTimeFormat('en', { style: 'short' });
 

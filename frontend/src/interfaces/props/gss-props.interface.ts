@@ -1,5 +1,5 @@
 import { NormalizedCacheObject } from '@apollo/client';
-import { AuthState } from '@Interfaces/context/auth-context.interface';
+import { AuthState } from '@Interfaces/domain/auth.interface';
 
 export interface AuthProps extends AuthState {}
 

@@ -20,7 +20,7 @@ import { GSSProps } from '@Interfaces/props/gss-props.interface';
 import { IRedirect } from '@Interfaces/redirect.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { RedirectConditions } from '@Enums/redirect-conditions';
-import { RecipeImage } from '@Interfaces/recipe/recipe.interface';
+import { RecipeImage } from '@Interfaces/domain/recipe.interface';
 
 const NewRecipePage: NextPage = () => {
   const [recipeImage, setRecipeImage] = useState<RecipeImage>();
