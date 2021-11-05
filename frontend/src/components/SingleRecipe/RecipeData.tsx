@@ -7,8 +7,8 @@ import {
   TwitterShareButton,
   TwitterIcon,
 } from 'react-share';
-import useUser from '@Lib/hooks/user/useUser';
-import { IRecipe } from '@Interfaces/recipe/recipe.interface';
+import { useUserStorage } from '@Lib/service/storageAdapter';
+import { IRecipe } from '@Interfaces/domain/recipe.interface';
 
 export type RecipeDataProps = {
   recipe: IRecipe;
@@ -23,7 +23,7 @@ const RecipeData: FC<RecipeDataProps> = ({
   confirmDeleteRecipe,
   handleVoteRecipe,
 }) => {
-  const { authState } = useUser();
+  const { authState } = useUserStorage();
   const {
     _id,
     name,
@@ -134,7 +134,7 @@ const RecipeData: FC<RecipeDataProps> = ({
           ))}
         </div>
       </div>
-      {authState.user && author?.email === authState.user.email && (
+      {authState?.user && author?.email === authState.user.email && (
         <div className="flex w-full mt-6">
           <button
             type="button"

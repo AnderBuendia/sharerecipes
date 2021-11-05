@@ -1,5 +1,5 @@
-import { UserCompleteProfile } from '@Interfaces/auth/user.interface';
-import { IComment } from '@Interfaces/comment/comment.interface';
+import { UserCompleteProfile } from '@Interfaces/domain/user.interface';
+import { IComment } from '@Interfaces/domain/comment.interface';
 
 export interface RecipeImage {
   image_url?: string;

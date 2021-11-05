@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Swal from 'sweetalert2';
 import useDeleteUser from '@Lib/hooks/user/useDeleteUser';
 import { UserRoles } from '@Enums/user/user-roles.enum';
-import { UserProfile } from '@Interfaces/auth/user.interface';
+import { UserProfile } from '@Interfaces/domain/user.interface';
 
 export type UserProps = {
   user: UserProfile;

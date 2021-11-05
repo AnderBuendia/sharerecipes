@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Waypoint } from 'react-waypoint';
 import { ChatIcon } from '@Components/Icons/chat.icon';
 import { StarIcon } from '@Components/Icons/star.icon';
-import { IRecipe } from '@Interfaces/recipe/recipe.interface';
+import { IRecipe } from '@Interfaces/domain/recipe.interface';
 import { FetchMoreGetRecipesArgs } from '@Types/apollo/query/fetch-more.type';
 
 export type RecipeCardProps = {

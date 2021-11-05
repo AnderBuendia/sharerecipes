@@ -1,16 +1,16 @@
-import { NextRouter } from 'next/router';
+import { useState } from 'react';
 import { useToasts } from 'react-toast-notifications';
-import useUser from '@Lib/hooks/user/useUser';
+import { useUserStorage } from '@Lib/service/storageAdapter';
 import { AlertMessages } from '@Enums/config/messages.enum';
 import { RestEndPoints } from '@Enums/paths/rest-endpoints.enum';
-import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { FormValuesLoginForm } from '@Types/forms/login-form.type';
 
-export const getLoginRequest = (router: NextRouter) => {
-  const { setAuth } = useUser();
+export function useAuthentication() {
+  const [openDropdown, setOpenDropdown] = useState<boolean>(false);
   const { addToast } = useToasts();
+  const { setAuth } = useUserStorage();
 
-  const loginRequest = async (data: FormValuesLoginForm) => {
+  const signIn = async (data: FormValuesLoginForm) => {
     try {
       const res = await fetch(
         process.env.NEXT_PUBLIC_SITE_URL + RestEndPoints.LOGIN,
@@ -35,9 +35,7 @@ export const getLoginRequest = (router: NextRouter) => {
 
         addToast(AlertMessages.LOGIN, { appearance: 'success' });
 
-        setTimeout(() => {
-          router.push(MainPaths.INDEX);
-        }, 3000);
+        return true;
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -48,5 +46,30 @@ export const getLoginRequest = (router: NextRouter) => {
     }
   };
 
-  return { loginRequest };
-};
+  const signOut = async () => {
+    setOpenDropdown(false);
+
+    try {
+      await fetch(RestEndPoints.LOGOUT, {
+        method: 'POST',
+      });
+
+      setAuth({
+        user: undefined,
+        jwt: undefined,
+      });
+
+      addToast(AlertMessages.LOGOUT, { appearance: 'info' });
+
+      return true;
+    } catch (error) {
+      if (error instanceof Error) {
+        addToast(error, { appearance: 'error' });
+      }
+
+      return false;
+    }
+  };
+
+  return { signIn, signOut, openDropdown, setOpenDropdown };
+}

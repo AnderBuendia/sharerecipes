@@ -12,7 +12,7 @@ import { SelectOption } from '@Interfaces/select/option.interface';
 import { AlertMessages, FormMessages } from '@Enums/config/messages.enum';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { FormValuesNewRecipe } from '@Types/forms/new-recipe.type';
-import { RecipeImage } from '@Interfaces/recipe/recipe.interface';
+import { RecipeImage } from '@Interfaces/domain/recipe.interface';
 
 export type NewRecipeForm = {
   recipeImage?: RecipeImage;

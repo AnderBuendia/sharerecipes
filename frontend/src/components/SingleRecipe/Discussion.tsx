@@ -1,16 +1,16 @@
 import { FC, useState, useRef, MutableRefObject } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import useUser from '@Lib/hooks/user/useUser';
 import useClickOutside from '@Lib/hooks/useClickOutside';
 import useCommentRecipe from '@Lib/hooks/recipe/useCommentRecipe';
 import ModalSignUp from '@Components/SingleRecipe/ModalSignUp';
 import Comment from '@Components/SingleRecipe/Comment';
 import { UserIcon } from '@Components/Icons/user.icon';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
-import { IRecipe } from '@Interfaces/recipe/recipe.interface';
+import { IRecipe } from '@Interfaces/domain/recipe.interface';
 import { FetchMoreGetRecipeArgs } from '@Types/apollo/query/fetch-more.type';
 import { FormValuesDiscussion } from '@Types/forms/discussion.type';
+import { useUserStorage } from '@Lib/service/storageAdapter';
 
 export type DiscussionProps = {
   recipe: IRecipe;
@@ -21,9 +21,7 @@ const Discussion: FC<DiscussionProps> = ({ recipe, fetchMore }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const router = useRouter();
   const componentRef = useRef() as MutableRefObject<HTMLDivElement>;
-  const {
-    authState: { user },
-  } = useUser();
+  const { authState } = useUserStorage();
   const { setEditCommentRecipe, setVoteCommentRecipe, setSendCommentRecipe } =
     useCommentRecipe({ url: recipe.url });
 
@@ -39,7 +37,8 @@ const Discussion: FC<DiscussionProps> = ({ recipe, fetchMore }) => {
 
   const onSubmit = handleSubmit(async (submitData) => {
     const { message } = submitData;
-    if (!user) return setShowModal(true);
+
+    if (!authState?.user) return setShowModal(true);
 
     const response = await setSendCommentRecipe({ message, url: recipe.url });
 
@@ -57,8 +56,8 @@ const Discussion: FC<DiscussionProps> = ({ recipe, fetchMore }) => {
       <div className="flex w-full">
         <div className="w-10 mr-2">
           <UserIcon
-            imageUrl={user?.image_url}
-            imageName={user?.image_name}
+            imageUrl={authState?.user?.image_url}
+            imageName={authState?.user?.image_name}
             w={256}
             h={256}
           />

@@ -1,11 +1,11 @@
 import { FC, useState } from 'react';
 import { Waypoint } from 'react-waypoint';
-import useUser from '@Lib/hooks/user/useUser';
-import useTimeAgo from '@Lib/hooks/useTimeAgo';
+import { useUserStorage } from '@Lib/service/storageAdapter';
+import { useTimeAgo } from '@Lib/hooks/useTimeAgo';
 import { UserIcon } from '@Components/Icons/user.icon';
 import { ChevronUpIcon } from '@Components/Icons/chevron-up.icon';
-import { IRecipe } from '@Interfaces/recipe/recipe.interface';
-import { IComment } from '@Interfaces/comment/comment.interface';
+import { IRecipe } from '@Interfaces/domain/recipe.interface';
+import { IComment } from '@Interfaces/domain/comment.interface';
 import { FetchMoreGetRecipeArgs } from '@Types/apollo/query/fetch-more.type';
 
 export type CommentProps = {
@@ -36,7 +36,7 @@ const Comment: FC<CommentProps> = ({
   const [editComment, setEditComment] = useState(message);
 
   const timeago = useTimeAgo(createdAt);
-  const { authState } = useUser();
+  const { authState } = useUserStorage();
 
   const handleEdit = (editComment: string) => {
     setEditCommentRecipe({ _id, message: editComment });
@@ -90,7 +90,7 @@ const Comment: FC<CommentProps> = ({
             <ChevronUpIcon className="w-5 h-5" />
             <span>Upvote {votes > 0 && `(${votes})`}</span>
           </button>
-          {authState.user && authState.user.email === author.email && (
+          {authState?.user && authState.user.email === author.email && (
             <button
               className="ml-3 text-xs font-bold text-gray-400"
               onClick={

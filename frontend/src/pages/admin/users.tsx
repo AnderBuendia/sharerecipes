@@ -24,7 +24,7 @@ import { IRedirect } from '@Interfaces/redirect.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { RedirectConditions } from '@Enums/redirect-conditions';
 import { UserRoles } from '@Enums/user/user-roles.enum';
-import { UserProfile } from '@Interfaces/auth/user.interface';
+import { UserProfile } from '@Interfaces/domain/user.interface';
 
 const AdminUsers: NextPage = () => {
   const router = useRouter();

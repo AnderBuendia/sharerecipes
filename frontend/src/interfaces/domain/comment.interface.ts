@@ -1,4 +1,4 @@
-import { UserComment } from '@Interfaces/auth/user.interface';
+import { UserComment } from '@Interfaces/domain/user.interface';
 
 export interface IComment {
   _id: string;

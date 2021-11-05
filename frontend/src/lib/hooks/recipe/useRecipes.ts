@@ -11,7 +11,7 @@ import { QueryDataGetRecipes } from '@Types/apollo/query/recipe.type';
 import {
   RecipeImage,
   NewRecipeData,
-} from '@Interfaces/recipe/recipe.interface';
+} from '@Interfaces/domain/recipe.interface';
 
 export default function useRecipes() {
   const { addToast } = useToasts();

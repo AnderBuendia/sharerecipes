@@ -14,7 +14,7 @@ import RecipesList from '@Components/Recipes/RecipesList';
 import RecipeCard from '@Components/Recipes/RecipeCard';
 import Spinner from '@Components/generic/Spinner';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
-import { IRecipe } from '@Interfaces/recipe/recipe.interface';
+import { IRecipe } from '@Interfaces/domain/recipe.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 
 const IndexPage: NextPage = () => {

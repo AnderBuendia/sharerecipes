@@ -13,7 +13,7 @@ import RecipeCard from '@Components/Recipes/RecipeCard';
 import RecipesList from '@Components/Recipes/RecipesList';
 import Spinner from '@Components/generic/Spinner';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
-import { IRecipe } from '@Interfaces/recipe/recipe.interface';
+import { IRecipe } from '@Interfaces/domain/recipe.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 
 const PopularPage: NextPage = () => {

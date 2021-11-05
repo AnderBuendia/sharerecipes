@@ -8,7 +8,7 @@ import { RamenIcon } from '@Components/Icons/ramen.icon';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 
 const HeaderDesktop: FC = () => {
-  const { authState, signOut, open, setOpen } = useUser();
+  const { authState } = useUser();
 
   return (
     <div className="xssm:hidden w-full py-2 px-4 flex flex-row items-center justify-between text-black bg-gray-400 dark:bg-gray-800">
@@ -34,12 +34,7 @@ const HeaderDesktop: FC = () => {
               </a>
             </Link>
 
-            <DropdownMenu
-              user={authState.user}
-              signOut={signOut}
-              open={open}
-              setOpen={setOpen}
-            />
+            <DropdownMenu user={authState.user} />
           </>
         ) : (
           <>

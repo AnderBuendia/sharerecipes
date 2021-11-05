@@ -1,8 +1,6 @@
-import { useState, useCallback, useContext } from 'react';
+import { useCallback } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { useToasts } from 'react-toast-notifications';
-import AuthContext from '@Lib/context/AuthContext';
-import { RestEndPoints } from '@Enums/paths/rest-endpoints.enum';
 import { AlertMessages } from '@Enums/config/messages.enum';
 import { GET_USERS } from '@Lib/graphql/user/query';
 import {
@@ -12,13 +10,14 @@ import {
   UPDATE_USER,
   UPDATE_USER_PASSWORD,
 } from '@Lib/graphql/user/mutation';
-import { AuthState } from '@Interfaces/context/auth-context.interface';
-import { UserImage } from '@Interfaces/auth/user.interface';
+import { AuthState } from '@Interfaces/domain/auth.interface';
+import { UserImage } from '@Interfaces/domain/user.interface';
+
+import { useUserStorage } from '@Lib/service/storageAdapter';
 
 export default function useUser() {
-  const [open, setOpen] = useState<boolean>(false);
-  const { authState, setAuth } = useContext(AuthContext);
   const { addToast } = useToasts();
+  const { authState, setAuth } = useUserStorage();
 
   /* Apollo Mutations */
   const [newUser] = useMutation(CREATE_USER);
@@ -95,7 +94,7 @@ export default function useUser() {
           variables: {
             input: {
               name,
-              email: authState.user?.email,
+              email: authState?.user?.email,
               password,
             },
           },
@@ -125,7 +124,7 @@ export default function useUser() {
         const { data } = await updateUserPassword({
           variables: {
             input: {
-              email: authState.user?.email,
+              email: authState?.user?.email,
               password,
               confirmPassword,
             },
@@ -224,36 +223,9 @@ export default function useUser() {
     [setAuth]
   );
 
-  const signOut = useCallback(async () => {
-    setOpen(false);
-
-    try {
-      await fetch(RestEndPoints.LOGOUT, {
-        method: 'POST',
-      });
-
-      setAuth({
-        user: undefined,
-        jwt: undefined,
-      });
-
-      addToast(AlertMessages.LOGOUT, { appearance: 'info' });
-
-      return true;
-    } catch (error) {
-      if (error instanceof Error) {
-        addToast(error, { appearance: 'error' });
-      }
-
-      return false;
-    }
-  }, [setAuth]);
-
   return {
-    open,
     authState,
     getUsers,
-    setOpen,
     setAuth,
     setNewUser,
     setUpdateUser,
@@ -261,6 +233,5 @@ export default function useUser() {
     setForgotPassword,
     setResetPassword,
     setImageUser,
-    signOut,
   };
 }

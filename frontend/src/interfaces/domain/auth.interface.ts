@@ -1,4 +1,4 @@
-import { UserCompleteProfile } from '@Interfaces/auth/user.interface';
+import { UserCompleteProfile } from '@Interfaces/domain/user.interface';
 
 export interface AuthState {
   user?: UserCompleteProfile;
