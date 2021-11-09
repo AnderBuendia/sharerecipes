@@ -1,6 +1,6 @@
 import { FC, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import useUser from '@Lib/hooks/user/useUser';
+import { useUserStorage } from '@Services/storageAdapter';
 import { generateQueryParams } from '@Lib/utils/url.utils';
 import { IRedirect } from '@Interfaces/redirect.interface';
 import { RedirectConditions } from '@Enums/redirect-conditions';
@@ -10,7 +10,7 @@ const withCSRRedirect = (Component: FC<any>, redirect: IRedirect) => {
 
   return (props: any) => {
     const router = useRouter();
-    const { authState } = useUser();
+    const { authState } = useUserStorage();
     const [shouldRender, setShouldRender] = useState<boolean>(
       !!props.shouldRender
     );
@@ -21,9 +21,9 @@ const withCSRRedirect = (Component: FC<any>, redirect: IRedirect) => {
 
     const redirect = () => {
       if (
-        (authState.jwt &&
+        (authState?.jwt &&
           condition === RedirectConditions.REDIRECT_WHEN_USER_EXISTS) ||
-        (!authState.jwt &&
+        (!authState?.jwt &&
           condition === RedirectConditions.REDIRECT_WHEN_USER_NOT_EXISTS)
       ) {
         let queryString;

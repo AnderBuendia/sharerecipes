@@ -7,13 +7,13 @@ import {
   TwitterShareButton,
   TwitterIcon,
 } from 'react-share';
-import { useUserStorage } from '@Lib/service/storageAdapter';
+import { useUserStorage } from '@Services/storageAdapter';
 import { IRecipe } from '@Interfaces/domain/recipe.interface';
 
 export type RecipeDataProps = {
   recipe: IRecipe;
   url: string;
-  confirmDeleteRecipe: (_id: string) => void;
+  confirmDeleteRecipe: (recipeId: IRecipe['_id']) => void;
   handleVoteRecipe: (votes: number) => Promise<void>;
 };
 

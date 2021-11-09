@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 import withCSRRedirect from '@Lib/hoc/with-csr-redirect.hoc';
 import { removeJwtCookie } from '@Lib/utils/jwt-cookie.utils';
 import { serverRedirect } from '@Lib/utils/ssr.utils';
-import useUser from '@Lib/hooks/user/useUser';
+import { useResetPassword } from '@Application/user/resetPassword';
 import FormLayout from '@Components/Layouts/FormLayout';
 import Input from '@Components/generic/Input';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
@@ -27,7 +27,7 @@ const ResetPasswordTokenPage: NextPage<ResetPasswordTokenPageProps> = ({
   token,
 }) => {
   const router = useRouter();
-  const { setResetPassword } = useUser();
+  const { resetPassword } = useResetPassword();
 
   const {
     register,
@@ -38,7 +38,7 @@ const ResetPasswordTokenPage: NextPage<ResetPasswordTokenPageProps> = ({
 
   const onSubmit = handleSubmit(async (submitData) => {
     const { password } = submitData;
-    const response = await setResetPassword({ password, token });
+    const response = await resetPassword({ password, token });
 
     setTimeout(() => {
       if (response) return router.push(MainPaths.LOGIN);

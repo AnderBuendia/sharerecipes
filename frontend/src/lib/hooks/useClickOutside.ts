@@ -2,7 +2,7 @@ import { useEffect, MutableRefObject, Dispatch, SetStateAction } from 'react';
 
 export type EventType = MouseEvent | TouchEvent;
 
-const useClickOutside = (
+export const useClickOutside = (
   componentRef: MutableRefObject<HTMLDivElement>,
   setOpen: Dispatch<SetStateAction<boolean>>
 ) => {
@@ -20,5 +20,3 @@ const useClickOutside = (
     }
   }, []);
 };
-
-export default useClickOutside;

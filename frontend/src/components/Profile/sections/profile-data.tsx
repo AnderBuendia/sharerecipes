@@ -1,9 +1,11 @@
 import { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import useUser from '@Lib/hooks/user/useUser';
+import { useUpdateUser } from '@Application/user/updateUser';
+import { useUserStorage } from '@Services/storageAdapter';
 import { FormMessages } from '@Enums/config/messages.enum';
 import DragDropImage from '@Components/generic/DragDropImage';
 import Input from '@Components/generic/Input';
+import { AuthState } from '@Interfaces/domain/auth.interface';
 
 export type FormValuesProfileData = {
   name: string;
@@ -11,8 +13,9 @@ export type FormValuesProfileData = {
 };
 
 const ProfileData: FC = () => {
-  const { authState, setImageUser, setUpdateUser } = useUser();
+  const { authState, setAuth } = useUserStorage();
 
+  const { updateUser } = useUpdateUser();
   const {
     register,
     handleSubmit,
@@ -25,12 +28,28 @@ const ProfileData: FC = () => {
   });
 
   const handleImageUser = (imageUrl: string, imageName: string) => {
-    setImageUser({ image_url: imageUrl, image_name: imageName });
+    setAuth((oldState: AuthState): AuthState => {
+      if (
+        oldState.user?.image_name !== imageName ||
+        oldState.user?.image_url !== imageUrl
+      ) {
+        return {
+          ...oldState,
+          user: {
+            ...oldState.user,
+            image_url: imageUrl,
+            image_name: imageName,
+          },
+        } as AuthState;
+      }
+
+      return oldState;
+    });
   };
 
   const onSubmit = handleSubmit(async (submitData) => {
     const { name, password } = submitData;
-    await setUpdateUser({ name, password });
+    await updateUser({ name, password, email: authState?.user?.email });
   });
 
   return (

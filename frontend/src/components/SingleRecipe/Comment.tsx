@@ -1,6 +1,8 @@
 import { FC, useState } from 'react';
 import { Waypoint } from 'react-waypoint';
-import { useUserStorage } from '@Lib/service/storageAdapter';
+import { useUserStorage } from '@Services/storageAdapter';
+import { useEditCommentRecipe } from '@Application/comment/editCommentRecipe';
+import { useVoteCommentRecipe } from '@Application/comment/voteCommentRecipe';
 import { useTimeAgo } from '@Lib/hooks/useTimeAgo';
 import { UserIcon } from '@Components/Icons/user.icon';
 import { ChevronUpIcon } from '@Components/Icons/chevron-up.icon';
@@ -13,39 +15,25 @@ export type CommentProps = {
   recipe: IRecipe;
   index: number;
   fetchMore: (variables: FetchMoreGetRecipeArgs) => void;
-  setEditCommentRecipe: ({
-    _id,
-    message,
-  }: {
-    _id: string;
-    message: string;
-  }) => Promise<void>;
-  setVoteCommentRecipe: ({ _id }: { _id: string }) => Promise<void>;
 };
 
-const Comment: FC<CommentProps> = ({
-  comment,
-  recipe,
-  index,
-  fetchMore,
-  setEditCommentRecipe,
-  setVoteCommentRecipe,
-}) => {
+const Comment: FC<CommentProps> = ({ comment, recipe, index, fetchMore }) => {
   const { _id, message, votes, author, createdAt, edited } = comment;
   const [isEditing, setIsEditing] = useState(false);
   const [editComment, setEditComment] = useState(message);
-
-  const timeago = useTimeAgo(createdAt);
   const { authState } = useUserStorage();
+  const { editCommentRecipe } = useEditCommentRecipe();
+  const { voteCommentRecipe } = useVoteCommentRecipe();
+  const timeago = useTimeAgo(createdAt);
 
   const handleEdit = (editComment: string) => {
-    setEditCommentRecipe({ _id, message: editComment });
+    editCommentRecipe({ commentId: _id, message: editComment });
 
     setIsEditing(false);
   };
 
   const handleVoteComment = () => {
-    setVoteCommentRecipe({ _id });
+    voteCommentRecipe({ commentId: _id });
   };
 
   return (
@@ -67,7 +55,7 @@ const Comment: FC<CommentProps> = ({
         </p>
         <p className="text-sm text-gray-400 mx-2">
           {timeago && timeago}
-          <span>{edited && ' - edited'}</span>
+          {edited && <span>- edited</span>}
         </p>
       </div>
       <div className="ml-10 mb-5">

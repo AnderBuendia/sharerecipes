@@ -1,13 +1,13 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_USER = gql`
-  mutation newUser($input: UserInput) {
+  mutation newUserMutation($input: UserInput) {
     newUser(input: $input)
   }
 `;
 
 export const AUTH_USER = gql`
-  mutation authenticateUser($input: AuthenticateInput) {
+  mutation authenticateUserMutation($input: AuthenticateInput) {
     authenticateUser(input: $input) {
       user {
         _id
@@ -24,13 +24,13 @@ export const AUTH_USER = gql`
 `;
 
 export const CONFIRM_USER = gql`
-  mutation confirmUser($input: TokenInput) {
+  mutation confirmUserMutation($input: TokenInput) {
     confirmUser(input: $input)
   }
 `;
 
 export const UPDATE_USER = gql`
-  mutation updateUser($input: UserInput) {
+  mutation updateUserMutation($input: UserInput) {
     updateUser(input: $input) {
       name
     }
@@ -38,25 +38,25 @@ export const UPDATE_USER = gql`
 `;
 
 export const DELETE_USER = gql`
-  mutation deleteUser($email: String!) {
+  mutation deleteUserMutation($email: String!) {
     deleteUser(email: $email)
   }
 `;
 
 export const UPDATE_USER_PASSWORD = gql`
-  mutation updateUserPassword($input: UserPasswordInput) {
+  mutation updateUserPasswordMutation($input: UserPasswordInput) {
     updateUserPassword(input: $input)
   }
 `;
 
 export const FORGOT_PASSWORD = gql`
-  mutation forgotPassword($input: EmailInput) {
+  mutation forgotPasswordMutation($input: EmailInput) {
     forgotPassword(input: $input)
   }
 `;
 
 export const RESET_PASSWORD = gql`
-  mutation resetPassword($input: UserPasswordInput) {
+  mutation resetPasswordMutation($input: UserPasswordInput) {
     resetPassword(input: $input)
   }
 `;

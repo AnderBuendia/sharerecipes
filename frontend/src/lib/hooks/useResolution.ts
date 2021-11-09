@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 
-const useResolution = () => {
+export const useResolution = () => {
   const [windowDimensions, setWindowDimensions] = useState(0);
+
   useEffect(() => {
     let timer: number;
     const handleResize = () => {
@@ -22,5 +23,3 @@ const useResolution = () => {
 
   return windowDimensions;
 };
-
-export default useResolution;
