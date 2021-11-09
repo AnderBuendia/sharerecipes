@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import Swal from 'sweetalert2';
-import useDeleteUser from '@Lib/hooks/user/useDeleteUser';
-import { UserRoles } from '@Enums/user/user-roles.enum';
+import { useDeleteUser } from '@Application/user/deleteUser';
 import { UserProfile } from '@Interfaces/domain/user.interface';
+import { UserRoles } from '@Enums/user/user-roles.enum';
 
 export type UserProps = {
   user: UserProfile;
@@ -11,13 +11,13 @@ export type UserProps = {
 
 const User: FC<UserProps> = ({ user, page }) => {
   const { name, email, role, confirmed } = user;
-  const { setDeleteUser } = useDeleteUser({
+  const { deleteUser } = useDeleteUser({
     offset: page * 9,
     limit: 9,
     email,
   });
 
-  const confirmDeleteUser = async (email: string) => {
+  const confirmDeleteUser = async (email: UserProfile['email']) => {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -29,7 +29,7 @@ const User: FC<UserProps> = ({ user, page }) => {
       cancelButtonText: 'No, cancel!',
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const response = await setDeleteUser({ email });
+        const response = await deleteUser({ email });
 
         if (response) {
           Swal.fire('Correct', 'User has been deleted', 'success');

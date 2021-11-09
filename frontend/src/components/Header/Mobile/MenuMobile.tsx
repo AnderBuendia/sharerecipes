@@ -1,8 +1,9 @@
 import { FC, useRef, MutableRefObject } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import useClickOutside from '@Lib/hooks/useClickOutside';
-import useUser from '@Lib/hooks/user/useUser';
+import { useAuthenticate } from '@Application/authenticate';
+import { useClickOutside } from '@Lib/hooks/useClickOutside';
+import { useUserStorage } from '@Services/storageAdapter';
 import { CloseIcon } from '@Components/Icons/close.icon';
 import { DocumentIcon } from '@Components/Icons/document.icon';
 import { AdminIcon } from '@Components/Icons/admin.icon';
@@ -10,19 +11,20 @@ import { MenuMobileIcon } from '@Components/Icons/menu-mobile.icon';
 import { UserIcon } from '@Components/Icons/user.icon';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { UserRoles } from '@Enums/user/user-roles.enum';
-import { useAuthentication } from '@Lib/service/authAdapter';
 
 const MenuMobile: FC = () => {
-  const { authState } = useUser();
-
-  const { openDropdown, setOpenDropdown, signOut } = useAuthentication();
+  const { authState } = useUserStorage();
+  const { openDropdown, setOpenDropdown, signOut } = useAuthenticate();
   const componentRef = useRef() as MutableRefObject<HTMLDivElement>;
   const router = useRouter();
 
   useClickOutside(componentRef, setOpenDropdown);
 
   const handleSignOut = async () => {
+    setOpenDropdown(false);
+
     const response = await signOut();
+
     if (response) router.push(MainPaths.INDEX);
   };
 

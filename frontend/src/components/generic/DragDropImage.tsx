@@ -3,7 +3,7 @@ import Uppy from '@uppy/core';
 import XHRUpload from '@uppy/xhr-upload';
 import { DragDrop, DashboardModal } from '@uppy/react';
 import ImageEditor from '@uppy/image-editor';
-import { useUserStorage } from '@Lib/service/storageAdapter';
+import { useUserStorage } from '@Services/storageAdapter';
 
 export type DragDropImageProps = {
   name: string;

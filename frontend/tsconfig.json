@@ -16,13 +16,15 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
+      "@Application/*": ["src/application/*"],
       "@Components/*": ["src/components/*"],
-      "@Pages/*": ["src/pages/*"],
-      "@Lib/*": ["src/lib/*"],
-      "@Styles/*": ["src/styles/*"],
+      "@Config/*": ["src/config/*"],
       "@Enums/*": ["src/enums/*"],
       "@Interfaces/*": ["src/interfaces/*"],
-      "@Config/*": ["src/config/*"],
+      "@Lib/*": ["src/lib/*"],
+      "@Pages/*": ["src/pages/*"],
+      "@Styles/*": ["src/styles/*"],
+      "@Services/*": ["src/services/*"],
       "@Types/*": ["src/types/*"]
     }
   },

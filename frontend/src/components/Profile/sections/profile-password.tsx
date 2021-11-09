@@ -1,15 +1,17 @@
 import { FC } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import useUser from '@Lib/hooks/user/useUser';
+import { useUpdateUserPassword } from '@Application/user/updateUserPassword';
+import { useUserStorage } from '@Services/storageAdapter';
 import Input from '@Components/generic/Input';
 import { ProfilePaths } from '@Enums/paths/profile-paths.enum';
 import { FormMessages } from '@Enums/config/messages.enum';
 import { FormValuesProfilePassword } from '@Types/forms/profile-password.type';
 
 const ProfilePassword: FC = () => {
-  const { setUpdateUserPassword } = useUser();
   const router = useRouter();
+  const { authState } = useUserStorage();
+  const { updateUserPassword } = useUpdateUserPassword();
 
   const {
     register,
@@ -20,9 +22,13 @@ const ProfilePassword: FC = () => {
 
   const onSubmit = handleSubmit(async (submitData) => {
     const { password, confirmPassword } = submitData;
-    const response = await setUpdateUserPassword({ password, confirmPassword });
+    const response = await updateUserPassword({
+      password,
+      confirmPassword,
+      email: authState?.user?.email,
+    });
 
-    if (response) router.push(ProfilePaths.MAIN);
+    if (response?.data) router.push(ProfilePaths.MAIN);
   });
 
   return (

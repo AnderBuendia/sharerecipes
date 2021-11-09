@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import Link from 'next/link';
-import useUser from '@Lib/hooks/user/useUser';
+import { useUserStorage } from '@Services/storageAdapter';
 import SearchBarDesktop from '@Components/Header/Desktop/SearchBarDesktop';
 import DarkModeButton from '@Components/generic/DarkModeButton';
 import DropdownMenu from './DropdownMenu';
@@ -8,7 +8,7 @@ import { RamenIcon } from '@Components/Icons/ramen.icon';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 
 const HeaderDesktop: FC = () => {
-  const { authState } = useUser();
+  const { authState } = useUserStorage();
 
   return (
     <div className="xssm:hidden w-full py-2 px-4 flex flex-row items-center justify-between text-black bg-gray-400 dark:bg-gray-800">
@@ -23,7 +23,7 @@ const HeaderDesktop: FC = () => {
       <div className="flex text-black items-center cursor-pointer">
         <DarkModeButton />
 
-        {authState.user ? (
+        {authState?.user ? (
           <>
             <Link href={MainPaths.NEW_RECIPE}>
               <a
@@ -34,7 +34,7 @@ const HeaderDesktop: FC = () => {
               </a>
             </Link>
 
-            <DropdownMenu user={authState.user} />
+            <DropdownMenu user={authState?.user} />
           </>
         ) : (
           <>

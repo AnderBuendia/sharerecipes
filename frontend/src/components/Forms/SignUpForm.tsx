@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import useUser from '@Lib/hooks/user/useUser';
+import { useCreateUser } from '@Application/user/createUser';
 import FormLayout from '@Components/Layouts/FormLayout';
 import Input from '@Components/generic/Input';
 import { FormMessages } from '@Enums/config/messages.enum';
@@ -11,7 +11,7 @@ import { FormValuesSignUpForm } from '@Types/forms/signup-form.type';
 
 const SignUpForm: FC = () => {
   const router = useRouter();
-  const { setNewUser } = useUser();
+  const { createUser } = useCreateUser();
 
   const {
     register,
@@ -21,9 +21,9 @@ const SignUpForm: FC = () => {
 
   const onSubmit = handleSubmit(async (submitData) => {
     const { name, email, password } = submitData;
-    const response = await setNewUser({ name, email, password });
+    const response = await createUser({ name, email, password });
 
-    if (response) {
+    if (response?.data) {
       setTimeout(() => {
         router.push(MainPaths.INDEX);
       }, 3000);

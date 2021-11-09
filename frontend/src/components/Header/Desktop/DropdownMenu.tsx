@@ -1,19 +1,19 @@
 import { FC, useRef, MutableRefObject } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import useClickOutside from '@Lib/hooks/useClickOutside';
+import { useClickOutside } from '@Lib/hooks/useClickOutside';
 import { UserIcon } from '@Components/Icons/user.icon';
 import { UserRoles } from '@Enums/user/user-roles.enum';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
-import { UserCompleteProfile } from '@Interfaces/auth/user.interface';
-import { useAuthentication } from '@Lib/service/authAdapter';
+import { UserCompleteProfile } from '@Interfaces/domain/user.interface';
+import { useAuthenticate } from '@Application/authenticate';
 
 export type DropdownMenuProps = {
   user: UserCompleteProfile;
 };
 
 const DropdownMenu: FC<DropdownMenuProps> = ({ user }) => {
-  const { openDropdown, setOpenDropdown, signOut } = useAuthentication();
+  const { openDropdown, setOpenDropdown, signOut } = useAuthenticate();
   const { name, image_url, image_name, role } = user;
   const router = useRouter();
   const componentRef = useRef() as MutableRefObject<HTMLDivElement>;
@@ -21,6 +21,8 @@ const DropdownMenu: FC<DropdownMenuProps> = ({ user }) => {
   useClickOutside(componentRef, setOpenDropdown);
 
   const handleSignOut = async () => {
+    setOpenDropdown(false);
+
     const response = await signOut();
 
     if (response) router.push(MainPaths.INDEX);

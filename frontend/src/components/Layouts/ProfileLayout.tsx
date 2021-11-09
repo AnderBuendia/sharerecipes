@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import useResolution from '@Lib/hooks/useResolution';
+import { useResolution } from '@Lib/hooks/useResolution';
 import ProfileMenu from '@Components/Profile/profile-menu';
 import ProfileMobileMenu from '@Components/Profile/profile-mobile-menu';
 import ProfileData from '@Components/Profile/sections/profile-data';

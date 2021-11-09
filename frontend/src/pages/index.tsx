@@ -8,7 +8,7 @@ import { decode } from 'jsonwebtoken';
 import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
 import { isRequestSSR, loadAuthProps } from '@Lib/utils/ssr.utils';
 import { createApolloClient } from '@Lib/apollo/apollo-client';
-import useRecipes from '@Lib/hooks/recipe/useRecipes';
+import { useRecipe } from '@Services/recipeAdapter';
 import MainLayout from '@Components/Layouts/MainLayout';
 import RecipesList from '@Components/Recipes/RecipesList';
 import RecipeCard from '@Components/Recipes/RecipeCard';
@@ -18,7 +18,7 @@ import { IRecipe } from '@Interfaces/domain/recipe.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 
 const IndexPage: NextPage = () => {
-  const { getRecipes } = useRecipes();
+  const { getRecipes } = useRecipe();
   const { data, loading, fetchMore } = getRecipes({
     offset: 0,
     limit: 20,

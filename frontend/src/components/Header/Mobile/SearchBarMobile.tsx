@@ -1,13 +1,13 @@
 import { FC, useState, useRef, MutableRefObject } from 'react';
 import { useRouter } from 'next/router';
+import { useClickOutside } from '@Lib/hooks/useClickOutside';
 import { searchRecipes } from '@Lib/utils/header.utils';
 import { SearchIcon } from '@Components/Icons/search.icon';
 import { CloseIcon } from '@Components/Icons/close.icon';
-import useClickOutside from '@Lib/hooks/useClickOutside';
 
 const SearchBarMobile: FC = () => {
-  const componentRef = useRef() as MutableRefObject<HTMLDivElement>;
   const router = useRouter();
+  const componentRef = useRef() as MutableRefObject<HTMLDivElement>;
   const [search, setSearch] = useState<string>('');
   const [openSearchBar, setOpenSearchBar] = useState<boolean>(false);
   useClickOutside(componentRef, setOpenSearchBar);

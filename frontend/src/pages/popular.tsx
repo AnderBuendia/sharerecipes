@@ -7,7 +7,7 @@ import { decode } from 'jsonwebtoken';
 import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
 import { isRequestSSR, loadAuthProps } from '@Lib/utils/ssr.utils';
 import { createApolloClient } from '@Lib/apollo/apollo-client';
-import useRecipes from '@Lib/hooks/recipe/useRecipes';
+import { useRecipe } from '@Services/recipeAdapter';
 import MainLayout from '@Components/Layouts/MainLayout';
 import RecipeCard from '@Components/Recipes/RecipeCard';
 import RecipesList from '@Components/Recipes/RecipesList';
@@ -17,7 +17,7 @@ import { IRecipe } from '@Interfaces/domain/recipe.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 
 const PopularPage: NextPage = () => {
-  const { getBestRecipes } = useRecipes();
+  const { getBestRecipes } = useRecipe();
   const { data, loading, fetchMore } = getBestRecipes({
     offset: 0,
     limit: 20,

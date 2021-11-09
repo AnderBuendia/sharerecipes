@@ -9,21 +9,24 @@ import { decode } from 'jsonwebtoken';
 import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
 import { isRequestSSR, loadAuthProps } from '@Lib/utils/ssr.utils';
 import { createApolloClient } from '@Lib/apollo/apollo-client';
-import useRecipes from '@Lib/hooks/recipe/useRecipes';
-import useDeleteRecipe from '@Lib/hooks/recipe/useDeleteRecipe';
+import { useRecipe } from '@Services/recipeAdapter';
+import { useVoteRecipe } from '@Application/recipe/voteRecipe';
+import { useDeleteRecipe } from '@Application/recipe/deleteRecipe';
 import MainLayout from '@Components/Layouts/MainLayout';
 import RecipeData from '@Components/SingleRecipe/RecipeData';
 import Discussion from '@Components/SingleRecipe/Discussion';
 import Spinner from '@Components/generic/Spinner';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
+import { IRecipe } from '@Interfaces/domain/recipe.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { GET_RECIPE } from '@Lib/graphql/recipe/query';
 
 const RecipePage: NextPage = () => {
   const router = useRouter();
   const { recipe: url, _id } = router.query as Record<string, string>;
-  const { getRecipe, setVoteRecipe } = useRecipes();
-  const { setDeleteRecipe } = useDeleteRecipe({ _id });
+  const { voteRecipe } = useVoteRecipe();
+  const { getRecipe } = useRecipe();
+  const { deleteRecipe } = useDeleteRecipe({ recipeId: _id });
 
   const { data, loading, fetchMore } = getRecipe({
     recipeUrl: url,
@@ -34,10 +37,10 @@ const RecipePage: NextPage = () => {
   const recipe = data ? data.getRecipe : null;
 
   const handleVoteRecipe = async (votes: number) => {
-    await setVoteRecipe({ url, votes });
+    await voteRecipe({ url, votes });
   };
 
-  const confirmDeleteRecipe = (_id: string) => {
+  const confirmDeleteRecipe = (recipeId: IRecipe['_id']) => {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -49,9 +52,9 @@ const RecipePage: NextPage = () => {
       cancelButtonText: 'No, cancel!',
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const response = await setDeleteRecipe({ _id });
+        const response = await deleteRecipe({ recipeId });
 
-        if (response) {
+        if (response?.data) {
           Swal.fire('Deleted!', 'Recipe has been deleted', 'success');
           router.push(MainPaths.INDEX);
         }

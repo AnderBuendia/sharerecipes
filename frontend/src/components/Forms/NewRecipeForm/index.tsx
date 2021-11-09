@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import { useForm, FieldError } from 'react-hook-form';
 import { SingleValue } from 'react-select';
-import useRecipes from '@Lib/hooks/recipe/useRecipes';
+import { useCreateRecipe } from '@Application/recipe/createRecipe';
 import useNewRecipeForm from '@Components/Forms/NewRecipeForm/hook';
 import Input from '@Components/generic/Input';
 import ReactSelect from '@Components/generic/ReactSelect';
@@ -21,7 +21,7 @@ export type NewRecipeForm = {
 
 const NewRecipeForm: FC<NewRecipeForm> = ({ recipeImage, setRecipeImage }) => {
   const router = useRouter();
-  const { setNewRecipe } = useRecipes();
+  const { createRecipe } = useCreateRecipe();
   const {
     selectedFoodStyle,
     setSelectedFoodStyle,
@@ -54,10 +54,10 @@ const NewRecipeForm: FC<NewRecipeForm> = ({ recipeImage, setRecipeImage }) => {
     }
   };
 
-  const onSubmit = handleSubmit(async (submitData) => {
-    const response = await setNewRecipe({ submitData, recipeImage });
+  const onSubmit = handleSubmit(async (data) => {
+    const response = await createRecipe({ data, recipeImage });
 
-    if (response) {
+    if (response?.data) {
       setRecipeImage({ image_url: undefined, image_name: undefined });
 
       router.push(MainPaths.INDEX);

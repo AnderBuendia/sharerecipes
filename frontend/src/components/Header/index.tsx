@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import useResolution from '@Lib/hooks/useResolution';
+import { useResolution } from '@Lib/hooks/useResolution';
 import HeaderDesktop from '@Components/Header/Desktop';
 import HeaderMobile from '@Components/Header/Mobile';
 import { ResolutionBreakPoints } from '@Enums/config/resolution-breakpoints.enum';

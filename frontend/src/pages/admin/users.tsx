@@ -15,7 +15,7 @@ import {
   loadAuthProps,
   serverRedirect,
 } from '@Lib/utils/ssr.utils';
-import useUser from '@Lib/hooks/user/useUser';
+import { useUser } from '@Services/userAdapter';
 import UsersPanel from '@Components/Admin/UsersPanel';
 import MainLayout from '@Components/Layouts/MainLayout';
 import Spinner from '@Components/generic/Spinner';
@@ -24,30 +24,17 @@ import { IRedirect } from '@Interfaces/redirect.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { RedirectConditions } from '@Enums/redirect-conditions';
 import { UserRoles } from '@Enums/user/user-roles.enum';
-import { UserProfile } from '@Interfaces/domain/user.interface';
+import { searchFilterUsers } from '@Lib/utils/search-filter.utils';
 
 const AdminUsers: NextPage = () => {
   const router = useRouter();
   const { page: queryPage } = router.query as Record<string, string>;
-
   const numberPage = queryPage ? parseInt(queryPage.toString()) : 0;
   const [page, setPage] = useState(numberPage);
   const [q, setQ] = useState('');
-
   const { getUsers } = useUser();
+
   const { data, loading } = getUsers({ offset: page * 9, limit: 9 });
-
-  const searchUser = (users: UserProfile[]) => {
-    const columns = users[0] && Object.keys(users[0]);
-
-    return users.filter((row) =>
-      columns.some(
-        (column) =>
-          row[column as keyof UserProfile].toString().toLowerCase().indexOf(q) >
-          -1
-      )
-    );
-  };
 
   const handleQ = (e: ChangeEvent<HTMLInputElement>) => {
     setQ(e.target.value);
@@ -65,8 +52,11 @@ const AdminUsers: NextPage = () => {
 
   if (loading) return <Spinner />;
 
-  const totalPages = data ? Math.ceil(data.getUsers.total / 9) : null;
-  let users = data ? searchUser(data.getUsers.users) : null;
+  const getUsersData = data ? data.getUsers : null;
+
+  const totalPages = Math.ceil(getUsersData.total / 9);
+  console.log('GETUSERS', getUsersData);
+  const users = searchFilterUsers(getUsersData.users, q);
 
   return (
     <MainLayout

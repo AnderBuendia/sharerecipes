@@ -1,16 +1,16 @@
 import { FC, useState, useRef, MutableRefObject } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import useClickOutside from '@Lib/hooks/useClickOutside';
-import useCommentRecipe from '@Lib/hooks/recipe/useCommentRecipe';
+import { useSendCommentRecipe } from '@Application/comment/sendCommentRecipe';
+import { useUserStorage } from '@Services/storageAdapter';
+import { useClickOutside } from '@Lib/hooks/useClickOutside';
 import ModalSignUp from '@Components/SingleRecipe/ModalSignUp';
 import Comment from '@Components/SingleRecipe/Comment';
 import { UserIcon } from '@Components/Icons/user.icon';
-import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { IRecipe } from '@Interfaces/domain/recipe.interface';
+import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { FetchMoreGetRecipeArgs } from '@Types/apollo/query/fetch-more.type';
 import { FormValuesDiscussion } from '@Types/forms/discussion.type';
-import { useUserStorage } from '@Lib/service/storageAdapter';
 
 export type DiscussionProps = {
   recipe: IRecipe;
@@ -18,12 +18,15 @@ export type DiscussionProps = {
 };
 
 const Discussion: FC<DiscussionProps> = ({ recipe, fetchMore }) => {
-  const [showModal, setShowModal] = useState<boolean>(false);
   const router = useRouter();
+  const [showModal, setShowModal] = useState<boolean>(false);
   const componentRef = useRef() as MutableRefObject<HTMLDivElement>;
   const { authState } = useUserStorage();
-  const { setEditCommentRecipe, setVoteCommentRecipe, setSendCommentRecipe } =
-    useCommentRecipe({ url: recipe.url });
+  const { sendCommentRecipe } = useSendCommentRecipe({ recipeUrl: recipe.url });
+
+  const { handleSubmit, register, reset } = useForm<FormValuesDiscussion>({
+    defaultValues: { message: '' },
+  });
 
   useClickOutside(componentRef, setShowModal);
 
@@ -31,18 +34,17 @@ const Discussion: FC<DiscussionProps> = ({ recipe, fetchMore }) => {
     router.push(MainPaths.SIGNUP);
   };
 
-  const { handleSubmit, register, reset } = useForm<FormValuesDiscussion>({
-    defaultValues: { message: '' },
-  });
+  const onSubmit = handleSubmit(async (data) => {
+    const { message } = data;
 
-  const onSubmit = handleSubmit(async (submitData) => {
-    const { message } = submitData;
+    if (!authState) return setShowModal(true);
 
-    if (!authState?.user) return setShowModal(true);
+    const response = await sendCommentRecipe({
+      message,
+      recipeUrl: recipe.url,
+    });
 
-    const response = await setSendCommentRecipe({ message, url: recipe.url });
-
-    if (response) reset();
+    if (response?.data) reset();
   });
 
   return (
@@ -89,8 +91,6 @@ const Discussion: FC<DiscussionProps> = ({ recipe, fetchMore }) => {
               index={index}
               fetchMore={fetchMore}
               recipe={recipe}
-              setEditCommentRecipe={setEditCommentRecipe}
-              setVoteCommentRecipe={setVoteCommentRecipe}
             />
           ))}
         </div>

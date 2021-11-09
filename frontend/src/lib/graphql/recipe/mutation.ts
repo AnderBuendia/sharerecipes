@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const NEW_RECIPE = gql`
-  mutation newRecipe($input: RecipeInput) {
+  mutation newRecipeMutation($input: RecipeInput) {
     newRecipe(input: $input) {
       _id
       name
@@ -18,7 +18,7 @@ export const NEW_RECIPE = gql`
 `;
 
 export const VOTE_RECIPE = gql`
-  mutation voteRecipe($recipeUrl: String!, $input: RecipeInput) {
+  mutation voteRecipeMutation($recipeUrl: String!, $input: RecipeInput) {
     voteRecipe(recipeUrl: $recipeUrl, input: $input) {
       _id
       voted
@@ -29,7 +29,7 @@ export const VOTE_RECIPE = gql`
 `;
 
 export const DELETE_RECIPE = gql`
-  mutation deleteRecipe($_id: ID!) {
+  mutation deleteRecipeMutation($_id: ID!) {
     deleteRecipe(_id: $_id)
   }
 `;

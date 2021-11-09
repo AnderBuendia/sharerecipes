@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
-import { useAuthentication } from '@Lib/service/authAdapter';
+import { useAuthenticate } from '@Application/authenticate';
 import FormLayout from '@Components/Layouts/FormLayout';
 import Input from '@Components/generic/Input';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
@@ -11,8 +11,7 @@ import { FormValuesLoginForm } from '@Types/forms/login-form.type';
 
 const LoginForm: FC = () => {
   const router = useRouter();
-  const { signIn } = useAuthentication();
-
+  const { signIn } = useAuthenticate();
   const {
     register,
     handleSubmit,

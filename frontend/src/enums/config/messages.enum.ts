@@ -12,7 +12,6 @@ export enum AlertMessages {
         Please, check your email to confirm your account.`,
   LOGIN = 'Authenticating...',
   LOGOUT = 'You have been disconnected',
-
   RECIPE_CREATED = 'Recipe has been created successfully',
 }
 
@@ -26,10 +25,15 @@ export enum FormMessages {
   MIN_LENGTH = 'Minimum 7 characters',
   MATCH_PASSWORDS = 'Passwords should match!',
   EMAIL_FORMAT_INVALID = 'This format is invalid. Please, make sure it is written like example@email.com',
-
   PREP_TIME_REQUIRED = 'Prep time is required',
   SERVES_REQUIRED = 'Number of serves is required',
   INGREDIENTS_REQUIRED = 'Ingredients are required',
   DESCRIPTION_REQUIRED = 'Your recipe is required',
   STYLE_REQUIRED = 'Food style is required',
+}
+
+export enum MessageTypes {
+  ERROR = 'error',
+  SUCCESS = 'success',
+  INFO = 'info',
 }
