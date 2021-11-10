@@ -18,18 +18,8 @@ export const loadCurrentUserSSR = async (
 
   if (!user) return;
 
-  const { _id, name, email, role, image_url, image_name, confirmed } = user;
-
   const authProps = {
-    user: {
-      _id,
-      name,
-      email,
-      role,
-      image_url,
-      image_name,
-      confirmed,
-    },
+    user,
     jwt,
   };
 

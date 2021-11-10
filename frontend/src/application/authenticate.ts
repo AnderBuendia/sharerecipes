@@ -19,7 +19,7 @@ export function useAuthenticate() {
       if (responseToJson.error) {
         throw new Error(responseToJson.error);
       } else {
-        setAuth({ user: responseToJson.user, jwt: responseToJson.jwt });
+        setAuth({ user: responseToJson.user, jwt: responseToJson.token });
 
         notify({
           message: AlertMessages.LOGIN,

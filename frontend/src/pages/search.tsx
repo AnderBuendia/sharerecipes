@@ -12,10 +12,8 @@ import { useRecipe } from '@Services/recipeAdapter';
 import { searchFilterRecipes } from '@Lib/utils/search-filter.utils';
 import Spinner from '@Components/generic/Spinner';
 import MainLayout from '@Components/Layouts/MainLayout';
-import RecipeCard from '@Components/Recipes/RecipeCard';
 import RecipesList from '@Components/Recipes/RecipesList';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
-import { IRecipe } from '@Interfaces/domain/recipe.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 
 const SearchPage: NextPage = () => {
@@ -30,24 +28,7 @@ const SearchPage: NextPage = () => {
 
   if (loading) return <Spinner />;
 
-  const recipes = data ? data.getRecipes : null;
-  const filterRecipes = searchFilterRecipes(recipes, search);
-
-  const recipesRendered = filterRecipes ? (
-    filterRecipes.map((recipe: IRecipe, index: number) => (
-      <RecipeCard
-        key={recipe._id}
-        index={index}
-        recipe={recipe}
-        numberOfRecipes={recipes.length}
-        fetchMore={fetchMore}
-      />
-    ))
-  ) : (
-    <h3 className="text-4xl font-body font-bold text-center mt-10">
-      No recipes
-    </h3>
-  );
+  const recipes = data ? searchFilterRecipes(data.getRecipes, search) : null;
 
   return (
     <MainLayout
@@ -55,10 +36,11 @@ const SearchPage: NextPage = () => {
       description="Search in ShareYourRecipes"
       url={MainPaths.SEARCH}
     >
-      <div className="container mx-auto w-11/12">
-        <h1 className="font-bold text-lg">Results by {q}</h1>
-        <RecipesList>{recipesRendered}</RecipesList>
-      </div>
+      <RecipesList
+        recipes={recipes}
+        fetchMore={fetchMore}
+        title={`Results by ${q} (${recipes?.length})`}
+      />
     </MainLayout>
   );
 };

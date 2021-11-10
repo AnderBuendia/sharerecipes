@@ -9,11 +9,9 @@ import { isRequestSSR, loadAuthProps } from '@Lib/utils/ssr.utils';
 import { createApolloClient } from '@Lib/apollo/apollo-client';
 import { useRecipe } from '@Services/recipeAdapter';
 import MainLayout from '@Components/Layouts/MainLayout';
-import RecipeCard from '@Components/Recipes/RecipeCard';
 import RecipesList from '@Components/Recipes/RecipesList';
 import Spinner from '@Components/generic/Spinner';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
-import { IRecipe } from '@Interfaces/domain/recipe.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 
 const PopularPage: NextPage = () => {
@@ -26,33 +24,17 @@ const PopularPage: NextPage = () => {
   if (loading) return <Spinner />;
   const recipes = data ? data.getBestRecipes : null;
 
-  const recipesRendered =
-    recipes && recipes.length > 0 ? (
-      recipes.map((recipe: IRecipe, index: number) => (
-        <RecipeCard
-          key={recipe._id}
-          recipe={recipe}
-          index={index}
-          numberOfRecipes={recipes.length}
-          fetchMore={fetchMore}
-        />
-      ))
-    ) : (
-      <h3 className="text-4xl font-body font-bold text-center mt-10">
-        No recipes
-      </h3>
-    );
-
   return (
     <MainLayout
       title="Search"
       description="Search in ShareYourRecipes"
       url={MainPaths.POPULAR}
     >
-      <div className="container mx-auto w-11/12">
-        <h1 className="font-bold text-lg">Popular Recipes</h1>
-        <RecipesList>{recipesRendered}</RecipesList>
-      </div>
+      <RecipesList
+        recipes={recipes}
+        fetchMore={fetchMore}
+        title="Popular Recipes"
+      />
     </MainLayout>
   );
 };

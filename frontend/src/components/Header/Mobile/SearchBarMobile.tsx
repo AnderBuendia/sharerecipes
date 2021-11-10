@@ -34,8 +34,9 @@ const SearchBarMobile: FC = () => {
             <input
               type="search"
               placeholder="Search..."
+              className="placeholder-gray-600 py-4 px-2 w-full focus:outline-none dark:bg-gray-800"
+              autoFocus
               onChange={(e) => setSearch(e.target.value)}
-              className="placeholder-gray-600 py-4 px-2 w-full focus:outline-none"
             />
             <CloseIcon
               className="p-2 w-12 cursor-pointer"

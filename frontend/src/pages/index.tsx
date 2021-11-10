@@ -3,7 +3,6 @@ import type {
   GetServerSideProps,
   GetServerSidePropsContext,
 } from 'next';
-import Link from 'next/link';
 import { decode } from 'jsonwebtoken';
 import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
 import { isRequestSSR, loadAuthProps } from '@Lib/utils/ssr.utils';
@@ -11,10 +10,8 @@ import { createApolloClient } from '@Lib/apollo/apollo-client';
 import { useRecipe } from '@Services/recipeAdapter';
 import MainLayout from '@Components/Layouts/MainLayout';
 import RecipesList from '@Components/Recipes/RecipesList';
-import RecipeCard from '@Components/Recipes/RecipeCard';
 import Spinner from '@Components/generic/Spinner';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
-import { IRecipe } from '@Interfaces/domain/recipe.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 
 const IndexPage: NextPage = () => {
@@ -27,45 +24,17 @@ const IndexPage: NextPage = () => {
   if (loading) return <Spinner />;
   const recipes = data ? data.getRecipes : null;
 
-  const recipesRendered =
-    recipes && recipes.length > 0 ? (
-      recipes.map((recipe: IRecipe, index: number) => (
-        <RecipeCard
-          key={recipe._id}
-          recipe={recipe}
-          numberOfRecipes={recipes.length}
-          index={index}
-          fetchMore={fetchMore}
-        />
-      ))
-    ) : (
-      <h3 className="text-4xl font-body font-bold text-center mt-10">
-        No recipes
-      </h3>
-    );
-
   return (
     <MainLayout
       title="Home"
       description="Share your own recipes"
       url={MainPaths.INDEX}
     >
-      <div className="container mx-auto w-11/12">
-        <div className="flex justify-between items-center">
-          <h1 className="font-bold text-lg">New Recipes</h1>
-
-          <Link href={MainPaths.POPULAR}>
-            <a
-              className="ml-auto w-30 bg-purple-500 px-2 rounded-full shadow-lg cursor-pointer hover:bg-purple-600 
-                transition duration-200 ease-in-out transform hover:scale-105 text-center text-gray-200 uppercase font-roboto text-xs hover:font-bold"
-            >
-              Popular Recipes
-            </a>
-          </Link>
-        </div>
-
-        <RecipesList>{recipesRendered}</RecipesList>
-      </div>
+      <RecipesList
+        recipes={recipes}
+        fetchMore={fetchMore}
+        title="New Recipes"
+      />
     </MainLayout>
   );
 };

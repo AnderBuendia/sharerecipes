@@ -34,7 +34,7 @@ const ProfileLayout: FC<ProfileLayoutProps> = ({ path }) => {
 
   const { Component, title } = components[path];
 
-  if (!Component) return <div>Prueba</div>;
+  if (!Component) return null;
 
   return isMobile ? (
     <div className="container mx-auto w-11/12">
