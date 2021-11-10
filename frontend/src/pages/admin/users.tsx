@@ -55,7 +55,6 @@ const AdminUsers: NextPage = () => {
   const getUsersData = data ? data.getUsers : null;
 
   const totalPages = Math.ceil(getUsersData.total / 9);
-  console.log('GETUSERS', getUsersData);
   const users = searchFilterUsers(getUsersData.users, q);
 
   return (

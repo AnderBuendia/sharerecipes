@@ -21,6 +21,8 @@ const MyApp: NextPage<CustomAppProps> = ({ Component, pageProps }) => {
     apolloCache
   );
 
+  // TODO: TEST HEADER IN _app
+  // TODO: PROFILE LAYOUT <HEAD /> and even FORM LAYOUT
   return (
     <ThemeProvider attribute="class">
       <AuthStoreContext.Provider value={{ authState, setAuth }}>

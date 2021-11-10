@@ -11,7 +11,7 @@ const HeaderDesktop: FC = () => {
   const { authState } = useUserStorage();
 
   return (
-    <div className="xssm:hidden w-full py-2 px-4 flex flex-row items-center justify-between text-black bg-gray-400 dark:bg-gray-800">
+    <header className="xssm:hidden w-full py-2 px-4 flex flex-row items-center justify-between text-black bg-gray-400 dark:bg-gray-800">
       <Link href={MainPaths.INDEX}>
         <a>
           <RamenIcon w={44} h={44} />
@@ -51,7 +51,7 @@ const HeaderDesktop: FC = () => {
           </>
         )}
       </div>
-    </div>
+    </header>
   );
 };
 
