@@ -1,16 +1,30 @@
-import { FC, useState, useRef, MutableRefObject } from 'react';
+import { FC, useState, useRef, FormEvent, MutableRefObject } from 'react';
 import { useRouter } from 'next/router';
 import { useClickOutside } from '@Lib/hooks/useClickOutside';
-import { searchRecipes } from '@Lib/utils/header.utils';
 import { SearchIcon } from '@Components/Icons/search.icon';
 import { CloseIcon } from '@Components/Icons/close.icon';
+import { MainPaths } from '@Enums/paths/main-paths.enum';
 
 const SearchBarMobile: FC = () => {
   const router = useRouter();
   const componentRef = useRef() as MutableRefObject<HTMLDivElement>;
   const [search, setSearch] = useState<string>('');
   const [openSearchBar, setOpenSearchBar] = useState<boolean>(false);
+
   useClickOutside(componentRef, setOpenSearchBar);
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (search.trim() === '') return;
+
+    setOpenSearchBar(false);
+
+    router.push({
+      pathname: MainPaths.SEARCH,
+      query: { q: search },
+    });
+  };
 
   return (
     <div ref={componentRef}>
@@ -21,7 +35,7 @@ const SearchBarMobile: FC = () => {
       {openSearchBar && (
         <div className="mdxl:hidden bg-white dark:bg-gray-800 w-full absolute top-0 left-0 center">
           <form
-            onSubmit={(e) => searchRecipes(e, search, router)}
+            onSubmit={handleSubmit}
             className="w-full flex flex-row items-center"
           >
             <button

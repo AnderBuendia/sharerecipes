@@ -1,4 +1,4 @@
-import { FC, useRef, MutableRefObject } from 'react';
+import { FC, useEffect, useRef, MutableRefObject } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAuthenticate } from '@Application/authenticate';
@@ -63,6 +63,7 @@ const MenuMobile: FC = () => {
                     <a
                       className="w-8/12 text-center py-1 px-3 rounded-full cursor-pointer border border-black 
                       text-white bg-gray-400 hover:bg-gray-200 hover:text-black"
+                      onClick={() => setOpenDropdown(false)}
                     >
                       My Account
                     </a>
@@ -71,14 +72,20 @@ const MenuMobile: FC = () => {
                   <div className="w-full bg-gray-700 border border-black my-5 rounded-full" />
 
                   <Link href={MainPaths.NEW_RECIPE}>
-                    <a className="flex flex-row self-start">
+                    <a
+                      className="flex flex-row self-start"
+                      onClick={() => setOpenDropdown(false)}
+                    >
                       <DocumentIcon className="w-5 mr-1" />{' '}
                       <span>New Recipe</span>
                     </a>
                   </Link>
                   {authState?.user?.role.includes(UserRoles.ADMIN) && (
                     <Link href={MainPaths.ADMIN}>
-                      <a className="flex flex-row self-start mt-3">
+                      <a
+                        className="flex flex-row self-start mt-3"
+                        onClick={() => setOpenDropdown(false)}
+                      >
                         <AdminIcon className="w-5 mr-1" />{' '}
                         <span>Admin Menu</span>
                       </a>
@@ -109,13 +116,22 @@ const MenuMobile: FC = () => {
 
               <div className="flex flex-col w-full mb-5">
                 <Link href="#">
-                  <a className="px-1 pb-1">Privacy Policy</a>
+                  <a
+                    className="px-1 pb-1"
+                    onClick={() => setOpenDropdown(false)}
+                  >
+                    Privacy Policy
+                  </a>
                 </Link>
                 <Link href="#">
-                  <a className="p-1">Cookies Policy</a>
+                  <a className="p-1" onClick={() => setOpenDropdown(false)}>
+                    Cookies Policy
+                  </a>
                 </Link>
                 <Link href="#">
-                  <a className="p-1">Legal Notice</a>
+                  <a className="p-1" onClick={() => setOpenDropdown(false)}>
+                    Legal Notice
+                  </a>
                 </Link>
               </div>
 

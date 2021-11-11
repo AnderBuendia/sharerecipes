@@ -5,14 +5,21 @@ import RecipeCard from '@Components/Recipes/RecipeCard';
 import { IRecipe } from '@Interfaces/domain/recipe.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { FetchMoreGetRecipesArgs } from '@Types/apollo/query/fetch-more.type';
+import SkeletonRecipeCard from '@Components/Recipes/SkeletonRecipeCard';
 
 export type RecipesListProps = {
   recipes: IRecipe[] | null;
   fetchMore: (variables: FetchMoreGetRecipesArgs) => void;
+  loading: boolean;
   title: string;
 };
 
-const RecipesList: FC<RecipesListProps> = ({ recipes, fetchMore, title }) => {
+const RecipesList: FC<RecipesListProps> = ({
+  recipes,
+  fetchMore,
+  loading,
+  title,
+}) => {
   const router = useRouter();
 
   const recipesRendered =
@@ -32,9 +39,11 @@ const RecipesList: FC<RecipesListProps> = ({ recipes, fetchMore, title }) => {
       </h3>
     );
 
+  console.log({ loading, recipes });
+
   return (
     <div className="container mx-auto w-11/12">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mb-2">
         <h1 className="font-bold text-lg">{title}</h1>
 
         {router.pathname === MainPaths.INDEX && (
@@ -49,8 +58,15 @@ const RecipesList: FC<RecipesListProps> = ({ recipes, fetchMore, title }) => {
         )}
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 cursor-pointer mt-2">
-        {recipesRendered}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        {loading ? (
+          <>
+            <SkeletonRecipeCard />
+            <SkeletonRecipeCard />
+          </>
+        ) : (
+          recipesRendered
+        )}
       </div>
     </div>
   );

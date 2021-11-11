@@ -10,7 +10,6 @@ import { createApolloClient } from '@Lib/apollo/apollo-client';
 import { useRecipe } from '@Services/recipeAdapter';
 import MainLayout from '@Components/Layouts/MainLayout';
 import RecipesList from '@Components/Recipes/RecipesList';
-import Spinner from '@Components/generic/Spinner';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 
@@ -21,7 +20,6 @@ const IndexPage: NextPage = () => {
     limit: 20,
   });
 
-  if (loading) return <Spinner />;
   const recipes = data ? data.getRecipes : null;
 
   return (
@@ -33,6 +31,7 @@ const IndexPage: NextPage = () => {
       <RecipesList
         recipes={recipes}
         fetchMore={fetchMore}
+        loading={loading}
         title="New Recipes"
       />
     </MainLayout>

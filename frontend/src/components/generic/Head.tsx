@@ -10,7 +10,7 @@ export type HeadProps = {
 
 const Head: FC<HeadProps> = ({ title, description, url, noindex = false }) => (
   <NextHead>
-    <title>{title} | ShareYourRecipes</title>
+    <title>{title} | ShareRecipes</title>
     <meta name="description" content={description} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />

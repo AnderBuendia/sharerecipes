@@ -1,15 +1,26 @@
-import { useState, FC } from 'react';
+import { useState, FC, FormEvent } from 'react';
 import { useRouter } from 'next/router';
-import { searchRecipes } from '@Lib/utils/header.utils';
 import { SearchIcon } from '@Components/Icons/search.icon';
+import { MainPaths } from '@Enums/paths/main-paths.enum';
 
 const SearchBarDesktop: FC = () => {
   const [search, setSearch] = useState<string>('');
   const router = useRouter();
 
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (search.trim() === '') return;
+
+    router.push({
+      pathname: MainPaths.SEARCH,
+      query: { q: search },
+    });
+  };
+
   return (
     <div className="xssm:hidden w-2/6 relative text-black">
-      <form onSubmit={(e) => searchRecipes(e, search, router)}>
+      <form onSubmit={handleSubmit}>
         <input
           type="search"
           placeholder="Search..."

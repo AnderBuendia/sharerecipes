@@ -41,7 +41,7 @@ const RecipeCard: FC<RecipeCardProps> = ({
           query: { _id },
         }}
       >
-        <div className="w-full rounded overflow-hidden shadow-2xl transition duration-500 ease-in-out transform hover:scale-105 hover:shadow-md">
+        <div className="w-full rounded overflow-hidden shadow-2xl transition duration-500 ease-in-out transform hover:scale-105 hover:shadow-md cursor-pointer">
           <div
             className="px-3 py-3 bg-auto bg-center h-56 relative"
             style={{
@@ -52,8 +52,8 @@ const RecipeCard: FC<RecipeCardProps> = ({
               <Image
                 src={image_url}
                 alt={name}
-                layout="fill"
                 objectFit="cover"
+                layout="fill"
                 priority
               />
             )}
