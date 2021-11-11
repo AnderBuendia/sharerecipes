@@ -1,4 +1,4 @@
-import { UserProfile } from '@Interfaces/auth/user.interface';
+import { UserProfile } from '@Interfaces/domain/user.interface';
 
 export type QueryDataGetUsers = {
   getUsers: {
