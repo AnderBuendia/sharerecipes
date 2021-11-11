@@ -5,15 +5,13 @@ const AppStoreContext = createContext<any>({});
 export const useAppStore = () => useContext(AppStoreContext);
 
 export const AppProviderStore: FC = ({ children }) => {
-  const [recipes, setRecipes] = useState();
-  const [comment, setComment] = useState();
+  const [search, setSearch] = useState<string>('');
 
   const value = {
-    recipes,
-    comment,
-    setRecipes,
-    setComment,
+    search,
+    setSearch,
   };
+
   return (
     <AppStoreContext.Provider value={value}>
       {children}

@@ -39,8 +39,6 @@ const RecipesList: FC<RecipesListProps> = ({
       </h3>
     );
 
-  console.log({ loading, recipes });
-
   return (
     <div className="container mx-auto w-11/12">
       <div className="flex justify-between items-center mb-2">

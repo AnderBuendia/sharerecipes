@@ -1,11 +1,12 @@
-import { useState, FC, FormEvent } from 'react';
+import { FC, FormEvent } from 'react';
 import { useRouter } from 'next/router';
 import { SearchIcon } from '@Components/Icons/search.icon';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
+import { useSearchStorage } from '@Services/storageAdapter';
 
 const SearchBarDesktop: FC = () => {
-  const [search, setSearch] = useState<string>('');
   const router = useRouter();
+  const { search, setSearch } = useSearchStorage();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
