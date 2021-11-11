@@ -8,6 +8,7 @@ import { ThemeProvider } from 'next-themes';
 import { ToastProvider } from 'react-toast-notifications';
 import { useAuthAndApollo } from '@Lib/hooks/useAuthAndApollo';
 import AuthStoreContext from '@Lib/context/auth-store.context';
+import { AppProviderStore } from '@Lib/context/app-store.context';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 
@@ -31,17 +32,19 @@ const MyApp: NextPage<CustomAppProps> = ({ Component, pageProps }) => {
     <ThemeProvider attribute="class">
       <AuthStoreContext.Provider value={{ authState, setAuth }}>
         <ApolloProvider client={apolloClient}>
-          <ToastProvider
-            autoDismiss
-            autoDismissTimeout={2000}
-            placement="top-center"
-          >
-            <div className="min-h-screen bg-gray-200 dark:bg-gray-500">
-              {pathname !== MainPaths.LOGIN &&
-                pathname !== MainPaths.SIGNUP && <HeaderDynamic />}
-              <Component {...componentProps} />
-            </div>
-          </ToastProvider>
+          <AppProviderStore>
+            <ToastProvider
+              autoDismiss
+              autoDismissTimeout={2000}
+              placement="top-center"
+            >
+              <div className="min-h-screen bg-gray-200 dark:bg-gray-500">
+                {pathname !== MainPaths.LOGIN &&
+                  pathname !== MainPaths.SIGNUP && <HeaderDynamic />}
+                <Component {...componentProps} />
+              </div>
+            </ToastProvider>
+          </AppProviderStore>
         </ApolloProvider>
       </AuthStoreContext.Provider>
     </ThemeProvider>

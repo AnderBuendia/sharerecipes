@@ -5,3 +5,8 @@ export interface UserStorageService {
   authState?: AuthState;
   setAuth: Dispatch<SetStateAction<AuthState>>;
 }
+
+export interface SearchStorageService {
+  search: string;
+  setSearch: Dispatch<SetStateAction<string>>;
+}
