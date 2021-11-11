@@ -7,7 +7,7 @@ phases:
       - cd frontend
       - cp example.env .env.production
       - npm install
-      - npm install jsonwebtoken graphql
+      - npm install jsonwebtoken graphql@15.7.2
       - npm install -D typescript @types/jsonwebtoken
   build:
     commands:
