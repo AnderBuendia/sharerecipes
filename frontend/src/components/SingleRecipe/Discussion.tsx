@@ -37,7 +37,8 @@ const Discussion: FC<DiscussionProps> = ({ recipe, fetchMore }) => {
   const onSubmit = handleSubmit(async (data) => {
     const { message } = data;
 
-    if (!authState) return setShowModal(true);
+    console.log({ authState });
+    if (!authState?.user) return setShowModal(true);
 
     const response = await sendCommentRecipe({
       message,

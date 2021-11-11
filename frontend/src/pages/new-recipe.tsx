@@ -31,7 +31,7 @@ const NewRecipePage: NextPage = () => {
 
   return (
     <MainLayout
-      title="New recipe"
+      title="New Recipe"
       description="Create a new recipe"
       url={MainPaths.NEW_RECIPE}
     >

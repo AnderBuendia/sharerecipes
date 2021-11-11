@@ -12,7 +12,6 @@ import {
   loadAuthProps,
   serverRedirect,
 } from '@Lib/utils/ssr.utils';
-import MainLayout from '@Components/Layouts/MainLayout';
 import ProfileLayout from '@Components/Layouts/ProfileLayout';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
 import { IRedirect } from '@Interfaces/redirect.interface';
@@ -20,15 +19,7 @@ import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { ProfilePaths } from '@Enums/paths/profile-paths.enum';
 import { RedirectConditions } from '@Enums/redirect-conditions';
 
-const ProfilePage: NextPage = () => (
-  <MainLayout
-    title="Your Profile"
-    description="This is your ShareYourRecipes profile"
-    url={MainPaths.PROFILE}
-  >
-    <ProfileLayout path={ProfilePaths.MAIN} />
-  </MainLayout>
-);
+const ProfilePage: NextPage = () => <ProfileLayout path={ProfilePaths.MAIN} />;
 
 const redirect: IRedirect = {
   href: MainPaths.LOGIN,

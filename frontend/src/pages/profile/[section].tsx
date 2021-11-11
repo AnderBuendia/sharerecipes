@@ -13,7 +13,6 @@ import {
 import { createApolloClient } from '@Lib/apollo/apollo-client';
 import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
 import ProfileLayout from '@Components/Layouts/ProfileLayout';
-import MainLayout from '@Components/Layouts/MainLayout';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
 import { IRedirect } from '@Interfaces/redirect.interface';
 import { ProfilePaths } from '@Enums/paths/profile-paths.enum';
@@ -25,13 +24,7 @@ export type ProfileSectionPageProps = {
 };
 
 const ProfileSectionPage: NextPage<ProfileSectionPageProps> = ({ path }) => (
-  <MainLayout
-    title="Other actions"
-    description="Other actions in your profile"
-    url={path}
-  >
-    <ProfileLayout path={path} />
-  </MainLayout>
+  <ProfileLayout path={path} />
 );
 
 const allowedPaths: string[] = Object.values(ProfilePaths);

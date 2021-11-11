@@ -10,7 +10,6 @@ import { isRequestSSR, loadAuthProps } from '@Lib/utils/ssr.utils';
 import { createApolloClient } from '@Lib/apollo/apollo-client';
 import { useRecipe } from '@Services/recipeAdapter';
 import { searchFilterRecipes } from '@Lib/utils/search-filter.utils';
-import Spinner from '@Components/generic/Spinner';
 import MainLayout from '@Components/Layouts/MainLayout';
 import RecipesList from '@Components/Recipes/RecipesList';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
@@ -26,8 +25,6 @@ const SearchPage: NextPage = () => {
   const { q } = router.query as Record<string, string>;
   const search = q.toLowerCase();
 
-  if (loading) return <Spinner />;
-
   const recipes = data ? searchFilterRecipes(data.getRecipes, search) : null;
 
   return (
@@ -39,6 +36,7 @@ const SearchPage: NextPage = () => {
       <RecipesList
         recipes={recipes}
         fetchMore={fetchMore}
+        loading={loading}
         title={`Results by ${q} (${recipes?.length})`}
       />
     </MainLayout>
