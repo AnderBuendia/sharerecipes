@@ -17,7 +17,7 @@ import { GSSProps } from '@Interfaces/props/gss-props.interface';
 import { IRedirect } from '@Interfaces/redirect.interface';
 import { ProfilePaths } from '@Enums/paths/profile-paths.enum';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
-import { RedirectConditions } from '@Enums/redirect-conditions';
+import { RedirectConditions } from '@Enums/redirect-conditions.enum';
 
 export type ProfileSectionPageProps = {
   path: ProfilePaths;

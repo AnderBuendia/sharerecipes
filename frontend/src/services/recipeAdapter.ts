@@ -32,9 +32,17 @@ export function useRecipe(): RecipeService {
     });
   };
 
-  const getRecipes = ({ offset, limit }: { offset: number; limit: number }) => {
+  const getRecipes = ({
+    offset,
+    limit,
+    sort,
+  }: {
+    offset: number;
+    limit: number;
+    sort: string;
+  }) => {
     return useQuery(GET_RECIPES, {
-      variables: { offset, limit },
+      variables: { offset, limit, sort },
     });
   };
 
@@ -55,13 +63,13 @@ export function useRecipe(): RecipeService {
       update(cache, { data: { newRecipe } }) {
         const queryData = cache.readQuery<QueryDataGetRecipes>({
           query: GET_RECIPES,
-          variables: { offset: 0, limit: 20 },
+          variables: { offset: 0, limit: 20, sort: '-createdAt' },
         });
 
         if (queryData) {
           cache.writeQuery({
             query: GET_RECIPES,
-            variables: { offset: 0, limit: 20 },
+            variables: { offset: 0, limit: 20, sort: '-createdAt' },
             data: {
               ...queryData,
               getRecipes: [...queryData.getRecipes, newRecipe],
@@ -77,13 +85,13 @@ export function useRecipe(): RecipeService {
       update(cache) {
         const queryData = cache.readQuery<QueryDataGetRecipes>({
           query: GET_RECIPES,
-          variables: { offset: 0, limit: 20 },
+          variables: { offset: 0, limit: 20, sort: '-createdAt' },
         });
 
         if (queryData) {
           cache.writeQuery({
             query: GET_RECIPES,
-            variables: { offset: 0, limit: 20 },
+            variables: { offset: 0, limit: 20, sort: '-createdAt' },
             data: {
               ...queryData,
               getRecipes: queryData.getRecipes.filter(

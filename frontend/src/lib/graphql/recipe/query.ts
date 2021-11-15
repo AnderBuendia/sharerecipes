@@ -20,8 +20,8 @@ export const COMMENTS_FRAGMENT = gql`
 `;
 
 export const GET_RECIPES = gql`
-  query getRecipes($offset: Int, $limit: Int) {
-    getRecipes(offset: $offset, limit: $limit) {
+  query getRecipes($offset: Int, $limit: Int, $sort: String) {
+    getRecipes(offset: $offset, limit: $limit, sort: $sort) {
       _id
       name
       prep_time

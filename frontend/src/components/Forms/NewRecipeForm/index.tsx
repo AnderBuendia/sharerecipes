@@ -191,7 +191,7 @@ const NewRecipeForm: FC<NewRecipeForm> = ({ recipeImage, setRecipeImage }) => {
           />
         )}
 
-        <label className="block text-black font-body font-bold mb-2">
+        <label className="block font-body font-bold mb-2">
           Description of your Recipe
         </label>
         <textarea

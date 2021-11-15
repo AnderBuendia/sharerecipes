@@ -30,8 +30,11 @@ const MenuMobile: FC = () => {
 
   return (
     <div ref={componentRef}>
-      <div onClick={() => setOpenDropdown(true)}>
-        <MenuMobileIcon className="w-10 h-10 mr-2" />
+      <div
+        className="py-1 px-2 rounded-lg hover:bg-gray-600 hover:text-white"
+        onClick={() => setOpenDropdown(true)}
+      >
+        <MenuMobileIcon className="w-8 h-8" />
       </div>
       <div
         className={`${
@@ -42,10 +45,10 @@ const MenuMobile: FC = () => {
         {openDropdown && (
           <aside>
             <CloseIcon
-              className="ml-1 mt-1 p-2 w-10 left-0 cursor-pointer hover:bg-gray-100"
+              className="ml-1 mt-1 p-2 w-10 left-0 rounded-lg cursor-pointer hover:bg-gray-200 hover:text-black"
               onClick={() => setOpenDropdown(false)}
             />
-            <div className="flex flex-col items-center w-full px-6">
+            <div className="flex flex-col items-center w-full px-6 py-8">
               {authState?.user ? (
                 <>
                   <UserIcon
@@ -61,75 +64,83 @@ const MenuMobile: FC = () => {
                   <p className="mb-4 font-roboto">{authState.user.name}</p>
                   <Link href={MainPaths.PROFILE}>
                     <a
-                      className="w-8/12 text-center py-1 px-3 rounded-full cursor-pointer border border-black 
-                      text-white bg-gray-400 hover:bg-gray-200 hover:text-black"
+                      className="px-8 p-1 rounded-lg text-center border border-black
+                      text-white bg-gray-800 hover:opacity-60"
                       onClick={() => setOpenDropdown(false)}
                     >
                       My Account
                     </a>
                   </Link>
 
-                  <div className="w-full bg-gray-700 border border-black my-5 rounded-full" />
+                  <div className="w-full bg-gray-700 border border-black my-3 rounded-full" />
 
-                  <Link href={MainPaths.NEW_RECIPE}>
-                    <a
-                      className="flex flex-row self-start"
-                      onClick={() => setOpenDropdown(false)}
-                    >
-                      <DocumentIcon className="w-5 mr-1" />{' '}
-                      <span>New Recipe</span>
-                    </a>
-                  </Link>
-                  {authState?.user?.role.includes(UserRoles.ADMIN) && (
-                    <Link href={MainPaths.ADMIN}>
+                  <div className="flex flex-col w-full">
+                    <Link href={MainPaths.NEW_RECIPE}>
                       <a
-                        className="flex flex-row self-start mt-3"
+                        className="flex flex-row w-full justify-center p-2 rounded-lg hover:bg-gray-400"
                         onClick={() => setOpenDropdown(false)}
                       >
-                        <AdminIcon className="w-5 mr-1" />{' '}
-                        <span>Admin Menu</span>
+                        <DocumentIcon className="w-5" />
+                        <span className="ml-1">New Recipe</span>
                       </a>
                     </Link>
-                  )}
+                    {authState?.user?.role.includes(UserRoles.ADMIN) && (
+                      <Link href={MainPaths.ADMIN}>
+                        <a
+                          className="flex flex-row w-full justify-center p-2 rounded-lg hover:bg-gray-400"
+                          onClick={() => setOpenDropdown(false)}
+                        >
+                          <AdminIcon className="w-5" />
+                          <span className="ml-1">Admin Menu</span>
+                        </a>
+                      </Link>
+                    )}
+                  </div>
                 </>
               ) : (
                 <>
                   <Link href={MainPaths.LOGIN}>
                     <a
-                      className="w-1/2 p-1 mb-3 rounded-full text-center cursor-pointer border border-black 
-                      text-white bg-gray-400 hover:bg-gray-200 hover:text-black"
+                      className="px-10 p-1 mb-3 rounded-lg text-center cursor-pointer border border-black 
+                      text-white bg-gray-800 hover:opacity-60"
                     >
-                      Login
+                      <span>Login</span>
                     </a>
                   </Link>
                   <Link href={MainPaths.SIGNUP}>
                     <a
-                      className="w-1/2 p-1 rounded-full text-center border border-black
-                      text-white bg-gray-400 hover:bg-gray-200 hover:text-black"
+                      className="px-8 p-1 rounded-lg text-center border border-black
+                      text-white bg-gray-800 hover:opacity-60"
                     >
-                      Sign Up
+                      <span>Sign Up</span>
                     </a>
                   </Link>
                 </>
               )}
-              <div className="w-full bg-gray-700 border border-black my-5 rounded-full" />
+              <div className="w-full bg-gray-700 border border-black my-3 rounded-full" />
 
-              <div className="flex flex-col w-full mb-5">
+              <div className="flex flex-col w-full text-center mb-5">
                 <Link href="#">
                   <a
-                    className="px-1 pb-1"
+                    className="p-2 rounded-lg hover:bg-gray-400"
                     onClick={() => setOpenDropdown(false)}
                   >
                     Privacy Policy
                   </a>
                 </Link>
                 <Link href="#">
-                  <a className="p-1" onClick={() => setOpenDropdown(false)}>
+                  <a
+                    className="p-2 rounded-lg hover:bg-gray-400"
+                    onClick={() => setOpenDropdown(false)}
+                  >
                     Cookies Policy
                   </a>
                 </Link>
                 <Link href="#">
-                  <a className="p-1" onClick={() => setOpenDropdown(false)}>
+                  <a
+                    className="p-2 rounded-lg hover:bg-gray-400"
+                    onClick={() => setOpenDropdown(false)}
+                  >
                     Legal Notice
                   </a>
                 </Link>
@@ -138,8 +149,8 @@ const MenuMobile: FC = () => {
               {authState?.user && (
                 <Link href={MainPaths.PROFILE}>
                   <button
-                    className="w-8/12 text-center py-1 px-3 rounded-full cursor-pointer border border-black 
-                  text-white bg-gray-400 hover:bg-gray-200 hover:text-black"
+                    className="px-10 p-1 rounded-lg text-center border border-black
+                    text-white bg-gray-800 hover:opacity-60"
                     onClick={handleSignOut}
                   >
                     Sign Out

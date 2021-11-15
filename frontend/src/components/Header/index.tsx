@@ -10,6 +10,7 @@ const Header: FC = () => {
   return (
     <>
       {width > ResolutionBreakPoints.SM ? <HeaderDesktop /> : <HeaderMobile />}
+      <div className="mx-16 border border-black"></div>
     </>
   );
 };

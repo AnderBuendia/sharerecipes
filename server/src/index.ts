@@ -4,6 +4,7 @@ import { existsSync, mkdirSync } from 'fs';
 import path from 'path';
 import cors from 'cors';
 import jwt from 'jsonwebtoken';
+import './paths';
 import { connectDB } from '@DB/database';
 import routes from '@Routes/index';
 import typeDefs from '@Graphql/mainTypeDefs';

@@ -17,7 +17,7 @@ import { GSSProps } from '@Interfaces/props/gss-props.interface';
 import { IRedirect } from '@Interfaces/redirect.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { ProfilePaths } from '@Enums/paths/profile-paths.enum';
-import { RedirectConditions } from '@Enums/redirect-conditions';
+import { RedirectConditions } from '@Enums/redirect-conditions.enum';
 
 const ProfilePage: NextPage = () => <ProfileLayout path={ProfilePaths.MAIN} />;
 

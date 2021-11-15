@@ -54,6 +54,7 @@ const RecipeCard: FC<RecipeCardProps> = ({
                 alt={name}
                 objectFit="cover"
                 layout="fill"
+                quality={50}
                 priority
               />
             )}
@@ -96,6 +97,7 @@ const RecipeCard: FC<RecipeCardProps> = ({
               variables: {
                 offset: 0,
                 limit: index + 20,
+                sort: '-createdAt',
               },
             });
           }}

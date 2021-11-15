@@ -56,7 +56,7 @@ const ProfileData: FC = () => {
     <div className="mdxl:w-11/12 bg-white dark:bg-gray-700 rounded-lg shadow-md mt-3 p-5">
       <div className="w-full text-center">
         <label className="font-bold font-body">Profile picture</label>
-        <div className="flex w-32 h-32 overflow-hidden mx-auto rounded-full my-4">
+        <div className="flex w-32 h-32 overflow-hidden mx-auto rounded-full my-4 text-black">
           <DragDropImage
             url={`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/user`}
             current={authState?.user?.image_url}

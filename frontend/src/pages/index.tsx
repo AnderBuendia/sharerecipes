@@ -8,17 +8,31 @@ import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
 import { isRequestSSR, loadAuthProps } from '@Lib/utils/ssr.utils';
 import { createApolloClient } from '@Lib/apollo/apollo-client';
 import { useRecipe } from '@Services/recipeAdapter';
+import { useRecipeStorage } from '@Services/storageAdapter';
 import MainLayout from '@Components/Layouts/MainLayout';
 import RecipesList from '@Components/Recipes/RecipesList';
+import RecipesNav from '@Components/Recipes/RecipesNav';
+import SkeletonRecipeCard from '@Components/Recipes/SkeletonRecipeCard';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 
 const IndexPage: NextPage = () => {
+  const { sortRecipes } = useRecipeStorage();
   const { getRecipes } = useRecipe();
   const { data, loading, fetchMore } = getRecipes({
     offset: 0,
     limit: 20,
+    sort: sortRecipes,
   });
+
+  if (loading) {
+    return (
+      <div className="container mx-auto w-11/12 mt-16">
+        <SkeletonRecipeCard />
+        <SkeletonRecipeCard />
+      </div>
+    );
+  }
 
   const recipes = data ? data.getRecipes : null;
 
@@ -28,12 +42,8 @@ const IndexPage: NextPage = () => {
       description="Share your own recipes"
       url={MainPaths.INDEX}
     >
-      <RecipesList
-        recipes={recipes}
-        fetchMore={fetchMore}
-        loading={loading}
-        title="New Recipes"
-      />
+      <RecipesNav />
+      <RecipesList recipes={recipes} fetchMore={fetchMore} />
     </MainLayout>
   );
 };

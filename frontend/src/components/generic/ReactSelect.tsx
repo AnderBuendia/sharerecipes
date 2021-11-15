@@ -29,7 +29,7 @@ const ReactSelect: FC<ReactSelectProps> = ({
       {label && (
         <label
           htmlFor={createHtmlTag(label)}
-          className="block text-black font-body font-bold mb-2"
+          className="block font-body font-bold mb-2"
         >
           {label}
         </label>

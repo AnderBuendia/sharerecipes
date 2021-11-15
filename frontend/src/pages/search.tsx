@@ -8,22 +8,35 @@ import { decode } from 'jsonwebtoken';
 import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
 import { isRequestSSR, loadAuthProps } from '@Lib/utils/ssr.utils';
 import { createApolloClient } from '@Lib/apollo/apollo-client';
-import { useRecipe } from '@Services/recipeAdapter';
 import { searchFilterRecipes } from '@Lib/utils/search-filter.utils';
+import { useRecipe } from '@Services/recipeAdapter';
+import { useRecipeStorage } from '@Services/storageAdapter';
 import MainLayout from '@Components/Layouts/MainLayout';
 import RecipesList from '@Components/Recipes/RecipesList';
+import SkeletonRecipeCard from '@Components/Recipes/SkeletonRecipeCard';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 
 const SearchPage: NextPage = () => {
+  const { sortRecipes } = useRecipeStorage();
   const { getRecipes } = useRecipe();
   const { data, loading, fetchMore } = getRecipes({
     offset: 0,
     limit: 20,
+    sort: sortRecipes,
   });
   const router = useRouter();
   const { q } = router.query as Record<string, string>;
   const search = q.toLowerCase();
+
+  if (loading) {
+    return (
+      <div className="container mx-auto w-11/12 mt-16">
+        <SkeletonRecipeCard />
+        <SkeletonRecipeCard />
+      </div>
+    );
+  }
 
   const recipes = data ? searchFilterRecipes(data.getRecipes, search) : null;
 
@@ -33,12 +46,13 @@ const SearchPage: NextPage = () => {
       description="Search in ShareYourRecipes"
       url={MainPaths.SEARCH}
     >
-      <RecipesList
-        recipes={recipes}
-        fetchMore={fetchMore}
-        loading={loading}
-        title={`Results by ${q} (${recipes?.length})`}
-      />
+      <>
+        <h2 className="font-bold text-lg my-5">
+          Results by <span className="underline">{search}</span> (
+          {recipes?.length})
+        </h2>
+        <RecipesList recipes={recipes} fetchMore={fetchMore} />
+      </>
     </MainLayout>
   );
 };
