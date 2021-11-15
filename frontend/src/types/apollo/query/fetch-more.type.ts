@@ -2,6 +2,7 @@ export type FetchMoreGetRecipesArgs = {
   variables: {
     offset: number;
     limit: number;
+    sort: string;
   };
 };
 

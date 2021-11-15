@@ -23,7 +23,7 @@ const ProfileMobileMenu: FC<ProfileMobileMenuProps> = ({ path }) => {
   return (
     <ReactSelect
       instance="selected-account-menu"
-      style="w-full max-w-lg mb-4 font-body shadow appearance-none"
+      style="w-full max-w-lg mb-4 font-body shadow appearance-none text-black"
       options={menuOptions}
       handleChange={handleChangeMenu}
       value={valueArray[0]}

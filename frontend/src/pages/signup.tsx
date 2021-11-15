@@ -16,7 +16,7 @@ import SignUpForm from '@Components/Forms/SignUpForm';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
 import { IRedirect } from '@Interfaces/redirect.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
-import { RedirectConditions } from '@Enums/redirect-conditions';
+import { RedirectConditions } from '@Enums/redirect-conditions.enum';
 
 const SignUpPage: NextPage = () => <SignUpForm />;
 

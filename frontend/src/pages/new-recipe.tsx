@@ -19,7 +19,7 @@ import DragDropImage from '@Components/generic/DragDropImage';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
 import { IRedirect } from '@Interfaces/redirect.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
-import { RedirectConditions } from '@Enums/redirect-conditions';
+import { RedirectConditions } from '@Enums/redirect-conditions.enum';
 import { RecipeImage } from '@Interfaces/domain/recipe.interface';
 
 const NewRecipePage: NextPage = () => {
@@ -35,30 +35,24 @@ const NewRecipePage: NextPage = () => {
       description="Create a new recipe"
       url={MainPaths.NEW_RECIPE}
     >
-      <div className="w-11/12 xl:w-10/12 mx-auto">
-        <div className="flex justify-center mt-5">
-          <div className="w-full max-w-lg bg-white dark:bg-gray-700 rounded-lg shadow-md px-8 pt-6 pb-8 mb-4">
-            <h2 className="text-4xl font-roboto font-bold text-center my-4">
-              Create New Recipe
-            </h2>
-            <label className="block font-body font-bold mb-4">
-              Recipe Image
-            </label>
-            <div className="flex w-128 h-56 overflow-hidden mx-auto my-4 rounded-md">
-              <DragDropImage
-                url={`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/recipes`}
-                current={recipeImage?.image_url}
-                name="photo"
-                rounded={false}
-                handleChange={handleChangeImage}
-              />
-            </div>
-            <NewRecipeForm
-              recipeImage={recipeImage}
-              setRecipeImage={setRecipeImage}
-            />
-          </div>
+      <div className="p-6 bg-white dark:bg-gray-700 rounded-lg shadow-md">
+        <h2 className="text-4xl font-roboto font-bold text-center my-3">
+          Create New Recipe
+        </h2>
+        <label className="block font-body font-bold mb-4">Recipe Image</label>
+        <div className="flex w-128 h-56 overflow-hidden mx-auto my-4 rounded-md text-black">
+          <DragDropImage
+            url={`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/recipes`}
+            current={recipeImage?.image_url}
+            name="photo"
+            rounded={false}
+            handleChange={handleChangeImage}
+          />
         </div>
+        <NewRecipeForm
+          recipeImage={recipeImage}
+          setRecipeImage={setRecipeImage}
+        />
       </div>
     </MainLayout>
   );

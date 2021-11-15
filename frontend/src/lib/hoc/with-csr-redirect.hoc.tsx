@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useUserStorage } from '@Services/storageAdapter';
 import { generateQueryParams } from '@Lib/utils/url.utils';
 import { IRedirect } from '@Interfaces/redirect.interface';
-import { RedirectConditions } from '@Enums/redirect-conditions';
+import { RedirectConditions } from '@Enums/redirect-conditions.enum';
 
 const withCSRRedirect = (Component: FC<any>, redirect: IRedirect) => {
   const { href, asPath, condition, query } = redirect;

@@ -22,14 +22,17 @@ export interface RecipeService {
   getRecipes: ({
     offset,
     limit,
+    sort,
   }: {
     offset: number;
     limit: number;
+    sort: string;
   }) => QueryResult<
     any,
     {
       offset: number;
       limit: number;
+      sort: string;
     }
   >;
 

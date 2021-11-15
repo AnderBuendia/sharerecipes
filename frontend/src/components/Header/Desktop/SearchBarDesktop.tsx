@@ -26,7 +26,7 @@ const SearchBarDesktop: FC = () => {
           type="search"
           placeholder="Search..."
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full p-3 rounded-md text-sm focus:outline-none bg-white placeholder-gray-700 dark:bg-gray-200"
+          className="w-full p-3 rounded-md text-sm focus:outline-none bg-white placeholder-gray-700 dark:bg-gray-300"
         />
         <button
           type="submit"

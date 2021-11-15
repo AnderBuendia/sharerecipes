@@ -17,9 +17,7 @@ const MainLayout: FC<MainLayoutProps> = ({
   <>
     <Head title={title} description={description} url={url} />
 
-    <div className="w-11/12 mx-auto bg-gray-200 dark:bg-gray-500 py-8">
-      {children}
-    </div>
+    <div className="w-10/12 container mx-auto py-5">{children}</div>
   </>
 );
 

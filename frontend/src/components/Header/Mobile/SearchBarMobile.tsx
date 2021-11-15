@@ -29,19 +29,22 @@ const SearchBarMobile: FC = () => {
 
   return (
     <div ref={componentRef}>
-      <div onClick={() => setOpenSearchBar(!openSearchBar)}>
-        <SearchIcon className="w-8 h-8 mr-2" />
+      <div
+        className="p-1 px-2 rounded-lg hover:bg-gray-600 hover:text-white"
+        onClick={() => setOpenSearchBar(!openSearchBar)}
+      >
+        <SearchIcon className="w-8 h-8 " />
       </div>
 
       {openSearchBar && (
-        <div className="mdxl:hidden bg-white dark:bg-gray-800 w-full absolute top-0 left-0 center">
+        <div className="px-3 py-1 mdxl:hidden bg-gray-100 dark:bg-gray-500 w-full absolute top-0 left-0 center">
           <form
             onSubmit={handleSubmit}
             className="w-full flex flex-row items-center"
           >
             <button
               type="submit"
-              className="p-2 cursor-pointerfocus:outline-none"
+              className="p-2 rounded-lg cursor-pointerfocus:outline-none hover:text-white hover:bg-gray-600"
             >
               <SearchIcon className="w-8" />
             </button>
@@ -49,12 +52,12 @@ const SearchBarMobile: FC = () => {
             <input
               type="search"
               placeholder="Search..."
-              className="placeholder-gray-600 py-4 px-2 w-full focus:outline-none dark:bg-gray-800"
+              className="bg-gray-100 placeholder-gray-900 py-4 px-2 w-full focus:outline-none dark:bg-gray-500 dark:placeholder-white"
               autoFocus
               onChange={(e) => setSearch(e.target.value)}
             />
             <CloseIcon
-              className="p-2 w-12 cursor-pointer"
+              className="p-2 w-12 cursor-pointer rounded-lg hover:text-white hover:bg-gray-600"
               onClick={() => setOpenSearchBar(false)}
             />
           </form>

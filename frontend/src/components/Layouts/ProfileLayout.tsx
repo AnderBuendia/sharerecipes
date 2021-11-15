@@ -42,7 +42,7 @@ const ProfileLayout: FC<ProfileLayoutProps> = ({ path }) => {
     <>
       <Head title={title} description={title} url={MainPaths.PROFILE} />
       {isMobile ? (
-        <div className="container mx-auto w-11/12 py-8">
+        <div className="container mx-auto w-10/12 py-5">
           <ProfileMobileMenu path={path} />
           <h1 className="mt-8 text-center text-2xl font-bold font-roboto">
             {title}

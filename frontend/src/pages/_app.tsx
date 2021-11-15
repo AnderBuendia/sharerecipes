@@ -28,6 +28,12 @@ const MyApp: NextPage<CustomAppProps> = ({ Component, pageProps }) => {
     apolloCache
   );
 
+  const headerRoutes =
+    pathname !== MainPaths.LOGIN &&
+    pathname !== MainPaths.SIGNUP &&
+    pathname !== MainPaths.FORGOT_PASSWORD &&
+    pathname !== MainPaths.FORGOT_PASSWORD_CONFIRM;
+
   return (
     <ThemeProvider attribute="class">
       <AuthStoreContext.Provider value={{ authState, setAuth }}>
@@ -38,9 +44,8 @@ const MyApp: NextPage<CustomAppProps> = ({ Component, pageProps }) => {
               autoDismissTimeout={2000}
               placement="top-center"
             >
-              <div className="min-h-screen bg-gray-200 dark:bg-gray-500">
-                {pathname !== MainPaths.LOGIN &&
-                  pathname !== MainPaths.SIGNUP && <HeaderDynamic />}
+              <div className="min-h-screen bg-gray-100 dark:bg-gray-500">
+                {headerRoutes && <HeaderDynamic />}
                 <Component {...componentProps} />
               </div>
             </ToastProvider>

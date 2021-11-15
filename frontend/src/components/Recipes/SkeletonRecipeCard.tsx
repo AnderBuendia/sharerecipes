@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 const SkeletonRecipeCard: FC = () => {
   return (
-    <div className="border border-gray-600 shadow rounded-md w-12/12 mx-auto">
+    <div className="border border-gray-600 shadow rounded-md w-12/12 mx-auto mb-4">
       <div className="animate-pulse p-24 bg-gray-600"></div>
       <div className="dark:bg-gray-700 flex flex-wrap overflow-hidden text-center p-1">
         <div className="w-1/2 overflow-hidden p-2 border-r border-b border-gray-300">

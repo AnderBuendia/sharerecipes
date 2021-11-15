@@ -22,7 +22,7 @@ import Spinner from '@Components/generic/Spinner';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
 import { IRedirect } from '@Interfaces/redirect.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
-import { RedirectConditions } from '@Enums/redirect-conditions';
+import { RedirectConditions } from '@Enums/redirect-conditions.enum';
 import { UserRoles } from '@Enums/user/user-roles.enum';
 import { searchFilterUsers } from '@Lib/utils/search-filter.utils';
 

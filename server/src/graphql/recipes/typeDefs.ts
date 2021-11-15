@@ -61,8 +61,7 @@ const recipeTypeDefs = gql`
 
   # Query
   extend type Query {
-    getRecipes(offset: Int, limit: Int): [Recipe]
-    getBestRecipes(offset: Int, limit: Int): [Recipe]
+    getRecipes(offset: Int, limit: Int, sort: String): [Recipe]
     getUserRecipes: [Recipe]
     getRecipe(recipeUrl: String!, offset: Int, limit: Int): Recipe
   }

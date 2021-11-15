@@ -10,3 +10,8 @@ export interface SearchStorageService {
   search: string;
   setSearch: Dispatch<SetStateAction<string>>;
 }
+
+export interface RecipeStorageService {
+  sortRecipes: string;
+  setSortRecipes: Dispatch<SetStateAction<string>>;
+}

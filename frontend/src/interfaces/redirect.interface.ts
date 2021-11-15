@@ -1,4 +1,4 @@
-import { RedirectConditions } from '@Enums/redirect-conditions';
+import { RedirectConditions } from '@Enums/redirect-conditions.enum';
 
 export interface IRedirect {
   href: string;

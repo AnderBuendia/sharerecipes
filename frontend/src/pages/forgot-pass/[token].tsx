@@ -15,7 +15,7 @@ import Input from '@Components/generic/Input';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
 import { IRedirect } from '@Interfaces/redirect.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
-import { RedirectConditions } from '@Enums/redirect-conditions';
+import { RedirectConditions } from '@Enums/redirect-conditions.enum';
 import { FormMessages } from '@Enums/config/messages.enum';
 import { FormValuesResetPasswordToken } from '@Types/forms/reset-password-token.type';
 
