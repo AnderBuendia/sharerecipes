@@ -44,7 +44,7 @@ const SearchBarMobile: FC = () => {
           >
             <button
               type="submit"
-              className="p-2 rounded-lg cursor-pointerfocus:outline-none hover:text-white hover:bg-gray-600"
+              className="p-2 rounded-lg cursor-pointer focus:outline-none hover:text-white hover:bg-gray-600"
             >
               <SearchIcon className="w-8" />
             </button>

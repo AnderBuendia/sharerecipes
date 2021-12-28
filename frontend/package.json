@@ -10,31 +10,31 @@
   },
   "dependencies": {
     "@apollo/client": "3.3.21",
-    "@uppy/core": "2.1.2",
-    "@uppy/image-editor": "1.0.4",
-    "@uppy/react": "2.1.1",
-    "@uppy/xhr-upload": "2.0.5",
+    "@uppy/core": "2.1.4",
+    "@uppy/image-editor": "1.1.0",
+    "@uppy/react": "2.1.2",
+    "@uppy/xhr-upload": "2.0.7",
     "cookie": "0.4.1",
-    "next": "12.0.3",
+    "next": "12.0.7",
     "next-themes": "0.0.15",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-hook-form": "7.19.0",
+    "react-hook-form": "7.22.5",
     "react-select": "5.2.1",
     "react-share": "4.4.0",
     "react-toast-notifications": "2.5.1",
     "react-waypoint": "10.1.0",
-    "sweetalert2": "11.1.9",
+    "sweetalert2": "11.3.0",
     "react-simple-star-rating": "3.0.0"
   },
   "devDependencies": {
-    "@types/react": "17.0.34",
+    "@types/react": "17.0.38",
     "@types/react-dom": "17.0.11",
     "@types/cookie": "0.4.1",
     "autoprefixer": "10.4.0",
     "elliptic": "6.5.4",
-    "postcss": "8.3.11",
-    "postcss-cli": "9.0.2",
-    "tailwindcss": "2.2.19"
+    "postcss": "8.4.5",
+    "postcss-cli": "9.1.0",
+    "tailwindcss": "3.0.7"
   }
 }

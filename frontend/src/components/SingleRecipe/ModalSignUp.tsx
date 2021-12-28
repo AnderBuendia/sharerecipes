@@ -30,8 +30,8 @@ const ModalSignUp: FC<ModalSignUpProps> = ({ onSignUp }) => {
         >
           Join our community to discover and share new recipes!
         </p>
-        <button className="btn-primary" onClick={onSignUp}>
-          Sign Up
+        <button className="btn-form bg-black" onClick={onSignUp}>
+          <span>Sign Up</span>
         </button>
       </div>
     </div>

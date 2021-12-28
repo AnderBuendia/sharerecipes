@@ -8,7 +8,7 @@ export type MenuLiLinkProps = {
 };
 
 const MenuLiLink: FC<MenuLiLinkProps> = ({ href, active, label }) => {
-  const classNames = ['w-full li-border-b-menu p-2'];
+  let classNames = ['li-border-b-menu'];
 
   active
     ? classNames.push('font-bold li-border-l-menu')
@@ -19,7 +19,13 @@ const MenuLiLink: FC<MenuLiLinkProps> = ({ href, active, label }) => {
   return (
     <li className={classNames.join(' ')}>
       <Link href={href}>
-        <a className={active ? 'cursor-default' : 'w-full p-3'}>{label}</a>
+        <a
+          className={`p-2 block ${
+            active && 'cursor-default pointer-events-none'
+          }`}
+        >
+          {label}
+        </a>
       </Link>
     </li>
   );

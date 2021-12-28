@@ -5,19 +5,16 @@ import ProfileMobileMenu from '@Components/Profile/profile-mobile-menu';
 import ProfileData from '@Components/Profile/sections/profile-data';
 import ProfilePassword from '@Components/Profile/sections/profile-password';
 import ProfileRecipes from '@Components/Profile/sections/profile-recipes';
+import Head from '@Components/generic/Head';
 import { ProfilePaths } from '@Enums/paths/profile-paths.enum';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
-import { ResolutionBreakPoints } from '@Enums/config/resolution-breakpoints.enum';
-import Head from '@Components/generic/Head';
 
 export type ProfileLayoutProps = {
   path: ProfilePaths;
 };
 
 const ProfileLayout: FC<ProfileLayoutProps> = ({ path }) => {
-  const width = useResolution();
-
-  const isMobile = width <= ResolutionBreakPoints.SM ? true : false;
+  const isNarrowScreen = useResolution();
 
   const components = {
     [ProfilePaths.MAIN]: {
@@ -41,7 +38,7 @@ const ProfileLayout: FC<ProfileLayoutProps> = ({ path }) => {
   return (
     <>
       <Head title={title} description={title} url={MainPaths.PROFILE} />
-      {isMobile ? (
+      {isNarrowScreen ? (
         <div className="container mx-auto w-10/12 py-5">
           <ProfileMobileMenu path={path} />
           <h1 className="mt-8 text-center text-2xl font-bold font-roboto">
@@ -51,7 +48,7 @@ const ProfileLayout: FC<ProfileLayoutProps> = ({ path }) => {
         </div>
       ) : (
         <div className="flex container mx-auto my-4">
-          <div className="w-1/4">
+          <div className="w-1/4 mr-3">
             <ProfileMenu />
           </div>
           <div className="w-3/4">

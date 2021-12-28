@@ -69,19 +69,17 @@ const ForgotPasswordPage: NextPage = () => {
           error={errors.email}
         />
 
-        <input
-          className="btn-primary"
-          type="submit"
-          value="Send Recovery Link"
-        />
+        <button className="btn-form bg-black">
+          <span>Send Recovery Link</span>
+        </button>
       </form>
-      <div>
-        <div className="border-gray border-t-2 block mt-8 text-center"></div>
-        <div className="w-full">
-          <Link href={MainPaths.LOGIN}>
-            <a className="btn-default dark:bg-gray-500">Return to Login</a>
-          </Link>
-        </div>
+
+      <div className="border-gray border-t-2 block my-4"></div>
+
+      <div className="flex flex-col justify-center items-center text-center">
+        <Link href={MainPaths.LOGIN}>
+          <a className="btn-form bg-orange-400">Return to Login</a>
+        </Link>
       </div>
     </FormLayout>
   );

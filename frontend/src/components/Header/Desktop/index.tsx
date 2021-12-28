@@ -11,7 +11,7 @@ const HeaderDesktop: FC = () => {
   const { authState } = useUserStorage();
 
   return (
-    <header className="xssm:hidden w-full py-3 px-8 flex flex-row items-center justify-between text-black bg-gray-100 dark:bg-gray-500">
+    <header className="xssm:hidden w-full py-3 px-10 flex flex-row items-center justify-between text-black bg-gray-100 dark:bg-gray-500">
       <Link href={MainPaths.INDEX}>
         <a>
           <RamenIcon w={44} h={44} />
@@ -20,7 +20,7 @@ const HeaderDesktop: FC = () => {
 
       <SearchBarDesktop />
 
-      <div className="flex text-black items-center cursor-pointer">
+      <div className="flex flex-row justify-between items-center cursor-pointer">
         <DarkModeButton />
 
         {authState?.user ? (
@@ -28,7 +28,7 @@ const HeaderDesktop: FC = () => {
             <Link href={MainPaths.NEW_RECIPE}>
               <a
                 className="bg-green-800 px-3 py-2 mr-5 rounded-lg text-white font-bold uppercase border-b-2 border-r-2 
-                            border-green-700 shadow-md hover:bg-green-700 transition duration-500 ease-out transform hover:scale-95"
+                            border-green-600 shadow-md hover:bg-green-700 transition duration-500 ease-out transform hover:scale-95"
               >
                 New Recipe
               </a>

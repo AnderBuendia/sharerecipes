@@ -87,15 +87,17 @@ const ResetPasswordTokenPage: NextPage<ResetPasswordTokenPageProps> = ({
           error={errors.confirmPassword}
         />
 
-        <input className="btn-primary" type="submit" value="Reset Password" />
+        <button className="btn-form bg-black">
+          <span>Reset Password</span>
+        </button>
       </form>
-      <div>
-        <div className="border-gray border-t-2 block mt-8 text-center"></div>
-        <div className="w-full">
-          <Link href={MainPaths.LOGIN}>
-            <a className="btn-default">Return to Login</a>
-          </Link>
-        </div>
+
+      <div className="border-gray border-t-2 block my-4"></div>
+
+      <div className="flex flex-col justify-center items-center text-center">
+        <Link href={MainPaths.LOGIN}>
+          <a className="btn-form bg-orange-400">Return to Login</a>
+        </Link>
       </div>
     </FormLayout>
   );

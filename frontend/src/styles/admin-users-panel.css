@@ -1,3 +1,3 @@
 .head-users-panel {
-  @apply uppercase text-center  border-b border-gray-300 w-2/6 py-2;
+  @apply uppercase text-center border-b border-gray-300 w-1/5 py-2;
 }

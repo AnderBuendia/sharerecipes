@@ -31,10 +31,10 @@ const DropdownMenu: FC<DropdownMenuProps> = ({ user }) => {
   if (!user) return null;
 
   return (
-    <div ref={componentRef} className="relative inline-block text-left mr-4">
+    <div ref={componentRef} className="relative inline-block">
       <div
-        className="flex items-center justify-center rounded-full cursor-pointer 
-            hover:shadow-xl hover:p-4 hover:opacity-80"
+        className="flex items-center rounded-full cursor-pointer 
+            hover:shadow-xl hover:shadow-gray-800/50 hover:opacity-60 transition duration-500 ease-in-out"
         aria-expanded="true"
         onClick={() => setOpenDropdown(!openDropdown)}
       >
@@ -49,20 +49,20 @@ const DropdownMenu: FC<DropdownMenuProps> = ({ user }) => {
             aria-orientation="vertical"
             aria-labelledby="options-menu"
           >
-            <div className="py-1 dark:text-white">
+            <div className="dark:text-white">
               <p
-                className="block px-4 py-2 text-sm font-bold leading-5"
+                className="block px-4 py-3 text-sm font-bold leading-5 border-b border-gray-200"
                 role="menuitem"
               >
                 Hi, {name}
               </p>
-              <div className="border-t border-gray-200"></div>
               {role.includes(UserRoles.ADMIN) && (
                 <Link href={MainPaths.ADMIN}>
                   <a
                     className="block px-4 py-2 text-sm leading-5 hover:bg-gray-200 
                     hover:text-gray-900 focus:outline-none"
                     role="menuitem"
+                    onClick={() => setOpenDropdown(false)}
                   >
                     Admin Menu
                   </a>
@@ -73,16 +73,16 @@ const DropdownMenu: FC<DropdownMenuProps> = ({ user }) => {
                   className="block px-4 py-2 text-sm leading-5 hover:bg-gray-200 hover:text-gray-900 
                         focus:outline-none"
                   role="menuitem"
+                  onClick={() => setOpenDropdown(false)}
                 >
                   Profile
                 </a>
               </Link>
             </div>
-            <div className="border-t border-gray-200"></div>
-            <div className="py-1 dark:text-white">
+            <div className="dark:text-white border-t border-gray-200">
               <button
                 onClick={handleSignOut}
-                className="w-full text-left block px-4 py-2 text-sm leading-5 font-bold 
+                className="w-full text-left block px-4 py-3 text-sm leading-5 font-bold 
                     hover:bg-gray-200 hover:text-gray-900 focus:outline-none"
                 role="menuitem"
               >

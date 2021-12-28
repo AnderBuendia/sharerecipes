@@ -21,18 +21,15 @@ const SearchBarDesktop: FC = () => {
 
   return (
     <div className="xssm:hidden w-2/6 relative text-black">
-      <form onSubmit={handleSubmit}>
+      <form className="flex flex-row items-center" onSubmit={handleSubmit}>
         <input
           type="search"
           placeholder="Search..."
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full p-3 rounded-md text-sm focus:outline-none bg-white placeholder-gray-700 dark:bg-gray-300"
+          className="w-11/12 p-3 border-2 rounded-l-lg border-gray-800 text-sm focus:outline-none bg-white placeholder-gray-700 dark:bg-gray-300"
         />
-        <button
-          type="submit"
-          className="search-button-desktop hover:opacity-50 focus:outline-none"
-        >
-          <SearchIcon className="w-5 text-white" />
+        <button className="search-button-desktop">
+          <SearchIcon className="w-6 h-8" />
         </button>
       </form>
     </div>

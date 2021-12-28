@@ -96,7 +96,9 @@ const ProfileData: FC = () => {
             error={errors.password}
           />
 
-          <input className="btn-primary" type="submit" value="Edit account" />
+          <button className="btn-form bg-black mt-3">
+            <span>Edit account</span>
+          </button>
         </form>
       </div>
     </div>

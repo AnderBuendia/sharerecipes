@@ -202,11 +202,9 @@ const NewRecipeForm: FC<NewRecipeForm> = ({ recipeImage, setRecipeImage }) => {
             required: FormMessages.DESCRIPTION_REQUIRED,
           })}
         />
-        <input
-          className="btn-primary"
-          type="submit"
-          value="Create New Recipe"
-        />
+        <button className="btn-form bg-black">
+          <span>Create New Recipe</span>
+        </button>
       </form>
     </>
   );
