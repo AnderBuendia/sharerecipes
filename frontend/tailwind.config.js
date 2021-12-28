@@ -1,5 +1,5 @@
 module.exports = {
-  purge: ['./src/**/*.{js,ts,jsx,tsx}'],
+  content: ['./src/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class',
 
   theme: {
@@ -18,14 +18,6 @@ module.exports = {
       roboto: ['Roboto'],
       body: ['Open Sans'],
       work: ['Work Sans'],
-    },
-    inset: {
-      0: 0,
-      auto: 'auto',
-      50: '50%',
-      40: '40%',
-      30: '30%',
-      20: '20%',
     },
     extend: {},
   },

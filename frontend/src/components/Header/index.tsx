@@ -2,14 +2,13 @@ import { FC } from 'react';
 import { useResolution } from '@Lib/hooks/useResolution';
 import HeaderDesktop from '@Components/Header/Desktop';
 import HeaderMobile from '@Components/Header/Mobile';
-import { ResolutionBreakPoints } from '@Enums/config/resolution-breakpoints.enum';
 
 const Header: FC = () => {
-  const width = useResolution();
+  const isNarrowScreen = useResolution();
 
   return (
     <>
-      {width > ResolutionBreakPoints.SM ? <HeaderDesktop /> : <HeaderMobile />}
+      {isNarrowScreen ? <HeaderMobile /> : <HeaderDesktop />}
       <div className="mx-16 border border-black"></div>
     </>
   );

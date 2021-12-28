@@ -6,7 +6,7 @@ const RecipesNav: FC = () => {
   const { sortRecipes, setSortRecipes } = useRecipeStorage();
 
   return (
-    <nav className="flex flex-row justify-center mb-2">
+    <nav className="flex flex-row justify-center mb-4">
       <button
         className={`${
           sortRecipes === SortRecipesEnum.CREATED_AT

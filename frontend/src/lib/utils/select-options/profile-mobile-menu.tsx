@@ -10,7 +10,7 @@ export const menuOptions = [
       <>
         <p>
           <HomeIcon className="w-4 float-left py-1 mr-2" />
-          <span> Profile</span>
+          <span>Profile</span>
         </p>
       </>
     ),
@@ -21,7 +21,7 @@ export const menuOptions = [
       <>
         <p>
           <LockClosed className="w-4 float-left py-1 mr-2" />
-          <span> Change Password</span>
+          <span>Change Password</span>
         </p>
       </>
     ),
@@ -32,7 +32,7 @@ export const menuOptions = [
       <>
         <p>
           <DocumentIcon className="w-4 float-left py-1 mr-2" />
-          <span> My Recipes</span>
+          <span>My Recipes</span>
         </p>
       </>
     ),

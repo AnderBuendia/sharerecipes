@@ -82,9 +82,11 @@ const SignUpForm: FC = () => {
           error={errors.password}
         />
 
-        <input className="btn-primary" type="submit" value="Create Account" />
+        <button className="btn-form bg-black">
+          <span>Create Account</span>
+        </button>
       </form>
-      <p className="text-lg font-roboto font-bold mt-8 text-center">
+      <p className="text-lg font-roboto font-bold mt-4 text-center">
         Have an account?{' '}
         <Link href="/login">
           <a className="underline text-blue-400">Log in</a>

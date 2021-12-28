@@ -80,7 +80,9 @@ const ProfilePassword: FC = () => {
           error={errors.confirmPassword}
         />
 
-        <input className="btn-primary" type="submit" value="Change Password" />
+        <button className="btn-form bg-black">
+          <span>Change Password</span>
+        </button>
       </form>
     </div>
   );

@@ -37,7 +37,6 @@ const Discussion: FC<DiscussionProps> = ({ recipe, fetchMore }) => {
   const onSubmit = handleSubmit(async (data) => {
     const { message } = data;
 
-    console.log({ authState });
     if (!authState?.user) return setShowModal(true);
 
     const response = await sendCommentRecipe({
@@ -56,17 +55,17 @@ const Discussion: FC<DiscussionProps> = ({ recipe, fetchMore }) => {
         </div>
       )}
       <h1 className="text-lg font-body font-bold mb-4">Discussion</h1>
-      <div className="flex w-full">
-        <div className="w-10 mr-2">
+      <div className="flex flex-row w-full">
+        <div>
           <UserIcon
             imageUrl={authState?.user?.image_url}
             imageName={authState?.user?.image_name}
-            w={256}
-            h={256}
+            w={45}
+            h={45}
           />
         </div>
 
-        <div className="w-8/12 relative">
+        <div className="relative xssm:w-8/12 w-10/12 ml-2">
           <form onSubmit={onSubmit}>
             <textarea
               className="bg-white font-body shadow appearance-none border rounded w-full h-32 mb-3 py-2 px-3 
@@ -75,11 +74,9 @@ const Discussion: FC<DiscussionProps> = ({ recipe, fetchMore }) => {
               {...register('message')}
             />
 
-            <input
-              className="ml-1 px-2 py-2 rounded-lg bg-black text-white font-roboto font-bold absolute top-0 hover:bg-gray-800 cursor-pointer"
-              type="submit"
-              value="SEND"
-            />
+            <button className="absolute ml-1 px-2 py-2 rounded-lg bg-black text-white font-roboto font-bold hover:bg-gray-800 cursor-pointer">
+              <span>SEND</span>
+            </button>
           </form>
         </div>
       </div>

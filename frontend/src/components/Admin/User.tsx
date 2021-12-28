@@ -65,15 +65,13 @@ const User: FC<UserProps> = ({ user, page }) => {
         </span>
       </td>
       <td className="p-3">
-        <div className="flex w-full">
-          <button
-            type="button"
-            className="flex-1 bg-red-700 py-2 px-2 text-white rounded text-xs uppercase font-bold hover:bg-red-600"
-            onClick={() => confirmDeleteUser(email)}
-          >
-            Delete
-          </button>
-        </div>
+        <button
+          type="button"
+          className="bg-red-700 py-2 px-2 text-white rounded text-xs uppercase font-bold hover:bg-red-600"
+          onClick={() => confirmDeleteUser(email)}
+        >
+          Delete
+        </button>
       </td>
     </tr>
   );

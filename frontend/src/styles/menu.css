@@ -1,10 +1,7 @@
 .li-border-l-menu {
-    @apply border-l-2;
-    border-left-color: rgb(201, 57, 57);
-    @apply rounded-sm;
+  @apply border-l-4 border-l-red-800 rounded-sm;
 }
 
 .li-border-b-menu {
-    @apply border-b;
-    border-bottom-color: border-gray-200;
+  @apply border-b border-b-gray-200;
 }

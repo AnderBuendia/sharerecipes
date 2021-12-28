@@ -48,17 +48,18 @@ const Comment: FC<CommentProps> = ({ comment, recipe, index, fetchMore }) => {
         <p className="ml-2 font-roboto text-sm font-bold">
           {author.name}
           {author.email === recipe.author?.email && (
-            <span className="ml-1 px-2 rounded-full bg-green-100 text-green-900 font-light text-xs uppercase">
+            <span className="ml-1 px-2 py-0.5 rounded-full bg-green-100 text-green-900 text-xs uppercase">
               Chef
             </span>
           )}
         </p>
         <p className="text-sm text-gray-400 mx-2">
           {timeago && timeago}
-          {edited && <span>- edited</span>}
+          {edited && <span> - edited</span>}
         </p>
       </div>
-      <div className="ml-10 mb-5">
+
+      <div className="px-10">
         {isEditing ? (
           <input
             type="text"
@@ -78,6 +79,7 @@ const Comment: FC<CommentProps> = ({ comment, recipe, index, fetchMore }) => {
             <ChevronUpIcon className="w-5 h-5" />
             <span>Upvote {votes > 0 && `(${votes})`}</span>
           </button>
+
           {authState?.user && authState.user.email === author.email && (
             <button
               className="ml-3 text-xs font-bold text-gray-400"

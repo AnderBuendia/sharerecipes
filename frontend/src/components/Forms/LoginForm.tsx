@@ -68,24 +68,30 @@ const LoginForm: FC = () => {
           error={errors.password}
         />
 
-        <input className="btn-primary" type="submit" value="Login" />
+        <button className="btn-form bg-black">
+          <span>Login</span>
+        </button>
       </form>
 
       <div>
-        <div className="w-full text-right mt-4">
+        <div className="w-full text-right">
           <Link href={MainPaths.FORGOT_PASSWORD}>
-            <a className="font-roboto underline font-medium text-gray-400 mt-8 text-center">
-              Forgot Password?
+            <a className="font-roboto underline font-medium text-gray-400 hover:text-blue-400 mt-8 text-center">
+              <span>Forgot Password?</span>
             </a>
           </Link>
         </div>
-        <div className="border-gray border-t-2 block mt-8 text-center"></div>
-        <div className="w-full">
-          <p className="text-lg font-roboto font-bold mt-8 text-center">
+
+        <div className="border-gray border-t-2 block mt-4 text-center"></div>
+
+        <div className="flex flex-col justify-center items-center text-center">
+          <p className="text-lg font-roboto font-bold mt-4">
             You don't have an account?
           </p>
           <Link href={MainPaths.SIGNUP}>
-            <a className="btn-default dark:bg-gray-500">Create New Account</a>
+            <a className="btn-form bg-orange-400">
+              <span>Create New Account</span>
+            </a>
           </Link>
         </div>
       </div>
