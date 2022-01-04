@@ -9,8 +9,9 @@ import { ToastProvider } from 'react-toast-notifications';
 import { useAuthAndApollo } from '@Lib/hooks/useAuthAndApollo';
 import AuthStoreContext from '@Lib/context/auth-store.context';
 import { AppProviderStore } from '@Lib/context/app-store.context';
+import { isRoute } from '@Lib/utils/is-route.utils';
+import Footer from '@Components/Footer';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
-import { MainPaths } from '@Enums/paths/main-paths.enum';
 
 const HeaderDynamic = dynamic(import('@Components/Header'), { ssr: false });
 
@@ -21,18 +22,13 @@ interface CustomAppProps extends AppProps {
 const MyApp: NextPage<CustomAppProps> = ({ Component, pageProps }) => {
   const { authProps, lostAuth, componentProps, apolloCache } = pageProps;
   const { pathname } = useRouter();
+  const headerRoutes = isRoute(pathname);
 
   const { authState, setAuth, apolloClient } = useAuthAndApollo(
     authProps,
     lostAuth,
     apolloCache
   );
-
-  const headerRoutes =
-    pathname !== MainPaths.LOGIN &&
-    pathname !== MainPaths.SIGNUP &&
-    pathname !== MainPaths.FORGOT_PASSWORD &&
-    pathname !== MainPaths.FORGOT_PASSWORD_CONFIRM;
 
   return (
     <ThemeProvider attribute="class">
@@ -44,9 +40,10 @@ const MyApp: NextPage<CustomAppProps> = ({ Component, pageProps }) => {
               autoDismissTimeout={2000}
               placement="top-center"
             >
-              <div className="min-h-screen bg-gray-100 dark:bg-gray-500">
+              <div className="flex flex-col justify-between h-screen bg-gray-100 dark:bg-gray-500">
                 {headerRoutes && <HeaderDynamic />}
                 <Component {...componentProps} />
+                <Footer />
               </div>
             </ToastProvider>
           </AppProviderStore>

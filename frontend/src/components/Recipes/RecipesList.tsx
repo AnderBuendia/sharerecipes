@@ -27,7 +27,7 @@ const RecipesList: FC<RecipesListProps> = ({ recipes, fetchMore }) => {
     );
 
   return (
-    <div className="">
+    <div className="xssm:w-11/12 w-full mx-auto container">
       <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
         {recipesRendered}
       </div>

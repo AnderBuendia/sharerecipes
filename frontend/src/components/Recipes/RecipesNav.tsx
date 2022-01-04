@@ -1,32 +1,28 @@
 import { FC } from 'react';
-import { SortRecipesEnum } from '@Enums/sort-recipes.enum';
 import { useRecipeStorage } from '@Services/storageAdapter';
+import SortRecipesButton from '@Components/generic/SortRecipesButton';
+import { SortRecipesEnum } from '@Enums/sort-recipes.enum';
 
 const RecipesNav: FC = () => {
   const { sortRecipes, setSortRecipes } = useRecipeStorage();
 
+  const handleSortRecipes = (value: string) => {
+    setSortRecipes(value);
+  };
+
   return (
     <nav className="flex flex-row justify-center mb-4">
-      <button
-        className={`${
-          sortRecipes === SortRecipesEnum.CREATED_AT
-            ? 'bg-gray-800'
-            : 'bg-gray-400'
-        } px-4 py-1 mr-8 rounded-lg border border-gray-500 text-white font-bold hover:opacity-60`}
-        onClick={() => setSortRecipes(SortRecipesEnum.CREATED_AT)}
-      >
-        Recent
-      </button>
-      <button
-        className={`${
-          sortRecipes === SortRecipesEnum.AVERAGE_VOTE
-            ? 'bg-gray-800'
-            : 'bg-gray-400'
-        } px-4 py-1 rounded-lg border border-gray-500 text-white font-bold hover:opacity-60`}
-        onClick={() => setSortRecipes(SortRecipesEnum.AVERAGE_VOTE)}
-      >
-        Popular
-      </button>
+      <SortRecipesButton
+        sortRecipes={sortRecipes}
+        handleSortRecipes={handleSortRecipes}
+        sortValue={SortRecipesEnum.CREATED_AT}
+      />
+
+      <SortRecipesButton
+        sortRecipes={sortRecipes}
+        handleSortRecipes={handleSortRecipes}
+        sortValue={SortRecipesEnum.AVERAGE_VOTE}
+      />
     </nav>
   );
 };
