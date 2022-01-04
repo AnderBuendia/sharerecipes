@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy my nice code
+    name: Deploy project
     runs-on: ubuntu-latest
     steps:
       - name: Get latest code
@@ -23,14 +23,13 @@ jobs:
           cd frontend
           npm run build
 
-      - name: Sync files
-        uses: SamKirkland/FTP-Deploy-Action@4.2.0
+      - name: RSync files
+        uses: burnett01/rsync-deployments@5.2
         with:
-          server: ${{ secrets.FTP_DOMAIN }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-          dry-run: true
+          switches: -avzr --delete
+          path: ./
+          remote_path: /.
+          remote_host: ${{ secrets.REMOTE_HOST }}
+          remote_port: ${{ secrets.REMOTE_PORT }}
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.DEPLOY_KEY }}
