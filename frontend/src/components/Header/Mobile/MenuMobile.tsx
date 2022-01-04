@@ -81,7 +81,7 @@ const MenuMobile: FC = () => {
                         onClick={() => setOpenDropdown(false)}
                       >
                         <DocumentIcon className="w-5" />
-                        <span className="ml-1">New Recipe</span>
+                        <span className="px-2">New Recipe</span>
                       </a>
                     </Link>
                     {authState?.user?.role.includes(UserRoles.ADMIN) && (
@@ -91,7 +91,7 @@ const MenuMobile: FC = () => {
                           onClick={() => setOpenDropdown(false)}
                         >
                           <AdminIcon className="w-5" />
-                          <span className="ml-1">Admin Menu</span>
+                          <span className="px-1">Admin Menu</span>
                         </a>
                       </Link>
                     )}

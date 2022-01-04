@@ -41,25 +41,23 @@ const RecipeCard: FC<RecipeCardProps> = ({
           query: { _id },
         }}
       >
-        <div className="w-full rounded overflow-hidden shadow-2xl transition duration-500 ease-in-out transform hover:scale-105 hover:shadow-md cursor-pointer">
+        <div className="rounded-md border border-gray-300 relative overflow-hidden shadow-2xl transition duration-500 ease-in-out transform hover:scale-105 hover:shadow-lg cursor-pointer">
           <div
-            className="px-3 py-3 bg-auto bg-center h-56 relative"
             style={{
-              backgroundImage: `linear-gradient(180deg,transparent 0,rgba(0,0,0,.9) 150%)`,
+              backgroundImage: `linear-gradient(192deg,transparent 0,rgba(0,0,0,.9) 100%)`,
             }}
+            className="w-full flex justify-center items-center aspect-auto"
           >
             {image_url && (
-              <Image
-                src={image_url}
-                alt={name}
-                objectFit="cover"
-                layout="fill"
-                quality={50}
-                priority
-              />
+              <Image src={image_url} alt={name} width={400} height={370} />
             )}
-            <div className="grid absolute bottom-0 mb-2">
-              <div className="font-bold text-xl text-white">{name}</div>
+          </div>
+
+          <div className="absolute bottom-0 w-full">
+            <div className="grid ml-2 mb-2">
+              <p className="bg-white dark:bg-gray-700 font-medium text-lg mb-2 mr-auto px-2 rounded-full">
+                {name}
+              </p>
               <div className="bg-white dark:bg-gray-700 flex items-center mr-auto px-2 rounded-full">
                 <ChatIcon className="w-4 h-4 mr-0.5" />
                 <span className="text-sm mr-1">
@@ -69,23 +67,24 @@ const RecipeCard: FC<RecipeCardProps> = ({
                 <span className="text-sm">{average_vote}</span>
               </div>
             </div>
-          </div>
-          <div className="dark:bg-gray-700 flex flex-wrap overflow-hidden text-center p-1">
-            <div className="w-1/2 overflow-hidden p-1 border-r border-b border-gray-300">
-              <p className="font-light text-xs uppercase">Prep time</p>
-              <span className="font-bold">{prep_time} mins</span>
-            </div>
-            <div className="w-1/2 overflow-hidden p-1 border-b border-gray-300">
-              <p className="font-light text-xs uppercase">Serves</p>
-              <span className="font-bold">{serves}</span>
-            </div>
-            <div className="w-1/2 overflow-hidden p-1 border-r border-gray-300">
-              <p className="font-light text-xs uppercase">Difficulty</p>
-              <span className="font-bold uppercase">{difficulty}</span>
-            </div>
-            <div className="w-1/2 overflow-hidden p-1">
-              <p className="font-light text-xs uppercase">Style</p>
-              <span className="font-bold uppercase">{style}</span>
+
+            <div className="bg-white dark:bg-gray-700 flex flex-wrap overflow-hidden text-center p-1">
+              <div className="w-1/2 overflow-hidden p-1 border-r border-b border-gray-300">
+                <p className="font-light text-xs uppercase">Prep time</p>
+                <span className="font-bold">{prep_time} mins</span>
+              </div>
+              <div className="w-1/2 overflow-hidden p-1 border-b border-gray-300">
+                <p className="font-light text-xs uppercase">Serves</p>
+                <span className="font-bold">{serves}</span>
+              </div>
+              <div className="w-1/2 overflow-hidden p-1 border-r border-gray-300">
+                <p className="font-light text-xs uppercase">Difficulty</p>
+                <span className="font-bold uppercase">{difficulty}</span>
+              </div>
+              <div className="w-1/2 overflow-hidden p-1">
+                <p className="font-light text-xs uppercase">Style</p>
+                <span className="font-bold uppercase">{style}</span>
+              </div>
             </div>
           </div>
         </div>
