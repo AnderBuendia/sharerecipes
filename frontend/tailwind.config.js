@@ -1,3 +1,5 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class',
@@ -14,12 +16,13 @@ module.exports = {
       mdxl: { min: '769px' },
       lgxl: { min: '1025px' },
     },
-    fontFamily: {
-      roboto: ['Roboto'],
-      body: ['Open Sans'],
-      work: ['Work Sans'],
+    extend: {
+      fontFamily: {
+        roboto: ['Roboto', ...defaultTheme.fontFamily.sans],
+        body: ['Open Sans', ...defaultTheme.fontFamily.sans],
+        work: ['Work Sans', ...defaultTheme.fontFamily.sans],
+      },
     },
-    extend: {},
   },
   variants: {
     extend: {
