@@ -40,7 +40,7 @@ const MyApp: NextPage<CustomAppProps> = ({ Component, pageProps }) => {
               autoDismissTimeout={2000}
               placement="top-center"
             >
-              <div className="flex flex-col justify-between h-screen bg-gray-100 dark:bg-gray-500">
+              <div className="flex flex-col justify-between min-h-screen bg-gray-100 dark:bg-gray-500">
                 {headerRoutes && <HeaderDynamic />}
                 <Component {...componentProps} />
                 <Footer />
