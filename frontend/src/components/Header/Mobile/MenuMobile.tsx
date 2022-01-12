@@ -31,7 +31,7 @@ const MenuMobile: FC = () => {
   return (
     <div ref={componentRef}>
       <div
-        className="py-1 px-2 rounded-lg hover:bg-gray-600 hover:text-white"
+        className="py-1 px-2 rounded-lg hover:bg-gray-500 hover:text-white"
         onClick={() => setOpenDropdown(true)}
       >
         <MenuMobileIcon className="w-8 h-8" />
@@ -40,7 +40,7 @@ const MenuMobile: FC = () => {
         className={`${
           openDropdown ? 'translate-x-0' : 'translate-x-full'
         } transform top-0 right-0 w-64
-        bg-white dark:bg-gray-700 fixed h-full shadow-lg overflow-auto ease-in-out transition-all duration-300 z-30`}
+        bg-white dark:bg-gray-800 fixed h-full shadow-lg overflow-auto ease-in-out transition-all duration-300 z-30`}
       >
         {openDropdown && (
           <aside>
@@ -65,7 +65,7 @@ const MenuMobile: FC = () => {
                   <Link href={MainPaths.PROFILE}>
                     <a
                       className="px-8 p-1 rounded-lg text-center border border-black
-                      text-white bg-gray-800 hover:opacity-60"
+                      text-white bg-black hover:opacity-60"
                       onClick={() => setOpenDropdown(false)}
                     >
                       My Account
@@ -102,7 +102,7 @@ const MenuMobile: FC = () => {
                   <Link href={MainPaths.LOGIN}>
                     <a
                       className="px-10 p-1 mb-3 rounded-lg text-center cursor-pointer border border-black 
-                      text-white bg-gray-800 hover:opacity-60"
+                      text-white bg-black hover:opacity-60"
                     >
                       <span>Login</span>
                     </a>
@@ -110,7 +110,7 @@ const MenuMobile: FC = () => {
                   <Link href={MainPaths.SIGNUP}>
                     <a
                       className="px-8 p-1 rounded-lg text-center border border-black
-                      text-white bg-gray-800 hover:opacity-60"
+                      text-white bg-black hover:opacity-60"
                     >
                       <span>Sign Up</span>
                     </a>
@@ -150,7 +150,7 @@ const MenuMobile: FC = () => {
                 <Link href={MainPaths.PROFILE}>
                   <button
                     className="px-10 p-1 rounded-lg text-center border border-black
-                    text-white bg-gray-800 hover:opacity-60"
+                    text-white bg-black hover:opacity-50"
                     onClick={handleSignOut}
                   >
                     Sign Out

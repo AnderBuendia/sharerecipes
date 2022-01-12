@@ -38,30 +38,33 @@ const ProfileLayout: FC<ProfileLayoutProps> = ({ path }) => {
   return (
     <>
       <Head title={title} description={title} url={MainPaths.PROFILE} />
-      {isNarrowScreen ? (
-        <div className="container mx-auto mb-auto w-11/12 py-5">
-          <ProfileMobileMenu path={path} />
-          <h1 className="mt-8 text-center text-2xl font-bold font-roboto">
-            {title}
-          </h1>
-          <Component />
-        </div>
-      ) : (
-        <div className="flex container mx-auto mb-auto py-5">
-          <div className="w-1/4 mr-3">
-            <ProfileMenu />
-          </div>
-          <div className="w-3/4">
-            <h1
-              className="w-11/12 text-2xl font-roboto pb-2 text-left
-                border-b border-gray-400"
-            >
+
+      <div className="container m-auto w-11/12 min-h-screen py-5">
+        {isNarrowScreen ? (
+          <>
+            <ProfileMobileMenu path={path} />
+            <h1 className="mt-8 text-center text-2xl font-bold font-roboto">
               {title}
             </h1>
             <Component />
+          </>
+        ) : (
+          <div className="flex">
+            <div className="w-1/4 mr-3">
+              <ProfileMenu />
+            </div>
+            <div className="w-3/4">
+              <h1
+                className="w-11/12 text-2xl font-roboto pb-2 text-left
+                border-b border-gray-400"
+              >
+                {title}
+              </h1>
+              <Component />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 };

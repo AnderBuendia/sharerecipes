@@ -20,7 +20,7 @@ interface CustomAppProps extends AppProps {
 const MyApp: NextPage<CustomAppProps> = ({ Component, pageProps }) => {
   const { authProps, lostAuth, componentProps, apolloCache } = pageProps;
   const { pathname } = useRouter();
-  const headerRoutes = isRoute(pathname);
+  const noElementsInRoutes = isRoute(pathname);
 
   const { authState, setAuth, apolloClient } = useAuthAndApollo(
     authProps,
@@ -29,7 +29,7 @@ const MyApp: NextPage<CustomAppProps> = ({ Component, pageProps }) => {
   );
 
   return (
-    <ThemeProvider attribute="class">
+    <ThemeProvider defaultTheme="dark" attribute="class">
       <AuthStoreContext.Provider value={{ authState, setAuth }}>
         <ApolloProvider client={apolloClient}>
           <AppProviderStore>
@@ -38,11 +38,11 @@ const MyApp: NextPage<CustomAppProps> = ({ Component, pageProps }) => {
               autoDismissTimeout={2000}
               placement="top-center"
             >
-              <div className="flex flex-col justify-between min-h-screen bg-gray-100 dark:bg-gray-500">
-                {headerRoutes && <Header />}
+              {noElementsInRoutes && <Header />}
+              <main className="flex place-content-center bg-gray-100 dark:bg-gray-500">
                 <Component {...componentProps} />
-                <Footer />
-              </div>
+              </main>
+              {noElementsInRoutes && <Footer />}
             </ToastProvider>
           </AppProviderStore>
         </ApolloProvider>
