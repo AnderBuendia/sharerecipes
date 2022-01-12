@@ -2,7 +2,6 @@ import '@Styles/index.css';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
-import dynamic from 'next/dynamic';
 import { ApolloProvider } from '@apollo/client';
 import { ThemeProvider } from 'next-themes';
 import { ToastProvider } from 'react-toast-notifications';
@@ -10,10 +9,9 @@ import { useAuthAndApollo } from '@Lib/hooks/useAuthAndApollo';
 import AuthStoreContext from '@Lib/context/auth-store.context';
 import { AppProviderStore } from '@Lib/context/app-store.context';
 import { isRoute } from '@Lib/utils/is-route.utils';
+import Header from '@Components/Header';
 import Footer from '@Components/Footer';
 import { GSSProps } from '@Interfaces/props/gss-props.interface';
-
-const HeaderDynamic = dynamic(import('@Components/Header'), { ssr: false });
 
 interface CustomAppProps extends AppProps {
   pageProps: GSSProps;
@@ -41,7 +39,7 @@ const MyApp: NextPage<CustomAppProps> = ({ Component, pageProps }) => {
               placement="top-center"
             >
               <div className="flex flex-col justify-between min-h-screen bg-gray-100 dark:bg-gray-500">
-                {headerRoutes && <HeaderDynamic />}
+                {headerRoutes && <Header />}
                 <Component {...componentProps} />
                 <Footer />
               </div>

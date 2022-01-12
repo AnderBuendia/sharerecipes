@@ -49,7 +49,13 @@ const RecipeCard: FC<RecipeCardProps> = ({
             className="w-full flex justify-center items-center aspect-auto"
           >
             {image_url && (
-              <Image src={image_url} alt={name} width={400} height={370} />
+              <Image
+                src={image_url}
+                alt={name}
+                width={400}
+                height={370}
+                priority
+              />
             )}
           </div>
 

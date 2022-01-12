@@ -5,8 +5,10 @@ If you like to cook and you want to share your dishes with other people, You can
 ## Stack Software
 
 - [Next.JS](https://nextjs.org/): [React](https://reactjs.org/) Framework, oriented to SSR.
-- [GraphQL](https://graphql.org/) with [Apollo](https://www.apollographql.com/): API Query language.
+- [TypeScript](https://www.typescriptlang.org/): Strongly typed programming language that builds on JavaScript.
+- [GraphQL](https://graphql.org/) (API Query language) with [Apollo](https://www.apollographql.com/): Apollo is a platform for building a unified graph, a communication layer that helps you manage the flow of data between your app clients and your back-end services.
 - [MongoDB](https://www.mongodb.com/es): NoSQL database system oriented to docs.
+- [Jest](https://jestjs.io/): JavaScript testing framework.
 
 ## Using this repository
 
@@ -50,7 +52,6 @@ npm run dev:server
 
 npm run dev:frontend
 ```
-
 
 ## Notes
 
