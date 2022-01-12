@@ -20,7 +20,10 @@ jobs:
       - name: 🔨 Build Project
         run: |
           npm install
-          cd frontend
+          cd server
+          npm run build
+          cd ../frontend
+          mv example.env .env.production
           npm run build
 
       - name: Install SSH Key
