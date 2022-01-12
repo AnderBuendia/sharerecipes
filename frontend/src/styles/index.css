@@ -14,16 +14,3 @@
 .background-card-image {
   background: linear-gradient(180deg, transparent 0, rgba(0, 0, 0, 0.9) 150%);
 }
-
-:root {
-  /* Your default theme */
-  --background: bg-gray-100;
-  --foreground: text-black;
-}
-
-[data-theme='dark'] {
-  --background: bg-gray;
-  --border: bg-gray;
-  --foreground: bg-gray;
-  --color: text-gray;
-}

@@ -8,7 +8,7 @@ import { MainPaths } from '@Enums/paths/main-paths.enum';
 
 const HeaderMobile: FC = () => {
   return (
-    <header className="mdxl:hidden w-full py-3 px-6 flex flex-row items-center justify-between bg-gray-100 dark:bg-gray-500">
+    <div className="container flex flex-row items-center justify-between">
       <Link href={MainPaths.INDEX}>
         <a>
           <RamenIcon w={33} h={33} />
@@ -20,7 +20,7 @@ const HeaderMobile: FC = () => {
         <SearchBarMobile />
         <MenuMobile />
       </div>
-    </header>
+    </div>
   );
 };
 

@@ -16,7 +16,7 @@ const DarkModeButton: FC = () => {
     <button
       aria-label="Toggle Dark Mode"
       type="button"
-      className="mr-3 px-4 py-2 h-10 transform-translate-x-2/4 rounded-md bg-gray-700 dark:bg-gray-800 dark:text-white hover:opacity-60"
+      className="mr-3 px-4 py-2 h-10 transform-translate-x-2/4 rounded-md bg-gray-700 dark:bg-black dark:text-white hover:opacity-60"
       onClick={() =>
         setTheme(
           theme === ThemeStyle.DARK_THEME
@@ -28,7 +28,7 @@ const DarkModeButton: FC = () => {
       {theme === ThemeStyle.DARK_THEME ? (
         <SunIcon className="w-5 h-5 fill-current" />
       ) : (
-        <MoonIcon className="w-4 h-4 fill-current text-white" />
+        <MoonIcon className="w-5 h-5 fill-current text-white" />
       )}
     </button>
   );

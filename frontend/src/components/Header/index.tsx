@@ -9,10 +9,9 @@ const Header: FC = () => {
   const isNarrowScreen = useResolution();
 
   return (
-    <>
+    <header className="flex place-content-center p-3 bg-gray-300 dark:bg-gray-700">
       {isNarrowScreen ? <HeaderMobileDynamic /> : <HeaderDesktop />}
-      <span className="mx-16 border border-black"></span>
-    </>
+    </header>
   );
 };
 
