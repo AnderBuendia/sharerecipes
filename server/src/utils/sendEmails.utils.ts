@@ -16,7 +16,7 @@ export const sendEmails = async ({ email, mailContent }: SendEmails) => {
   });
 
   const mailOptions = {
-    from: 'no-reply@anderb.me',
+    from: 'no-reply@anderb.info',
     to: email,
     subject: `${mailContent.text}`,
     html: `<div style="width:100%">
