@@ -2,6 +2,6 @@
 module.exports = {
   swcMinify: true,
   images: {
-    domains: ['sharerecipes.anderb.me', 'localhost'],
+    domains: ['sharerecipes.anderb.info', 'localhost'],
   },
 };
