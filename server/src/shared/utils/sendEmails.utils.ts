@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 import { SendEmails } from '@Shared/rest/interfaces/send-emails.interface';
-import { USER_EMAIL, USER_PASS } from '@Shared/utils/constants';
+import { USER_EMAIL, USER_EMAIL_PASS } from '@Shared/utils/constants';
 
 export const sendEmails = ({ email, mailContent }: SendEmails) => {
   const transporter = nodemailer.createTransport({
@@ -9,7 +9,7 @@ export const sendEmails = ({ email, mailContent }: SendEmails) => {
     secure: false,
     auth: {
       user: USER_EMAIL,
-      pass: USER_PASS,
+      pass: USER_EMAIL_PASS,
     },
     tls: {
       rejectUnauthorized: false,

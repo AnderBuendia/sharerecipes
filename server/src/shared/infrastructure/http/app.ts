@@ -13,8 +13,6 @@ import {
 } from '@Shared/utils/constants';
 import { MainPaths } from '@Shared/infrastructure/enums/paths/main-paths.enum';
 
-console.log({ HOLA: process.env.HOLA });
-
 /* Create server */
 export const app = express();
 checkEnv();
