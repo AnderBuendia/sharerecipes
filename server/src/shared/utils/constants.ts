@@ -1,7 +1,8 @@
 import path from 'path';
 import { MainPaths } from '@Shared/infrastructure/enums/paths/main-paths.enum';
-require('dotenv').config({ path: `${__dirname}/../../.env.local` });
+require('dotenv').config({ path: `${process.cwd()}/.env.local` });
 
+console.log({ proess: process.cwd() });
 /* Urls */
 export const FRONT_URL = process.env.HOST_FRONT;
 export const BACK_URL = process.env.BACKEND_URL;
