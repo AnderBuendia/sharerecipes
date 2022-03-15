@@ -60,11 +60,11 @@ const DragDropImage: FC<DragDropImageProps> = ({
 
     uppy.on('upload-success', (_file, response) => {
       const imageUrl = response.body.image_url;
-      const imageName = response.body.filename;
+      const imageName = response.body.image_name;
 
       uppy.reset();
       setModal(false);
-      handleChange && handleChange(imageUrl, imageName);
+      if (handleChange) handleChange(imageUrl, imageName);
     });
     return () => uppy.close();
   }, []);
@@ -89,8 +89,8 @@ const DragDropImage: FC<DragDropImageProps> = ({
         uppy={uppy}
         locale={{
           strings: {
-            dropHereOr: 'Suelta la imagen o %{browse}',
-            browse: 'pulsa aquí',
+            dropHereOr: 'Drop image or %{browse}',
+            browse: 'click here',
           },
         }}
       />

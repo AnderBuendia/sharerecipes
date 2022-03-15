@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAuthentication } from '@Services/authAdapter';
 import { useUserStorage } from '@Services/storageAdapter';
 import { useNotifier } from '@Services/notificationAdapter';
-import { FormValuesLoginForm } from '@Types/forms/login-form.type';
+import type { FormValuesLoginForm } from '@Types/forms/login-form.type';
 import { AlertMessages, MessageTypes } from '@Enums/config/messages.enum';
 
 export function useAuthenticate() {

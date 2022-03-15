@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
@@ -7,7 +7,7 @@ import FormLayout from '@Components/Layouts/FormLayout';
 import Input from '@Components/generic/Input';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { FormMessages } from '@Enums/config/messages.enum';
-import { FormValuesLoginForm } from '@Types/forms/login-form.type';
+import type { FormValuesLoginForm } from '@Types/forms/login-form.type';
 
 const LoginForm: FC = () => {
   const router = useRouter();
@@ -75,7 +75,7 @@ const LoginForm: FC = () => {
 
       <div>
         <div className="w-full text-right">
-          <Link href={MainPaths.FORGOT_PASSWORD}>
+          <Link href={MainPaths.FORGOT_USER_PASSWORD}>
             <a className="font-roboto underline font-medium text-gray-400 hover:text-blue-400 mt-8 text-center">
               <span>Forgot Password?</span>
             </a>

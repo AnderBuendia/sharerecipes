@@ -1,9 +1,9 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import Link from 'next/link';
 import { useUserStorage } from '@Services/storageAdapter';
 import SearchBarDesktop from '@Components/Header/Desktop/SearchBarDesktop';
 import DarkModeButton from '@Components/generic/DarkModeButton';
-import DropdownMenu from './DropdownMenu';
+import DropdownMenu from '@Components/Header/Desktop/DropdownMenu';
 import { RamenIcon } from '@Components/Icons/ramen.icon';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 
@@ -11,7 +11,7 @@ const HeaderDesktop: FC = () => {
   const { authState } = useUserStorage();
 
   return (
-    <div className="container flex flex-row items-center justify-between">
+    <div className="flex flex-row items-center justify-between">
       <Link href={MainPaths.INDEX}>
         <a>
           <RamenIcon w={44} h={44} />

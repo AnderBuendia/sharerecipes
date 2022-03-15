@@ -11,7 +11,7 @@ import { AppProviderStore } from '@Lib/context/app-store.context';
 import { isRoute } from '@Lib/utils/is-route.utils';
 import Header from '@Components/Header';
 import Footer from '@Components/Footer';
-import { GSSProps } from '@Interfaces/props/gss-props.interface';
+import type { GSSProps } from '@Interfaces/props/gss-props.interface';
 
 interface CustomAppProps extends AppProps {
   pageProps: GSSProps;
@@ -38,11 +38,13 @@ const MyApp: NextPage<CustomAppProps> = ({ Component, pageProps }) => {
               autoDismissTimeout={2000}
               placement="top-center"
             >
-              {noElementsInRoutes && <Header />}
-              <main className="flex place-content-center bg-gray-100 dark:bg-gray-500">
-                <Component {...componentProps} />
-              </main>
-              {noElementsInRoutes && <Footer />}
+              <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-500">
+                {noElementsInRoutes && <Header />}
+                <main className="flex-1 place-content-center">
+                  <Component {...componentProps} />
+                </main>
+                {<Footer />}
+              </div>
             </ToastProvider>
           </AppProviderStore>
         </ApolloProvider>

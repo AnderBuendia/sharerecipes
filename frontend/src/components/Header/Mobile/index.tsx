@@ -8,7 +8,7 @@ import { MainPaths } from '@Enums/paths/main-paths.enum';
 
 const HeaderMobile: FC = () => {
   return (
-    <div className="container flex flex-row items-center justify-between">
+    <div className="flex flex-row items-center justify-between">
       <Link href={MainPaths.INDEX}>
         <a>
           <RamenIcon w={33} h={33} />

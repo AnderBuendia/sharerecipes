@@ -1,5 +1,7 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { SortRecipesEnum } from '@Enums/sort-recipes.enum';
+
+const DEFAULT_SORT_RECIPES = 'Recent';
 
 export type SortRecipesButtonProps = {
   sortRecipes: string;
@@ -17,13 +19,12 @@ const SortRecipesButton: FC<SortRecipesButtonProps> = ({
   handleSortRecipes,
   sortValue,
 }) => {
-  const label = LABEL_BUTTON[sortValue] || 'Recent';
+  const label = LABEL_BUTTON[sortValue] || DEFAULT_SORT_RECIPES;
+  const buttonColor = sortRecipes === sortValue ? 'bg-gray-800' : 'bg-gray-400';
 
   return (
     <button
-      className={`${
-        sortRecipes === sortValue ? 'bg-gray-800' : 'bg-gray-400'
-      } px-4 py-1 mr-8 rounded-lg border border-gray-500 text-white font-bold hover:opacity-60`}
+      className={`${buttonColor} mx-3 px-4 py-1 rounded-lg border border-gray-500 text-white font-bold hover:opacity-60`}
       onClick={() => handleSortRecipes(sortValue)}
     >
       {label}

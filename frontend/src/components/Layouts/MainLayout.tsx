@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 import Head from '@Components/generic/Head';
 
 export type MainLayoutProps = {
@@ -17,7 +17,7 @@ const MainLayout: FC<MainLayoutProps> = ({
   <>
     <Head title={title} description={description} url={url} />
 
-    <div className="w-11/12 min-h-screen container m-auto py-5">{children}</div>
+    <div className="w-10/12 container m-auto py-5">{children}</div>
   </>
 );
 

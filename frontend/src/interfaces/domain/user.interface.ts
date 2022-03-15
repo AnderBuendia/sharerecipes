@@ -16,7 +16,4 @@ export interface UserProfile extends UserMainData {
 
 export interface UserComment extends UserMainData, UserImage {}
 
-export interface UserCompleteProfile extends UserProfile, UserImage {
-  createdAt?: number;
-  updatedAt?: number;
-}
+export interface UserCompleteProfile extends UserProfile, UserImage {}

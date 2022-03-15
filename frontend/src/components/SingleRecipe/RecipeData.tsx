@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import Image from 'next/image';
 import { Rating } from 'react-simple-star-rating';
 import {
@@ -8,18 +8,18 @@ import {
   TwitterIcon,
 } from 'react-share';
 import { useUserStorage } from '@Services/storageAdapter';
-import { IRecipe } from '@Interfaces/domain/recipe.interface';
+import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 
 export type RecipeDataProps = {
   recipe: IRecipe;
-  url: string;
+  url_query: string;
   confirmDeleteRecipe: (recipeId: IRecipe['_id']) => void;
   handleVoteRecipe: (votes: number) => Promise<void>;
 };
 
 const RecipeData: FC<RecipeDataProps> = ({
   recipe,
-  url,
+  url_query,
   confirmDeleteRecipe,
   handleVoteRecipe,
 }) => {
@@ -44,15 +44,15 @@ const RecipeData: FC<RecipeDataProps> = ({
     <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md p-5 mb-4">
       <h1 className="break-all text-2xl font-body font-bold mb-2">{name}</h1>
       <div className="w-full flex flex-col lgxl:flex-row lgxl:justify-between">
-        <div className="lgxl:w-2/4 text-center ">
+        <div className="lgxl:w-2/4 text-center mb-3">
           {image_url && image_name && (
             <Image
-              className="rounded-md mb-3"
+              className="rounded-sm"
               src={image_url}
               alt={image_name}
-              layout="fixed"
               width={300}
               height={300}
+              priority
             />
           )}
         </div>
@@ -83,14 +83,14 @@ const RecipeData: FC<RecipeDataProps> = ({
           <div className="flex flex-row justify-between items-center">
             <div className="flex flex-row">
               <FacebookShareButton
-                url={process.env.NEXT_PUBLIC_SITE_URL + `/recipe/${url}`}
+                url={process.env.NEXT_PUBLIC_SITE_URL + `/recipe/${url_query}`}
                 quote="Visit my new recipe"
                 className="cursor-pointer mr-3"
               >
                 <FacebookIcon size={28} className="rounded-full" />
               </FacebookShareButton>
               <TwitterShareButton
-                url={process.env.NEXT_PUBLIC_SITE_URL + `/recipe/${url}`}
+                url={process.env.NEXT_PUBLIC_SITE_URL + `/recipe/${url_query}`}
                 title="Visit my new recipe"
                 className="cursor-pointer"
               >
@@ -134,7 +134,7 @@ const RecipeData: FC<RecipeDataProps> = ({
           ))}
         </div>
       </div>
-      {authState?.user && author?.email === authState.user.email && (
+      {authState?.user?.email === author?.email && (
         <div className="flex w-full mt-6">
           <button
             type="button"

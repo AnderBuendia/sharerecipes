@@ -2,24 +2,24 @@ import { QueryResult, MutationTuple, OperationVariables } from '@apollo/client';
 import { IRecipe } from '@Interfaces/domain/recipe.interface';
 
 export interface RecipeService {
-  getRecipe: ({
-    recipeUrl,
+  findRecipe: ({
+    recipeUrlQuery,
     offset,
     limit,
   }: {
-    recipeUrl: string;
+    recipeUrlQuery: string;
     offset: number;
     limit: number;
   }) => QueryResult<
     any,
     {
-      recipeUrl: string;
+      recipeUrlQuery: string;
       offset: number;
       limit: number;
     }
   >;
 
-  getRecipes: ({
+  findRecipes: ({
     offset,
     limit,
     sort,
@@ -36,25 +36,13 @@ export interface RecipeService {
     }
   >;
 
-  getBestRecipes: ({
-    offset,
-    limit,
-  }: {
-    offset: number;
-    limit: number;
-  }) => QueryResult<
-    any,
-    {
-      offset: number;
-      limit: number;
-    }
-  >;
+  setCreateRecipe: () => MutationTuple<any, OperationVariables>;
 
-  setNewRecipe: () => MutationTuple<any, OperationVariables>;
   setDeleteRecipe: ({
     recipeId,
   }: {
     recipeId: IRecipe['_id'];
   }) => MutationTuple<any, OperationVariables>;
+
   setVoteRecipe: () => MutationTuple<any, OperationVariables>;
 }

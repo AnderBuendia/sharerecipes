@@ -19,25 +19,24 @@ import { useUser } from '@Services/userAdapter';
 import UsersPanel from '@Components/Admin/UsersPanel';
 import MainLayout from '@Components/Layouts/MainLayout';
 import Spinner from '@Components/generic/Spinner';
-import { GSSProps } from '@Interfaces/props/gss-props.interface';
-import { IRedirect } from '@Interfaces/redirect.interface';
+import type { GSSProps } from '@Interfaces/props/gss-props.interface';
+import type { IRedirect } from '@Interfaces/redirect.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { RedirectConditions } from '@Enums/redirect-conditions.enum';
 import { UserRoles } from '@Enums/user/user-roles.enum';
-import { searchFilterUsers } from '@Lib/utils/search-filter.utils';
 
 const AdminUsers: NextPage = () => {
   const router = useRouter();
   const { page: queryPage } = router.query as Record<string, string>;
   const numberPage = queryPage ? parseInt(queryPage.toString()) : 0;
   const [page, setPage] = useState(numberPage);
-  const [q, setQ] = useState('');
-  const { getUsers } = useUser();
+  const [userQuery, setUserQuery] = useState('');
+  const { findUsers } = useUser();
 
-  const { data, loading } = getUsers({ offset: page * 9, limit: 9 });
+  const { data, loading } = findUsers({ offset: page * 9, limit: 9 });
 
-  const handleQ = (e: ChangeEvent<HTMLInputElement>) => {
-    setQ(e.target.value);
+  const handleUserQuery = (e: ChangeEvent<HTMLInputElement>) => {
+    setUserQuery(e.target.value);
   };
 
   const handlePage = (e: number) => {
@@ -52,10 +51,9 @@ const AdminUsers: NextPage = () => {
 
   if (loading) return <Spinner />;
 
-  const getUsersData = data ? data.getUsers : null;
-
-  const totalPages = Math.ceil(getUsersData.total / 9);
-  const users = searchFilterUsers(getUsersData.users, q);
+  const findUsersData = data ? data.find_users : null;
+  const users = findUsersData.users;
+  const totalUsers = findUsersData.total;
 
   return (
     <MainLayout
@@ -64,14 +62,13 @@ const AdminUsers: NextPage = () => {
       url={MainPaths.ADMIN}
     >
       <UsersPanel
-        q={q}
-        handleQ={handleQ}
+        userQuery={userQuery}
+        handleUserQuery={handleUserQuery}
         handlePage={handlePage}
         handleRouterPage={handleRouterPage}
-        totalUsers={data.getUsers.total}
         page={page}
         users={users}
-        totalPages={totalPages}
+        totalUsers={totalUsers}
       />
     </MainLayout>
   );

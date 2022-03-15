@@ -14,16 +14,16 @@ import { useRecipeStorage } from '@Services/storageAdapter';
 import MainLayout from '@Components/Layouts/MainLayout';
 import RecipesList from '@Components/Recipes/RecipesList';
 import SkeletonRecipeCard from '@Components/Recipes/SkeletonRecipeCard';
-import { GSSProps } from '@Interfaces/props/gss-props.interface';
+import type { GSSProps } from '@Interfaces/props/gss-props.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 
 const SearchPage: NextPage = () => {
   const { sortRecipes } = useRecipeStorage();
-  const { getRecipes } = useRecipe();
-  const { data, loading, fetchMore } = getRecipes({
+  const { findRecipes } = useRecipe();
+  const { data, loading, fetchMore } = findRecipes({
+    sort: sortRecipes,
     offset: 0,
     limit: 20,
-    sort: sortRecipes,
   });
   const router = useRouter();
   const { q } = router.query as Record<string, string>;
@@ -38,7 +38,7 @@ const SearchPage: NextPage = () => {
     );
   }
 
-  const recipes = data ? searchFilterRecipes(data.getRecipes, search) : null;
+  const recipes = data ? searchFilterRecipes(data.find_recipes, search) : null;
 
   return (
     <MainLayout

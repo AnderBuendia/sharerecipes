@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { useRecipeStorage } from '@Services/storageAdapter';
 import SortRecipesButton from '@Components/generic/SortRecipesButton';
 import { SortRecipesEnum } from '@Enums/sort-recipes.enum';
@@ -11,7 +11,7 @@ const RecipesNav: FC = () => {
   };
 
   return (
-    <nav className="flex flex-row justify-center mb-4">
+    <nav className="flex flex-row justify-center items-center mb-4">
       <SortRecipesButton
         sortRecipes={sortRecipes}
         handleSortRecipes={handleSortRecipes}

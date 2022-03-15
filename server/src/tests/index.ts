@@ -1,9 +1,10 @@
 import supertest from 'supertest';
 import mongoose from 'mongoose';
-import { User } from '@Models/User';
-import { Recipe } from '@Models/Recipe';
-import { Comment } from '@Models/Comment';
-import { app } from '../index';
+import { User } from '@Shared/infrastructure/http/mongodb/schemas/user.schema';
+import { Recipe } from '@Shared/infrastructure/http/mongodb/schemas/recipe.schema';
+import { Comment } from '@Shared/infrastructure/http/mongodb/schemas/comment.schema';
+import { app } from '@Shared/infrastructure/http/app';
+
 const api = supertest(app);
 
 export { api, mongoose, User, Recipe, Comment };

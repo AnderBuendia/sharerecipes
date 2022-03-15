@@ -1,9 +1,9 @@
 import { IRecipe } from '@Interfaces/domain/recipe.interface';
 
-export type QueryDataGetRecipes = {
-  getRecipes: IRecipe[];
+export type QueryDataFindRecipes = {
+  find_recipes: IRecipe[];
 };
 
-export type QueryDataGetRecipe = {
-  getRecipe: IRecipe;
+export type QueryDataFindRecipe = {
+  find_recipe: IRecipe;
 };

@@ -13,16 +13,16 @@ import MainLayout from '@Components/Layouts/MainLayout';
 import RecipesList from '@Components/Recipes/RecipesList';
 import RecipesNav from '@Components/Recipes/RecipesNav';
 import SkeletonRecipeCard from '@Components/Recipes/SkeletonRecipeCard';
-import { GSSProps } from '@Interfaces/props/gss-props.interface';
+import type { GSSProps } from '@Interfaces/props/gss-props.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 
 const IndexPage: NextPage = () => {
   const { sortRecipes } = useRecipeStorage();
-  const { getRecipes } = useRecipe();
-  const { data, loading, fetchMore } = getRecipes({
+  const { findRecipes } = useRecipe();
+  const { data, loading, fetchMore } = findRecipes({
+    sort: sortRecipes,
     offset: 0,
     limit: 20,
-    sort: sortRecipes,
   });
 
   if (loading) {
@@ -34,7 +34,7 @@ const IndexPage: NextPage = () => {
     );
   }
 
-  const recipes = data ? data.getRecipes : null;
+  const recipes = data ? data.find_recipes : null;
 
   return (
     <MainLayout

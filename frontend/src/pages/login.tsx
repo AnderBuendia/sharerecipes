@@ -13,8 +13,8 @@ import {
 } from '@Lib/utils/ssr.utils';
 import withCSRRedirect from '@Lib/hoc/with-csr-redirect.hoc';
 import LoginForm from '@Components/Forms/LoginForm';
-import { GSSProps } from '@Interfaces/props/gss-props.interface';
-import { IRedirect } from '@Interfaces/redirect.interface';
+import type { GSSProps } from '@Interfaces/props/gss-props.interface';
+import type { IRedirect } from '@Interfaces/redirect.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { RedirectConditions } from '@Enums/redirect-conditions.enum';
 

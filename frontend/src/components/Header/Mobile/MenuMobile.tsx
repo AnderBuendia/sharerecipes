@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, MutableRefObject } from 'react';
+import { FC, useRef, MutableRefObject } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAuthenticate } from '@Application/authenticate';
@@ -84,7 +84,7 @@ const MenuMobile: FC = () => {
                         <span className="px-2">New Recipe</span>
                       </a>
                     </Link>
-                    {authState?.user?.role.includes(UserRoles.ADMIN) && (
+                    {authState?.user?.role === UserRoles.ADMIN && (
                       <Link href={MainPaths.ADMIN}>
                         <a
                           className="flex flex-row w-full justify-center p-2 rounded-lg hover:bg-gray-400"
