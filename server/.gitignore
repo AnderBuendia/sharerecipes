@@ -1,8 +1,10 @@
 node_modules
-src/variables.env
+variables.env
 /src/tests/initialTest.test.js
 /src/utils/forTesting.js
 /src/images
 /images
 .DS_Store
 /dist*
+.env.*
+/src/.env.*
