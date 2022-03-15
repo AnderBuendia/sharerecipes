@@ -2,7 +2,6 @@ import path from 'path';
 import { MainPaths } from '@Shared/infrastructure/enums/paths/main-paths.enum';
 require('dotenv').config({ path: `${process.cwd()}/.env.local` });
 
-console.log({ proess: process.cwd() });
 /* Urls */
 export const FRONT_URL = process.env.HOST_FRONT;
 export const BACK_URL = process.env.BACKEND_URL;
@@ -24,7 +23,7 @@ export const FORGOT_USER_PASSWORD_CODE = process.env.SECRET_FORGOT;
 
 /* Send mails */
 export const USER_EMAIL = process.env.EMAILU;
-export const USER_PASS = process.env.EMAILP;
+export const USER_EMAIL_PASS = process.env.EMAILP;
 
 /* Magic numbers */
 export const PORT = parseInt(process.env.BACK_PORT) || 4000;
