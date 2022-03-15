@@ -15,33 +15,35 @@ import {
   loadAuthProps,
   serverRedirect,
 } from '@Lib/utils/ssr.utils';
-import { useForgotPassword } from '@Application/user/forgotPassword';
+import { useForgotUserPassword } from '@Application/use-case/user/forgot-user-password.use-case.';
 import FormLayout from '@Components/Layouts/FormLayout';
 import Input from '@Components/generic/Input';
-import { GSSProps } from '@Interfaces/props/gss-props.interface';
-import { IRedirect } from '@Interfaces/redirect.interface';
+import type { GSSProps } from '@Interfaces/props/gss-props.interface';
+import type { IRedirect } from '@Interfaces/redirect.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { RedirectConditions } from '@Enums/redirect-conditions.enum';
 import { FormMessages } from '@Enums/config/messages.enum';
-import { FormValuesForgotPassword } from '@Types/forms/forgot-password.type';
+import type { FormValuesForgotUserPassword } from '@Types/forms/forgot-password.type';
+
+const DELAY_TIME_NOTIFICATION = 3000;
 
 const ForgotPasswordPage: NextPage = () => {
   const router = useRouter();
-  const { forgotPassword } = useForgotPassword();
+  const { forgotUserPassword } = useForgotUserPassword();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValuesForgotPassword>();
+  } = useForm<FormValuesForgotUserPassword>();
 
   const onSubmit = handleSubmit(async (submitData) => {
     const { email } = submitData;
-    const response = await forgotPassword({ email });
+    const response = await forgotUserPassword({ email });
 
     if (response) {
       setTimeout(() => {
         router.push(MainPaths.INDEX);
-      }, 3000);
+      }, DELAY_TIME_NOTIFICATION);
     }
   });
 
@@ -49,7 +51,7 @@ const ForgotPasswordPage: NextPage = () => {
     <FormLayout
       title="Cannot login?"
       description="Have you forgot password?"
-      url={MainPaths.FORGOT_PASSWORD}
+      url={MainPaths.FORGOT_USER_PASSWORD}
     >
       <form onSubmit={onSubmit}>
         <Input

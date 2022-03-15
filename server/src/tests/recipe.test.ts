@@ -1,18 +1,22 @@
-import { RecipeErrors } from '@Enums/recipe-errors.enum';
 import { api, User, Recipe, Comment } from './index';
-import { hashSync } from 'bcrypt';
+import { hash } from 'bcrypt';
+import { v4 as uuidv4 } from 'uuid';
+import { UserErrors } from '@Shared/infrastructure/enums/errors.enum';
 
 let token: string;
 let messageId: string;
 
 describe('Recipe Tests', () => {
   beforeAll(async () => {
-    await User.create({
+    const newUser = {
+      _id: uuidv4(),
       name: 'Prueba2',
       email: 'prueba2@email.com',
-      password: hashSync('Ander_123', 10),
+      password: await hash('Ander_123', 10),
       confirmed: true,
-    });
+    };
+
+    await User.create(newUser);
   });
 
   afterAll(async () => {
@@ -34,12 +38,12 @@ describe('Recipe Tests', () => {
       .send({
         query: `
           mutation {
-            authenticateUser(input: {
+            authenticate_user(input: {
               email: "prueba2@email.com",
               password: "Ander_123"
             }) {
               user {
-                _id
+                name
               }
               token
             }
@@ -48,8 +52,8 @@ describe('Recipe Tests', () => {
       })
       .expect(200)
       .expect(({ body }) => {
-        token = body.data.authenticateUser.token;
-        expect(body.data.authenticateUser).not.toEqual(null);
+        token = body.data.authenticate_user.token;
+        expect(body.data.authenticate_user).not.toEqual(null);
       });
   });
 
@@ -60,7 +64,7 @@ describe('Recipe Tests', () => {
       .send({
         query: `
       mutation {
-        newRecipe(input: {
+        create_recipe(input: {
           name: "CarrotCake",
           prep_time: 34,
           serves: 3,
@@ -78,7 +82,7 @@ describe('Recipe Tests', () => {
       })
       .expect(200)
       .expect(({ body }) => {
-        expect(body.data.newRecipe.name).toBe('CarrotCake');
+        expect(body.data.create_recipe.name).toBe('CarrotCake');
       });
   });
 
@@ -89,8 +93,8 @@ describe('Recipe Tests', () => {
       .send({
         query: `
       mutation {
-        sendCommentRecipe(
-          recipeUrl: "carrotcake",
+        send_recipe_comment(
+          recipeUrlQuery: "carrotcake",
           input: {
             message: "Nice bad token!"
           }
@@ -102,7 +106,7 @@ describe('Recipe Tests', () => {
       })
       .expect(200)
       .expect(({ body }) => {
-        expect(body.errors[0].message).toBe(RecipeErrors.NOT_LOGGED_IN);
+        expect(body.errors[0].message).toBe(UserErrors.NOT_LOGGED_IN);
       });
   });
 
@@ -113,8 +117,8 @@ describe('Recipe Tests', () => {
       .send({
         query: `
       mutation {
-        sendCommentRecipe(
-          recipeUrl: "carrotcake", 
+        send_recipe_comment(
+          recipeUrlQuery: "carrotcake", 
           input: {
             message: "Nice carrot cake!"
           }
@@ -127,8 +131,8 @@ describe('Recipe Tests', () => {
       })
       .expect(200)
       .expect(({ body }) => {
-        messageId = body.data.sendCommentRecipe._id;
-        expect(body.data.sendCommentRecipe.message).not.toEqual(null);
+        messageId = body.data.send_recipe_comment._id;
+        expect(body.data.send_recipe_comment.message).not.toEqual(null);
       });
   });
 
@@ -139,8 +143,8 @@ describe('Recipe Tests', () => {
       .send({
         query: `
       mutation {
-        editCommentRecipe(
-          _id: "${messageId}", 
+        edit_comment(
+          commentId: "${messageId}", 
           input: {
             message: "Nice carrot cake Edit!"
           }
@@ -152,7 +156,7 @@ describe('Recipe Tests', () => {
       })
       .expect(200)
       .expect(({ body }) => {
-        expect(body.data.editCommentRecipe.message).not.toEqual(null);
+        expect(body.data.edit_comment.message).not.toEqual(null);
       });
   });
 
@@ -163,8 +167,8 @@ describe('Recipe Tests', () => {
       .send({
         query: `
       mutation {
-        voteCommentRecipe(
-          _id: "${messageId}", 
+        vote_comment(
+          commentId: "${messageId}", 
           input: {
             votes: 1
           }
@@ -176,7 +180,7 @@ describe('Recipe Tests', () => {
       })
       .expect(200)
       .expect(({ body }) => {
-        expect(body.data.voteCommentRecipe.votes).toBe(1);
+        expect(body.data.vote_comment.votes).toBe(1);
       });
   });
 });

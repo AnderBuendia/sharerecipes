@@ -1,33 +1,36 @@
-import { FC, ChangeEvent } from 'react';
+import type { FC, ChangeEvent } from 'react';
+import { searchFilterUsers } from '@Lib/utils/search-filter.utils';
 import User from '@Components/Admin/User';
 import Pagination from '@Components/Admin/Pagination';
 import { UsersGroupIcon } from '@Components/Icons/users-group.icon';
-import { UserProfile } from '@Interfaces/domain/user.interface';
+import type { UserProfile } from '@Interfaces/domain/user.interface';
 
 export type UsersPanelProps = {
-  q: string;
-  handleQ: (e: ChangeEvent<HTMLInputElement>) => void;
+  userQuery: string;
+  handleUserQuery: (e: ChangeEvent<HTMLInputElement>) => void;
   handlePage: (e: number) => void;
   handleRouterPage: (e: number) => void;
   page: number;
   totalUsers: number;
-  users: UserProfile[] | null;
-  totalPages: number | null;
+  users: UserProfile[];
 };
 
 const UsersPanel: FC<UsersPanelProps> = ({
-  q,
-  handleQ,
+  userQuery,
+  handleUserQuery,
   handlePage,
   handleRouterPage,
   page,
-  totalUsers,
   users,
-  totalPages,
+  totalUsers,
 }) => {
+  const totalPages = Math.ceil(totalUsers / 9);
+
+  if (userQuery) users = searchFilterUsers(users, userQuery);
+
   return (
     <>
-      <h2 className="text-4xl font-roboto font-bold text-gray-800 text-center mb-2">
+      <h2 className="text-4xl font-roboto font-bold text-center mb-2">
         All Users
       </h2>
       <div className="flex flex-row justify-between w-full">
@@ -41,10 +44,10 @@ const UsersPanel: FC<UsersPanelProps> = ({
         <div className="flex mx-auto w-3/5 lg:w-2/6 bg-white rounded-lg shadow-md p-4 dark:bg-gray-700">
           <input
             type="search"
-            value={q}
+            value={userQuery}
             placeholder="Filter..."
             className="bg-white h-12 w-full py-4 px-4 border-2 border-gray-700 placeholder-gray-700 rounded-lg text-sm focus:outline-none dark:bg-gray-300 dark:text-black"
-            onChange={handleQ}
+            onChange={handleUserQuery}
           />
         </div>
       </div>

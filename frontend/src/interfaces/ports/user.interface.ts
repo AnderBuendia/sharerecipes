@@ -2,7 +2,7 @@ import { QueryResult, MutationTuple, OperationVariables } from '@apollo/client';
 import { UserProfile } from '@Interfaces/domain/user.interface';
 
 export interface UserService {
-  getUsers: ({
+  findUsers: ({
     offset,
     limit,
   }: {
@@ -16,8 +16,10 @@ export interface UserService {
     }
   >;
 
-  setNewUser: () => MutationTuple<any, OperationVariables>;
+  setCreateUser: () => MutationTuple<any, OperationVariables>;
+
   setUpdateUser: () => MutationTuple<any, OperationVariables>;
+
   setDeleteUser: ({
     offset,
     limit,
@@ -28,7 +30,9 @@ export interface UserService {
     email: UserProfile['email'];
   }) => MutationTuple<any, OperationVariables>;
 
-  setForgotPassword: () => MutationTuple<any, OperationVariables>;
-  setResetPassword: () => MutationTuple<any, OperationVariables>;
+  setForgotUserPassword: () => MutationTuple<any, OperationVariables>;
+
+  setResetUserPassword: () => MutationTuple<any, OperationVariables>;
+
   setUpdateUserPassword: () => MutationTuple<any, OperationVariables>;
 }

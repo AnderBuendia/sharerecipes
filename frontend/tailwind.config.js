@@ -16,6 +16,7 @@ module.exports = {
       mdxl: { min: '769px' },
       lgxl: { min: '1025px' },
     },
+
     extend: {
       fontFamily: {
         roboto: ['Roboto', ...defaultTheme.fontFamily.sans],

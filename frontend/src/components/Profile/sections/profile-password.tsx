@@ -1,12 +1,12 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { useUpdateUserPassword } from '@Application/user/updateUserPassword';
+import { useUpdateUserPassword } from '@Application/use-case/user/update-user-password.use-case';
 import { useUserStorage } from '@Services/storageAdapter';
 import Input from '@Components/generic/Input';
 import { ProfilePaths } from '@Enums/paths/profile-paths.enum';
 import { FormMessages } from '@Enums/config/messages.enum';
-import { FormValuesProfilePassword } from '@Types/forms/profile-password.type';
+import type { FormValuesProfilePassword } from '@Types/forms/profile-password.type';
 
 const ProfilePassword: FC = () => {
   const router = useRouter();

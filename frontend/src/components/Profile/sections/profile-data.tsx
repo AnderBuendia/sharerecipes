@@ -1,11 +1,12 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { useForm } from 'react-hook-form';
-import { useUpdateUser } from '@Application/user/updateUser';
+import { useUpdateUser } from '@Application/use-case/user/update-user.use-case';
 import { useUserStorage } from '@Services/storageAdapter';
 import { FormMessages } from '@Enums/config/messages.enum';
 import DragDropImage from '@Components/generic/DragDropImage';
 import Input from '@Components/generic/Input';
-import { AuthState } from '@Interfaces/domain/auth.interface';
+import type { AuthState } from '@Interfaces/domain/auth.interface';
+import { ApiV1RestEndPoints } from '@Enums/paths/rest-endpoints.enum';
 
 export type FormValuesProfileData = {
   name: string;
@@ -14,7 +15,6 @@ export type FormValuesProfileData = {
 
 const ProfileData: FC = () => {
   const { authState, setAuth } = useUserStorage();
-
   const { updateUser } = useUpdateUser();
   const {
     register,
@@ -58,7 +58,7 @@ const ProfileData: FC = () => {
         <label className="font-bold font-body">Profile picture</label>
         <div className="flex w-32 h-32 overflow-hidden mx-auto rounded-full my-4 text-black">
           <DragDropImage
-            url={`${process.env.NEXT_PUBLIC_BACKEND_URL}/upload/user`}
+            url={`${process.env.NEXT_PUBLIC_BACKEND_URL}${ApiV1RestEndPoints.UPLOAD_USER_IMAGE}`}
             current={authState?.user?.image_url}
             name="photo"
             rounded

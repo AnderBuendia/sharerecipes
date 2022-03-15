@@ -5,9 +5,11 @@ export enum DATE_UNITS {
   second = 1,
 }
 
+const MILLISECONDS_TO_SECONDS = 1000;
+
 const getDateDiffs = (timestamp: number) => {
   const now = Date.now();
-  const elapsed = (timestamp - now) / 1000;
+  const elapsed = (timestamp - now) / MILLISECONDS_TO_SECONDS;
   let value: number | undefined;
   let unit: string | undefined;
 

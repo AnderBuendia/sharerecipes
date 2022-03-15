@@ -10,34 +10,34 @@ import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
 import { isRequestSSR, loadAuthProps } from '@Lib/utils/ssr.utils';
 import { createApolloClient } from '@Lib/apollo/apollo-client';
 import { useRecipe } from '@Services/recipeAdapter';
-import { useVoteRecipe } from '@Application/recipe/voteRecipe';
-import { useDeleteRecipe } from '@Application/recipe/deleteRecipe';
+import { useVoteRecipe } from '@Application/use-case/recipe/vote-recipe.use-case';
+import { useDeleteRecipe } from '@Application/use-case/recipe/delete-recipe.use-case';
 import MainLayout from '@Components/Layouts/MainLayout';
 import RecipeData from '@Components/SingleRecipe/RecipeData';
 import Discussion from '@Components/SingleRecipe/Discussion';
 import Spinner from '@Components/generic/Spinner';
-import { GSSProps } from '@Interfaces/props/gss-props.interface';
-import { IRecipe } from '@Interfaces/domain/recipe.interface';
+import type { GSSProps } from '@Interfaces/props/gss-props.interface';
+import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
-import { GET_RECIPE } from '@Lib/graphql/recipe/query';
+import { FIND_RECIPE } from '@Lib/graphql/recipe/query.gql';
 
 const RecipePage: NextPage = () => {
   const router = useRouter();
-  const { recipe: url, _id } = router.query as Record<string, string>;
+  const { recipe: url_query, _id } = router.query as Record<string, string>;
   const { voteRecipe } = useVoteRecipe();
-  const { getRecipe } = useRecipe();
+  const { findRecipe } = useRecipe();
   const { deleteRecipe } = useDeleteRecipe({ recipeId: _id });
 
-  const { data, loading, fetchMore } = getRecipe({
-    recipeUrl: url,
+  const { data, loading, fetchMore } = findRecipe({
+    recipeUrlQuery: url_query,
     offset: 0,
     limit: 20,
   });
 
-  const recipe = data ? data.getRecipe : null;
+  const recipe = data ? data.find_recipe : null;
 
   const handleVoteRecipe = async (votes: number) => {
-    await voteRecipe({ url, votes });
+    await voteRecipe({ recipeUrlQuery: url_query, votes });
   };
 
   const confirmDeleteRecipe = (recipeId: IRecipe['_id']) => {
@@ -72,7 +72,7 @@ const RecipePage: NextPage = () => {
     >
       <RecipeData
         recipe={recipe}
-        url={url}
+        url_query={url_query}
         confirmDeleteRecipe={confirmDeleteRecipe}
         handleVoteRecipe={handleVoteRecipe}
       />
@@ -101,9 +101,9 @@ export const getServerSideProps: GetServerSideProps = async (
   }
 
   await apolloClient.query({
-    query: GET_RECIPE,
+    query: FIND_RECIPE,
     variables: {
-      recipeUrl: ctx.params?.recipe,
+      recipeUrlQuery: ctx.params?.recipe,
       offset: 0,
       limit: 10,
     },

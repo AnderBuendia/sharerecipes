@@ -1,38 +1,34 @@
 import { useQuery, useMutation } from '@apollo/client';
+import { FIND_RECIPE, FIND_RECIPES } from '@Lib/graphql/recipe/query.gql';
 import {
-  GET_RECIPE,
-  GET_RECIPES,
-  GET_BEST_RECIPES,
-} from '@Lib/graphql/recipe/query';
-import {
-  NEW_RECIPE,
+  CREATE_RECIPE,
   VOTE_RECIPE,
   DELETE_RECIPE,
-} from '@Lib/graphql/recipe/mutation';
+} from '@Lib/graphql/recipe/mutation.gql';
 import { RecipeService } from '@Interfaces/ports/recipe.interface';
 import { IRecipe } from '@Interfaces/domain/recipe.interface';
-import { QueryDataGetRecipes } from '@Types/apollo/query/recipe.type';
+import { QueryDataFindRecipes } from '@Types/apollo/query/recipe.type';
 
 export function useRecipe(): RecipeService {
-  const getRecipe = ({
-    recipeUrl,
+  const findRecipe = ({
+    recipeUrlQuery,
     offset,
     limit,
   }: {
-    recipeUrl: string;
+    recipeUrlQuery: string;
     offset: number;
     limit: number;
   }) => {
-    return useQuery(GET_RECIPE, {
+    return useQuery(FIND_RECIPE, {
       variables: {
-        recipeUrl,
+        recipeUrlQuery,
         offset,
         limit,
       },
     });
   };
 
-  const getRecipes = ({
+  const findRecipes = ({
     offset,
     limit,
     sort,
@@ -41,38 +37,25 @@ export function useRecipe(): RecipeService {
     limit: number;
     sort: string;
   }) => {
-    return useQuery(GET_RECIPES, {
-      variables: { offset, limit, sort },
+    return useQuery(FIND_RECIPES, {
+      variables: { sort, offset, limit },
     });
   };
 
-  const getBestRecipes = ({
-    offset,
-    limit,
-  }: {
-    offset: number;
-    limit: number;
-  }) => {
-    return useQuery(GET_BEST_RECIPES, {
-      variables: { offset, limit },
-    });
-  };
-
-  const setNewRecipe = () => {
-    return useMutation(NEW_RECIPE, {
-      update(cache, { data: { newRecipe } }) {
-        const queryData = cache.readQuery<QueryDataGetRecipes>({
-          query: GET_RECIPES,
-          variables: { offset: 0, limit: 20, sort: '-createdAt' },
+  const setCreateRecipe = () => {
+    return useMutation(CREATE_RECIPE, {
+      update(cache, { data: { create_recipe } }) {
+        const queryData = cache.readQuery<QueryDataFindRecipes>({
+          query: FIND_RECIPES,
+          variables: { sort: '-createdAt', offset: 0, limit: 20 },
         });
 
         if (queryData) {
           cache.writeQuery({
-            query: GET_RECIPES,
-            variables: { offset: 0, limit: 20, sort: '-createdAt' },
+            query: FIND_RECIPES,
+            variables: { sort: '-createdAt', offset: 0, limit: 20 },
             data: {
-              ...queryData,
-              getRecipes: [...queryData.getRecipes, newRecipe],
+              find_recipes: [...queryData.find_recipes, create_recipe],
             },
           });
         }
@@ -83,18 +66,18 @@ export function useRecipe(): RecipeService {
   const setDeleteRecipe = ({ recipeId }: { recipeId: IRecipe['_id'] }) => {
     return useMutation(DELETE_RECIPE, {
       update(cache) {
-        const queryData = cache.readQuery<QueryDataGetRecipes>({
-          query: GET_RECIPES,
-          variables: { offset: 0, limit: 20, sort: '-createdAt' },
+        const queryData = cache.readQuery<QueryDataFindRecipes>({
+          query: FIND_RECIPES,
+          variables: { sort: '-createdAt', offset: 0, limit: 20 },
         });
 
         if (queryData) {
           cache.writeQuery({
-            query: GET_RECIPES,
-            variables: { offset: 0, limit: 20, sort: '-createdAt' },
+            query: FIND_RECIPES,
+            variables: { sort: '-createdAt', offset: 0, limit: 20 },
             data: {
               ...queryData,
-              getRecipes: queryData.getRecipes.filter(
+              find_recipes: queryData.find_recipes.filter(
                 (currentRecipe) => currentRecipe._id !== recipeId
               ),
             },
@@ -109,10 +92,9 @@ export function useRecipe(): RecipeService {
   };
 
   return {
-    getRecipe,
-    getRecipes,
-    getBestRecipes,
-    setNewRecipe,
+    findRecipe,
+    findRecipes,
+    setCreateRecipe,
     setDeleteRecipe,
     setVoteRecipe,
   };

@@ -2,11 +2,13 @@ import { MutationTuple, OperationVariables } from '@apollo/client';
 import { IRecipe } from '@Interfaces/domain/recipe.interface';
 
 export interface CommentService {
-  setSendCommentRecipe: ({
-    recipeUrl,
+  setSendRecipeComment: ({
+    recipeUrlQuery,
   }: {
-    recipeUrl: IRecipe['url'];
+    recipeUrlQuery: IRecipe['url_query'];
   }) => MutationTuple<any, OperationVariables>;
-  setVoteCommentRecipe: () => MutationTuple<any, OperationVariables>;
-  setEditCommentRecipe: () => MutationTuple<any, OperationVariables>;
+
+  setVoteComment: () => MutationTuple<any, OperationVariables>;
+
+  setEditComment: () => MutationTuple<any, OperationVariables>;
 }

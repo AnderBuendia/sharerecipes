@@ -1,39 +1,41 @@
 import { FC, useState } from 'react';
 import { Waypoint } from 'react-waypoint';
 import { useUserStorage } from '@Services/storageAdapter';
-import { useEditCommentRecipe } from '@Application/comment/editCommentRecipe';
-import { useVoteCommentRecipe } from '@Application/comment/voteCommentRecipe';
+import { useEditComment } from '@Application/use-case/comment/edit-comment.use-case';
+import { useVoteComment } from '@Application/use-case/comment/vote-comment.use-case';
 import { useTimeAgo } from '@Lib/hooks/useTimeAgo';
 import { UserIcon } from '@Components/Icons/user.icon';
 import { ChevronUpIcon } from '@Components/Icons/chevron-up.icon';
-import { IRecipe } from '@Interfaces/domain/recipe.interface';
-import { IComment } from '@Interfaces/domain/comment.interface';
-import { FetchMoreGetRecipeArgs } from '@Types/apollo/query/fetch-more.type';
+import type { IRecipe } from '@Interfaces/domain/recipe.interface';
+import type { IComment } from '@Interfaces/domain/comment.interface';
+import type { FetchMoreFindRecipeArgs } from '@Types/apollo/query/fetch-more.type';
+
+const USER_ICON_DIMENSIONS = 28;
 
 export type CommentProps = {
   comment: IComment;
   recipe: IRecipe;
   index: number;
-  fetchMore: (variables: FetchMoreGetRecipeArgs) => void;
+  fetchMore: (variables: FetchMoreFindRecipeArgs) => void;
 };
 
 const Comment: FC<CommentProps> = ({ comment, recipe, index, fetchMore }) => {
   const { _id, message, votes, author, createdAt, edited } = comment;
   const [isEditing, setIsEditing] = useState(false);
-  const [editComment, setEditComment] = useState(message);
+  const [editMessage, setEditMessage] = useState(message);
   const { authState } = useUserStorage();
-  const { editCommentRecipe } = useEditCommentRecipe();
-  const { voteCommentRecipe } = useVoteCommentRecipe();
+  const { editComment } = useEditComment();
+  const { voteComment } = useVoteComment();
   const timeago = useTimeAgo(createdAt);
 
-  const handleEdit = (editComment: string) => {
-    editCommentRecipe({ commentId: _id, message: editComment });
+  const handleEdit = (editMessage: string) => {
+    editComment({ commentId: _id, message: editMessage });
 
     setIsEditing(false);
   };
 
   const handleVoteComment = () => {
-    voteCommentRecipe({ commentId: _id });
+    voteComment({ commentId: _id });
   };
 
   return (
@@ -42,8 +44,8 @@ const Comment: FC<CommentProps> = ({ comment, recipe, index, fetchMore }) => {
         <UserIcon
           imageUrl={author.image_url}
           imageName={author.image_name}
-          w={28}
-          h={28}
+          w={USER_ICON_DIMENSIONS}
+          h={USER_ICON_DIMENSIONS}
         />
         <p className="ml-2 font-roboto text-sm font-bold">
           {author.name}
@@ -63,9 +65,9 @@ const Comment: FC<CommentProps> = ({ comment, recipe, index, fetchMore }) => {
         {isEditing ? (
           <input
             type="text"
-            className="py-1 px-2 bg-white border border-black rounded-md hover:bg-gray-50 hover:border-blue-400 leading-tight focus:shadow-outline"
-            value={editComment}
-            onChange={(e) => setEditComment(e.target.value)}
+            className="py-1 px-2 bg-white border border-black rounded-md hover:bg-gray-50 hover:border-blue-400 leading-tight focus:shadow-outline text-black"
+            value={editMessage}
+            onChange={(e) => setEditMessage(e.target.value)}
           />
         ) : (
           <p className="break-all font-roboto text-sm font-medium">{message}</p>
@@ -80,12 +82,12 @@ const Comment: FC<CommentProps> = ({ comment, recipe, index, fetchMore }) => {
             <span>Upvote {votes > 0 && `(${votes})`}</span>
           </button>
 
-          {authState?.user && authState.user.email === author.email && (
+          {authState?.user?.email === author.email && (
             <button
               className="ml-3 text-xs font-bold text-gray-400"
               onClick={
                 isEditing
-                  ? () => handleEdit(editComment)
+                  ? () => handleEdit(editMessage)
                   : () => setIsEditing(true)
               }
             >
@@ -99,7 +101,7 @@ const Comment: FC<CommentProps> = ({ comment, recipe, index, fetchMore }) => {
           onEnter={() =>
             fetchMore({
               variables: {
-                recipeUrl: recipe.url,
+                recipeUrlQuery: recipe.url_query,
                 offset: 0,
                 limit: index + 11,
               },

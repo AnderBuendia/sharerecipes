@@ -1,31 +1,37 @@
 import { FC, useState, useRef, MutableRefObject } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { useSendCommentRecipe } from '@Application/comment/sendCommentRecipe';
+import { useSendRecipeComment } from '@Application/use-case/comment/send-recipe-comment.use-case';
 import { useUserStorage } from '@Services/storageAdapter';
 import { useClickOutside } from '@Lib/hooks/useClickOutside';
 import ModalSignUp from '@Components/SingleRecipe/ModalSignUp';
 import Comment from '@Components/SingleRecipe/Comment';
 import { UserIcon } from '@Components/Icons/user.icon';
-import { IRecipe } from '@Interfaces/domain/recipe.interface';
+import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
-import { FetchMoreGetRecipeArgs } from '@Types/apollo/query/fetch-more.type';
-import { FormValuesDiscussion } from '@Types/forms/discussion.type';
+import type { FetchMoreFindRecipeArgs } from '@Types/apollo/query/fetch-more.type';
+import type { FormValuesDiscussion } from '@Types/forms/discussion.type';
+
+const DEFAULT_MESSAGE_DISCUSSION = '';
+const USER_ICON_DIMENSION = 45;
 
 export type DiscussionProps = {
   recipe: IRecipe;
-  fetchMore: (variables: FetchMoreGetRecipeArgs) => void;
+  fetchMore: (variables: FetchMoreFindRecipeArgs) => void;
 };
 
 const Discussion: FC<DiscussionProps> = ({ recipe, fetchMore }) => {
+  const { url_query } = recipe;
   const router = useRouter();
   const [showModal, setShowModal] = useState<boolean>(false);
   const componentRef = useRef() as MutableRefObject<HTMLDivElement>;
   const { authState } = useUserStorage();
-  const { sendCommentRecipe } = useSendCommentRecipe({ recipeUrl: recipe.url });
+  const { sendRecipeComment } = useSendRecipeComment({
+    recipeUrlQuery: url_query,
+  });
 
   const { handleSubmit, register, reset } = useForm<FormValuesDiscussion>({
-    defaultValues: { message: '' },
+    defaultValues: { message: DEFAULT_MESSAGE_DISCUSSION },
   });
 
   useClickOutside(componentRef, setShowModal);
@@ -39,9 +45,9 @@ const Discussion: FC<DiscussionProps> = ({ recipe, fetchMore }) => {
 
     if (!authState?.user) return setShowModal(true);
 
-    const response = await sendCommentRecipe({
+    const response = await sendRecipeComment({
       message,
-      recipeUrl: recipe.url,
+      recipeUrlQuery: url_query,
     });
 
     if (response?.data) reset();
@@ -60,8 +66,8 @@ const Discussion: FC<DiscussionProps> = ({ recipe, fetchMore }) => {
           <UserIcon
             imageUrl={authState?.user?.image_url}
             imageName={authState?.user?.image_name}
-            w={45}
-            h={45}
+            w={USER_ICON_DIMENSION}
+            h={USER_ICON_DIMENSION}
           />
         </div>
 
@@ -82,7 +88,7 @@ const Discussion: FC<DiscussionProps> = ({ recipe, fetchMore }) => {
       </div>
       <div className="w-full mt-4">
         <div className="border-t border-gray-400 mb-4">
-          {recipe.comments.map((comment, index) => (
+          {recipe?.comments?.map((comment, index) => (
             <Comment
               key={comment._id}
               comment={comment}

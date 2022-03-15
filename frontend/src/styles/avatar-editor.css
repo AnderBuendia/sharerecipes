@@ -28,7 +28,11 @@
 }
 
 .avatar-editor .uppy-DragDrop-label {
-  @apply font-medium m-0 transition-all ease-in-out duration-300 opacity-0;
+  @apply font-medium m-0 transition-all ease-in-out duration-300 opacity-0 dark:text-white;
+}
+
+.avatar-editor .uppy-DragDrop-browse {
+  @apply text-blue-400;
 }
 
 .avatar-editor:hover .uppy-DragDrop-label {

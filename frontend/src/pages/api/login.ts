@@ -4,7 +4,7 @@ import { createApolloClient } from '@Lib/apollo/apollo-client';
 import { setJwtCookie } from '@Lib/utils/jwt-cookie.utils';
 import { HTTPStatusCodes } from '@Enums/config/http-status-codes.enum';
 import { AlertMessages, FormMessages } from '@Enums/config/messages.enum';
-import { AUTH_USER } from '@Lib/graphql/user/mutation';
+import { AUTH_USER } from '@Lib/graphql/user/mutation.gql';
 
 const login = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'POST') {
@@ -39,8 +39,8 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     });
 
-    const token = response.data.authenticateUser.token;
-    const user = response.data.authenticateUser.user;
+    const token = response.data.authenticate_user.token;
+    const user = response.data.authenticate_user.user;
 
     if (token && user) {
       setJwtCookie(res, token);

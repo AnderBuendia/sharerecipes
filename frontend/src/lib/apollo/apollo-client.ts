@@ -4,10 +4,10 @@ import {
   ApolloLink,
   createHttpLink,
   NormalizedCacheObject,
+  Reference,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
-import { offsetLimitPagination } from '@apollo/client/utilities';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 let globalJwt: string | undefined;
@@ -56,24 +56,30 @@ export const createApolloClient = (jwt?: string) => {
             },
             voted: {
               merge(existing, incoming) {
-                return incoming;
+                return [...incoming];
               },
             },
           },
         },
         Query: {
           fields: {
-            getRecipe: {
+            find_recipe: {
               merge(existing, incoming) {
-                return incoming;
+                return {
+                  ...incoming,
+                };
               },
             },
-            getRecipes: {
+            find_recipes: {
               merge(existing = [], incoming) {
                 return [...incoming];
               },
             },
-            getBestRecipes: offsetLimitPagination(),
+            find_users: {
+              merge(existing = [], incoming) {
+                return { ...incoming };
+              },
+            },
           },
         },
       },

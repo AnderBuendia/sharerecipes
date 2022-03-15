@@ -22,7 +22,7 @@ export interface IRecipe extends NewRecipeData, RecipeImage {
   votes: number;
   voted: string[];
   average_vote: number;
-  url: string;
+  url_query: string;
   author: UserCompleteProfile;
   comments: IComment[];
   createdAt: number;

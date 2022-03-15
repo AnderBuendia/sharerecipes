@@ -1,14 +1,14 @@
-export type FetchMoreGetRecipesArgs = {
+export type FetchMoreFindRecipesArgs = {
   variables: {
+    sort: string;
     offset: number;
     limit: number;
-    sort: string;
   };
 };
 
-export type FetchMoreGetRecipeArgs = {
+export type FetchMoreFindRecipeArgs = {
   variables: {
-    recipeUrl?: string;
+    recipeUrlQuery?: string;
     offset: number;
     limit: number;
   };

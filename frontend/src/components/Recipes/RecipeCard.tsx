@@ -1,17 +1,22 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Waypoint } from 'react-waypoint';
 import { ChatIcon } from '@Components/Icons/chat.icon';
 import { StarIcon } from '@Components/Icons/star.icon';
-import { IRecipe } from '@Interfaces/domain/recipe.interface';
-import { FetchMoreGetRecipesArgs } from '@Types/apollo/query/fetch-more.type';
+import type { IRecipe } from '@Interfaces/domain/recipe.interface';
+import type { FetchMoreFindRecipesArgs } from '@Types/apollo/query/fetch-more.type';
+
+const MAX_NUMBER_SHOW_RECIPES = 12;
+const LIMIT_SHOW_RECIPES = 1;
+const OFFSET_NUMBER = 0;
+const LIMIT_NUMBER = 20;
 
 export type RecipeCardProps = {
   recipe: IRecipe;
   numberOfRecipes: number;
   index: number;
-  fetchMore: (variables: FetchMoreGetRecipesArgs) => void;
+  fetchMore: (variables: FetchMoreFindRecipesArgs) => void;
 };
 
 const RecipeCard: FC<RecipeCardProps> = ({
@@ -29,7 +34,7 @@ const RecipeCard: FC<RecipeCardProps> = ({
     style,
     image_url,
     average_vote,
-    url,
+    url_query,
     comments,
   } = recipe;
 
@@ -37,7 +42,7 @@ const RecipeCard: FC<RecipeCardProps> = ({
     <>
       <Link
         href={{
-          pathname: `recipe/${url}`,
+          pathname: `recipe/${url_query}`,
           query: { _id },
         }}
       >
@@ -49,13 +54,7 @@ const RecipeCard: FC<RecipeCardProps> = ({
             className="w-full flex justify-center items-center aspect-auto"
           >
             {image_url && (
-              <Image
-                src={image_url}
-                alt={name}
-                width={400}
-                height={370}
-                priority
-              />
+              <Image src={image_url} alt={name} width={400} height={370} />
             )}
           </div>
 
@@ -95,19 +94,20 @@ const RecipeCard: FC<RecipeCardProps> = ({
           </div>
         </div>
       </Link>
-      {index > 12 && index === numberOfRecipes - 1 && (
-        <Waypoint
-          onEnter={() => {
-            fetchMore({
-              variables: {
-                offset: 0,
-                limit: index + 20,
-                sort: '-createdAt',
-              },
-            });
-          }}
-        />
-      )}
+      {index > MAX_NUMBER_SHOW_RECIPES &&
+        index === numberOfRecipes - LIMIT_SHOW_RECIPES && (
+          <Waypoint
+            onEnter={() => {
+              fetchMore({
+                variables: {
+                  sort: '-createdAt',
+                  offset: OFFSET_NUMBER,
+                  limit: index + LIMIT_NUMBER,
+                },
+              });
+            }}
+          />
+        )}
     </>
   );
 };

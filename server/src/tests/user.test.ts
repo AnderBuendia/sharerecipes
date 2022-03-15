@@ -1,4 +1,7 @@
-import { UserErrors } from '@Enums/user-errors.enum';
+import {
+  CommonErrors,
+  UserErrors,
+} from '@Shared/infrastructure/enums/errors.enum';
 import { api, mongoose, User } from './index';
 
 let token: string;
@@ -11,100 +14,95 @@ describe('User Tests', () => {
   });
 
   test('Register new user - Bad email', async () => {
-    try {
-      await api
-        .post('/graphql')
-        .send({
-          query: `
+    await api
+      .post('/graphql')
+      .send({
+        query: `
           mutation {
-            newUser(input: {
+            create_user(input: {
               name: "Dolan",
               email: "test@email",
               password: "Test_123"
-            })
+            }) {
+              success
+            }
           }
         `,
-        })
-        .expect(200)
-        .expect(({ body }) => {
-          expect(body.errors[0].message).toBe(UserErrors.EMAIL_FORMAT);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+      })
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body.errors[0].message).toBe(
+          `\"test@email\" ${CommonErrors.FORMAT}`
+        );
+      });
   });
 
   test('Register new user - Bad password', async () => {
-    try {
-      await api
-        .post('/graphql')
-        .send({
-          query: `
+    await api
+      .post('/graphql')
+      .send({
+        query: `
         mutation {
-          newUser(input: {
+          create_user(input: {
             name: "Dolan1",
             email: "test1@email.com",
             password: "Ander12"
-          })
+          }) {
+            success
+          }
         }
       `,
-        })
-        .expect(200)
-        .expect(({ body }) => {
-          expect(body.errors[0].message).toBe(UserErrors.PASSWORD);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+      })
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body.errors[0].message).toBe(`\"**\" ${CommonErrors.FORMAT}`);
+      });
   });
 
   test('Register new user', async () => {
-    try {
-      await api
-        .post('/graphql')
-        .send({
-          query: `
+    return await api
+      .post('/graphql')
+      .send({
+        query: `
           mutation {
-            newUser(input: {
+            create_user(input: {
               name: "testname",
               email: "test2@email.com",
               password: "Test_123"
-            })
+            }) {
+              success
+              token
+            }
           }
         `,
-        })
-        .expect(200)
-        .expect(({ body }) => {
-          token = body.data.newUser;
-          expect(body.data.newUser).not.toEqual(null);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+      })
+      .expect(200)
+      .expect(({ body }) => {
+        token = body.data.create_user.token;
+        expect(body.data.create_user.success).toEqual(true);
+      });
   });
 
   test('Register new user - Email already registered', async () => {
-    try {
-      await api
-        .post('/graphql')
-        .send({
-          query: `
+    await api
+      .post('/graphql')
+      .send({
+        query: `
           mutation {
-            newUser(input: {
+            create_user(input: {
               name: "prueba201",
               email: "test2@email.com",
               password: "Ander_123"
-            })
+            }) {
+              success
+            }
           }
         `,
-        })
-        .expect(200)
-        .expect(({ body }) => {
-          expect(body.errors[0].message).toBe(UserErrors.REGISTERED);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+      })
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body.errors[0].message).toBe(UserErrors.REGISTERED);
+      });
   });
 
   test('Confirm new user - Bad Token', async () => {
@@ -113,15 +111,17 @@ describe('User Tests', () => {
       .send({
         query: `
             mutation {
-              confirmUser(input: {
+              confirm_user(input: {
                 token: "232334234fdssd"
-              })
+              }) {
+                success
+              }
             }
           `,
       })
       .expect(200)
       .expect(({ body }) => {
-        expect(body.data.confirmUser).toBe(null);
+        expect(body.errors[0].message).toBe('jwt malformed');
       });
   });
 
@@ -131,27 +131,31 @@ describe('User Tests', () => {
       .send({
         query: `
           mutation {
-            confirmUser(input: {
+            confirm_user(input: {
               token: "${token}"
-            })
+            }) { 
+              success 
+            }
           }
         `,
       })
       .expect(200)
       .expect(({ body }) => {
-        expect(body.data.confirmUser).toBe(true);
+        expect(body.data.confirm_user.success).toBe(true);
       });
   });
 
-  test('Forgot Password - Bad Email', async () => {
+  test('Forgot User Password - Bad Email', async () => {
     await api
       .post('/graphql')
       .send({
         query: `
       mutation {
-        forgotPassword(input: {
+        forgot_user_password(input: {
           email: "dolan@email.com",
-        })
+        }) { 
+          success
+        }
       }
     `,
       })
@@ -161,41 +165,46 @@ describe('User Tests', () => {
       });
   });
 
-  test('Forgot Password', async () => {
+  test('Forgot User Password', async () => {
     await api
       .post('/graphql')
       .send({
         query: `
       mutation {
-        forgotPassword(input: {
+        forgot_user_password(input: {
           email: "test2@email.com",
-        })
+        }) { 
+          success
+          token
+        }
       }
     `,
       })
       .expect(200)
       .expect(({ body }) => {
-        token = body.data.forgotPassword;
-        expect(body.data.forgotPassword).not.toEqual(null);
+        token = body.data.forgot_user_password.token;
+        expect(body.data.forgot_user_password.success).toEqual(true);
       });
   });
 
-  test('Valid Password', async () => {
+  test('Valid User Password', async () => {
     await api
       .post('/graphql')
       .send({
         query: `
       mutation {
-        resetPassword(input: {
+        reset_user_password(input: {
           token: "${token}",
           password: "Test_1234"
-        })
+        }) { 
+          success
+        }
       }
     `,
       })
       .expect(200)
       .expect(({ body }) => {
-        expect(body.data.resetPassword).toBe(true);
+        expect(body.data.reset_user_password.success).toBe(true);
       });
   });
 
@@ -205,12 +214,12 @@ describe('User Tests', () => {
       .send({
         query: `
         mutation {
-          authenticateUser(input: {
+          authenticate_user(input: {
             email: "prueba201@email",
             password: "Test23"
           }) {
             user {
-              _id
+              name
             }
           }
         }
@@ -218,7 +227,7 @@ describe('User Tests', () => {
       })
       .expect(200)
       .expect(({ body }) => {
-        expect(body.errors[0].message).toBe(UserErrors.EMAIL_FORMAT);
+        expect(body.errors[0].message).toBe(UserErrors.USER_NOT_FOUND);
       });
   });
 
@@ -228,12 +237,12 @@ describe('User Tests', () => {
       .send({
         query: `
         mutation {
-          authenticateUser(input: {
+          authenticate_user(input: {
             email: "test2@email.com",
             password: "Test_12"
           }) {
             user {
-              _id
+              name
             }
           }
         }
@@ -241,7 +250,7 @@ describe('User Tests', () => {
       })
       .expect(200)
       .expect(({ body }) => {
-        expect(body.errors[0].message).toBe(UserErrors.PASSWORD);
+        expect(body.errors[0].message).toBe(UserErrors.CURRENT_PASSWORD);
       });
   });
 
@@ -251,12 +260,12 @@ describe('User Tests', () => {
       .send({
         query: `
       mutation {
-        authenticateUser(input: {
+        authenticate_user(input: {
           email: "test2@email.com",
           password: "Test_1234"
         }) {
           user {
-            _id
+            name
           }
           token
         }
@@ -265,42 +274,20 @@ describe('User Tests', () => {
       })
       .expect(200)
       .expect(({ body }) => {
-        token = body.data.authenticateUser.token;
-        expect(body.data.authenticateUser).not.toEqual(null);
+        token = body.data.authenticate_user.token;
+        expect(body.data.authenticate_user).not.toEqual(null);
       });
   });
 
   test('Update user - Bad Email', async () => {
     await api
       .post('/graphql')
-      .send({
-        query: `
-      mutation {
-        updateUser(input: {
-          email: "test@email.com",
-          password: "Test_1234",
-          name: "NewName"
-        }) {
-          name
-        }
-      }
-    `,
-      })
-      .expect(200)
-      .expect((response) => {
-        expect(response.body.errors[0].message).toBe(UserErrors.USER_NOT_FOUND);
-      });
-  });
-
-  test('Update user', async () => {
-    await api
-      .post('/graphql')
       .set('Authorization', `Bearer ${token}`)
       .send({
         query: `
       mutation {
-        updateUser(input: {
-          email: "test2@email.com",
+        update_user(input: {
+          email: "hello@mail.com",
           password: "Test_1234",
           name: "NewName"
         }) {
@@ -311,28 +298,53 @@ describe('User Tests', () => {
       })
       .expect(200)
       .expect(({ body }) => {
-        expect(body.data.updateUser.name).toBe('NewName');
+        expect(body.errors[0].message).toBe(UserErrors.USER_NOT_FOUND);
       });
   });
 
-  test('Update user password', async () => {
+  test('Update user - Update password', async () => {
     await api
       .post('/graphql')
       .set('Authorization', `Bearer ${token}`)
       .send({
         query: `
       mutation {
-        updateUserPassword(input: {
+        update_user_password(input: {
           email: "test2@email.com",
           password: "Test_1234",
           confirmPassword: "Test_12345"
-        })
+        }) {
+          email
+        }
       }
     `,
       })
       .expect(200)
       .expect(({ body }) => {
-        expect(body.data.updateUserPassword).toBe(true);
+        expect(body.data.update_user_password.email).toBe('test2@email.com');
+      });
+  });
+
+  test('Update user - Update user name', async () => {
+    await api
+      .post('/graphql')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        query: `
+      mutation {
+        update_user(input: {
+          email: "test2@email.com",
+          password: "Test_12345",
+          name: "NewName"
+        }) {
+          name
+        }
+      }
+    `,
+      })
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body.data.update_user.name).toBe('NewName');
       });
   });
 });

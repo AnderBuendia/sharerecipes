@@ -56,7 +56,7 @@ const DropdownMenu: FC<DropdownMenuProps> = ({ user }) => {
               >
                 Hi, {name}
               </p>
-              {role.includes(UserRoles.ADMIN) && (
+              {role === UserRoles.ADMIN && (
                 <Link href={MainPaths.ADMIN}>
                   <a
                     className="block px-4 py-2 text-sm leading-5 hover:bg-gray-200 
