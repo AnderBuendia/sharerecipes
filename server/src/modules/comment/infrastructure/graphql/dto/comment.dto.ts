@@ -2,7 +2,7 @@ import { CommentEntityDoc } from '@Shared/infrastructure/http/mongodb/interfaces
 
 export type PublicCommentDTO = CommentEntityDoc;
 
-export interface UpdateCommentDTO {
+export interface SendRecipeCommentDTO {
   message: string;
 }
 
@@ -10,7 +10,4 @@ export interface VoteCommentDTO {
   votes: number;
 }
 
-export interface SendRecipeCommentDTO {
-  url_query: string;
-  message: string;
-}
+export interface UpdateCommentDTO extends SendRecipeCommentDTO {}

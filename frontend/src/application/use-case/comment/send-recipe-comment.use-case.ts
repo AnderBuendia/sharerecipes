@@ -6,7 +6,7 @@ import { IRecipe } from '@Interfaces/domain/recipe.interface';
 export function useSendRecipeComment({
   recipeUrlQuery,
 }: {
-  recipeUrlQuery: IRecipe['url_query'];
+  recipeUrlQuery: IRecipe['urlQuery'];
 }) {
   const { setSendRecipeComment } = useComment();
   const [send_recipe_comment] = setSendRecipeComment({ recipeUrlQuery });
@@ -17,7 +17,7 @@ export function useSendRecipeComment({
     recipeUrlQuery,
   }: {
     message: string;
-    recipeUrlQuery: IRecipe['url_query'];
+    recipeUrlQuery: IRecipe['urlQuery'];
   }) => {
     try {
       return await send_recipe_comment({

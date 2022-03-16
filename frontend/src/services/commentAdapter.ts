@@ -13,7 +13,7 @@ export function useComment(): CommentService {
   const setSendRecipeComment = ({
     recipeUrlQuery,
   }: {
-    recipeUrlQuery: IRecipe['url_query'];
+    recipeUrlQuery: IRecipe['urlQuery'];
   }) => {
     return useMutation(SEND_RECIPE_COMMENT, {
       update(cache, { data: { send_recipe_comment } }) {
