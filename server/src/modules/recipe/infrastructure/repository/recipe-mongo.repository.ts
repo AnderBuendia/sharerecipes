@@ -71,8 +71,8 @@ export class RecipeRepository implements RecipeRepositoryInterface {
     return this.toDomain(recipe);
   }
 
-  async findRecipeByUrl(recipeUrl: string) {
-    const recipe = await Recipe.findOne({ url_query: recipeUrl });
+  async findRecipeByUrl(recipeUrlQuery: string) {
+    const recipe = await Recipe.findOne({ url_query: recipeUrlQuery });
 
     if (!recipe) return null;
 

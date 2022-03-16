@@ -23,13 +23,13 @@ import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 
 const RecipePage: NextPage = () => {
   const router = useRouter();
-  const { recipe: url_query, _id } = router.query as Record<string, string>;
+  const { recipe: urlQuery, _id } = router.query as Record<string, string>;
   const { voteRecipe } = useVoteRecipe();
   const { findRecipe } = useRecipe();
   const { deleteRecipe } = useDeleteRecipe({ recipeId: _id });
 
   const { data, loading, fetchMore } = findRecipe({
-    recipeUrlQuery: url_query,
+    recipeUrlQuery: urlQuery,
     offset: 0,
     limit: 20,
   });
@@ -37,7 +37,7 @@ const RecipePage: NextPage = () => {
   const recipe = data ? data.find_recipe : null;
 
   const handleVoteRecipe = async (votes: number) => {
-    await voteRecipe({ recipeUrlQuery: url_query, votes });
+    await voteRecipe({ recipeUrlQuery: urlQuery, votes });
   };
 
   const confirmDeleteRecipe = (recipeId: IRecipe['_id']) => {
@@ -72,7 +72,7 @@ const RecipePage: NextPage = () => {
     >
       <RecipeData
         recipe={recipe}
-        url_query={url_query}
+        urlQuery={urlQuery}
         confirmDeleteRecipe={confirmDeleteRecipe}
         handleVoteRecipe={handleVoteRecipe}
       />

@@ -5,7 +5,7 @@ export interface CommentService {
   setSendRecipeComment: ({
     recipeUrlQuery,
   }: {
-    recipeUrlQuery: IRecipe['url_query'];
+    recipeUrlQuery: IRecipe['urlQuery'];
   }) => MutationTuple<any, OperationVariables>;
 
   setVoteComment: () => MutationTuple<any, OperationVariables>;

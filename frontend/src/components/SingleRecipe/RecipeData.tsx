@@ -12,14 +12,14 @@ import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 
 export type RecipeDataProps = {
   recipe: IRecipe;
-  url_query: string;
+  urlQuery: string;
   confirmDeleteRecipe: (recipeId: IRecipe['_id']) => void;
   handleVoteRecipe: (votes: number) => Promise<void>;
 };
 
 const RecipeData: FC<RecipeDataProps> = ({
   recipe,
-  url_query,
+  urlQuery,
   confirmDeleteRecipe,
   handleVoteRecipe,
 }) => {
@@ -83,14 +83,14 @@ const RecipeData: FC<RecipeDataProps> = ({
           <div className="flex flex-row justify-between items-center">
             <div className="flex flex-row">
               <FacebookShareButton
-                url={process.env.NEXT_PUBLIC_SITE_URL + `/recipe/${url_query}`}
+                url={process.env.NEXT_PUBLIC_SITE_URL + `/recipe/${urlQuery}`}
                 quote="Visit my new recipe"
                 className="cursor-pointer mr-3"
               >
                 <FacebookIcon size={28} className="rounded-full" />
               </FacebookShareButton>
               <TwitterShareButton
-                url={process.env.NEXT_PUBLIC_SITE_URL + `/recipe/${url_query}`}
+                url={process.env.NEXT_PUBLIC_SITE_URL + `/recipe/${urlQuery}`}
                 title="Visit my new recipe"
                 className="cursor-pointer"
               >
