@@ -1,28 +1,38 @@
 import { UserCompleteProfile } from '@Interfaces/domain/user.interface';
 import { IComment } from '@Interfaces/domain/comment.interface';
 
-export interface RecipeImage {
-  image_url?: string;
-  image_name?: string;
+export interface CreateRecipeFormData {
+  name: string;
+  prepTime: string;
+  serves: string;
+  ingredients: string[];
+  description: string;
+  difficulty: string;
+  style: string;
+  otherStyle?: string;
 }
 
-export interface NewRecipeData {
+export interface RecipeImage {
+  imageUrl?: string;
+  imageName?: string;
+}
+
+export interface CreateRecipe extends RecipeImage {
   name: string;
-  prep_time: number;
+  prepTime: number;
   serves: number;
   ingredients: string[];
   description: string;
   difficulty: string;
   style: string;
-  other_style?: string;
 }
 
-export interface IRecipe extends NewRecipeData, RecipeImage {
+export interface IRecipe extends CreateRecipe {
   _id: string;
   votes: number;
   voted: string[];
-  average_vote: number;
-  url_query: string;
+  averageVote: number;
+  urlQuery: string;
   author: UserCompleteProfile;
   comments: IComment[];
   createdAt: number;

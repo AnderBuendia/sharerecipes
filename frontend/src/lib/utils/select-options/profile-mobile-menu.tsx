@@ -1,7 +1,7 @@
-import { ProfilePaths } from '@Enums/paths/profile-paths.enum';
 import { LockClosed } from '@Components/Icons/lock-closed.icon';
 import { HomeIcon } from '@Components/Icons/home.icon';
 import { DocumentIcon } from '@Components/Icons/document.icon';
+import { ProfilePaths } from '@Enums/paths/profile-paths.enum';
 
 export const menuOptions = [
   {

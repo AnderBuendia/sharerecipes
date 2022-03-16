@@ -16,8 +16,8 @@ export const AUTH_USER = gql`
         name
         email
         role
-        image_url
-        image_name
+        imageUrl
+        imageName
         confirmed
       }
       token

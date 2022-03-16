@@ -27,14 +27,14 @@ const RecipeData: FC<RecipeDataProps> = ({
   const {
     _id,
     name,
-    image_url,
-    image_name,
-    prep_time,
+    imageUrl,
+    imageName,
+    prepTime,
     serves,
     difficulty,
     style,
     ingredients,
-    average_vote,
+    averageVote,
     voted,
     author,
     description,
@@ -45,13 +45,13 @@ const RecipeData: FC<RecipeDataProps> = ({
       <h1 className="break-all text-2xl font-body font-bold mb-2">{name}</h1>
       <div className="w-full flex flex-col lgxl:flex-row lgxl:justify-between">
         <div className="lgxl:w-2/4 text-center mb-3">
-          {image_url && image_name && (
+          {imageUrl && imageName && (
             <Image
               className="rounded-sm"
-              src={image_url}
-              alt={image_name}
-              width={300}
-              height={300}
+              src={imageUrl}
+              alt={imageName}
+              width={312}
+              height={312}
               priority
             />
           )}
@@ -61,7 +61,7 @@ const RecipeData: FC<RecipeDataProps> = ({
           <div className="w-full flex flex-row border-gray-400 border-t p-3 lgxl:p-0 lgxl:flex-col">
             <div className="w-full text-center lgxl:w-full lgxl:my-3">
               <p className="font-light text-xs uppercase">Preparation time</p>
-              <span className="font-bold">{prep_time} mins</span>
+              <span className="font-bold">{prepTime} mins</span>
             </div>
             <div className="w-full text-center border-l border-gray-400 lgxl:border-l-0 lg:p-2 lgxl:border-t lgxl:py-3">
               <p className="font-light text-xs uppercase">Serves</p>
@@ -99,11 +99,11 @@ const RecipeData: FC<RecipeDataProps> = ({
             </div>
             <div className="flex flex-col float-right items-end mt-4 ">
               <Rating
-                ratingValue={Math.floor(average_vote)}
+                ratingValue={Math.floor(averageVote)}
                 onClick={handleVoteRecipe}
               />
               <p className="ml-1 text-lg">
-                ({average_vote} from {voted.length} votes)
+                ({averageVote} from {voted.length} votes)
               </p>
             </div>
           </div>
@@ -113,7 +113,7 @@ const RecipeData: FC<RecipeDataProps> = ({
       <div className="w-full mt-2 flex flex-wrap lgxl:flex-nowrap lgxl:justify-between">
         <div className="w-full lgxl:w-2/5 lgxl:border-r-2 lgxl:border-gray-800">
           <h1 className="text-lg font-body font-bold">Ingredients</h1>
-          {ingredients ? (
+          {ingredients?.length ? (
             <ul>
               {ingredients.map((ingredient) => (
                 <li key={ingredient} className="px-2 py-1 font-body">

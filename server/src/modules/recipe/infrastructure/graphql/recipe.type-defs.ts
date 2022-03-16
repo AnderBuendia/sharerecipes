@@ -7,17 +7,17 @@ const recipeTypeDefs = gql`
     name: String
     serves: Int
     ingredients: [String]
-    prep_time: Int
+    prepTime: Int
     difficulty: RecipeDifficulty
-    image_name: String
-    image_url: String
+    imageName: String
+    imageUrl: String
     description: String
     style: String
     comments(offset: Int, limit: Int): [Comment]
     votes: Float
     voted: [String]
-    average_vote: Float
-    url_query: String
+    averageVote: Float
+    urlQuery: String
     author: User
     createdAt: String
   }
@@ -31,25 +31,25 @@ const recipeTypeDefs = gql`
   input CreateRecipeDTO {
     name: String
     serves: Int
-    prep_time: Int
+    prepTime: Int
     ingredients: [String]
     difficulty: RecipeDifficulty
     style: String
+    imageUrl: String
+    imageName: String
     description: String
-    image_url: String
-    image_name: String
   }
 
   input UpdateRecipeDTO {
     name: String
     serves: Int
-    prep_time: Int
+    prepTime: Int
     ingredients: [String]
     difficulty: RecipeDifficulty
     style: String
+    imageUrl: String
+    imageName: String
     description: String
-    image_url: String
-    image_name: String
   }
 
   input VoteRecipeDTO {
@@ -66,7 +66,7 @@ const recipeTypeDefs = gql`
   extend type Query {
     find_recipe(recipeUrlQuery: String!, offset: Int, limit: Int): Recipe
 
-    find_recipes(sort: String, offset: Int, limit: Int): [Recipe]
+    find_recipes(sort: String, query: String, offset: Int, limit: Int): [Recipe]
   }
 
   # Mutation

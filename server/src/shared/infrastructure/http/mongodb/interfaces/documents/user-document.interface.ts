@@ -1,3 +1,6 @@
+/**
+ * Interface for mongoose user's schema
+ */
 export interface UserEntity {
   _id: string;
   name: string;
@@ -9,4 +12,15 @@ export interface UserEntity {
   role: string;
 }
 
-export interface UserEntityDoc extends Omit<UserEntity, 'password'> {}
+/**
+ * Interface for mongoose user's document
+ */
+export interface UserEntityDoc {
+  _id: string;
+  name: string;
+  email: string;
+  imageUrl?: string;
+  imageName?: string;
+  confirmed: boolean;
+  role: string;
+}

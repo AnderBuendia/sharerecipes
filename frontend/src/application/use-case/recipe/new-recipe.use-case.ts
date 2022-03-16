@@ -1,10 +1,11 @@
 import { useRecipe } from '@Services/recipeAdapter';
-import {
-  RecipeImage,
-  NewRecipeData,
-} from '@Interfaces/domain/recipe.interface';
+import { createRecipe } from '@Domain/recipe.domain';
 import { useNotifier } from '@Services/notificationAdapter';
 import { MessageTypes } from '@Enums/config/messages.enum';
+import type {
+  RecipeImage,
+  CreateRecipeFormData,
+} from '@Interfaces/domain/recipe.interface';
 
 export function useNewRecipe() {
   const { setCreateRecipe } = useRecipe();
@@ -15,37 +16,27 @@ export function useNewRecipe() {
     data,
     recipeImage,
   }: {
-    data: NewRecipeData;
+    data: CreateRecipeFormData;
     recipeImage?: RecipeImage;
   }) => {
-    const {
-      name,
-      prep_time,
-      serves,
-      ingredients,
-      description,
-      difficulty,
-      style,
-      other_style,
-    } = data;
-
-    if (!recipeImage) {
-      throw new Error('There is no image. Please upload an image.');
-    }
-
     try {
+      if (!recipeImage)
+        throw new Error('There is no image. Please upload an image.');
+
+      const recipe = createRecipe(data, recipeImage);
+
       return await create_recipe({
         variables: {
           input: {
-            name,
-            prep_time: Number(prep_time),
-            serves: Number(serves),
-            ingredients,
-            difficulty,
-            style: other_style ? other_style : style,
-            image_url: recipeImage?.image_url,
-            image_name: recipeImage?.image_name,
-            description,
+            name: recipe.name,
+            prepTime: recipe.prepTime,
+            serves: recipe.serves,
+            ingredients: recipe.ingredients,
+            difficulty: recipe.difficulty,
+            style: recipe.style,
+            imageUrl: recipe.imageUrl,
+            imageName: recipe.imageName,
+            description: recipe.description,
           },
         },
       });

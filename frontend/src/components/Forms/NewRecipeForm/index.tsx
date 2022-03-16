@@ -8,11 +8,11 @@ import useNewRecipeForm from '@Components/Forms/NewRecipeForm/hook';
 import Input from '@Components/generic/Input';
 import ReactSelect from '@Components/generic/ReactSelect';
 import { foodStyle, difficulty } from '@Lib/utils/select-options/new-recipe';
-import { SelectOption } from '@Interfaces/select/option.interface';
 import { AlertMessages, FormMessages } from '@Enums/config/messages.enum';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
-import { FormValuesNewRecipe } from '@Types/forms/new-recipe.type';
-import { RecipeImage } from '@Interfaces/domain/recipe.interface';
+import type { SelectOption } from '@Interfaces/select/option.interface';
+import type { RecipeImage } from '@Interfaces/domain/recipe.interface';
+import type { FormValuesNewRecipe } from '@Types/forms/new-recipe.type';
 
 export type NewRecipeForm = {
   recipeImage?: RecipeImage;
@@ -58,7 +58,7 @@ const NewRecipeForm: FC<NewRecipeForm> = ({ recipeImage, setRecipeImage }) => {
     const response = await newRecipe({ data, recipeImage });
 
     if (response?.data) {
-      setRecipeImage({ image_url: undefined, image_name: undefined });
+      setRecipeImage({ imageUrl: undefined, imageName: undefined });
 
       router.push(MainPaths.INDEX);
 
@@ -90,11 +90,11 @@ const NewRecipeForm: FC<NewRecipeForm> = ({ recipeImage, setRecipeImage }) => {
           type="number"
           placeholder="Preparation Time"
           register={{
-            ...register('prep_time', {
+            ...register('prepTime', {
               required: FormMessages.PREP_TIME_REQUIRED,
             }),
           }}
-          error={errors.prep_time}
+          error={errors.prepTime}
         />
         <Input
           label="Serves"
@@ -129,7 +129,7 @@ const NewRecipeForm: FC<NewRecipeForm> = ({ recipeImage, setRecipeImage }) => {
                   className="w-7 bg-red-700 ml-1 p-1 text-white text-center rounded"
                   onClick={() => removeIngredients(index, counter)}
                 >
-                  -
+                  <span>-</span>
                 </button>
 
                 {errors?.ingredients &&
@@ -184,7 +184,7 @@ const NewRecipeForm: FC<NewRecipeForm> = ({ recipeImage, setRecipeImage }) => {
             type="text"
             placeholder="Introduce that style"
             register={{
-              ...register('other_style', {
+              ...register('otherStyle', {
                 required: FormMessages.STYLE_REQUIRED,
               }),
             }}

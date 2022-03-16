@@ -52,8 +52,8 @@ const MenuMobile: FC = () => {
               {authState?.user ? (
                 <>
                   <UserIcon
-                    imageUrl={authState.user.image_url}
-                    imageName={authState.user.image_name}
+                    imageUrl={authState.user.imageUrl}
+                    imageName={authState.user.imageName}
                     w={80}
                     h={80}
                   />

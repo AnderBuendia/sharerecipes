@@ -1,9 +1,9 @@
-import { UserEntity } from '@Shared/infrastructure/http/mongodb/interfaces/documents/user-document.interface';
 import { VOUuid } from '@Shared/domain/value-objects/uuid.vo';
 import { VOBoolean } from '@Shared/domain/value-objects/boolean.vo';
 import { VOUserName } from '@Shared/domain/value-objects/name.vo';
 import { VOEmail } from '@Shared/domain/value-objects/email.vo';
 import { VOHashedPassword } from '@Shared/domain/value-objects/hashed-password.vo';
+import type { UserEntity } from '@Shared/infrastructure/http/mongodb/interfaces/documents/user-document.interface';
 
 export class UserModel {
   public constructor(
@@ -11,8 +11,8 @@ export class UserModel {
     public name: VOUserName,
     public email: VOEmail,
     public password: VOHashedPassword,
-    public image_url?: string,
-    public image_name?: string,
+    public imageUrl?: string,
+    public imageName?: string,
     public confirmed?: VOBoolean,
     public role?: string
   ) {}
@@ -26,24 +26,16 @@ export class UserModel {
   }
 
   static update(userData: UserModel) {
-    const {
-      _id,
-      name,
-      email,
-      password,
-      image_url,
-      image_name,
-      confirmed,
-      role,
-    } = userData;
+    const { _id, name, email, password, imageUrl, imageName, confirmed, role } =
+      userData;
 
     const user = new UserModel(
       _id,
       name,
       email,
       password,
-      image_url,
-      image_name,
+      imageUrl,
+      imageName,
       confirmed,
       role
     );

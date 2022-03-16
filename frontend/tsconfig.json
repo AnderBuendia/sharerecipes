@@ -19,6 +19,7 @@
       "@Application/*": ["src/application/*"],
       "@Components/*": ["src/components/*"],
       "@Config/*": ["src/config/*"],
+      "@Domain/*": ["src/domain/*"],
       "@Enums/*": ["src/enums/*"],
       "@Interfaces/*": ["src/interfaces/*"],
       "@Lib/*": ["src/lib/*"],

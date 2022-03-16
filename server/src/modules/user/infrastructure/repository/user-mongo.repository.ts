@@ -32,8 +32,8 @@ export class UserRepository implements UserRepositoryInterface {
       _id: domainEntity._id.value,
       name: domainEntity.name.value,
       email: domainEntity.email.value,
-      image_url: domainEntity.image_url,
-      image_name: domainEntity.image_name,
+      imageUrl: domainEntity.imageUrl,
+      imageName: domainEntity.imageName,
       confirmed: domainEntity.confirmed.value,
       role: domainEntity.role,
     };
@@ -49,8 +49,8 @@ export class UserRepository implements UserRepositoryInterface {
       name: domainEntity.name.value,
       email: domainEntity.email.value,
       password: domainEntity.password.value,
-      image_url: domainEntity.image_url,
-      image_name: domainEntity.image_name,
+      image_url: domainEntity.imageUrl,
+      image_name: domainEntity.imageName,
       confirmed: domainEntity.confirmed?.value,
       role: domainEntity.role,
     };

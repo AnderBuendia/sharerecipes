@@ -1,8 +1,8 @@
-import { FC, FormEvent } from 'react';
+import type { FC, FormEvent } from 'react';
 import { useRouter } from 'next/router';
+import { useSearchStorage } from '@Services/storageAdapter';
 import { SearchIcon } from '@Components/Icons/search.icon';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
-import { useSearchStorage } from '@Services/storageAdapter';
 
 const SearchBarDesktop: FC = () => {
   const router = useRouter();

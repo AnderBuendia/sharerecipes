@@ -1,7 +1,5 @@
 import type { Request, Response } from 'express';
 import { TOKEN_CODE, API_URL } from '@Shared/utils/constants';
-import type { UserRepositoryInterface } from '@Modules/user/infrastructure/repository/user-mongo.repository.interface';
-import type { UploadRepositoryInterface } from '@Modules/upload/infrastructure/repository/upload.repository.interface';
 import { MainPaths } from '@Shared/infrastructure/enums/paths/main-paths.enum';
 import {
   CommonErrors,
@@ -9,6 +7,8 @@ import {
   UserErrors,
 } from '@Shared/infrastructure/enums/errors.enum';
 import { HTTPStatusCodes } from '@Shared/infrastructure/enums/http-status-code.enum';
+import type { UserRepositoryInterface } from '@Modules/user/infrastructure/repository/user-mongo.repository.interface';
+import type { UploadRepositoryInterface } from '@Modules/upload/infrastructure/repository/upload.repository.interface';
 
 const IMAGES_API_URL = `${API_URL}${MainPaths.IMAGES}`;
 
@@ -43,7 +43,7 @@ export class UploadRecipeImageUseCase {
 
       return res
         .status(Number(HTTPStatusCodes.OK))
-        .json({ image_url: imageUrl, image_name: filename });
+        .json({ imageUrl, imageName: filename });
     } catch (error) {
       res
         .status(Number(HTTPStatusCodes.INTERNAL_SERVER_ERROR))

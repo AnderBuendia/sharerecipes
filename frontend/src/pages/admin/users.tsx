@@ -19,11 +19,12 @@ import { useUser } from '@Services/userAdapter';
 import UsersPanel from '@Components/Admin/UsersPanel';
 import MainLayout from '@Components/Layouts/MainLayout';
 import Spinner from '@Components/generic/Spinner';
-import type { GSSProps } from '@Interfaces/props/gss-props.interface';
-import type { IRedirect } from '@Interfaces/redirect.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { RedirectConditions } from '@Enums/redirect-conditions.enum';
+import { HTTPStatusCodes } from '@Enums/config/http-status-codes.enum';
 import { UserRoles } from '@Enums/user/user-roles.enum';
+import type { GSSProps } from '@Interfaces/props/gss-props.interface';
+import type { IRedirect } from '@Interfaces/redirect.interface';
 
 const AdminUsers: NextPage = () => {
   const router = useRouter();
@@ -76,7 +77,7 @@ const AdminUsers: NextPage = () => {
 
 const redirect: IRedirect = {
   href: MainPaths.INDEX,
-  statusCode: 302,
+  statusCode: HTTPStatusCodes.FOUND,
   condition: RedirectConditions.REDIRECT_WHEN_USER_NOT_EXISTS,
 };
 

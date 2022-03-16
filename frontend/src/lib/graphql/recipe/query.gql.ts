@@ -12,28 +12,28 @@ export const COMMENTS_FRAGMENT = gql`
         _id
         name
         email
-        image_url
-        image_name
+        imageUrl
+        imageName
       }
     }
   }
 `;
 
 export const FIND_RECIPES = gql`
-  query find_recipes($sort: String, $offset: Int, $limit: Int) {
-    find_recipes(sort: $sort, offset: $offset, limit: $limit) {
+  query find_recipes($sort: String, $query: String, $offset: Int, $limit: Int) {
+    find_recipes(sort: $sort, query: $query, offset: $offset, limit: $limit) {
       _id
       name
-      prep_time
+      prepTime
       serves
       ingredients
       difficulty
       style
-      image_url
-      image_name
+      imageUrl
+      imageName
       description
-      average_vote
-      url_query
+      averageVote
+      urlQuery
       comments {
         _id
       }
@@ -46,14 +46,14 @@ export const FIND_RECIPE = gql`
     find_recipe(recipeUrlQuery: $recipeUrlQuery) {
       _id
       name
-      prep_time
+      prepTime
       serves
       ingredients
       description
       difficulty
       style
-      image_url
-      image_name
+      imageUrl
+      imageName
       author {
         _id
         name
@@ -62,8 +62,8 @@ export const FIND_RECIPE = gql`
       ...CommentsFragment
       votes
       voted
-      average_vote
-      url_query
+      averageVote
+      urlQuery
     }
   }
 

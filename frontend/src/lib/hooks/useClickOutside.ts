@@ -1,4 +1,5 @@
-import { useEffect, MutableRefObject, Dispatch, SetStateAction } from 'react';
+import { useEffect } from 'react';
+import type { MutableRefObject, Dispatch, SetStateAction } from 'react';
 
 export type EventType = MouseEvent | TouchEvent;
 

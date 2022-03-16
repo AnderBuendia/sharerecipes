@@ -5,16 +5,16 @@ export const CREATE_RECIPE = gql`
     create_recipe(input: $input) {
       _id
       name
-      prep_time
+      prepTime
       serves
       ingredients
       difficulty
       style
-      image_url
-      image_name
+      imageUrl
+      imageName
       description
-      average_vote
-      url_query
+      averageVote
+      urlQuery
       comments {
         _id
       }
@@ -28,7 +28,7 @@ export const VOTE_RECIPE = gql`
       _id
       voted
       votes
-      average_vote
+      averageVote
     }
   }
 `;

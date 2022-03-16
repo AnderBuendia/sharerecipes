@@ -13,17 +13,18 @@ import {
   serverRedirect,
 } from '@Lib/utils/ssr.utils';
 import ProfileLayout from '@Components/Layouts/ProfileLayout';
-import { GSSProps } from '@Interfaces/props/gss-props.interface';
-import { IRedirect } from '@Interfaces/redirect.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { ProfilePaths } from '@Enums/paths/profile-paths.enum';
 import { RedirectConditions } from '@Enums/redirect-conditions.enum';
+import { HTTPStatusCodes } from '@Enums/config/http-status-codes.enum';
+import type { IRedirect } from '@Interfaces/redirect.interface';
+import type { GSSProps } from '@Interfaces/props/gss-props.interface';
 
 const ProfilePage: NextPage = () => <ProfileLayout path={ProfilePaths.MAIN} />;
 
 const redirect: IRedirect = {
   href: MainPaths.LOGIN,
-  statusCode: 302,
+  statusCode: HTTPStatusCodes.FOUND,
   condition: RedirectConditions.REDIRECT_WHEN_USER_NOT_EXISTS,
   query: { returnTo: MainPaths.PROFILE },
 };

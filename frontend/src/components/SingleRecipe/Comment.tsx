@@ -42,8 +42,8 @@ const Comment: FC<CommentProps> = ({ comment, recipe, index, fetchMore }) => {
     <div>
       <div className="flex w-full items-center mt-4">
         <UserIcon
-          imageUrl={author.image_url}
-          imageName={author.image_name}
+          imageUrl={author.imageUrl}
+          imageName={author.imageName}
           w={USER_ICON_DIMENSIONS}
           h={USER_ICON_DIMENSIONS}
         />
@@ -101,7 +101,7 @@ const Comment: FC<CommentProps> = ({ comment, recipe, index, fetchMore }) => {
           onEnter={() =>
             fetchMore({
               variables: {
-                recipeUrlQuery: recipe.url_query,
+                recipeUrlQuery: recipe.urlQuery,
                 offset: 0,
                 limit: index + 11,
               },

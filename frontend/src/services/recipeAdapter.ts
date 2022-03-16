@@ -5,9 +5,9 @@ import {
   VOTE_RECIPE,
   DELETE_RECIPE,
 } from '@Lib/graphql/recipe/mutation.gql';
-import { RecipeService } from '@Interfaces/ports/recipe.interface';
-import { IRecipe } from '@Interfaces/domain/recipe.interface';
-import { QueryDataFindRecipes } from '@Types/apollo/query/recipe.type';
+import type { RecipeService } from '@Interfaces/ports/recipe.interface';
+import type { IRecipe } from '@Interfaces/domain/recipe.interface';
+import type { QueryDataFindRecipes } from '@Types/apollo/query/recipe.type';
 
 export function useRecipe(): RecipeService {
   const findRecipe = ({
@@ -29,16 +29,18 @@ export function useRecipe(): RecipeService {
   };
 
   const findRecipes = ({
+    sort,
+    query,
     offset,
     limit,
-    sort,
   }: {
+    sort: string;
+    query?: string;
     offset: number;
     limit: number;
-    sort: string;
   }) => {
     return useQuery(FIND_RECIPES, {
-      variables: { sort, offset, limit },
+      variables: { sort, query, offset, limit },
     });
   };
 

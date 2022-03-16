@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import Select, { SingleValue } from 'react-select';
 import { SelectOption } from '@Interfaces/select/option.interface';
 import { createHtmlTag } from '@Lib/utils/create-html-tag.utils';

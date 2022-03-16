@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import Link from 'next/link';
 import SearchBarMobile from '@Components/Header/Mobile/SearchBarMobile';
 import DarkModeButton from '@Components/generic/DarkModeButton';
@@ -11,7 +11,7 @@ const HeaderMobile: FC = () => {
     <div className="flex flex-row items-center justify-between">
       <Link href={MainPaths.INDEX}>
         <a>
-          <RamenIcon w={33} h={33} />
+          <RamenIcon />
         </a>
       </Link>
 

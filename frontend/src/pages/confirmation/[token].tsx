@@ -8,10 +8,11 @@ import { useRouter } from 'next/router';
 import { removeJwtCookie } from '@Lib/utils/jwt-cookie.utils';
 import { checkActivationToken } from '@Lib/utils/user.utils';
 import MainLayout from '@Components/Layouts/MainLayout';
-import { GSSProps } from '@Interfaces/props/gss-props.interface';
 import { HTTPStatusCodes } from '@Enums/config/http-status-codes.enum';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { AlertMessages } from '@Enums/config/messages.enum';
+import { TimeNotifications } from '@Enums/config/notifications.enum';
+import type { GSSProps } from '@Interfaces/props/gss-props.interface';
 
 const ConfirmationTokenPage: NextPage = () => {
   const router = useRouter();
@@ -19,7 +20,7 @@ const ConfirmationTokenPage: NextPage = () => {
   useEffect(() => {
     setTimeout(() => {
       router.push(MainPaths.LOGIN);
-    }, 4000);
+    }, TimeNotifications.DELAY);
   }, [router]);
 
   return (

@@ -4,7 +4,6 @@ import {
   ApolloLink,
   createHttpLink,
   NormalizedCacheObject,
-  Reference,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';

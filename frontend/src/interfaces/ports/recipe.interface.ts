@@ -21,18 +21,21 @@ export interface RecipeService {
 
   findRecipes: ({
     offset,
+    query,
     limit,
     sort,
   }: {
+    sort: string;
+    query?: string;
     offset: number;
     limit: number;
-    sort: string;
   }) => QueryResult<
     any,
     {
+      sort: string;
+      query?: string;
       offset: number;
       limit: number;
-      sort: string;
     }
   >;
 

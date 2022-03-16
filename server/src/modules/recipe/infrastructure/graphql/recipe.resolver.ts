@@ -1,6 +1,7 @@
 import container from '@Shared/infrastructure/IoC/container';
 
 const DEFAULT_SORTED_RECIPES = '-createdAt';
+const DEFAULT_SEARCH_QUERY_RECIPES = '';
 
 const recipeResolvers = {
   /* Types to relation DBs */
@@ -21,8 +22,13 @@ const recipeResolvers = {
 
     find_recipes: (
       _,
-      { sort = DEFAULT_SORTED_RECIPES, offset = 0, limit = 20 }
-    ) => container.cradle.findRecipesQuery.execute(sort, offset, limit),
+      {
+        sort = DEFAULT_SORTED_RECIPES,
+        query = DEFAULT_SEARCH_QUERY_RECIPES,
+        offset = 0,
+        limit = 20,
+      }
+    ) => container.cradle.findRecipesQuery.execute(sort, query, offset, limit),
   },
 
   Mutation: {

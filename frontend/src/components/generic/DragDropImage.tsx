@@ -59,8 +59,8 @@ const DragDropImage: FC<DragDropImageProps> = ({
     });
 
     uppy.on('upload-success', (_file, response) => {
-      const imageUrl = response.body.image_url;
-      const imageName = response.body.image_name;
+      const imageUrl = response.body.imageUrl;
+      const imageName = response.body.imageName;
 
       uppy.reset();
       setModal(false);

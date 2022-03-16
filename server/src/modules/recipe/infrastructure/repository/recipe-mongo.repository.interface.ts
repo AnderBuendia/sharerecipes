@@ -15,6 +15,7 @@ export interface RecipeRepositoryInterface {
 
   findRecipes(
     sort: string,
+    query: string,
     offset: number,
     limit: number
   ): Promise<RecipeModel[]>;

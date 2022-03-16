@@ -16,18 +16,19 @@ import {
 import MainLayout from '@Components/Layouts/MainLayout';
 import NewRecipeForm from '@Components/Forms/NewRecipeForm';
 import DragDropImage from '@Components/generic/DragDropImage';
+import { MainPaths } from '@Enums/paths/main-paths.enum';
+import { HTTPStatusCodes } from '@Enums/config/http-status-codes.enum';
+import { RedirectConditions } from '@Enums/redirect-conditions.enum';
+import { ApiV1RestEndPoints } from '@Enums/paths/rest-endpoints.enum';
 import type { GSSProps } from '@Interfaces/props/gss-props.interface';
 import type { IRedirect } from '@Interfaces/redirect.interface';
 import type { RecipeImage } from '@Interfaces/domain/recipe.interface';
-import { MainPaths } from '@Enums/paths/main-paths.enum';
-import { RedirectConditions } from '@Enums/redirect-conditions.enum';
-import { ApiV1RestEndPoints } from '@Enums/paths/rest-endpoints.enum';
 
 const NewRecipePage: NextPage = () => {
   const [recipeImage, setRecipeImage] = useState<RecipeImage>();
 
   const handleChangeImage = (imageUrl: string, imageName: string) => {
-    setRecipeImage({ image_url: imageUrl, image_name: imageName });
+    setRecipeImage({ imageUrl: imageUrl, imageName: imageName });
   };
 
   return (
@@ -44,7 +45,7 @@ const NewRecipePage: NextPage = () => {
         <div className="flex w-128 h-56 overflow-hidden mx-auto my-4 rounded-md text-black">
           <DragDropImage
             url={`${process.env.NEXT_PUBLIC_BACKEND_URL}${ApiV1RestEndPoints.UPLOAD_RECIPE_IMAGE}`}
-            current={recipeImage?.image_url}
+            current={recipeImage?.imageUrl}
             name="photo"
             rounded={false}
             handleChange={handleChangeImage}
@@ -61,7 +62,7 @@ const NewRecipePage: NextPage = () => {
 
 const redirect: IRedirect = {
   href: MainPaths.INDEX,
-  statusCode: 302,
+  statusCode: HTTPStatusCodes.FOUND,
   condition: RedirectConditions.REDIRECT_WHEN_USER_NOT_EXISTS,
 };
 

@@ -1,7 +1,7 @@
 import { useRecipe } from '@Services/recipeAdapter';
 import { useNotifier } from '@Services/notificationAdapter';
-import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 import { MessageTypes } from '@Enums/config/messages.enum';
+import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 
 export function useDeleteRecipe({ recipeId }: { recipeId: IRecipe['_id'] }) {
   const { setDeleteRecipe } = useRecipe();

@@ -23,7 +23,7 @@ const FormLayout: FC<FormLayoutProps> = ({
     <div className="relative top-28 flex flex-col items-center justify-center">
       <Link href={MainPaths.INDEX}>
         <a>
-          <RamenIcon w={70} h={70} />
+          <RamenIcon />
         </a>
       </Link>
       <h2 className="text-3xl font-roboto font-bold text-center my-4">

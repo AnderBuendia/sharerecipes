@@ -8,7 +8,16 @@ export const SEND_RECIPE_COMMENT = gql`
     send_recipe_comment(recipeUrlQuery: $recipeUrlQuery, input: $input) {
       _id
       message
+      edited
       createdAt
+      votes
+      author {
+        _id
+        name
+        email
+        imageUrl
+        imageName
+      }
     }
   }
 `;

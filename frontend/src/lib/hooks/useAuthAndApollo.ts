@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { NormalizedCacheObject } from '@apollo/client';
-import { initializeApollo } from '../apollo/apollo-client';
-import { AuthProps } from '@Interfaces/props/gss-props.interface';
-import { AuthState } from '@Interfaces/domain/auth.interface';
+import { initializeApollo } from '@Lib/apollo/apollo-client';
+import type { AuthProps } from '@Interfaces/props/gss-props.interface';
+import type { AuthState } from '@Interfaces/domain/auth.interface';
 
 /**
  * Hook to handle the auth state and its Apollo client,

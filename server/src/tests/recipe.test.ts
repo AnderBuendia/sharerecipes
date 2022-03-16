@@ -66,13 +66,13 @@ describe('Recipe Tests', () => {
       mutation {
         create_recipe(input: {
           name: "CarrotCake",
-          prep_time: 34,
+          prepTime: 34,
           serves: 3,
           ingredients: ["5 carrots"],
           difficulty: MEDIUM,
           style: "AMERICAN",
-          image_url: "T35tim4g3.jpg",
-          image_name: "T35tim4g3.jpg",
+          imageUrl: "T35tim4g3.jpg",
+          imageName: "T35tim4g3.jpg",
           description: "Creating new carrot cake recipe"
         }) {
           name
