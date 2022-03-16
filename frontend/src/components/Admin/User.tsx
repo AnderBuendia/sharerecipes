@@ -1,8 +1,12 @@
 import type { FC } from 'react';
 import Swal from 'sweetalert2';
 import { useDeleteUser } from '@Application/use-case/user/delete-user.use-case';
-import type { UserProfile } from '@Interfaces/domain/user.interface';
 import { UserRoles } from '@Enums/user/user-roles.enum';
+import type { UserProfile } from '@Interfaces/domain/user.interface';
+
+const NUMBER_OF_USERS_TO_SHOW = 9;
+const USER_CONFIRMED = 'Active';
+const USER_NOT_CONFIRMED = 'Inactive';
 
 export type UserProps = {
   user: UserProfile;
@@ -12,8 +16,8 @@ export type UserProps = {
 const User: FC<UserProps> = ({ user, page }) => {
   const { name, email, role, confirmed } = user;
   const { deleteUser } = useDeleteUser({
-    offset: page * 9,
-    limit: 9,
+    offset: page * NUMBER_OF_USERS_TO_SHOW,
+    limit: NUMBER_OF_USERS_TO_SHOW,
     email,
   });
 
@@ -38,30 +42,30 @@ const User: FC<UserProps> = ({ user, page }) => {
     });
   };
 
+  const roleStyle = role.includes(UserRoles.ADMIN)
+    ? 'bg-purple-600 border-purple-600'
+    : 'bg-yellow-600 border-yellow-600';
+
+  const confirmedStyle = confirmed
+    ? 'bg-green-600 border-green-600'
+    : 'bg-red-600 border-red-600';
+
   return (
     <tr className="text-center font-roboto border-t border-gray-200">
       <td className="p-3">{name}</td>
       <td className="p-3">{email}</td>
       <td className="p-3">
         <span
-          className={`${
-            role.includes(UserRoles.ADMIN)
-              ? 'bg-purple-600 border-purple-600'
-              : 'bg-yellow-600 border-yellow-600'
-          } px-2 py-1 uppercase text-sm text-white rounded-full`}
+          className={`${roleStyle} px-2 py-1 uppercase text-sm text-white rounded-full`}
         >
           {role}
         </span>
       </td>
       <td className="p-3">
         <span
-          className={`${
-            confirmed
-              ? 'bg-green-600 border-green-600'
-              : 'bg-red-600 border-red-600'
-          } rounded-full px-2 py-1 uppercase text-sm text-white`}
+          className={`${confirmedStyle} rounded-full px-2 py-1 uppercase text-sm text-white`}
         >
-          {confirmed ? 'Active' : 'Inactive'}
+          {confirmed ? USER_CONFIRMED : USER_NOT_CONFIRMED}
         </span>
       </td>
       <td className="p-3">

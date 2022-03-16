@@ -3,6 +3,7 @@ import type {
   GetServerSideProps,
   GetServerSidePropsContext,
 } from 'next';
+import dynamic from 'next/dynamic';
 import { decode } from 'jsonwebtoken';
 import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
 import { isRequestSSR, loadAuthProps } from '@Lib/utils/ssr.utils';
@@ -10,11 +11,14 @@ import { createApolloClient } from '@Lib/apollo/apollo-client';
 import { useRecipe } from '@Services/recipeAdapter';
 import { useRecipeStorage } from '@Services/storageAdapter';
 import MainLayout from '@Components/Layouts/MainLayout';
-import RecipesList from '@Components/Recipes/RecipesList';
 import RecipesNav from '@Components/Recipes/RecipesNav';
 import SkeletonRecipeCard from '@Components/Recipes/SkeletonRecipeCard';
-import type { GSSProps } from '@Interfaces/props/gss-props.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
+import type { GSSProps } from '@Interfaces/props/gss-props.interface';
+
+const RecipesListDynamic = dynamic(
+  () => import('@Components/Recipes/RecipesList')
+);
 
 const IndexPage: NextPage = () => {
   const { sortRecipes } = useRecipeStorage();
@@ -43,7 +47,7 @@ const IndexPage: NextPage = () => {
       url={MainPaths.INDEX}
     >
       <RecipesNav />
-      <RecipesList recipes={recipes} fetchMore={fetchMore} />
+      <RecipesListDynamic recipes={recipes} fetchMore={fetchMore} />
     </MainLayout>
   );
 };

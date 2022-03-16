@@ -57,7 +57,7 @@ export class VoteRecipeUseCase {
         ...existingRecipe,
         voted: updatedVoted,
         votes: new VOPositiveNumber(sumVotes),
-        average_vote: new VOPositiveNumber(averageVotes),
+        averageVote: new VOPositiveNumber(averageVotes),
       };
 
       const domainRecipe = RecipeModel.update(normalizeRecipe);

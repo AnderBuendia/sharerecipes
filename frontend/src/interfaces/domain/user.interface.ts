@@ -5,8 +5,8 @@ export interface UserMainData {
 }
 
 export interface UserImage {
-  image_name?: string;
-  image_url?: string;
+  imageName?: string;
+  imageUrl?: string;
 }
 
 export interface UserProfile extends UserMainData {

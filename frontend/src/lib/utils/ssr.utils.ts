@@ -3,7 +3,7 @@ import { ServerResponse } from 'http';
 import { loadCurrentUserSSR } from '@Lib/utils/user.utils';
 import { generateQueryParams } from '@Lib/utils/url.utils';
 import { removeJwtCookie } from '@Lib/utils/jwt-cookie.utils';
-import { IRedirect } from '@Interfaces/redirect.interface';
+import type { IRedirect } from '@Interfaces/redirect.interface';
 
 export const isRequestSSR = (currentUrl?: string) => {
   if (!currentUrl) return true;

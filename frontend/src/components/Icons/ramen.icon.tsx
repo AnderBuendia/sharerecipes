@@ -1,11 +1,15 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import Image from 'next/image';
+import ramenPic from '../../../public/ramen.svg';
 
-export type RamenIconProps = {
-  w: number;
-  h: number;
-};
+const RAMEN_PIC_DIMENSIONS = 42;
 
-export const RamenIcon: FC<RamenIconProps> = ({ w, h }) => {
-  return <Image src="/ramen.svg" width={w} height={h} />;
+export const RamenIcon: FC = () => {
+  return (
+    <Image
+      src={ramenPic}
+      width={RAMEN_PIC_DIMENSIONS}
+      height={RAMEN_PIC_DIMENSIONS}
+    />
+  );
 };

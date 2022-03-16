@@ -8,26 +8,28 @@ import { decode } from 'jsonwebtoken';
 import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
 import { isRequestSSR, loadAuthProps } from '@Lib/utils/ssr.utils';
 import { createApolloClient } from '@Lib/apollo/apollo-client';
-import { searchFilterRecipes } from '@Lib/utils/search-filter.utils';
 import { useRecipe } from '@Services/recipeAdapter';
-import { useRecipeStorage } from '@Services/storageAdapter';
 import MainLayout from '@Components/Layouts/MainLayout';
 import RecipesList from '@Components/Recipes/RecipesList';
 import SkeletonRecipeCard from '@Components/Recipes/SkeletonRecipeCard';
-import type { GSSProps } from '@Interfaces/props/gss-props.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
+import { RecipeQueryProperties } from '@Enums/graphql/query.enum';
+import { FIND_RECIPES } from '@Lib/graphql/recipe/query.gql';
+import type { GSSProps } from '@Interfaces/props/gss-props.interface';
+
+const SORT_RECIPES_BY = '-createdAt';
 
 const SearchPage: NextPage = () => {
-  const { sortRecipes } = useRecipeStorage();
-  const { findRecipes } = useRecipe();
-  const { data, loading, fetchMore } = findRecipes({
-    sort: sortRecipes,
-    offset: 0,
-    limit: 20,
-  });
   const router = useRouter();
   const { q } = router.query as Record<string, string>;
   const search = q.toLowerCase();
+  const { findRecipes } = useRecipe();
+  const { data, loading, fetchMore } = findRecipes({
+    sort: SORT_RECIPES_BY,
+    query: search,
+    offset: RecipeQueryProperties.OFFSET_NUMBER,
+    limit: RecipeQueryProperties.LIMIT_NUMBER,
+  });
 
   if (loading) {
     return (
@@ -38,7 +40,7 @@ const SearchPage: NextPage = () => {
     );
   }
 
-  const recipes = data ? searchFilterRecipes(data.find_recipes, search) : null;
+  const recipes = data ? data.find_recipes : null;
 
   return (
     <MainLayout
@@ -62,17 +64,29 @@ export const getServerSideProps: GetServerSideProps = async (
 ) => {
   const props: GSSProps = { lostAuth: false };
   const isSSR = isRequestSSR(ctx.req.url);
-
   const jwt = getJwtFromCookie(ctx.req.headers.cookie);
+  const apolloClient = createApolloClient();
+  const { q } = ctx.query as Record<string, string>;
 
   if (jwt) {
     if (isSSR) {
-      const apolloClient = createApolloClient();
       const authProps = await loadAuthProps(ctx.res, jwt, apolloClient);
 
       if (authProps) props.authProps = authProps;
     } else if (!decode(jwt)) props.lostAuth = true;
   }
+
+  await apolloClient.query({
+    query: FIND_RECIPES,
+    variables: {
+      sort: SORT_RECIPES_BY,
+      query: q.toLowerCase(),
+      offset: RecipeQueryProperties.OFFSET_NUMBER,
+      limit: RecipeQueryProperties.LIMIT_NUMBER,
+    },
+  });
+
+  props.apolloCache = apolloClient.cache.extract();
 
   return { props: props || null };
 };

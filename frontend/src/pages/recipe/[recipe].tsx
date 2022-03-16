@@ -16,10 +16,10 @@ import MainLayout from '@Components/Layouts/MainLayout';
 import RecipeData from '@Components/SingleRecipe/RecipeData';
 import Discussion from '@Components/SingleRecipe/Discussion';
 import Spinner from '@Components/generic/Spinner';
-import type { GSSProps } from '@Interfaces/props/gss-props.interface';
-import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { FIND_RECIPE } from '@Lib/graphql/recipe/query.gql';
+import type { GSSProps } from '@Interfaces/props/gss-props.interface';
+import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 
 const RecipePage: NextPage = () => {
   const router = useRouter();
@@ -87,9 +87,7 @@ export const getServerSideProps: GetServerSideProps = async (
 ) => {
   const props: GSSProps = { lostAuth: false };
   const isSSR = isRequestSSR(ctx.req.url);
-
   const jwt = getJwtFromCookie(ctx.req.headers.cookie);
-
   const apolloClient = createApolloClient();
 
   if (jwt) {
@@ -105,7 +103,7 @@ export const getServerSideProps: GetServerSideProps = async (
     variables: {
       recipeUrlQuery: ctx.params?.recipe,
       offset: 0,
-      limit: 10,
+      limit: 20,
     },
   });
 

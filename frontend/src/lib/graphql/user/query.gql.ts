@@ -7,8 +7,8 @@ export const FIND_USER = gql`
       name
       email
       role
-      image_url
-      image_name
+      imageUrl
+      imageName
       confirmed
     }
   }

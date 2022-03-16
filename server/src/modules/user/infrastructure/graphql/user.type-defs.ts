@@ -7,8 +7,8 @@ const userTypeDefs = gql`
     name: String
     email: String
     role: String
-    image_url: String
-    image_name: String
+    imageUrl: String
+    imageName: String
     confirmed: Boolean
   }
 

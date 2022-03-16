@@ -14,7 +14,7 @@ const HeaderDesktop: FC = () => {
     <div className="flex flex-row items-center justify-between">
       <Link href={MainPaths.INDEX}>
         <a>
-          <RamenIcon w={44} h={44} />
+          <RamenIcon />
         </a>
       </Link>
 

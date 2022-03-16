@@ -3,15 +3,15 @@ import { SortRecipesEnum } from '@Enums/sort-recipes.enum';
 
 const DEFAULT_SORT_RECIPES = 'Recent';
 
+const LABEL_BUTTON: { [key: string]: string } = {
+  [SortRecipesEnum.CREATED_AT]: 'Recent',
+  [SortRecipesEnum.AVERAGE_VOTE]: 'Popular',
+};
+
 export type SortRecipesButtonProps = {
   sortRecipes: string;
   handleSortRecipes: (value: string) => void;
   sortValue: string;
-};
-
-const LABEL_BUTTON: { [key: string]: string } = {
-  [SortRecipesEnum.CREATED_AT]: 'Recent',
-  [SortRecipesEnum.AVERAGE_VOTE]: 'Popular',
 };
 
 const SortRecipesButton: FC<SortRecipesButtonProps> = ({

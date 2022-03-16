@@ -1,20 +1,20 @@
 import { FC, useRef, MutableRefObject } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useAuthenticate } from '@Application/authenticate';
 import { useClickOutside } from '@Lib/hooks/useClickOutside';
 import { UserIcon } from '@Components/Icons/user.icon';
 import { UserRoles } from '@Enums/user/user-roles.enum';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
-import { UserCompleteProfile } from '@Interfaces/domain/user.interface';
-import { useAuthenticate } from '@Application/authenticate';
+import type { UserCompleteProfile } from '@Interfaces/domain/user.interface';
 
 export type DropdownMenuProps = {
   user: UserCompleteProfile;
 };
 
 const DropdownMenu: FC<DropdownMenuProps> = ({ user }) => {
+  const { name, imageUrl, imageName, role } = user;
   const { openDropdown, setOpenDropdown, signOut } = useAuthenticate();
-  const { name, image_url, image_name, role } = user;
   const router = useRouter();
   const componentRef = useRef() as MutableRefObject<HTMLDivElement>;
 
@@ -38,7 +38,7 @@ const DropdownMenu: FC<DropdownMenuProps> = ({ user }) => {
         aria-expanded="true"
         onClick={() => setOpenDropdown(!openDropdown)}
       >
-        <UserIcon imageUrl={image_url} imageName={image_name} w={46} h={46} />
+        <UserIcon imageUrl={imageUrl} imageName={imageName} w={46} h={46} />
       </div>
 
       {openDropdown && (
@@ -54,7 +54,7 @@ const DropdownMenu: FC<DropdownMenuProps> = ({ user }) => {
                 className="block px-4 py-3 text-sm font-bold leading-5 border-b border-gray-200"
                 role="menuitem"
               >
-                Hi, {name}
+                <span>Hi, {name}</span>
               </p>
               {role === UserRoles.ADMIN && (
                 <Link href={MainPaths.ADMIN}>

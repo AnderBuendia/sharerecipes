@@ -3,19 +3,19 @@ import { RecipeEntityDoc } from '@Shared/infrastructure/http/mongodb/interfaces/
 export type PublicRecipeDTO = RecipeEntityDoc;
 
 export interface DefaultRecipeDTO {
-  url_query: string;
+  urlQuery: string;
 }
 
 export interface CreateRecipeDTO {
   name: string;
   serves: number;
-  prep_time: number;
+  prepTime: number;
   ingredients: string[];
   difficulty: string;
   style: string;
+  imageUrl: string;
+  imageName: string;
   description: string;
-  image_url: string;
-  image_name: string;
 }
 
 export interface VoteRecipeDTO extends DefaultRecipeDTO {

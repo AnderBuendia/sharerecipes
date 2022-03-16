@@ -7,8 +7,8 @@ import { useClickOutside } from '@Lib/hooks/useClickOutside';
 import ModalSignUp from '@Components/SingleRecipe/ModalSignUp';
 import Comment from '@Components/SingleRecipe/Comment';
 import { UserIcon } from '@Components/Icons/user.icon';
-import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
+import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 import type { FetchMoreFindRecipeArgs } from '@Types/apollo/query/fetch-more.type';
 import type { FormValuesDiscussion } from '@Types/forms/discussion.type';
 
@@ -21,13 +21,13 @@ export type DiscussionProps = {
 };
 
 const Discussion: FC<DiscussionProps> = ({ recipe, fetchMore }) => {
-  const { url_query } = recipe;
+  const { urlQuery } = recipe;
   const router = useRouter();
   const [showModal, setShowModal] = useState<boolean>(false);
   const componentRef = useRef() as MutableRefObject<HTMLDivElement>;
   const { authState } = useUserStorage();
   const { sendRecipeComment } = useSendRecipeComment({
-    recipeUrlQuery: url_query,
+    recipeUrlQuery: urlQuery,
   });
 
   const { handleSubmit, register, reset } = useForm<FormValuesDiscussion>({
@@ -46,8 +46,8 @@ const Discussion: FC<DiscussionProps> = ({ recipe, fetchMore }) => {
     if (!authState?.user) return setShowModal(true);
 
     const response = await sendRecipeComment({
+      recipeUrlQuery: urlQuery,
       message,
-      recipeUrlQuery: url_query,
     });
 
     if (response?.data) reset();
@@ -64,8 +64,8 @@ const Discussion: FC<DiscussionProps> = ({ recipe, fetchMore }) => {
       <div className="flex flex-row w-full">
         <div>
           <UserIcon
-            imageUrl={authState?.user?.image_url}
-            imageName={authState?.user?.image_name}
+            imageUrl={authState?.user?.imageUrl}
+            imageName={authState?.user?.imageName}
             w={USER_ICON_DIMENSION}
             h={USER_ICON_DIMENSION}
           />

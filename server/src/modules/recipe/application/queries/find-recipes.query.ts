@@ -6,10 +6,11 @@ import { HTTPStatusCodes } from '@Shared/infrastructure/enums/http-status-code.e
 export class FindRecipesQuery {
   constructor(private readonly recipeRepository: RecipeRepositoryInterface) {}
 
-  async execute(sort: string, offset: number, limit: number) {
+  async execute(sort: string, query: string, offset: number, limit: number) {
     try {
       const existingRecipes = await this.recipeRepository.findRecipes(
         sort,
+        query,
         offset,
         limit
       );

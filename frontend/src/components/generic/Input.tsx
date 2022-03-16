@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import type { FC } from 'react';
 import { FieldError, UseFormRegisterReturn } from 'react-hook-form';
 import { createHtmlTag } from '@Lib/utils/create-html-tag.utils';
 

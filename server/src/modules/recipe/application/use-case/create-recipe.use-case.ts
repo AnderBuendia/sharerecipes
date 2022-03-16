@@ -21,13 +21,13 @@ export class CreateRecipeUseCase {
     const {
       name,
       serves,
-      prep_time,
+      prepTime,
       ingredients,
       difficulty,
       style,
       description,
-      image_url,
-      image_name,
+      imageUrl,
+      imageName,
     } = input;
 
     try {
@@ -50,18 +50,18 @@ export class CreateRecipeUseCase {
         _id: new VOUuid(uuidv4()),
         name: new VORecipeName(name),
         serves: new VOPositiveNumber(serves),
-        prep_time: new VOPositiveNumber(prep_time),
+        prepTime: new VOPositiveNumber(prepTime),
         ingredients,
         difficulty,
         style,
         description,
-        image_url,
-        image_name,
-        url_query: urlQuery,
-        author: new VOUuid(ctxUserId),
+        imageUrl,
+        imageName,
         votes: new VOPositiveNumber(DEFAULT_NUMBER_OF_VOTES),
         voted: [],
-        average_vote: new VOPositiveNumber(DEFAULT_AVERAGE_VOTE),
+        averageVote: new VOPositiveNumber(DEFAULT_AVERAGE_VOTE),
+        author: new VOUuid(ctxUserId),
+        urlQuery: urlQuery,
       };
 
       const domainRecipe = RecipeModel.create(normalizeRecipe);

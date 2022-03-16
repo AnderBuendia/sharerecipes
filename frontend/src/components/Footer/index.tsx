@@ -4,7 +4,7 @@ import { SocialPaths } from '@Enums/paths/social-paths.enum';
 
 const Footer: FC = () => {
   return (
-    <footer className="place-content-center p-4 flex flex-col justify-center items-center">
+    <footer className="flex flex-col justify-center items-center p-4">
       <div className="flex flex-row items-center">
         <p>Developed by</p>
 
@@ -13,7 +13,7 @@ const Footer: FC = () => {
           target="_blank"
           className="ml-2 py-1 px-2 rounded-3xl flex items-center bg-black text-white dark:bg-white dark:text-black"
         >
-          <CreatorIcon w={28} h={28} style="rounded-full" />
+          <CreatorIcon />
           <span className="ml-1">anderb</span>
         </a>
       </div>

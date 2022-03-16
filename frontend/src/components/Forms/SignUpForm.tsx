@@ -9,6 +9,8 @@ import { FormMessages } from '@Enums/config/messages.enum';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import type { FormValuesSignUpForm } from '@Types/forms/signup-form.type';
 
+const MIN_PASSWORD_CHARACTERS = 7;
+
 const SignUpForm: FC = () => {
   const router = useRouter();
   const { newUser } = useNewUser();
@@ -74,7 +76,7 @@ const SignUpForm: FC = () => {
             ...register('password', {
               required: FormMessages.PASSWORD_REQUIRED,
               minLength: {
-                value: 7,
+                value: MIN_PASSWORD_CHARACTERS,
                 message: FormMessages.MIN_LENGTH,
               },
             }),

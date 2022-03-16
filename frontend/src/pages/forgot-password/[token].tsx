@@ -12,12 +12,16 @@ import { serverRedirect } from '@Lib/utils/ssr.utils';
 import { useResetUserPassword } from '@Application/use-case/user/reset-user-password.use-case';
 import FormLayout from '@Components/Layouts/FormLayout';
 import Input from '@Components/generic/Input';
-import type { GSSProps } from '@Interfaces/props/gss-props.interface';
-import type { IRedirect } from '@Interfaces/redirect.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { RedirectConditions } from '@Enums/redirect-conditions.enum';
 import { FormMessages } from '@Enums/config/messages.enum';
+import { TimeNotifications } from '@Enums/config/notifications.enum';
+import { HTTPStatusCodes } from '@Enums/config/http-status-codes.enum';
+import type { GSSProps } from '@Interfaces/props/gss-props.interface';
+import type { IRedirect } from '@Interfaces/redirect.interface';
 import type { FormValuesResetUserPasswordToken } from '@Types/forms/reset-password-token.type';
+
+const MIN_PASSWORD_CHARACTERS = 7;
 
 export type ResetPasswordTokenPageProps = {
   token: string;
@@ -43,7 +47,7 @@ const ResetPasswordTokenPage: NextPage<ResetPasswordTokenPageProps> = ({
     setTimeout(() => {
       if (response) return router.push(MainPaths.LOGIN);
       else return router.push(MainPaths.FORGOT_USER_PASSWORD);
-    }, 3000);
+    }, TimeNotifications.DELAY);
   });
 
   return (
@@ -61,7 +65,7 @@ const ResetPasswordTokenPage: NextPage<ResetPasswordTokenPageProps> = ({
             ...register('password', {
               required: FormMessages.PASSWORD_REQUIRED,
               minLength: {
-                value: 7,
+                value: MIN_PASSWORD_CHARACTERS,
                 message: 'Minimum 7 characters',
               },
             }),
@@ -105,7 +109,7 @@ const ResetPasswordTokenPage: NextPage<ResetPasswordTokenPageProps> = ({
 
 const redirect: IRedirect = {
   href: MainPaths.NOT_FOUND,
-  statusCode: 302,
+  statusCode: HTTPStatusCodes.FOUND,
   condition: RedirectConditions.REDIRECT_WHEN_TOKEN_NOT_EXISTS,
 };
 

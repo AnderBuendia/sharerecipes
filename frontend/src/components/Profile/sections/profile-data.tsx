@@ -5,8 +5,8 @@ import { useUserStorage } from '@Services/storageAdapter';
 import { FormMessages } from '@Enums/config/messages.enum';
 import DragDropImage from '@Components/generic/DragDropImage';
 import Input from '@Components/generic/Input';
-import type { AuthState } from '@Interfaces/domain/auth.interface';
 import { ApiV1RestEndPoints } from '@Enums/paths/rest-endpoints.enum';
+import type { AuthState } from '@Interfaces/domain/auth.interface';
 
 export type FormValuesProfileData = {
   name: string;
@@ -30,15 +30,15 @@ const ProfileData: FC = () => {
   const handleImageUser = (imageUrl: string, imageName: string) => {
     setAuth((oldState: AuthState): AuthState => {
       if (
-        oldState.user?.image_name !== imageName ||
-        oldState.user?.image_url !== imageUrl
+        oldState.user?.imageName !== imageName ||
+        oldState.user?.imageUrl !== imageUrl
       ) {
         return {
           ...oldState,
           user: {
             ...oldState.user,
-            image_url: imageUrl,
-            image_name: imageName,
+            imageUrl: imageUrl,
+            imageName: imageName,
           },
         } as AuthState;
       }
@@ -59,7 +59,7 @@ const ProfileData: FC = () => {
         <div className="flex w-32 h-32 overflow-hidden mx-auto rounded-full my-4 text-black">
           <DragDropImage
             url={`${process.env.NEXT_PUBLIC_BACKEND_URL}${ApiV1RestEndPoints.UPLOAD_USER_IMAGE}`}
-            current={authState?.user?.image_url}
+            current={authState?.user?.imageUrl}
             name="photo"
             rounded
             handleChange={handleImageUser}

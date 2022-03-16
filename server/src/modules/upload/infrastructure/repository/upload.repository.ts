@@ -5,9 +5,9 @@ import type { UploadRepositoryInterface } from '@Modules/upload/infrastructure/r
 
 export class UploadRepository implements UploadRepositoryInterface {
   deleteCurrentUserImageFile(user: UserModel) {
-    const pathName = `${IMAGES_PATH}/${user.image_name}`;
+    const pathName = `${IMAGES_PATH}/${user.imageName}`;
 
-    if (user.image_name) unlinkSync(pathName);
+    if (user.imageName) unlinkSync(pathName);
   }
 
   deleteImageFile(imageUrl: string) {

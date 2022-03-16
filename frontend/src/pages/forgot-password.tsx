@@ -18,14 +18,14 @@ import {
 import { useForgotUserPassword } from '@Application/use-case/user/forgot-user-password.use-case.';
 import FormLayout from '@Components/Layouts/FormLayout';
 import Input from '@Components/generic/Input';
-import type { GSSProps } from '@Interfaces/props/gss-props.interface';
-import type { IRedirect } from '@Interfaces/redirect.interface';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { RedirectConditions } from '@Enums/redirect-conditions.enum';
 import { FormMessages } from '@Enums/config/messages.enum';
+import { HTTPStatusCodes } from '@Enums/config/http-status-codes.enum';
+import { TimeNotifications } from '@Enums/config/notifications.enum';
+import type { GSSProps } from '@Interfaces/props/gss-props.interface';
+import type { IRedirect } from '@Interfaces/redirect.interface';
 import type { FormValuesForgotUserPassword } from '@Types/forms/forgot-password.type';
-
-const DELAY_TIME_NOTIFICATION = 3000;
 
 const ForgotPasswordPage: NextPage = () => {
   const router = useRouter();
@@ -43,7 +43,7 @@ const ForgotPasswordPage: NextPage = () => {
     if (response) {
       setTimeout(() => {
         router.push(MainPaths.INDEX);
-      }, DELAY_TIME_NOTIFICATION);
+      }, TimeNotifications.DELAY);
     }
   });
 
@@ -89,7 +89,7 @@ const ForgotPasswordPage: NextPage = () => {
 
 const redirect: IRedirect = {
   href: MainPaths.INDEX,
-  statusCode: 302,
+  statusCode: HTTPStatusCodes.FOUND,
   condition: RedirectConditions.REDIRECT_WHEN_USER_EXISTS,
 };
 

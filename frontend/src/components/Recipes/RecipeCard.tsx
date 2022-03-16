@@ -11,6 +11,7 @@ const MAX_NUMBER_SHOW_RECIPES = 12;
 const LIMIT_SHOW_RECIPES = 1;
 const OFFSET_NUMBER = 0;
 const LIMIT_NUMBER = 20;
+const INITIAL_COMMENTS = 0;
 
 export type RecipeCardProps = {
   recipe: IRecipe;
@@ -28,13 +29,13 @@ const RecipeCard: FC<RecipeCardProps> = ({
   const {
     _id,
     name,
-    prep_time,
+    prepTime,
     serves,
     difficulty,
     style,
-    image_url,
-    average_vote,
-    url_query,
+    imageUrl,
+    averageVote,
+    urlQuery,
     comments,
   } = recipe;
 
@@ -42,7 +43,7 @@ const RecipeCard: FC<RecipeCardProps> = ({
     <>
       <Link
         href={{
-          pathname: `recipe/${url_query}`,
+          pathname: `recipe/${urlQuery}`,
           query: { _id },
         }}
       >
@@ -53,8 +54,15 @@ const RecipeCard: FC<RecipeCardProps> = ({
             }}
             className="w-full flex justify-center items-center aspect-auto"
           >
-            {image_url && (
-              <Image src={image_url} alt={name} width={400} height={370} />
+            {imageUrl && (
+              <Image
+                src={imageUrl}
+                alt={urlQuery}
+                width={384}
+                height={384}
+                quality={50}
+                priority
+              />
             )}
           </div>
 
@@ -66,17 +74,17 @@ const RecipeCard: FC<RecipeCardProps> = ({
               <div className="bg-white dark:bg-gray-700 flex items-center mr-auto px-2 rounded-full">
                 <ChatIcon className="w-4 h-4 mr-0.5" />
                 <span className="text-sm mr-1">
-                  {comments ? comments.length : 0}
+                  {comments ? comments.length : INITIAL_COMMENTS}
                 </span>
                 <StarIcon className="w-4 h-4 text-yellow-400 mr-0.5" />
-                <span className="text-sm">{average_vote}</span>
+                <span className="text-sm">{averageVote}</span>
               </div>
             </div>
 
             <div className="bg-white dark:bg-gray-700 flex flex-wrap overflow-hidden text-center p-1">
               <div className="w-1/2 overflow-hidden p-1 border-r border-b border-gray-300">
                 <p className="font-light text-xs uppercase">Prep time</p>
-                <span className="font-bold">{prep_time} mins</span>
+                <span className="font-bold">{prepTime} mins</span>
               </div>
               <div className="w-1/2 overflow-hidden p-1 border-b border-gray-300">
                 <p className="font-light text-xs uppercase">Serves</p>

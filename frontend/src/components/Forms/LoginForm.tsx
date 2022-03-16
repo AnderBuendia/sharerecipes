@@ -7,6 +7,7 @@ import FormLayout from '@Components/Layouts/FormLayout';
 import Input from '@Components/generic/Input';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 import { FormMessages } from '@Enums/config/messages.enum';
+import { TimeNotifications } from '@Enums/config/notifications.enum';
 import type { FormValuesLoginForm } from '@Types/forms/login-form.type';
 
 const LoginForm: FC = () => {
@@ -24,7 +25,7 @@ const LoginForm: FC = () => {
     if (response) {
       setTimeout(() => {
         router.push(MainPaths.INDEX);
-      }, 3000);
+      }, TimeNotifications.DELAY);
     }
   });
 

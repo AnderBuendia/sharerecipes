@@ -8,18 +8,18 @@ export class RecipeModel {
     public _id: VOUuid,
     public name: VORecipeName,
     public ingredients: string[],
-    public prep_time: VOPositiveNumber,
+    public prepTime: VOPositiveNumber,
     public serves: VOPositiveNumber,
     public difficulty: string,
     public description: string,
     public style: string,
-    public url_query: string,
-    public image_url: string,
-    public image_name: string,
-    public author: VOUuid,
+    public imageUrl: string,
+    public imageName: string,
     public votes: VOPositiveNumber,
     public voted: string[],
-    public average_vote: VOPositiveNumber
+    public averageVote: VOPositiveNumber,
+    public author: VOUuid,
+    public urlQuery: string
   ) {}
 
   static create(recipeData: RecipeModel) {
@@ -27,36 +27,36 @@ export class RecipeModel {
       _id,
       name,
       ingredients,
-      prep_time,
+      prepTime,
       serves,
       difficulty,
       description,
       style,
-      url_query,
-      image_url,
-      image_name,
-      author,
+      imageUrl,
+      imageName,
       votes,
       voted,
-      average_vote,
+      averageVote,
+      author,
+      urlQuery,
     } = recipeData;
 
     const recipe = new RecipeModel(
       _id,
       name,
       ingredients,
-      prep_time,
+      prepTime,
       serves,
       difficulty,
       description,
       style,
-      url_query,
-      image_url,
-      image_name,
-      author,
+      imageUrl,
+      imageName,
       votes,
       voted,
-      average_vote
+      averageVote,
+      author,
+      urlQuery
     );
 
     return recipe;
@@ -67,36 +67,36 @@ export class RecipeModel {
       _id,
       name,
       ingredients,
-      prep_time,
+      prepTime,
       serves,
       difficulty,
       description,
       style,
-      url_query,
-      image_url,
-      image_name,
-      author,
+      imageUrl,
+      imageName,
       votes,
       voted,
-      average_vote,
+      averageVote,
+      author,
+      urlQuery,
     } = recipeData;
 
     const recipe = new RecipeModel(
       _id,
       name,
       ingredients,
-      prep_time,
+      prepTime,
       serves,
       difficulty,
       description,
       style,
-      url_query,
-      image_url,
-      image_name,
-      author,
+      imageUrl,
+      imageName,
       votes,
       voted,
-      average_vote
+      averageVote,
+      author,
+      urlQuery
     );
 
     return recipe;
@@ -112,13 +112,13 @@ export class RecipeModel {
       difficulty,
       description,
       style,
-      url_query,
       image_url,
       image_name,
-      author,
       votes,
       voted,
       average_vote,
+      author,
+      url_query,
     } = recipeData;
 
     const recipe = new RecipeModel(
@@ -130,13 +130,13 @@ export class RecipeModel {
       difficulty,
       description,
       style,
-      url_query,
       image_url,
       image_name,
-      new VOUuid(author),
       new VOPositiveNumber(votes),
       voted,
-      new VOPositiveNumber(average_vote)
+      new VOPositiveNumber(average_vote),
+      new VOUuid(author),
+      url_query
     );
 
     return recipe;

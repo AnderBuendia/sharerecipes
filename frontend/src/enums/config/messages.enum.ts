@@ -25,7 +25,7 @@ export enum FormMessages {
   MIN_LENGTH = 'Minimum 7 characters',
   MATCH_PASSWORDS = 'Passwords should match!',
   EMAIL_FORMAT_INVALID = 'This format is invalid. Please, make sure it is written like example@email.com',
-  PREP_TIME_REQUIRED = 'Prep time is required',
+  PREP_TIME_REQUIRED = 'Preparation time is required',
   SERVES_REQUIRED = 'Number of serves is required',
   INGREDIENTS_REQUIRED = 'Ingredients are required',
   DESCRIPTION_REQUIRED = 'Your recipe is required',

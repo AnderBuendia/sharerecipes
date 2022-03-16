@@ -13,16 +13,17 @@ import {
 } from '@Lib/utils/ssr.utils';
 import withCSRRedirect from '@Lib/hoc/with-csr-redirect.hoc';
 import LoginForm from '@Components/Forms/LoginForm';
+import { MainPaths } from '@Enums/paths/main-paths.enum';
+import { HTTPStatusCodes } from '@Enums/config/http-status-codes.enum';
+import { RedirectConditions } from '@Enums/redirect-conditions.enum';
 import type { GSSProps } from '@Interfaces/props/gss-props.interface';
 import type { IRedirect } from '@Interfaces/redirect.interface';
-import { MainPaths } from '@Enums/paths/main-paths.enum';
-import { RedirectConditions } from '@Enums/redirect-conditions.enum';
 
 const LoginPage: NextPage = () => <LoginForm />;
 
 const redirect: IRedirect = {
   href: MainPaths.INDEX,
-  statusCode: 302,
+  statusCode: HTTPStatusCodes.FOUND,
   condition: RedirectConditions.REDIRECT_WHEN_USER_EXISTS,
 };
 

@@ -24,18 +24,18 @@ export class RecipeRepository implements RecipeRepositoryInterface {
       _id: domainEntity._id.value,
       name: domainEntity.name.value,
       ingredients: domainEntity.ingredients,
-      prep_time: domainEntity.prep_time.value,
+      prepTime: domainEntity.prepTime.value,
       serves: domainEntity.serves.value,
       difficulty: domainEntity.difficulty,
       description: domainEntity.description,
       style: domainEntity.style,
-      url_query: domainEntity.url_query,
-      image_url: domainEntity.image_url,
-      image_name: domainEntity.image_name,
+      urlQuery: domainEntity.urlQuery,
+      imageUrl: domainEntity.imageUrl,
+      imageName: domainEntity.imageName,
       author: domainEntity.author.value,
       votes: domainEntity.votes.value,
       voted: domainEntity.voted,
-      average_vote: domainEntity.average_vote.value,
+      averageVote: domainEntity.averageVote.value,
     };
   }
 
@@ -48,18 +48,18 @@ export class RecipeRepository implements RecipeRepositoryInterface {
       _id: domainEntity._id.value,
       name: domainEntity.name.value,
       ingredients: domainEntity.ingredients,
-      prep_time: domainEntity.prep_time.value,
+      prep_time: domainEntity.prepTime.value,
       serves: domainEntity.serves.value,
       difficulty: domainEntity.difficulty,
       description: domainEntity.description,
       style: domainEntity.style,
-      url_query: domainEntity.url_query,
-      image_url: domainEntity.image_url,
-      image_name: domainEntity.image_name,
+      image_url: domainEntity.imageUrl,
+      image_name: domainEntity.imageName,
       author: domainEntity.author.value,
       votes: domainEntity.votes?.value,
       voted: domainEntity.voted,
-      average_vote: domainEntity.average_vote?.value,
+      average_vote: domainEntity.averageVote?.value,
+      url_query: domainEntity.urlQuery,
     };
   }
 
@@ -79,8 +79,22 @@ export class RecipeRepository implements RecipeRepositoryInterface {
     return this.toDomain(recipe);
   }
 
-  async findRecipes(sort: string, offset: number, limit: number) {
-    const recipes = await Recipe.find({})
+  async findRecipes(
+    sort: string,
+    query: string,
+    offset: number,
+    limit: number
+  ) {
+    const recipes = await Recipe.find({
+      $and: [
+        {
+          $or: [
+            { name: { $regex: query, $options: 'i' } },
+            { style: { $regex: query, $options: 'i' } },
+          ],
+        },
+      ],
+    })
       .sort(sort)
       .skip(offset)
       .limit(limit)
@@ -122,7 +136,7 @@ export class RecipeRepository implements RecipeRepositoryInterface {
   }
 
   async deleteRecipe(recipe: RecipeModel) {
-    const recipeImagePath = `${IMAGES_PATH}/${recipe.image_name}`;
+    const recipeImagePath = `${IMAGES_PATH}/${recipe.imageName}`;
 
     unlinkSync(recipeImagePath);
 
