@@ -2,17 +2,11 @@ import {
   CommonErrors,
   UserErrors,
 } from '@Shared/infrastructure/enums/errors.enum';
-import { api, mongoose, User } from './index';
+import { api, User } from './index';
 
 let token: string;
 
 describe('User Tests', () => {
-  afterAll(async () => {
-    await User.deleteMany({
-      email: { $in: ['test2@email.com'] },
-    });
-  });
-
   test('Register new user - Bad email', async () => {
     await api
       .post('/graphql')
@@ -347,8 +341,10 @@ describe('User Tests', () => {
         expect(body.data.update_user.name).toBe('NewName');
       });
   });
-});
 
-afterAll(async () => {
-  await mongoose.connection.close();
+  afterAll(async () => {
+    await User.deleteMany({
+      email: { $in: ['test2@email.com'] },
+    });
+  });
 });

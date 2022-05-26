@@ -130,7 +130,7 @@ export class UserRepository implements UserRepositoryInterface {
    * @param email User's email
    */
   async findUserByEmail(email: string) {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).exec();
 
     if (!user) return null;
 

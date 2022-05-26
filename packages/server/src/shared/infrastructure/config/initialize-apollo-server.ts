@@ -1,15 +1,16 @@
-import http from 'http';
+import type { Express } from 'express';
+import type { Server } from 'http';
 import { ApolloServer } from 'apollo-server-express';
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core/dist/plugin/drainHttpServer';
 import { handleApolloContext } from '@Shared/infrastructure/http/graphql/utils/graphqlContext';
 import typeDefs from '@Shared/infrastructure/http/graphql/utils/mergeTypeDefs';
 import resolvers from '@Shared/infrastructure/http/graphql/utils/mergeResolvers';
-import { PORT, BACK_URL, NODE_ENV } from '@Shared/utils/constants';
+import { BACK_URL } from '@Shared/utils/constants';
 
-/* Apollo server */
-export async function startApolloServer(app) {
-  const httpServer = http.createServer(app);
-
+export const initializeApolloServer = async (
+  app: Express,
+  httpServer: Server
+) => {
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
@@ -21,11 +22,5 @@ export async function startApolloServer(app) {
 
   apolloServer.applyMiddleware({ app, cors: false });
 
-  if (NODE_ENV !== 'test') {
-    await new Promise<void>((resolve) =>
-      httpServer.listen({ port: PORT }, resolve)
-    );
-  }
-
   console.log(`🚀 Server ready at ${BACK_URL}${apolloServer.graphqlPath}`);
-}
+};
