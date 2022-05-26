@@ -20,7 +20,7 @@ jobs:
       - name: 🔨 Build Project
         run: |
           npm install
-          cd server
+          cd packages/server
           npm run build
           cd ../frontend
           mv example.env .env.production

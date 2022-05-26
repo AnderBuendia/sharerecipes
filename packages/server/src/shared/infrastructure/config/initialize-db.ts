@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import { connect, connection } from 'mongoose';
 import { DB_URL, DB_URL_TEST, NODE_ENV } from '@Shared/utils/constants';
 
 const ENVIRONMENT = {
@@ -9,12 +9,19 @@ const ENVIRONMENT = {
 
 const connectionString = ENVIRONMENT[NODE_ENV];
 
-export const connectDB = async () => {
+export const initializeDB = async () => {
   try {
-    await mongoose.connect(connectionString);
+    const isConnected = await connect(connectionString);
+
+    if (!isConnected) throw new Error('Failed to connect to DB');
+
     console.log('🚀 DB Connected');
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
     process.exit(1);
   }
+};
+
+export const stopDB = async () => {
+  await connection.close();
 };

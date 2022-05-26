@@ -1,7 +1,6 @@
 import { api, User, Recipe, Comment } from './index';
-import { hash } from 'bcrypt';
-import { v4 as uuidv4 } from 'uuid';
 import { UserErrors } from '@Shared/infrastructure/enums/errors.enum';
+import { hash } from 'bcrypt';
 
 let token: string;
 let messageId: string;
@@ -9,7 +8,7 @@ let messageId: string;
 describe('Recipe Tests', () => {
   beforeAll(async () => {
     const newUser = {
-      _id: uuidv4(),
+      _id: 'a5d08544-e01e-4c69-b1f0-5e8407aff72b',
       name: 'Prueba2',
       email: 'prueba2@email.com',
       password: await hash('Ander_123', 10),
@@ -17,19 +16,6 @@ describe('Recipe Tests', () => {
     };
 
     await User.create(newUser);
-  });
-
-  afterAll(async () => {
-    await Recipe.deleteMany({
-      name: { $in: ['CarrotCake'] },
-    });
-    await Comment.deleteMany({
-      message: { $in: ['Nice carrot cake Edit!'] },
-    });
-
-    await User.deleteMany({
-      email: { $in: ['prueba2@email.com'] },
-    });
   });
 
   test('Authenticate user to handle recipes', async () => {
@@ -182,5 +168,18 @@ describe('Recipe Tests', () => {
       .expect(({ body }) => {
         expect(body.data.vote_comment.votes).toBe(1);
       });
+  });
+
+  afterAll(async () => {
+    await Recipe.deleteMany({
+      name: { $in: ['CarrotCake'] },
+    });
+    await Comment.deleteMany({
+      message: { $in: ['Nice carrot cake Edit!'] },
+    });
+
+    await User.deleteMany({
+      email: { $in: ['prueba2@email.com'] },
+    });
   });
 });
