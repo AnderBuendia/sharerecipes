@@ -2,7 +2,6 @@ import express from 'express';
 import { createServer } from 'http';
 import { existsSync, mkdirSync } from 'fs';
 import cors from 'cors';
-import '../../utils/paths.utils';
 import { initializeApolloServer } from '@Shared/infrastructure/config/initialize-apollo-server';
 import { v1Router } from '@Shared/infrastructure/http/api/v1';
 import { checkEnv } from '@Shared/utils/checkEnv.utils';
