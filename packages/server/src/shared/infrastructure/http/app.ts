@@ -1,3 +1,4 @@
+import '../../utils/paths.utils';
 import { initializeHttpServer } from '@Shared/infrastructure/config/initialize-http';
 import { initializeDB } from '@Shared/infrastructure/config/initialize-db';
 import { PORT, NODE_ENV } from '@Shared/utils/constants';
