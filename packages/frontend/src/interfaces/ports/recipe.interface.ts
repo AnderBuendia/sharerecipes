@@ -20,10 +20,10 @@ export interface RecipeService {
   >;
 
   findRecipes: ({
-    offset,
-    query,
-    limit,
     sort,
+    query,
+    offset,
+    limit,
   }: {
     sort: string;
     query?: string;
@@ -33,7 +33,7 @@ export interface RecipeService {
     any,
     {
       sort: string;
-      query?: string;
+      query: string | undefined;
       offset: number;
       limit: number;
     }
