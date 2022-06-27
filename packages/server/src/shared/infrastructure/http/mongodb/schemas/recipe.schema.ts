@@ -1,5 +1,4 @@
-import { model, Schema, Model } from 'mongoose';
-import { RecipeEntity } from '@Shared/infrastructure/http/mongodb/interfaces/documents/recipe-document.interface';
+import { model, Schema } from 'mongoose';
 import { Schemas } from '@Shared/infrastructure/http/mongodb/enums/schemas.enum';
 import {
   DEFAULT_AVERAGE_VOTE,
@@ -7,8 +6,9 @@ import {
 } from '@Shared/utils/constants';
 import { RecipeDifficulty } from '@Shared/domain/enums/recipe-difficulty.enum';
 import { RecipeStyle } from '@Shared/domain/enums/recipe-style.enum';
+import type { RecipeEntity } from '@Shared/infrastructure/http/mongodb/interfaces/documents/recipe-document.interface';
 
-const recipeSchema: Schema = new Schema(
+const recipeSchema = new Schema<RecipeEntity>(
   {
     _id: {
       type: String,
@@ -53,7 +53,7 @@ const recipeSchema: Schema = new Schema(
       default: DEFAULT_NUMBER_OF_VOTES,
     },
     voted: {
-      type: Array,
+      type: [String],
     },
     average_vote: {
       type: Number,
@@ -73,4 +73,4 @@ const recipeSchema: Schema = new Schema(
   }
 );
 
-export const Recipe: Model<RecipeEntity> = model(Schemas.RECIPE, recipeSchema);
+export const Recipe = model<RecipeEntity>(Schemas.RECIPE, recipeSchema);

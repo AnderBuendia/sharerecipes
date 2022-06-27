@@ -1,9 +1,9 @@
-import { model, Schema, Model } from 'mongoose';
-import { CommentEntity } from '@Shared/infrastructure/http/mongodb/interfaces/documents/comment-document.interface';
+import { model, Schema } from 'mongoose';
 import { DEFAULT_NUMBER_OF_VOTES } from '@Shared/utils/constants';
 import { Schemas } from '@Shared/infrastructure/http/mongodb/enums/schemas.enum';
+import type { CommentEntity } from '@Shared/infrastructure/http/mongodb/interfaces/documents/comment-document.interface';
 
-const commentSchema: Schema = new Schema(
+const commentSchema = new Schema<CommentEntity>(
   {
     _id: {
       type: String,
@@ -18,7 +18,7 @@ const commentSchema: Schema = new Schema(
       default: DEFAULT_NUMBER_OF_VOTES,
     },
     voted: {
-      type: Array,
+      type: [String],
     },
     author: {
       type: String,
@@ -40,7 +40,4 @@ const commentSchema: Schema = new Schema(
   }
 );
 
-export const Comment: Model<CommentEntity> = model(
-  Schemas.COMMENT,
-  commentSchema
-);
+export const Comment = model<CommentEntity>(Schemas.COMMENT, commentSchema);

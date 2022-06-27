@@ -1,9 +1,9 @@
-import { model, Schema, Model } from 'mongoose';
-import { UserEntity } from '@Shared/infrastructure/http/mongodb/interfaces/documents/user-document.interface';
+import { model, Schema } from 'mongoose';
 import { Schemas } from '@Shared/infrastructure/http/mongodb/enums/schemas.enum';
 import { UserRole } from '@Shared/domain/enums/user-role.enum';
+import type { UserEntity } from '@Shared/infrastructure/http/mongodb/interfaces/documents/user-document.interface';
 
-const userSchema: Schema = new Schema(
+const userSchema = new Schema<UserEntity>(
   {
     _id: {
       type: String,
@@ -54,4 +54,4 @@ userSchema.set('toJSON', {
   },
 });
 
-export const User: Model<UserEntity> = model(Schemas.USER, userSchema);
+export const User = model<UserEntity>(Schemas.USER, userSchema);
