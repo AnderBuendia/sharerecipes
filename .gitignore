@@ -1,7 +1,6 @@
 Tasks.todo
 node_modules
 .vscode
-package-lock.json
 appspec.yml
 buildspec.yml
 scripts
