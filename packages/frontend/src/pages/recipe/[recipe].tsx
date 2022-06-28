@@ -68,6 +68,7 @@ const RecipePage: NextPage = () => {
     <MainLayout
       title={recipe.name}
       description={`Recipe ${recipe.name}`}
+      image={recipe.imageUrl}
       url={MainPaths.RECIPE}
     >
       <RecipeData

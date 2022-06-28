@@ -5,17 +5,26 @@ export type HeadProps = {
   title: string;
   description: string;
   url: string;
+  image?: string;
   noindex?: boolean;
 };
 
-const Head: FC<HeadProps> = ({ title, description, url, noindex = false }) => (
+const Head: FC<HeadProps> = ({
+  title,
+  description,
+  url,
+  image,
+  noindex = false,
+}) => (
   <NextHead>
     <title>{title} | ShareRecipes</title>
     <meta name="description" content={description} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={url} />
+    <meta property="og:image" content={image} />
     <meta name="twitter:title" content={title} />
+    <meta name="twitter:image" content={image} />
     <meta name="twitter:description" content={description} />
     <link rel="canonical" href={process.env.NEXT_PUBLIC_SITE_URL || '' + url} />
     {noindex && <meta name="robots" content="noindex" />}

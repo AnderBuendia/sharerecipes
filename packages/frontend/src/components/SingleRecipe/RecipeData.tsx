@@ -9,6 +9,7 @@ import {
 } from 'react-share';
 import { useUserStorage } from '@Services/storageAdapter';
 import type { IRecipe } from '@Interfaces/domain/recipe.interface';
+import ShareBar from '@Components/generic/ShareBar';
 
 export type RecipeDataProps = {
   recipe: IRecipe;
@@ -17,6 +18,7 @@ export type RecipeDataProps = {
   handleVoteRecipe: (votes: number) => Promise<void>;
 };
 
+// TODO: Implement sharedUrl and sharedText
 const RecipeData: FC<RecipeDataProps> = ({
   recipe,
   urlQuery,
@@ -80,6 +82,7 @@ const RecipeData: FC<RecipeDataProps> = ({
             </div>
           </div>
 
+          {/* <ShareBar /> */}
           <div className="flex flex-row justify-between items-center">
             <div className="flex flex-row">
               <FacebookShareButton
