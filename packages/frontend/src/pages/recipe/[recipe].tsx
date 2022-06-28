@@ -16,10 +16,12 @@ import MainLayout from '@Components/Layouts/MainLayout';
 import RecipeData from '@Components/SingleRecipe/RecipeData';
 import Discussion from '@Components/SingleRecipe/Discussion';
 import Spinner from '@Components/generic/Spinner';
-import { MainPaths } from '@Enums/paths/main-paths.enum';
+import { SITE_URL } from '@Lib/utils/constants.utils';
 import { FIND_RECIPE } from '@Lib/graphql/recipe/query.gql';
+import { MainPaths } from '@Enums/paths/main-paths.enum';
 import type { GSSProps } from '@Interfaces/props/gss-props.interface';
 import type { IRecipe } from '@Interfaces/domain/recipe.interface';
+
 
 const RecipePage: NextPage = () => {
   const router = useRouter();
@@ -27,7 +29,8 @@ const RecipePage: NextPage = () => {
   const { voteRecipe } = useVoteRecipe();
   const { findRecipe } = useRecipe();
   const { deleteRecipe } = useDeleteRecipe({ recipeId: _id });
-
+  const canonicalUrl = `${SITE_URL}/recipe/${urlQuery}`;
+  
   const { data, loading, fetchMore } = findRecipe({
     recipeUrlQuery: urlQuery,
     offset: 0,
@@ -69,11 +72,11 @@ const RecipePage: NextPage = () => {
       title={recipe.name}
       description={`Recipe ${recipe.name}`}
       image={recipe.imageUrl}
-      url={MainPaths.RECIPE}
+      url={canonicalUrl}
     >
       <RecipeData
         recipe={recipe}
-        urlQuery={urlQuery}
+        canonicalUrl={canonicalUrl}
         confirmDeleteRecipe={confirmDeleteRecipe}
         handleVoteRecipe={handleVoteRecipe}
       />
