@@ -35,3 +35,35 @@ export const getTwitter = ({
   'data-param-text': sharedText,
   'data-param-url': sharedUrl,
 });
+
+const getFacebook = ({
+  facebookAppId,
+  encodedSharedUrl,
+  encodedSharedText,
+  sharedUrl,
+  sharedText
+}: {
+  facebookAppId: string;
+  encodedSharedUrl: string;
+  encodedSharedText: string;
+  sharedUrl: string;
+  sharedText: string;
+}) => {
+  return {
+    iconName: 'facebook',
+    analytics: 'facebook',
+    openLinkInWindow: true,
+    href: [
+      'https://www.facebook.com/dialog/share?',
+      'display=popup',
+      '&app_id=', facebookAppId,
+      '&href=', encodedSharedUrl, getTracker('facebook'),
+      '&quote=', encodedSharedText,
+    ].join(''),
+    'data-param-app_id': facebookAppId,
+    'data-param-description': sharedText,
+    'data-param-href': sharedUrl,
+    'data-param-text': sharedText,
+    'data-param-url': sharedUrl,
+  };
+};
