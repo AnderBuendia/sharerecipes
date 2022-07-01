@@ -1,32 +1,48 @@
 import type { FC } from 'react';
-import { getTwitter } from '@Lib/utils/social.utils';
+import { getTwitter, getFacebook } from '@Lib/utils/social.utils';
 import SocialIcon from '@Components/generic/SocialIcon';
-import type { SocialLink } from '@Interfaces/social.interface'
 
 export type ShareBarProps = {
   sharedUrl: string;
   sharedText: string;
-}
+};
 
-const ShareBar: FC<ShareBarProps> = ({ sharedUrl, sharedText,}) => {
+const ShareBar: FC<ShareBarProps> = ({ sharedUrl, sharedText }) => {
   const encodedSharedUrl = encodeURIComponent(sharedUrl);
   const encodedSharedText = encodeURIComponent(sharedText);
-  const socialLinks: SocialLink[] = [];
 
   const addSocialLinks = () => {
-    socialLinks.push(getTwitter({ encodedSharedUrl, encodedSharedText, sharedUrl, sharedText }));
-  }
+    const links = [];
 
-  addSocialLinks();
+    links.push(
+      getTwitter({
+        encodedSharedUrl,
+        encodedSharedText,
+        sharedUrl,
+        sharedText,
+      }),
+      getFacebook({
+        encodedSharedUrl,
+        encodedSharedText,
+        sharedUrl,
+        sharedText,
+      })
+    );
+
+    return links;
+  };
+
+  const socialLinks = addSocialLinks();
 
   if (!socialLinks.length) return null;
 
-  return <>
-    {socialLinks.map((socialLink) => { 
-      <SocialIcon socialLink={socialLink} />
-    })}  
-  </>
-  
-}
- 
+  return (
+    <div className="flex">
+      {socialLinks.map((socialLink) => (
+        <SocialIcon socialLink={socialLink} />
+      ))}
+    </div>
+  );
+};
+
 export default ShareBar;

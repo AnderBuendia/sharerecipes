@@ -1,25 +1,20 @@
 import type { FC } from 'react';
 import Image from 'next/image';
 import { Rating } from 'react-simple-star-rating';
-import {
-  FacebookShareButton,
-  FacebookIcon,
-  TwitterShareButton,
-  TwitterIcon,
-} from 'react-share';
 import { useUserStorage } from '@Services/storageAdapter';
 import type { IRecipe } from '@Interfaces/domain/recipe.interface';
+import ShareBar from '@Components/generic/ShareBar';
 
 export type RecipeDataProps = {
   recipe: IRecipe;
-  urlQuery: string;
+  canonicalUrl: string;
   confirmDeleteRecipe: (recipeId: IRecipe['_id']) => void;
   handleVoteRecipe: (votes: number) => Promise<void>;
 };
 
 const RecipeData: FC<RecipeDataProps> = ({
   recipe,
-  urlQuery,
+  canonicalUrl,
   confirmDeleteRecipe,
   handleVoteRecipe,
 }) => {
@@ -81,22 +76,8 @@ const RecipeData: FC<RecipeDataProps> = ({
           </div>
 
           <div className="flex flex-row justify-between items-center">
-            <div className="flex flex-row">
-              <FacebookShareButton
-                url={process.env.NEXT_PUBLIC_SITE_URL + `/recipe/${urlQuery}`}
-                quote="Visit my new recipe"
-                className="cursor-pointer mr-3"
-              >
-                <FacebookIcon size={28} className="rounded-full" />
-              </FacebookShareButton>
-              <TwitterShareButton
-                url={process.env.NEXT_PUBLIC_SITE_URL + `/recipe/${urlQuery}`}
-                title="Visit my new recipe"
-                className="cursor-pointer"
-              >
-                <TwitterIcon size={28} className="rounded-full" />
-              </TwitterShareButton>
-            </div>
+            <ShareBar sharedUrl={canonicalUrl} sharedText={name} />
+      
             <div className="flex flex-col float-right items-end mt-4 ">
               <Rating
                 ratingValue={Math.floor(averageVote)}
