@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { getTwitter } from '@Lib/utils/social.utils';
+import { getTwitter, getFacebook } from '@Lib/utils/social.utils';
 import SocialIcon from '@Components/generic/SocialIcon';
 
 export type ShareBarProps = {
@@ -15,7 +15,18 @@ const ShareBar: FC<ShareBarProps> = ({ sharedUrl, sharedText }) => {
     const links = [];
 
     links.push(
-      getTwitter({ encodedSharedUrl, encodedSharedText, sharedUrl, sharedText })
+      getTwitter({
+        encodedSharedUrl,
+        encodedSharedText,
+        sharedUrl,
+        sharedText,
+      }),
+      getFacebook({
+        encodedSharedUrl,
+        encodedSharedText,
+        sharedUrl,
+        sharedText,
+      })
     );
 
     return links;
@@ -26,10 +37,10 @@ const ShareBar: FC<ShareBarProps> = ({ sharedUrl, sharedText }) => {
   if (!socialLinks.length) return null;
 
   return (
-    <div className='flex'>
-      {socialLinks.map((socialLink) => 
+    <div className="flex">
+      {socialLinks.map((socialLink) => (
         <SocialIcon socialLink={socialLink} />
-      )}
+      ))}
     </div>
   );
 };

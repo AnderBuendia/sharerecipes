@@ -1,4 +1,5 @@
-const SITE_LANGUAGE = 'en';
+import { FACEBOOK_APP_ID, SITE_LANGUAGE } from '@Lib/utils/constants.utils';
+
 const TRACKING_PARAM = '%3Fssm=';
 const TRACKING_VALUE: {
   [key: string]: string;
@@ -10,7 +11,7 @@ const TRACKING_VALUE: {
 
 export const getTracker = (type: string) => {
   return `${TRACKING_PARAM}${TRACKING_VALUE[type]}`;
-}
+};
 
 export const getTwitter = ({
   encodedSharedUrl,
@@ -26,9 +27,13 @@ export const getTwitter = ({
   iconName: 'twitter',
   href: [
     'https://twitter.com/intent/tweet?',
-    'url=', encodedSharedUrl, getTracker('twitter'),
-    '&text=', encodedSharedText,
-    '&lang=', SITE_LANGUAGE,
+    'url=',
+    encodedSharedUrl,
+    getTracker('twitter'),
+    '&text=',
+    encodedSharedText,
+    '&lang=',
+    SITE_LANGUAGE,
   ].join(''),
   'data-param-description': sharedText,
   'data-param-href': sharedUrl,
@@ -36,14 +41,12 @@ export const getTwitter = ({
   'data-param-url': sharedUrl,
 });
 
-const getFacebook = ({
-  facebookAppId,
+export const getFacebook = ({
   encodedSharedUrl,
   encodedSharedText,
   sharedUrl,
-  sharedText
+  sharedText,
 }: {
-  facebookAppId: string;
   encodedSharedUrl: string;
   encodedSharedText: string;
   sharedUrl: string;
@@ -56,11 +59,15 @@ const getFacebook = ({
     href: [
       'https://www.facebook.com/dialog/share?',
       'display=popup',
-      '&app_id=', facebookAppId,
-      '&href=', encodedSharedUrl, getTracker('facebook'),
-      '&quote=', encodedSharedText,
+      '&app_id=',
+      FACEBOOK_APP_ID,
+      '&href=',
+      encodedSharedUrl,
+      getTracker('facebook'),
+      '&quote=',
+      encodedSharedText,
     ].join(''),
-    'data-param-app_id': facebookAppId,
+    'data-param-app_id': FACEBOOK_APP_ID,
     'data-param-description': sharedText,
     'data-param-href': sharedUrl,
     'data-param-text': sharedText,
