@@ -1,7 +1,6 @@
 import { useRecipe } from '@Services/recipeAdapter';
 import { createRecipe } from '@Domain/recipe.domain';
-import { useNotifier } from '@Services/notificationAdapter';
-import { MessageTypes } from '@Enums/config/messages.enum';
+import { useNotifier } from '@Services/notification.service';
 import type {
   RecipeImage,
   CreateRecipeFormData,
@@ -10,7 +9,7 @@ import type {
 export function useNewRecipe() {
   const { setCreateRecipe } = useRecipe();
   const [create_recipe] = setCreateRecipe();
-  const { notify } = useNotifier();
+  const { notifyError } = useNotifier();
 
   const newRecipe = async ({
     data,
@@ -20,8 +19,9 @@ export function useNewRecipe() {
     recipeImage?: RecipeImage;
   }) => {
     try {
-      if (!recipeImage)
+      if (!recipeImage) {
         throw new Error('There is no image. Please upload an image.');
+      }
 
       const recipe = createRecipe(data, recipeImage);
 
@@ -42,10 +42,7 @@ export function useNewRecipe() {
       });
     } catch (error) {
       if (error instanceof Error) {
-        notify({
-          message: error.message.replace('GraphQL error: ', ''),
-          messageType: MessageTypes.ERROR,
-        });
+        notifyError({ message: error.message.replace('GraphQL error: ', '') });
       }
     }
   };

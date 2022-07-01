@@ -1,11 +1,10 @@
 import { useRecipe } from '@Services/recipeAdapter';
-import { useNotifier } from '@Services/notificationAdapter';
-import { MessageTypes } from '@Enums/config/messages.enum';
+import { useNotifier } from '@Services/notification.service';
 
 export function useVoteRecipe() {
   const { setVoteRecipe } = useRecipe();
   const [vote_recipe] = setVoteRecipe();
-  const { notify } = useNotifier();
+  const { notifyError } = useNotifier();
 
   const voteRecipe = async ({
     recipeUrlQuery,
@@ -25,10 +24,7 @@ export function useVoteRecipe() {
       });
     } catch (error) {
       if (error instanceof Error) {
-        notify({
-          message: error.message.replace('GraphQL error: ', ''),
-          messageType: MessageTypes.ERROR,
-        });
+        notifyError({ message: error.message.replace('GraphQL error: ', '') });
       }
     }
   };

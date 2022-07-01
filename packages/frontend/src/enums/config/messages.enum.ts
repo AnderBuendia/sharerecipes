@@ -31,9 +31,3 @@ export enum FormMessages {
   DESCRIPTION_REQUIRED = 'Your recipe is required',
   STYLE_REQUIRED = 'Food style is required',
 }
-
-export enum MessageTypes {
-  ERROR = 'error',
-  SUCCESS = 'success',
-  INFO = 'info',
-}
