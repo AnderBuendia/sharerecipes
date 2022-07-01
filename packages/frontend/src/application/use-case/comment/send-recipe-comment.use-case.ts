@@ -1,7 +1,6 @@
 import { useComment } from '@Services/commentAdapter';
-import { useNotifier } from '@Services/notificationAdapter';
-import { MessageTypes } from '@Enums/config/messages.enum';
-import { IRecipe } from '@Interfaces/domain/recipe.interface';
+import { useNotifier } from '@Services/notification.service';
+import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 
 export function useSendRecipeComment({
   recipeUrlQuery,
@@ -10,7 +9,7 @@ export function useSendRecipeComment({
 }) {
   const { setSendRecipeComment } = useComment();
   const [send_recipe_comment] = setSendRecipeComment({ recipeUrlQuery });
-  const { notify } = useNotifier();
+  const { notifyError } = useNotifier();
 
   const sendRecipeComment = async ({
     message,
@@ -30,10 +29,7 @@ export function useSendRecipeComment({
       });
     } catch (error) {
       if (error instanceof Error) {
-        notify({
-          message: error.message.replace('GraphQL error: ', ''),
-          messageType: MessageTypes.ERROR,
-        });
+        notifyError({ message: error.message.replace('GraphQL error: ', '') });
       }
     }
   };

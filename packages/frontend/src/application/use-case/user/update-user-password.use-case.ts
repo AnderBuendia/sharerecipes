@@ -1,15 +1,11 @@
 import { useUser } from '@Services/userAdapter';
-import { useNotifier } from '@Services/notificationAdapter';
-import {
-  FormMessages,
-  AlertMessages,
-  MessageTypes,
-} from '@Enums/config/messages.enum';
+import { useNotifier } from '@Services/notification.service';
+import { FormMessages, AlertMessages } from '@Enums/config/messages.enum';
 
 export function useUpdateUserPassword() {
   const { setUpdateUserPassword } = useUser();
   const [update_user_password] = setUpdateUserPassword();
-  const { notify } = useNotifier();
+  const { notifySuccess, notifyError } = useNotifier();
 
   const updateUserPassword = async ({
     password,
@@ -33,18 +29,12 @@ export function useUpdateUserPassword() {
         },
       });
 
-      notify({
-        message: AlertMessages.PASSWORD_UPDATED,
-        messageType: MessageTypes.SUCCESS,
-      });
+      notifySuccess({ message: AlertMessages.PASSWORD_UPDATED });
 
       return response;
     } catch (error) {
       if (error instanceof Error) {
-        notify({
-          message: error.message.replace('GraphQL error: ', ''),
-          messageType: MessageTypes.ERROR,
-        });
+        notifyError({ message: error.message.replace('GraphQL error: ', '') });
       }
     }
   };

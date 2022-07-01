@@ -1,11 +1,11 @@
 import { useUser } from '@Services/userAdapter';
-import { useNotifier } from '@Services/notificationAdapter';
-import { AlertMessages, MessageTypes } from '@Enums/config/messages.enum';
+import { useNotifier } from '@Services/notification.service';
+import { AlertMessages } from '@Enums/config/messages.enum';
 
 export function useResetUserPassword() {
   const { setResetUserPassword } = useUser();
   const [reset_user_password] = setResetUserPassword();
-  const { notify } = useNotifier();
+  const { notifySuccess, notifyError } = useNotifier();
 
   const resetUserPassword = async ({
     password,
@@ -24,18 +24,12 @@ export function useResetUserPassword() {
         },
       });
 
-      notify({
-        message: AlertMessages.PASSWORD_UPDATED_LOGIN,
-        messageType: MessageTypes.SUCCESS,
-      });
+      notifySuccess({ message: AlertMessages.PASSWORD_UPDATED_LOGIN });
 
       return response;
     } catch (error) {
       if (error instanceof Error) {
-        notify({
-          message: error.message.replace('GraphQL error: ', ''),
-          messageType: MessageTypes.ERROR,
-        });
+        notifyError({ message: error.message.replace('GraphQL error: ', '') });
       }
     }
   };

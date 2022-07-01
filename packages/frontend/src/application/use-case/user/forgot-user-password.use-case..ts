@@ -1,11 +1,11 @@
 import { useUser } from '@Services/userAdapter';
-import { useNotifier } from '@Services/notificationAdapter';
-import { AlertMessages, MessageTypes } from '@Enums/config/messages.enum';
+import { useNotifier } from '@Services/notification.service';
+import { AlertMessages } from '@Enums/config/messages.enum';
 
 export function useForgotUserPassword() {
   const { setForgotUserPassword } = useUser();
   const [forgot_user_password] = setForgotUserPassword();
-  const { notify } = useNotifier();
+  const { notifySuccess, notifyError } = useNotifier();
 
   const forgotUserPassword = async ({ email }: { email: string }) => {
     try {
@@ -17,18 +17,12 @@ export function useForgotUserPassword() {
         },
       });
 
-      notify({
-        message: AlertMessages.CHECK_ACTIVATION_MAIL,
-        messageType: MessageTypes.SUCCESS,
-      });
+      notifySuccess({ message: AlertMessages.CHECK_ACTIVATION_MAIL });
 
       return response;
     } catch (error) {
       if (error instanceof Error) {
-        notify({
-          message: error.message.replace('GraphQL error: ', ''),
-          messageType: MessageTypes.ERROR,
-        });
+        notifyError({ message: error.message.replace('GraphQL error: ', '') });
       }
     }
   };

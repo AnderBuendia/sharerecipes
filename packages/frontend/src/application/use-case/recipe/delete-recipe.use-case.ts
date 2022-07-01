@@ -1,12 +1,11 @@
 import { useRecipe } from '@Services/recipeAdapter';
-import { useNotifier } from '@Services/notificationAdapter';
-import { MessageTypes } from '@Enums/config/messages.enum';
+import { useNotifier } from '@Services/notification.service';
 import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 
 export function useDeleteRecipe({ recipeId }: { recipeId: IRecipe['_id'] }) {
   const { setDeleteRecipe } = useRecipe();
   const [delete_recipe] = setDeleteRecipe({ recipeId });
-  const { notify } = useNotifier();
+  const { notifyError } = useNotifier();
 
   const deleteRecipe = async ({ recipeId }: { recipeId: IRecipe['_id'] }) => {
     try {
@@ -17,10 +16,7 @@ export function useDeleteRecipe({ recipeId }: { recipeId: IRecipe['_id'] }) {
       });
     } catch (error) {
       if (error instanceof Error) {
-        notify({
-          message: error.message.replace('GraphQL error: ', ''),
-          messageType: MessageTypes.ERROR,
-        });
+        notifyError({ message: error.message.replace('GraphQL error: ', '') });
       }
     }
   };

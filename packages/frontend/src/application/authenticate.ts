@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { useAuthentication } from '@Services/authAdapter';
 import { useUserStorage } from '@Services/storageAdapter';
-import { useNotifier } from '@Services/notificationAdapter';
+import { useNotifier } from '@Services/notification.service';
 import type { FormValuesLoginForm } from '@Types/forms/login-form.type';
-import { AlertMessages, MessageTypes } from '@Enums/config/messages.enum';
+import { AlertMessages } from '@Enums/config/messages.enum';
 
 export function useAuthenticate() {
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);
   const { setAuth } = useUserStorage();
   const { loginRequest, logoutRequest } = useAuthentication();
-  const { notify } = useNotifier();
+  const { notifySuccess, notifyError } = useNotifier();
 
   const signIn = async (data: FormValuesLoginForm) => {
     try {
@@ -21,19 +21,13 @@ export function useAuthenticate() {
       } else {
         setAuth({ user: responseToJson.user, jwt: responseToJson.token });
 
-        notify({
-          message: AlertMessages.LOGIN,
-          messageType: MessageTypes.SUCCESS,
-        });
+        notifySuccess({ message: AlertMessages.LOGIN });
 
         return true;
       }
     } catch (error) {
       if (error instanceof Error) {
-        notify({
-          message: error.message.replace('GraphQL error: ', ''),
-          messageType: MessageTypes.ERROR,
-        });
+        notifyError({ message: error.message.replace('GraphQL error: ', '') });
       }
 
       return false;
@@ -49,12 +43,12 @@ export function useAuthenticate() {
         jwt: undefined,
       });
 
-      notify({ message: AlertMessages.LOGOUT, messageType: MessageTypes.INFO });
+      notifySuccess({ message: AlertMessages.LOGOUT });
 
       return true;
     } catch (error) {
       if (error instanceof Error) {
-        notify({ message: error.message, messageType: MessageTypes.ERROR });
+        notifyError({ message: error.message });
       }
 
       return false;

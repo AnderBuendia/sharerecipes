@@ -1,14 +1,13 @@
 import { useComment } from '@Services/commentAdapter';
-import { useNotifier } from '@Services/notificationAdapter';
+import { useNotifier } from '@Services/notification.service';
 import type { IComment } from '@Interfaces/domain/comment.interface';
-import { MessageTypes } from '@Enums/config/messages.enum';
 
 const DEFAULT_NUMBER_OF_VOTES = 1;
 
 export function useVoteComment() {
   const { setVoteComment } = useComment();
   const [vote_comment] = setVoteComment();
-  const { notify } = useNotifier();
+  const { notifyError } = useNotifier();
 
   const voteComment = async ({ commentId }: { commentId: IComment['_id'] }) => {
     try {
@@ -22,10 +21,7 @@ export function useVoteComment() {
       });
     } catch (error) {
       if (error instanceof Error) {
-        notify({
-          message: error.message.replace('GraphQL error: ', ''),
-          messageType: MessageTypes.ERROR,
-        });
+        notifyError({ message: error.message.replace('GraphQL error: ', '') });
       }
     }
   };

@@ -1,12 +1,11 @@
 import { useComment } from '@Services/commentAdapter';
-import { useNotifier } from '@Services/notificationAdapter';
+import { useNotifier } from '@Services/notification.service';
 import type { IComment } from '@Interfaces/domain/comment.interface';
-import { MessageTypes } from '@Enums/config/messages.enum';
 
 export function useEditComment() {
   const { setEditComment } = useComment();
   const [edit_comment] = setEditComment();
-  const { notify } = useNotifier();
+  const { notifyError } = useNotifier();
 
   const editComment = async ({
     commentId,
@@ -26,10 +25,7 @@ export function useEditComment() {
       });
     } catch (error) {
       if (error instanceof Error) {
-        notify({
-          message: error.message.replace('GraphQL error: ', ''),
-          messageType: MessageTypes.ERROR,
-        });
+        notifyError({ message: error.message.replace('GraphQL error: ', '') });
       }
     }
   };
