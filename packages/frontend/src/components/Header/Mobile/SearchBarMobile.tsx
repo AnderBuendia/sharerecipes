@@ -1,7 +1,8 @@
-import { FC, useState, useRef, FormEvent, MutableRefObject } from 'react';
+import type { FC, FormEvent, MutableRefObject } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useClickOutside } from '@Lib/hooks/useClickOutside';
-import { useSearchStorage } from '@Services/storageAdapter';
+import { useSearchStorage } from '@Services/storage.service';
 import { SearchIcon } from '@Components/Icons/search.icon';
 import { CloseIcon } from '@Components/Icons/close.icon';
 import { MainPaths } from '@Enums/paths/main-paths.enum';

@@ -1,6 +1,6 @@
 import type { FC, FormEvent } from 'react';
 import { useRouter } from 'next/router';
-import { useSearchStorage } from '@Services/storageAdapter';
+import { useSearchStorage } from '@Services/storage.service';
 import { SearchIcon } from '@Components/Icons/search.icon';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
 

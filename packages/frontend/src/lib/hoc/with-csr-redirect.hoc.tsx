@@ -1,9 +1,10 @@
-import { FC, useState, useEffect } from 'react';
+import type { FC } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useUserStorage } from '@Services/storageAdapter';
+import { useUserStorage } from '@Services/storage.service';
 import { generateQueryParams } from '@Lib/utils/url.utils';
-import { IRedirect } from '@Interfaces/redirect.interface';
 import { RedirectConditions } from '@Enums/redirect-conditions.enum';
+import type { IRedirect } from '@Interfaces/redirect.interface';
 
 const withCSRRedirect = (Component: FC<any>, redirect: IRedirect) => {
   const { href, asPath, condition, query } = redirect;

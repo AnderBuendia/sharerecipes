@@ -1,4 +1,4 @@
-import { useUser } from '@Services/userAdapter';
+import { useUser } from '@Services/user.service';
 import { useNotifier } from '@Services/notification.service';
 import type { UserProfile } from '@Interfaces/domain/user.interface';
 

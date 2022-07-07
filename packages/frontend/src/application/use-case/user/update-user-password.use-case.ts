@@ -1,4 +1,4 @@
-import { useUser } from '@Services/userAdapter';
+import { useUser } from '@Services/user.service';
 import { useNotifier } from '@Services/notification.service';
 import { FormMessages, AlertMessages } from '@Enums/config/messages.enum';
 

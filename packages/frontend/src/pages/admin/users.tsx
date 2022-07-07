@@ -3,7 +3,8 @@ import type {
   GetServerSideProps,
   GetServerSidePropsContext,
 } from 'next';
-import { useState, ChangeEvent } from 'react';
+import type { ChangeEvent } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { decode } from 'jsonwebtoken';
 import withCSRRedirect from '@Lib/hoc/with-csr-redirect.hoc';
@@ -15,7 +16,7 @@ import {
   loadAuthProps,
   serverRedirect,
 } from '@Lib/utils/ssr.utils';
-import { useUser } from '@Services/userAdapter';
+import { useUser } from '@Services/user.service';
 import UsersPanel from '@Components/Admin/UsersPanel';
 import MainLayout from '@Components/Layouts/MainLayout';
 import Spinner from '@Components/generic/Spinner';
