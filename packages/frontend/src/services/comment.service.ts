@@ -5,15 +5,19 @@ import {
   VOTE_COMMENT,
   EDIT_COMMENT,
 } from '@Lib/graphql/comment/mutation.gql';
-import type { CommentService } from '@Interfaces/ports/comment.interface';
+import type { CommentService } from '@Interfaces/ports/service/comment-service.interface';
 import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 import type { QueryDataFindRecipe } from '@Types/apollo/query/recipe.type';
 
 export function useComment(): CommentService {
   const setSendRecipeComment = ({
     recipeUrlQuery,
+    offset = 0,
+    limit = 10,
   }: {
     recipeUrlQuery: IRecipe['urlQuery'];
+    offset?: number;
+    limit?: number;
   }) => {
     return useMutation(SEND_RECIPE_COMMENT, {
       update(cache, { data: { send_recipe_comment } }) {
@@ -21,8 +25,8 @@ export function useComment(): CommentService {
           query: FIND_RECIPE,
           variables: {
             recipeUrlQuery,
-            offset: 0,
-            limit: 10,
+            offset,
+            limit,
           },
         });
 
@@ -31,8 +35,8 @@ export function useComment(): CommentService {
             query: FIND_RECIPE,
             variables: {
               recipeUrlQuery,
-              offset: 0,
-              limit: 10,
+              offset,
+              limit,
             },
             data: {
               find_recipe: {
