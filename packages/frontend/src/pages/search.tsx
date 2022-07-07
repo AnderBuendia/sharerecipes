@@ -8,7 +8,7 @@ import { decode } from 'jsonwebtoken';
 import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
 import { isRequestSSR, loadAuthProps } from '@Lib/utils/ssr.utils';
 import { createApolloClient } from '@Lib/apollo/apollo-client';
-import { useRecipe } from '@Services/recipeAdapter';
+import { useRecipe } from '@Services/recipe.service';
 import MainLayout from '@Components/Layouts/MainLayout';
 import RecipesList from '@Components/Recipes/RecipesList';
 import SkeletonRecipeCard from '@Components/Recipes/SkeletonRecipeCard';

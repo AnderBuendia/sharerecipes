@@ -1,8 +1,9 @@
-import { FC, useState, useRef, MutableRefObject } from 'react';
+import type { FC, MutableRefObject } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { useSendRecipeComment } from '@Application/use-case/comment/send-recipe-comment.use-case';
-import { useUserStorage } from '@Services/storageAdapter';
+import { useUserStorage } from '@Services/storage.service';
 import { useClickOutside } from '@Lib/hooks/useClickOutside';
 import ModalSignUp from '@Components/SingleRecipe/ModalSignUp';
 import Comment from '@Components/SingleRecipe/Comment';

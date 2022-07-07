@@ -1,4 +1,4 @@
-import { useComment } from '@Services/commentAdapter';
+import { useComment } from '@Services/comment.service';
 import { useNotifier } from '@Services/notification.service';
 import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 

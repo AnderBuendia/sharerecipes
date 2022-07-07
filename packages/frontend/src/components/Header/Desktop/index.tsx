@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import Link from 'next/link';
-import { useUserStorage } from '@Services/storageAdapter';
+import { useUserStorage } from '@Services/storage.service';
 import SearchBarDesktop from '@Components/Header/Desktop/SearchBarDesktop';
 import DarkModeButton from '@Components/generic/DarkModeButton';
 import DropdownMenu from '@Components/Header/Desktop/DropdownMenu';

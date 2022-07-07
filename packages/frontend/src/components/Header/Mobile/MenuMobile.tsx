@@ -1,9 +1,10 @@
-import { FC, useRef, MutableRefObject } from 'react';
+import type { FC } from 'react';
+import { useRef, MutableRefObject } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAuthenticate } from '@Application/authenticate';
 import { useClickOutside } from '@Lib/hooks/useClickOutside';
-import { useUserStorage } from '@Services/storageAdapter';
+import { useUserStorage } from '@Services/storage.service';
 import { CloseIcon } from '@Components/Icons/close.icon';
 import { DocumentIcon } from '@Components/Icons/document.icon';
 import { AdminIcon } from '@Components/Icons/admin.icon';

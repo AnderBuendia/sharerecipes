@@ -1,9 +1,9 @@
 import type { FC } from 'react';
 import Image from 'next/image';
 import { Rating } from 'react-simple-star-rating';
-import { useUserStorage } from '@Services/storageAdapter';
-import type { IRecipe } from '@Interfaces/domain/recipe.interface';
+import { useUserStorage } from '@Services/storage.service';
 import ShareBar from '@Components/generic/ShareBar';
+import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 
 export type RecipeDataProps = {
   recipe: IRecipe;
@@ -77,7 +77,7 @@ const RecipeData: FC<RecipeDataProps> = ({
 
           <div className="flex flex-row justify-between items-center">
             <ShareBar sharedUrl={canonicalUrl} sharedText={name} />
-      
+
             <div className="flex flex-col float-right items-end mt-4 ">
               <Rating
                 ratingValue={Math.floor(averageVote)}

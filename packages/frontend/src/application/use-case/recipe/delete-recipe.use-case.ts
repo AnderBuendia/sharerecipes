@@ -1,4 +1,4 @@
-import { useRecipe } from '@Services/recipeAdapter';
+import { useRecipe } from '@Services/recipe.service';
 import { useNotifier } from '@Services/notification.service';
 import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 

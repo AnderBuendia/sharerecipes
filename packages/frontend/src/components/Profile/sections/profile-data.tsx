@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useUpdateUser } from '@Application/use-case/user/update-user.use-case';
-import { useUserStorage } from '@Services/storageAdapter';
+import { useUserStorage } from '@Services/storage.service';
 import { FormMessages } from '@Enums/config/messages.enum';
 import DragDropImage from '@Components/generic/DragDropImage';
 import Input from '@Components/generic/Input';

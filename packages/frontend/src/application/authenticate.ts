@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { useAuthentication } from '@Services/authAdapter';
-import { useUserStorage } from '@Services/storageAdapter';
+import { useAuthentication } from '@Services/auth.service';
+import { useUserStorage } from '@Services/storage.service';
 import { useNotifier } from '@Services/notification.service';
-import type { FormValuesLoginForm } from '@Types/forms/login-form.type';
 import { AlertMessages } from '@Enums/config/messages.enum';
+import type { UserLoginDTO } from '@Application/dto/user.dto';
 
 export function useAuthenticate() {
   const [openDropdown, setOpenDropdown] = useState<boolean>(false);
@@ -11,20 +11,15 @@ export function useAuthenticate() {
   const { loginRequest, logoutRequest } = useAuthentication();
   const { notifySuccess, notifyError } = useNotifier();
 
-  const signIn = async (data: FormValuesLoginForm) => {
+  const signIn = async (data: UserLoginDTO) => {
     try {
-      const response = await loginRequest(data);
-      const responseToJson = await response.json();
+      const authState = await loginRequest(data);
 
-      if (responseToJson.error) {
-        throw new Error(responseToJson.error);
-      } else {
-        setAuth({ user: responseToJson.user, jwt: responseToJson.token });
+      setAuth(authState);
 
-        notifySuccess({ message: AlertMessages.LOGIN });
+      notifySuccess({ message: AlertMessages.LOGIN });
 
-        return true;
-      }
+      return true;
     } catch (error) {
       if (error instanceof Error) {
         notifyError({ message: error.message.replace('GraphQL error: ', '') });

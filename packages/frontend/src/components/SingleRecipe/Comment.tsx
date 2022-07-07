@@ -1,6 +1,7 @@
-import { FC, useState } from 'react';
+import type { FC } from 'react';
+import { useState } from 'react';
 import { Waypoint } from 'react-waypoint';
-import { useUserStorage } from '@Services/storageAdapter';
+import { useUserStorage } from '@Services/storage.service';
 import { useEditComment } from '@Application/use-case/comment/edit-comment.use-case';
 import { useVoteComment } from '@Application/use-case/comment/vote-comment.use-case';
 import { useTimeAgo } from '@Lib/hooks/useTimeAgo';
@@ -11,6 +12,28 @@ import type { IComment } from '@Interfaces/domain/comment.interface';
 import type { FetchMoreFindRecipeArgs } from '@Types/apollo/query/fetch-more.type';
 
 const USER_ICON_DIMENSIONS = 28;
+
+function renderInfiniteScroll(
+  index: number,
+  recipe: IRecipe,
+  fetchMore: (variables: FetchMoreFindRecipeArgs) => void
+) {
+  return (
+    index === recipe.comments.length - 1 && (
+      <Waypoint
+        onEnter={() =>
+          fetchMore({
+            variables: {
+              recipeUrlQuery: recipe.urlQuery,
+              offset: 0,
+              limit: index + 11,
+            },
+          })
+        }
+      />
+    )
+  );
+}
 
 export type CommentProps = {
   comment: IComment;
@@ -38,8 +61,10 @@ const Comment: FC<CommentProps> = ({ comment, recipe, index, fetchMore }) => {
     voteComment({ commentId: _id });
   };
 
+  const showUpvotes = votes > 0 ? `(${votes})` : ' ';
+
   return (
-    <div>
+    <>
       <div className="flex w-full items-center mt-4">
         <UserIcon
           imageUrl={author.imageUrl}
@@ -79,7 +104,7 @@ const Comment: FC<CommentProps> = ({ comment, recipe, index, fetchMore }) => {
             onClick={handleVoteComment}
           >
             <ChevronUpIcon className="w-5 h-5" />
-            <span>Upvote {votes > 0 && `(${votes})`}</span>
+            <span>Upvote {showUpvotes}</span>
           </button>
 
           {authState?.user?.email === author.email && (
@@ -96,20 +121,8 @@ const Comment: FC<CommentProps> = ({ comment, recipe, index, fetchMore }) => {
           )}
         </div>
       </div>
-      {index === recipe.comments.length - 1 && (
-        <Waypoint
-          onEnter={() =>
-            fetchMore({
-              variables: {
-                recipeUrlQuery: recipe.urlQuery,
-                offset: 0,
-                limit: index + 11,
-              },
-            })
-          }
-        />
-      )}
-    </div>
+      {renderInfiniteScroll(index, recipe, fetchMore)}
+    </>
   );
 };
 

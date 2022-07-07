@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { useRecipeStorage } from '@Services/storageAdapter';
+import { useRecipeStorage } from '@Services/storage.service';
 import SortRecipesButton from '@Components/generic/SortRecipesButton';
 import { SortRecipesEnum } from '@Enums/sort-recipes.enum';
 

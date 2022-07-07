@@ -9,7 +9,7 @@ import { decode } from 'jsonwebtoken';
 import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
 import { isRequestSSR, loadAuthProps } from '@Lib/utils/ssr.utils';
 import { createApolloClient } from '@Lib/apollo/apollo-client';
-import { useRecipe } from '@Services/recipeAdapter';
+import { useRecipe } from '@Services/recipe.service';
 import { useVoteRecipe } from '@Application/use-case/recipe/vote-recipe.use-case';
 import { useDeleteRecipe } from '@Application/use-case/recipe/delete-recipe.use-case';
 import MainLayout from '@Components/Layouts/MainLayout';
@@ -22,7 +22,6 @@ import { MainPaths } from '@Enums/paths/main-paths.enum';
 import type { GSSProps } from '@Interfaces/props/gss-props.interface';
 import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 
-
 const RecipePage: NextPage = () => {
   const router = useRouter();
   const { recipe: urlQuery, _id } = router.query as Record<string, string>;
@@ -30,7 +29,7 @@ const RecipePage: NextPage = () => {
   const { findRecipe } = useRecipe();
   const { deleteRecipe } = useDeleteRecipe({ recipeId: _id });
   const canonicalUrl = `${SITE_URL}/recipe/${urlQuery}`;
-  
+
   const { data, loading, fetchMore } = findRecipe({
     recipeUrlQuery: urlQuery,
     offset: 0,
