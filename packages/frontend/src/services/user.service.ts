@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from '@apollo/client';
-import { useUserStorage } from '@Services/storageAdapter';
+import { useUserStorage } from '@Services/storage.service';
 import { FIND_USERS } from '@Lib/graphql/user/query.gql';
 import {
   CREATE_USER,
@@ -9,7 +9,7 @@ import {
   UPDATE_USER,
   DELETE_USER,
 } from '@Lib/graphql/user/mutation.gql';
-import { UserService } from '@Interfaces/ports/user.interface';
+import type { UserService } from '@Interfaces/ports/service/user-service.interface';
 import type { UserProfile } from '@Interfaces/domain/user.interface';
 import type { AuthState } from '@Interfaces/domain/auth.interface';
 import type { QueryDataFindUsers } from '@Types/apollo/query/user.type';

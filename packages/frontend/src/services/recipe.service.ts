@@ -5,9 +5,13 @@ import {
   VOTE_RECIPE,
   DELETE_RECIPE,
 } from '@Lib/graphql/recipe/mutation.gql';
-import type { RecipeService } from '@Interfaces/ports/recipe.interface';
+import type { RecipeService } from '@Interfaces/ports/service/recipe-service.interface';
 import type { IRecipe } from '@Interfaces/domain/recipe.interface';
 import type { QueryDataFindRecipes } from '@Types/apollo/query/recipe.type';
+
+export const SORT_QUERY = '-createdAt';
+export const QUERY_OFFSET = 0;
+export const QUERY_LIMIT = 20;
 
 export function useRecipe(): RecipeService {
   const findRecipe = ({
@@ -49,13 +53,21 @@ export function useRecipe(): RecipeService {
       update(cache, { data: { create_recipe } }) {
         const queryData = cache.readQuery<QueryDataFindRecipes>({
           query: FIND_RECIPES,
-          variables: { sort: '-createdAt', offset: 0, limit: 20 },
+          variables: {
+            sort: SORT_QUERY,
+            offset: QUERY_OFFSET,
+            limit: QUERY_LIMIT,
+          },
         });
 
         if (queryData) {
           cache.writeQuery({
             query: FIND_RECIPES,
-            variables: { sort: '-createdAt', offset: 0, limit: 20 },
+            variables: {
+              sort: SORT_QUERY,
+              offset: QUERY_OFFSET,
+              limit: QUERY_LIMIT,
+            },
             data: {
               find_recipes: [...queryData.find_recipes, create_recipe],
             },
@@ -70,13 +82,22 @@ export function useRecipe(): RecipeService {
       update(cache) {
         const queryData = cache.readQuery<QueryDataFindRecipes>({
           query: FIND_RECIPES,
-          variables: { sort: '-createdAt', offset: 0, limit: 20 },
+          variables: {
+            sort: SORT_QUERY,
+            offset: QUERY_OFFSET,
+            limit: QUERY_LIMIT,
+          },
         });
 
         if (queryData) {
           cache.writeQuery({
             query: FIND_RECIPES,
-            variables: { sort: '-createdAt', offset: 0, limit: 20 },
+            variables: {
+              sort: SORT_QUERY,
+              offset: QUERY_OFFSET,
+              limit: QUERY_LIMIT,
+            },
+
             data: {
               ...queryData,
               find_recipes: queryData.find_recipes.filter(

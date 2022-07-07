@@ -1,8 +1,8 @@
 import { useAuthStore } from '@Lib/context/auth-store.context';
 import { useAppStore } from '@Lib/context/app-store.context';
-import { UserStorageService } from '@Interfaces/ports/storage.interface';
-import { SearchStorageService } from '@Interfaces/ports/storage.interface';
-import { RecipeStorageService } from '@Interfaces/ports/storage.interface';
+import type { UserStorageService } from '@Interfaces/ports/service/storage-service.interface';
+import type { SearchStorageService } from '@Interfaces/ports/service/storage-service.interface';
+import type { RecipeStorageService } from '@Interfaces/ports/service/storage-service.interface';
 
 export const useUserStorage = (): UserStorageService => {
   return useAuthStore();
