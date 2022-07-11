@@ -14,6 +14,7 @@ export const initializeApolloServer = async (
   const apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
+    cache: 'bounded',
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
     context: handleApolloContext,
   });

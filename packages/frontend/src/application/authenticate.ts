@@ -15,8 +15,6 @@ export function useAuthenticate() {
     try {
       const authState = await loginRequest(data);
 
-      console.log('=> AUTH STATE', authState);
-
       setAuth(authState);
 
       notifySuccess({ message: AlertMessages.LOGIN });
