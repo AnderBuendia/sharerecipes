@@ -14,13 +14,12 @@
   @apply hidden;
 }
 
-.avatar-editor.rounded-full .uppy-Root,
-.avatar-editor.rounded-full .cropper-view-box {
+.avatar-editor.rounded-full .uppy-DragDrop-container {
   border-radius: 9999px;
 }
 
 .avatar-editor .uppy-DragDrop-inner {
-  @apply p-1 z-10;
+  @apply p-5 z-10;
 }
 
 .avatar-editor .uppy-DragDrop-arrow {

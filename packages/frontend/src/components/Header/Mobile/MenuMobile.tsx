@@ -50,7 +50,7 @@ const MenuMobile: FC = () => {
               onClick={() => setOpenDropdown(false)}
             />
             <div className="flex flex-col items-center w-full px-6 py-8">
-              {authState?.user ? (
+              {authState.user ? (
                 <>
                   <UserIcon
                     imageUrl={authState.user.imageUrl}
@@ -85,7 +85,7 @@ const MenuMobile: FC = () => {
                         <span className="px-2">New Recipe</span>
                       </a>
                     </Link>
-                    {authState?.user?.role === UserRoles.ADMIN && (
+                    {authState.user?.role === UserRoles.ADMIN && (
                       <Link href={MainPaths.ADMIN}>
                         <a
                           className="flex flex-row w-full justify-center p-2 rounded-lg hover:bg-gray-400"

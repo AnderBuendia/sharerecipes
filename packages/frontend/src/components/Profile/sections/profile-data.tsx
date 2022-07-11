@@ -22,7 +22,7 @@ const ProfileData: FC = () => {
     formState: { errors },
   } = useForm<FormValuesProfileData>({
     defaultValues: {
-      name: authState?.user ? authState.user.name : '',
+      name: authState.user ? authState.user?.name : '',
       password: '',
     },
   });
@@ -56,7 +56,7 @@ const ProfileData: FC = () => {
     <div className="mdxl:w-11/12 bg-white dark:bg-gray-700 rounded-lg shadow-md mt-3 p-5">
       <div className="w-full text-center">
         <label className="font-bold font-body">Profile picture</label>
-        <div className="flex w-32 h-32 overflow-hidden mx-auto rounded-full my-4 text-black">
+        <div className="flex w-32 h-32 overflow-hidden mx-auto my-4 text-black">
           <DragDropImage
             url={`${process.env.NEXT_PUBLIC_BACKEND_URL}${ApiV1RestEndPoints.UPLOAD_USER_IMAGE}`}
             current={authState?.user?.imageUrl}

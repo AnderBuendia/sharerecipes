@@ -1,20 +1,12 @@
-import type {
-  NextPage,
-  GetServerSideProps,
-  GetServerSidePropsContext,
-} from 'next';
+import type { NextPage, GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
-import { decode } from 'jsonwebtoken';
-import { getJwtFromCookie } from '@Lib/utils/jwt-cookie.utils';
-import { isRequestSSR, loadAuthProps } from '@Lib/utils/ssr.utils';
-import { createApolloClient } from '@Lib/apollo/apollo-client';
+import { withAuthGSSP } from '@Lib/hof/gssp.hof';
 import { useRecipe } from '@Services/recipe.service';
 import { useRecipeStorage } from '@Services/storage.service';
 import MainLayout from '@Components/Layouts/MainLayout';
 import RecipesNav from '@Components/Recipes/RecipesNav';
 import SkeletonRecipeCard from '@Components/Recipes/SkeletonRecipeCard';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
-import type { GSSProps } from '@Interfaces/props/gss-props.interface';
 
 const RecipesListDynamic = dynamic(
   () => import('@Components/Recipes/RecipesList')
@@ -52,23 +44,6 @@ const IndexPage: NextPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (
-  ctx: GetServerSidePropsContext
-) => {
-  const props: GSSProps = { lostAuth: false };
-  const isSSR = isRequestSSR(ctx.req.url);
-  const jwt = getJwtFromCookie(ctx.req.headers.cookie);
-
-  if (jwt) {
-    if (isSSR) {
-      const apolloClient = createApolloClient();
-      const authProps = await loadAuthProps(ctx.res, jwt, apolloClient);
-
-      if (authProps) props.authProps = authProps;
-    } else if (!decode(jwt)) props.lostAuth = true;
-  }
-
-  return { props: props || null };
-};
+export const getServerSideProps: GetServerSideProps = withAuthGSSP();
 
 export default IndexPage;

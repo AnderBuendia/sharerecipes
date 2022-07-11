@@ -80,6 +80,7 @@ const DragDropImage: FC<DragDropImageProps> = ({
       }
     : undefined;
 
+  console.log('=> ROUNDED', rounded);
   return (
     <div
       className={`avatar-editor w-full h-full relative ${

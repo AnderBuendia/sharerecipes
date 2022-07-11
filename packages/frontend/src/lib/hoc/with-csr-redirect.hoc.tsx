@@ -20,22 +20,22 @@ const withCSRRedirect = (Component: FC<any>, redirect: IRedirect) => {
       redirect();
     }, []);
 
-    const redirect = () => {
+    function redirect() {
       if (
-        (authState?.jwt &&
+        (authState.jwt &&
           condition === RedirectConditions.REDIRECT_WHEN_USER_EXISTS) ||
-        (!authState?.jwt &&
+        (!authState.jwt &&
           condition === RedirectConditions.REDIRECT_WHEN_USER_NOT_EXISTS)
       ) {
         let queryString;
 
-        if (query) return (queryString = generateQueryParams(query));
+        if (query) queryString = generateQueryParams(query);
 
         const url = queryString ? `${href}?${queryString}` : href;
 
         router.replace(url, asPath);
       } else setShouldRender(true);
-    };
+    }
 
     return shouldRender ? <Component {...props}></Component> : <></>;
   };

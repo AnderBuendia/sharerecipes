@@ -1,11 +1,31 @@
-import { FC, useState, createContext, useContext } from 'react';
+import type { FC, ReactNode, Dispatch, SetStateAction } from 'react';
+import { useState, createContext, useContext } from 'react';
 import { SortRecipesEnum } from '@Enums/sort-recipes.enum';
 
-const AppStoreContext = createContext<any>({});
+interface IAppStoreContext {
+  search: string;
+  sortRecipes: string;
+  setSearch: Dispatch<SetStateAction<string>>;
+  setSortRecipes: Dispatch<SetStateAction<string>>;
+}
 
-export const useAppStore = () => useContext(AppStoreContext);
+type AppStoreProviderProps = {
+  children: ReactNode;
+};
 
-export const AppProviderStore: FC = ({ children }) => {
+const AppStoreContext = createContext<IAppStoreContext>({} as any);
+
+export const useAppStore = () => {
+  const context = useContext(AppStoreContext);
+
+  if (context === undefined || !Object.keys(context).length) {
+    throw new Error('useAppStore must be used within AppStoreProvider');
+  }
+
+  return context;
+};
+
+export const AppProviderStore: FC<AppStoreProviderProps> = ({ children }) => {
   const [search, setSearch] = useState<string>('');
   const [sortRecipes, setSortRecipes] = useState<string>(
     SortRecipesEnum.CREATED_AT
