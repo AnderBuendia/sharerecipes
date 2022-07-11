@@ -24,7 +24,7 @@ const Head: FC<HeadProps> = ({
 
   return (
     <NextHead>
-      <title>{title} | ShareRecipes</title>
+      <title>{`${title} - ShareRecipes.anderb.info`}</title>
       <meta name="lang" content={SITE_LANGUAGE} />
       <meta name="author" content={SITE_AUTHOR} />
       <meta name="description" content={description} />

@@ -10,7 +10,7 @@ export default function Custom404() {
         </h2>
         <Link href="/">
           <a className="p-4 rounded-full font-bold font-body text-white uppercase transition duration-500 ease-in-out bg-black hover:bg-gray-700 transform hover:-translate-y-1 hover:scale-110">
-            Go TO Homepage
+            Go To Homepage
           </a>
         </Link>
       </div>

@@ -1,26 +1,25 @@
-import { FC, useEffect, Dispatch, SetStateAction } from 'react';
+import type { FC } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Swal from 'sweetalert2';
 import { useForm, FieldError } from 'react-hook-form';
-import { SingleValue } from 'react-select';
+import type { SingleValue } from 'react-select';
 import { useNewRecipe } from '@Application/use-case/recipe/new-recipe.use-case';
+import { foodStyle, difficulty } from '@Lib/utils/select-options/new-recipe';
 import useNewRecipeForm from '@Components/Forms/NewRecipeForm/hook';
 import Input from '@Components/generic/Input';
 import ReactSelect from '@Components/generic/ReactSelect';
-import { foodStyle, difficulty } from '@Lib/utils/select-options/new-recipe';
+import DragDropImage from '@Components/generic/DragDropImage';
 import { AlertMessages, FormMessages } from '@Enums/config/messages.enum';
 import { MainPaths } from '@Enums/paths/main-paths.enum';
+import { ApiV1RestEndPoints } from '@Enums/paths/rest-endpoints.enum';
 import type { SelectOption } from '@Interfaces/select/option.interface';
 import type { RecipeImage } from '@Interfaces/domain/recipe.interface';
 import type { FormValuesNewRecipe } from '@Types/forms/new-recipe.type';
 
-export type NewRecipeForm = {
-  recipeImage?: RecipeImage;
-  setRecipeImage: Dispatch<SetStateAction<RecipeImage | undefined>>;
-};
-
-const NewRecipeForm: FC<NewRecipeForm> = ({ recipeImage, setRecipeImage }) => {
+const NewRecipeForm: FC = () => {
   const router = useRouter();
+  const [recipeImage, setRecipeImage] = useState<RecipeImage>();
   const { newRecipe } = useNewRecipe();
   const {
     selectedFoodStyle,
@@ -54,6 +53,10 @@ const NewRecipeForm: FC<NewRecipeForm> = ({ recipeImage, setRecipeImage }) => {
     }
   };
 
+  const handleChangeImage = (imageUrl: string, imageName: string) => {
+    setRecipeImage({ imageUrl: imageUrl, imageName: imageName });
+  };
+
   const onSubmit = handleSubmit(async (data) => {
     const response = await newRecipe({ data, recipeImage });
 
@@ -72,7 +75,20 @@ const NewRecipeForm: FC<NewRecipeForm> = ({ recipeImage, setRecipeImage }) => {
   }, []);
 
   return (
-    <>
+    <div className="p-6 bg-white dark:bg-gray-700 rounded-lg shadow-md">
+      <h2 className="text-4xl font-roboto font-bold text-center my-3">
+        Create New Recipe
+      </h2>
+      <label className="block font-body font-bold mb-4">Recipe Image</label>
+      <div className="overflow-hidden my-4 rounded-md text-black">
+        <DragDropImage
+          url={`${process.env.NEXT_PUBLIC_BACKEND_URL}${ApiV1RestEndPoints.UPLOAD_RECIPE_IMAGE}`}
+          current={recipeImage?.imageUrl}
+          name="photo"
+          rounded={false}
+          handleChange={handleChangeImage}
+        />
+      </div>
       <form onSubmit={onSubmit}>
         <Input
           label="Name"
@@ -206,7 +222,7 @@ const NewRecipeForm: FC<NewRecipeForm> = ({ recipeImage, setRecipeImage }) => {
           <span>Create New Recipe</span>
         </button>
       </form>
-    </>
+    </div>
   );
 };
 
